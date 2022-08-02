@@ -1,0 +1,17 @@
+<svg width="0" height="0" class="hidden">
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 16" id="ic_arr_down">
+    <path d="M11.875 5.8125L7.5 10.1875L3.125 5.8125" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 37" id="ic_close">
+    <path d="M10.1367 26.3639L18.0007 18.5M25.8646 10.636L18.0007 18.5M18.0007 18.5L10.1367 10.636M18.0007 18.5L25.8646 26.3639" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" id="ic_notification">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5804 7.76158C24.5804 4.35574 22.2519 2.99042 18.8994 2.99042H11.0265C7.77703 2.99042 5.3418 4.26265 5.3418 7.53444V25.7639C5.3418 26.6626 6.30869 27.2285 7.09189 26.7892L14.9934 22.3568L22.8266 26.7817C23.611 27.2236 24.5804 26.6576 24.5804 25.7577V7.76158Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+    <path d="M10.3828 11.3204H19.4436" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" id="ic_wallet">
+    <path d="M14.25 15H3.75C2.92157 15 2.25 14.3285 2.25 13.5V6.75C2.25 5.92157 2.92157 5.25 3.75 5.25H14.25C15.0784 5.25 15.75 5.92157 15.75 6.75V13.5C15.75 14.3285 15.0784 15 14.25 15Z" stroke="currentColor" fill="none"></path>
+    <path d="M12.375 10.5C12.1679 10.5 12 10.3321 12 10.125C12 9.91792 12.1679 9.75 12.375 9.75C12.5821 9.75 12.75 9.91792 12.75 10.125C12.75 10.3321 12.5821 10.5 12.375 10.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M13.5 5.25V4.20242C13.5 3.21687 12.5658 2.49913 11.6135 2.75306L3.3635 4.95307C2.70688 5.12817 2.25 5.72285 2.25 6.40242V6.75" stroke="currentColor" fill="none"></path>
+  </symbol>
+</svg>
