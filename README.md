@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# bro.app
-The voyager assistant
-=======
 # bro_app
 
 This template should help get you started developing with Vue 3 in Vite.
