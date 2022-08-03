@@ -8,9 +8,11 @@
 
                 <IPFS />
 
-                <Currency />
+                <Currency v-if="store.auth" />
 
-                <User />
+                <User v-if="store.auth" />
+
+                <ConnectBtn v-if="!store.auth" />
             </div>
         </div>
     </header>
@@ -18,58 +20,63 @@
 
 
 <script setup>
-    import IPFS from '../components/IPFS.vue'
-    import Currency from '../components/Currency.vue'
-    import User from '../components/User.vue'
+    import { useGlobalStore } from '@/stores'
+
+    import IPFS from '../components/header/IPFS.vue'
+    import Currency from '../components/header/Currency.vue'
+    import User from '../components/header/User.vue'
+    import ConnectBtn from '../components/header/ConnectBtn.vue'
+
+    const store = useGlobalStore()
 </script>
 
 
 <style>
-    header
-    {
-        position: relative;
-        z-index: 90;
-        top: 0;
-        left: 0;
+header
+{
+    position: relative;
+    z-index: 90;
+    top: 0;
+    left: 0;
 
-        width: 100%;
-        padding: 20px 0;
+    width: 100%;
+    padding: 20px 0;
 
-        transition: .2s linear;
-    }
-
-
-    header .cont
-    {
-        max-width: 100%;
-        padding: 0 20px;
-    }
+    transition: .2s linear;
+}
 
 
-    header .info
-    {
-        padding: 11px 20px;
-
-        border-radius: 42px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-    }
+header .cont
+{
+    max-width: 100%;
+    padding: 0 20px;
+}
 
 
+header .info
+{
+    padding: 11px 20px;
 
-    header .logo
-    {
-        margin-right: auto;
-    }
+    border-radius: 42px;
 
-    header .logo img
-    {
-        display: block;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
 
-        max-width: 100%;
-        height: 70px;
-    }
+
+
+header .logo
+{
+    margin-right: auto;
+}
+
+header .logo img
+{
+    display: block;
+
+    max-width: 100%;
+    height: 70px;
+}
 
 </style>

@@ -13,7 +13,10 @@ export default {
 
             // Keplr Error page
             'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
-            'keplr_install_btn': "Install Keplr"
+            'keplr_install_btn': "Install Keplr",
+
+            // Buttons
+            'connect_wallet': 'Connect wallet'
         }
     }
 }

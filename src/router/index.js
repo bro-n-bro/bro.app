@@ -41,16 +41,6 @@ router.beforeEach(async (to, from, next) => {
         router.push({ name: 'KeplrError' })
     } else {
         next()
-
-        const chainId = 'cosmoshub-4'
-
-        window.keplr.enable(chainId)
-
-        const offlineSigner = window.keplr.getOfflineSigner(chainId),
-            accounts = await offlineSigner.getAccounts()
-
-        console.log(offlineSigner)
-        console.log(accounts)
     }
 })
 
