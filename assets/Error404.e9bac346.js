@@ -1,1 +1,0 @@
-import{_ as e,o,c as r,a as s,t as c}from"./index.8d0df9f8.js";const a="/assets/error_404.a13afed4.svg",_={},n={class:"error_info"},i={class:"cont"},l=s("img",{src:a,alt:"",class:"img"},null,-1),d={class:"title"};function f(t,m){return o(),r("section",n,[s("div",i,[l,s("div",d,c(t.$t("message.error_title_404")),1)])])}const g=e(_,[["render",f]]);export{g as default};
