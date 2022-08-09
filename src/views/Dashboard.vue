@@ -71,7 +71,29 @@
 
 
                 <div class="account">
-                    <button class="connect_wallet_btn" @click.prevent="connectWallet()">{{ $t('message.connect_wallet') }}</button>
+                    <button class="connect_wallet_btn" @click.prevent="emitter.emit('connectWallet')" v-if="!store.auth">
+                        {{ $t('message.connect_wallet') }}
+                    </button>
+
+                    <template v-else>
+                        <div class="user_name">{{ store.userName }}</div>
+
+                        <div class="balance">0.1000 BTC</div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
 
                     <div class="shadow"></div>
                 </div>
@@ -141,14 +163,11 @@
 
 
 <script setup>
-    const connectWallet = async () => {
-        const chainId = 'cosmoshub-4'
+    import { inject } from 'vue'
+    import { useGlobalStore } from '@/stores'
 
-        window.keplr.enable(chainId)
-
-        const offlineSigner = window.keplr.getOfflineSigner(chainId),
-            accounts = await offlineSigner.getAccounts()
-    }
+    const emitter = inject('emitter'),
+          store = useGlobalStore()
 </script>
 
 
@@ -638,5 +657,16 @@
 {
     background: #950fff;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 </style>

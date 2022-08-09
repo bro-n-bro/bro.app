@@ -1,5 +1,5 @@
 <template>
-    <button class="connect_btn" @click.prevent="connectWallet()">
+    <button class="connect_btn" @click.prevent="emitter.emit('connectWallet')">
         <div class="icon">
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
@@ -10,14 +10,9 @@
 
 
 <script setup>
-    const connectWallet = async () => {
-        const chainId = 'cosmoshub-4'
+    import { inject } from 'vue'
 
-        window.keplr.enable(chainId)
-
-        const offlineSigner = window.keplr.getOfflineSigner(chainId),
-            accounts = await offlineSigner.getAccounts()
-    }
+    const emitter = inject('emitter')
 </script>
 
 

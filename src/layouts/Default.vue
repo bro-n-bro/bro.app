@@ -20,7 +20,27 @@
 <script setup>
     import Header  from '../components/Header.vue'
 
+    import { inject } from 'vue'
     import { RouterView } from 'vue-router'
+    import { useGlobalStore } from '@/stores'
+
+    const emitter = inject('emitter'),
+          store = useGlobalStore()
+
+    // Event "connect wallet"
+    emitter.on('connectWallet', async () => {
+        const chainId = 'cosmoshub-4'
+
+        window.keplr.enable(chainId)
+
+        const offlineSigner = window.keplr.getOfflineSigner(chainId),
+            accounts = await offlineSigner.getAccounts(),
+            key = await window.keplr.getKey(chainId)
+
+        // Update store
+        store.$patch({ userName: key.name })
+        store.$patch({ auth: true })
+    })
 </script>
 
 
@@ -96,6 +116,54 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </style>

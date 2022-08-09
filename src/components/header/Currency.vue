@@ -1,15 +1,15 @@
 <template>
     <div class="currency">
         <button class="btn" :class="{ active: showDropdown }" @click.prevent="showDropdown = !showDropdown">
-            <span>BTC</span>
+            <span>{{ store.currency }}</span>
             <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
         <div class="dropdown">
-            <div><button class="btn active">BTC</button></div>
-            <div><button class="btn">ETH</button></div>
-            <div><button class="btn">ATOM</button></div>
-            <div><button class="btn">USDT</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'BTC' }">BTC</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'ETH' }">ETH</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'ATOM' }">ATOM</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'USDT' }">USDT</button></div>
         </div>
     </div>
 </template>
@@ -17,8 +17,10 @@
 
 <script setup>
     import { ref } from 'vue'
+    import { useGlobalStore } from '@/stores'
 
-    const showDropdown = ref(false)
+    const store = useGlobalStore(),
+          showDropdown = ref(false)
 </script>
 
 
@@ -108,6 +110,16 @@
 {
     background: #191919;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 </style>

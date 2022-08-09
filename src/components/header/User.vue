@@ -4,7 +4,7 @@
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
 
-        <div class="name">{{ userName }}</div>
+        <div class="name">{{ store.userName }}</div>
 
         <div class="photo">
             <!-- <img src="images/tmp/user_avatar.jpg" alt=""> -->
@@ -14,7 +14,9 @@
 
 
 <script setup>
-    const userName = 'Ira Milkovich'
+    import { useGlobalStore } from '@/stores'
+
+    const store = useGlobalStore()
 </script>
 
 
@@ -63,8 +65,8 @@
 {
     display: block;
 
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
 
@@ -97,6 +99,10 @@
 
     object-fit: cover;
 }
+
+
+
+
 
 
 </style>
