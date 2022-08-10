@@ -18,5 +18,6 @@ app.use(router)
 app.use(i18n)
 
 app.provide('emitter', emitter)
+app.provide('i18n', i18n)
 
 app.mount('#app')

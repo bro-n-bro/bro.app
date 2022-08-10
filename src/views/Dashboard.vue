@@ -78,7 +78,7 @@
                     <template v-else>
                         <div class="user_name">{{ store.userName }}</div>
 
-                        <div class="balance">0.1000 BTC</div>
+                        <div class="balance">0.1000 {{ store.currency }}</div>
 
                         <div class="stats">
                             <div>
@@ -657,16 +657,4 @@
 {
     background: #950fff;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

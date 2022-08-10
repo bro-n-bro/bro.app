@@ -4,7 +4,7 @@ export default {
         message: {
             // IPFS
             'ipfs': "Ipfs node",
-            'ipfs_tooltip': "Built-in IPFS node is active.",
+            'ipfs_notice': "Built-in IPFS node is active.",
 
 
             // Error page
@@ -16,7 +16,10 @@ export default {
             'keplr_install_btn': "Install Keplr",
 
             // Buttons
-            'connect_wallet': 'Connect wallet'
+            'connect_wallet': 'Connect wallet',
+
+            // Notofications
+            'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.'
         }
     }
 }

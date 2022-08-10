@@ -1,16 +1,17 @@
 <template>
-    <div class="ipfs_status" :class="{ green: store.IPFSStatus }">
+    <div class="ipfs_status" :class="{ green: store.IPFSStatus }" @mouseover="emitter.emit('setNotification', $t('message.ipfs_notice'))">
         <div>{{ $t('message.ipfs') }}</div>
-
-        <div class="hover">{{ $t('message.ipfs_tooltip') }}</div>
     </div>
 </template>
 
 
 <script setup>
+    import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
+        emitter = inject('emitter'),
+        i18n = inject('i18n'),
         node = Ipfs.create({
         // repo: 'ipfs-repo-cyber',
         init: true,
@@ -65,42 +66,6 @@
     .ipfs_status.green
     {
         color: #1bc562;
-    }
-
-
-    .ipfs_status .hover
-    {
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 18px;
-
-        position: absolute;
-        top: 100%;
-        right: -40px;
-
-        visibility: hidden;
-
-        width: 220px;
-        margin-top: 36px;
-        padding: 11px 19px;
-
-        transition: .2s linear;
-        text-align: right;
-        pointer-events: none;
-
-        opacity: 0;
-        border-radius: 20px;
-        background: #353535;
-    }
-
-    .ipfs_status.green:hover .hover
-    {
-        visibility: visible;
-
-        margin-top: 16px;
-
-        opacity: 1;
     }
 
 

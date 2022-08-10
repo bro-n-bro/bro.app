@@ -6,10 +6,10 @@
         </button>
 
         <div class="dropdown">
-            <div><button class="btn" :class="{ active: store.currency == 'BTC' }">BTC</button></div>
-            <div><button class="btn" :class="{ active: store.currency == 'ETH' }">ETH</button></div>
-            <div><button class="btn" :class="{ active: store.currency == 'ATOM' }">ATOM</button></div>
-            <div><button class="btn" :class="{ active: store.currency == 'USDT' }">USDT</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'BTC' }" @click.prevent="selectCurrency('BTC')">BTC</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'ETH' }" @click.prevent="selectCurrency('ETH')">ETH</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'ATOM' }" @click.prevent="selectCurrency('ATOM')">ATOM</button></div>
+            <div><button class="btn" :class="{ active: store.currency == 'USDT' }" @click.prevent="selectCurrency('USDT')">USDT</button></div>
         </div>
     </div>
 </template>
@@ -20,7 +20,13 @@
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
-          showDropdown = ref(false)
+        showDropdown = ref(false)
+
+    function selectCurrency(newCurrency) {
+        store.$patch({ currency: newCurrency })
+
+        this.showDropdown = false
+    }
 </script>
 
 

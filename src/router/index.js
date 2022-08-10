@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useGlobalStore } from '@/stores'
 
 import defaultLayut from '../layouts/Default.vue'
 import errorLayut from '../layouts/Error.vue'
@@ -38,7 +39,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     // Keplr
     if (!window.keplr && to.name !== 'KeplrError') {
-        router.push({ name: 'KeplrError' })
+        router().push({ name: 'KeplrError' })
     } else {
         next()
     }

@@ -8,7 +8,7 @@
                     <svg><use xlink:href="/sprite.svg#ic_notification"></use></svg>
                 </div>
 
-                <span>Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.</span>
+                <span>{{ noticeDefault }}</span>
             </div>
         </div>
     </section>
@@ -20,12 +20,15 @@
 <script setup>
     import Header  from '../components/Header.vue'
 
-    import { inject } from 'vue'
+    import { inject, ref } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
 
     const emitter = inject('emitter'),
-          store = useGlobalStore()
+        i18n = inject('i18n'),
+        store = useGlobalStore(),
+        noticeDefault = ref(i18n.global.t('message.notice_default'))
+
 
     // Event "connect wallet"
     emitter.on('connectWallet', async () => {
@@ -33,13 +36,19 @@
 
         window.keplr.enable(chainId)
 
-        const offlineSigner = window.keplr.getOfflineSigner(chainId),
-            accounts = await offlineSigner.getAccounts(),
-            key = await window.keplr.getKey(chainId)
+        const key = await window.keplr.getKey(chainId)
 
-        // Update store
-        store.$patch({ userName: key.name })
-        store.$patch({ auth: true })
+        if (key) {
+            // Update store
+            store.$patch({ userName: key.name })
+            store.$patch({ auth: true })
+        }
+    })
+
+
+    // Event "set notification"
+    emitter.on('setNotification', function(notice) {
+        this.noticeDefault = notice
     })
 </script>
 

@@ -3,8 +3,8 @@ import VueI18nMessages from '@/locale/messages'
 
 
 const i18n = createI18n({
-    locale: import.meta.env.VUE_APP_LANG,
-    fallbackLocale: import.meta.env.VUE_APP_LANG,
+    locale: 'en',
+    fallbackLocale: 'en',
     messages: VueI18nMessages
 })
 
