@@ -23,6 +23,8 @@
     import { inject, ref } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
+    import { SigningCosmosClient } from '@cosmjs/launchpad'
+    import { fromBech32, toBech32 } from '@cosmjs/encoding'
 
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
@@ -36,12 +38,36 @@
 
         window.keplr.enable(chainId)
 
-        const key = await window.keplr.getKey(chainId)
+        const offlineSigner = window.getOfflineSigner(chainId),
+            accounts = await offlineSigner.getAccounts(),
+            key = await window.keplr.getKey(chainId)
 
         if (key) {
             // Update store
             store.$patch({ userName: key.name })
             store.$patch({ auth: true })
+
+            const cosmJS = new SigningCosmosClient(
+                'https://lcd-cosmoshub.keplr.app/rest',
+                accounts[0].address,
+                offlineSigner,
+            )
+
+            store.$patch({
+                wallets: {
+                    'cosmos': accounts[0].address,
+                    'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data),
+                    'osmo': toBech32('osmo', fromBech32(accounts[0].address).data),
+                    'juno': toBech32('juno', fromBech32(accounts[0].address).data),
+                    'emoney': toBech32('emoney', fromBech32(accounts[0].address).data),
+                    'stars': toBech32('stars', fromBech32(accounts[0].address).data),
+                    'gravity': toBech32('gravity', fromBech32(accounts[0].address).data),
+                    'evm': toBech32('evm', fromBech32(accounts[0].address).data),
+                    'cre': toBech32('cre', fromBech32(accounts[0].address).data),
+                    'omniflix': toBech32('omniflix', fromBech32(accounts[0].address).data),
+                    'desmos': toBech32('desmos', fromBech32(accounts[0].address).data),
+                }
+            })
         }
     })
 

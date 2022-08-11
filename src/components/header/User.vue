@@ -7,16 +7,29 @@
         <div class="name">{{ store.userName }}</div>
 
         <div class="photo">
-            <!-- <img src="images/tmp/user_avatar.jpg" alt=""> -->
+            <img :src="store.avatar" alt="" v-if="store.avatar">
         </div>
     </div>
 </template>
 
 
 <script setup>
+    import { onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore()
+
+    onMounted(async () => {
+        if(store.auth){
+            await fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${store.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
+                .then(response => response.json())
+			    .then(data => {
+                    data.txs
+                        ? store.$patch({ avatar: 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to })
+                        : store.$patch({ avatar: `https://robohash.org/${store.userName.toLowerCase()}?set=set4` })
+                })
+        }
+    })
 </script>
 
 
@@ -99,6 +112,13 @@
 
     object-fit: cover;
 }
+
+
+
+
+
+
+
 
 
 
