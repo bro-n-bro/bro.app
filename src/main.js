@@ -5,8 +5,6 @@ import i18n from './locale'
 import App from './App.vue'
 import router from './router'
 
-import '@/assets/css/styles.css'
-
 // Events
 import mitt from 'mitt'
 const emitter = mitt()
