@@ -3,11 +3,12 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
-// https://vitejs.dev/config/
 export default defineConfig({
     define: {
-        'global': {},
-        'process.env': {}
+        'process.env': {},
+        '__VUE_I18N_FULL_INSTALL__': JSON.stringify(true),
+        '__VUE_I18N_LEGACY_API__': JSON.stringify(true),
+        '__INTLIFY_PROD_DEVTOOLS__': JSON.stringify(true)
     },
 
     plugins: [vue()],

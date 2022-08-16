@@ -2,71 +2,263 @@
     <section class="dashboard">
         <div class="cont">
             <div class="row">
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/evmos_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.evm.status}">
+                    <template v-if="!store.networks.evm.status">
+                        <div class="logo">
+                            <img src="../assets/images/evmos_logo.png" alt="">
+                        </div>
 
-                    <div>Evmos</div>
+                        <div>Evmos</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/evmos_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Evmos</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.evm.health_color]" :style="{'--speed': store.networks.evm.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/juno_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.juno.status}">
+                    <template v-if="!store.networks.juno.status">
+                        <div class="logo">
+                            <img src="../assets/images/juno_logo.png" alt="">
+                        </div>
 
-                    <div>Juno</div>
+                        <div>Juno</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/juno_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Juno</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.juno.health_color]" :style="{'--speed': store.networks.juno.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/cosmos_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.cosmos.status}">
+                    <template v-if="!store.networks.cosmos.status">
+                        <div class="logo">
+                            <img src="../assets/images/cosmos_logo.png" alt="">
+                        </div>
 
-                    <div>Cosmos</div>
+                        <div>Cosmos</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/cosmos_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Cosmos</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.cosmos.health_color]" :style="{'--speed': store.networks.cosmos.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/bostrom_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.bostrom.status}">
+                    <template v-if="!store.networks.bostrom.status">
+                        <div class="logo">
+                            <img src="../assets/images/bostrom_logo.png" alt="">
+                        </div>
 
-                    <div>Bostrom</div>
+                        <div>Bostrom</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/bostrom_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Bostrom</div>
+                        </div>
+
+                        <div class="tokens">{{ store.networks.bostrom.delegations_sum }} MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" :style="{'width': store.networks.bostrom.availabel_percents + '%'}"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">{{ store.networks.bostrom.personal_APR }}%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">{{ store.networks.bostrom.RPDE }}</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.bostrom.health_color]" :style="{'--speed': store.networks.bostrom.speed + 's'}"></div>
                 </div>
             </div>
 
 
             <div class="row">
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/e-money_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.emoney.status}">
+                    <template v-if="!store.networks.emoney.status">
+                        <div class="logo">
+                            <img src="../assets/images/e-money_logo.png" alt="">
+                        </div>
 
-                    <div>E-money</div>
+                        <div>E-money</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/e-money_logo.png" alt="">
+                            </div>
+
+                            <div class="name">E-money</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.emoney.health_color]" :style="{'--speed': store.networks.emoney.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/desmos_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.desmos.status}">
+                    <template v-if="!store.networks.desmos.status">
+                        <div class="logo">
+                            <img src="../assets/images/desmos_logo.png" alt="">
+                        </div>
 
-                    <div>Desmos</div>
+                        <div>Desmos</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/desmos_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Desmos</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.desmos.health_color]" :style="{'--speed': store.networks.desmos.speed + 's'}"></div>
                 </div>
 
 
@@ -78,17 +270,20 @@
                     <template v-else>
                         <div class="user_name">{{ store.userName }}</div>
 
-                        <div class="balance">0.1000 {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'USDT'">{{ store.balance_usdt }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'ATOM'">{{ store.balance_atom }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'ETH'">{{ store.balance_eth }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'BTC'">{{ store.balance_btc }} {{ store.currency }}</div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">RPDE</div>
-                                <div class="val">0</div>
+                                <div class="val">{{ store.RPDE }}</div>
                             </div>
 
                             <div>
                                 <div class="label">Personal APR</div>
-                                <div class="val">0%</div>
+                                <div class="val">{{ store.personal_APR }}%</div>
                             </div>
                         </div>
 
@@ -99,63 +294,224 @@
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/osmosis_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.osmo.status}">
+                    <template v-if="!store.networks.osmo.status">
+                        <div class="logo">
+                            <img src="../assets/images/osmosis_logo.png" alt="">
+                        </div>
 
-                    <div>Osmosis</div>
+                        <div>Osmosis</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/osmosis_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Osmosis</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.osmo.health_color]" :style="{'--speed': store.networks.osmo.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/crescent_logo.png" alt="">
-                    </div>
+                <div class="network" :class="{ empty: !store.networks.cre.status}">
+                    <template v-if="!store.networks.cre.status">
+                        <div class="logo">
+                            <img src="../assets/images/crescent_logo.png" alt="">
+                        </div>
 
-                    <div>Crescent hub</div>
+                        <div>Crescent hub</div>
+                    </template>
 
-                    <div class="shadow grey"></div>
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/crescent_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Crescent hub</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.cre.health_color]" :style="{'--speed': store.networks.cre.speed + 's'}"></div>
                 </div>
             </div>
 
 
             <div class="row">
+                <div class="network" :class="{ empty: !store.networks.gravity.status}">
+                    <template v-if="!store.networks.gravity.status">
+                        <div class="logo">
+                            <img src="../assets/images/g-bridge_logo.png" alt="">
+                        </div>
+
+                        <div>G-Bridge</div>
+                    </template>
+
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/g-bridge_logo.png" alt="">
+                            </div>
+
+                            <div class="name">G-Bridge</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.gravity.health_color]" :style="{'--speed': store.networks.gravity.speed + 's'}"></div>
+                </div>
+
+
+                <div class="network" :class="{ empty: !store.networks.stars.status}">
+                    <template v-if="!store.networks.stars.status">
+                        <div class="logo">
+                            <img src="../assets/images/stargaze_logo.png" alt="">
+                        </div>
+
+                        <div>Stargaze</div>
+                    </template>
+
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/stargaze_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Stargaze</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.stars.health_color]" :style="{'--speed': store.networks.stars.speed + 's'}"></div>
+                </div>
+
+
+                <div class="network" :class="{ empty: !store.networks.omniflix.status}">
+                    <template v-if="!store.networks.omniflix.status">
+                        <div class="logo">
+                            <img src="../assets/images/omniflix_logo.png" alt="">
+                        </div>
+
+                        <div>Omniflix hub</div>
+                    </template>
+
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/omniflix_logo.png" alt="">
+                            </div>
+
+                            <div class="name">Omniflix hub</div>
+                        </div>
+
+                        <div class="tokens">2,123.43 MBOOT</div>
+
+                        <div class="progress">
+                            <div class="bar" style="width: 27%;"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">Personal APR</div>
+                                <div class="val">0%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">RPDE</div>
+                                <div class="val">0</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn">Details</a>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.omniflix.health_color]" :style="{'--speed': store.networks.omniflix.speed + 's'}"></div>
+                </div>
+
+
                 <div class="network hidden"></div>
-
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/g-bridge_logo.png" alt="">
-                    </div>
-
-                    <div>G-Bridge</div>
-
-                    <div class="shadow grey"></div>
-                </div>
-
-
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/stargaze_logo.png" alt="">
-                    </div>
-
-                    <div>Stargaze</div>
-
-                    <div class="shadow grey"></div>
-                </div>
-
-
-                <div class="network empty">
-                    <div class="logo">
-                        <img src="../assets/images/omniflix_logo.png" alt="">
-                    </div>
-
-                    <div>Omniflix hub</div>
-
-                    <div class="shadow grey"></div>
-                </div>
             </div>
         </div>
     </section>
@@ -167,7 +523,7 @@
     import { useGlobalStore } from '@/stores'
 
     const emitter = inject('emitter'),
-          store = useGlobalStore()
+        store = useGlobalStore()
 </script>
 
 
@@ -236,6 +592,11 @@
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
+.dashboard .row > *.hidden:before
+{
+    display: none;
+}
+
 
 .dashboard .shadow
 {
@@ -249,6 +610,7 @@
     width: calc(100% + 6px);
     height: calc(100% + 6px);
 
+    --speed: 10s;
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
@@ -265,24 +627,9 @@
     height: calc(100% + 48px);
 
     content: '';
-    -webkit-animation: spin 3s linear infinite;
-       -moz-animation: spin 3s linear infinite;
-            animation: spin 3s linear infinite;
-}
-
-.dashboard .row > *:nth-child(2) .shadow:after
-{
-    animation-duration: .5s;
-}
-
-.dashboard .row > *:nth-child(3) .shadow:after
-{
-    animation-duration: 4s;
-}
-
-.dashboard .row > *:nth-child(4) .shadow:after
-{
-    animation-duration: 8s;
+    -webkit-animation: spin var(--speed) linear infinite;
+       -moz-animation: spin var(--speed) linear infinite;
+            animation: spin var(--speed) linear infinite;
 }
 
 .dashboard .shadow.green:after
@@ -388,6 +735,8 @@
 {
     height: 13px;
 
+    transition: width .2s linear;
+
     border-radius: 20px;
     background: #4075fd;
 }
@@ -485,6 +834,11 @@
     flex-wrap: wrap;
 }
 
+.dashboard .network.empty .shadow:after
+{
+    background: #212121;
+}
+
 
 .dashboard .network.empty .logo
 {
@@ -533,13 +887,6 @@
 
     border-radius: 50%;
     background: rgba(20, 20, 20, .8);
-}
-
-
-
-.dashboard .network.hidden:before
-{
-    display: none;
 }
 
 
@@ -657,4 +1004,50 @@
 {
     background: #950fff;
 }
+
+
+
+@-moz-keyframes spin
+{
+    100%
+    {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin
+{
+    100%
+    {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin
+{
+    100%
+    {
+        -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
