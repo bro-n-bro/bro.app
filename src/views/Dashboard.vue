@@ -68,7 +68,7 @@
                         <div class="tokens">{{ store.networks.juno.delegations_sum }} JUNO</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.juno.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -111,7 +111,7 @@
                         <div class="tokens">{{ store.networks.cosmoshub.delegations_sum }} ATOM</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.cosmoshub.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -196,7 +196,7 @@
                             <div class="name">{{ store.networks.emoney.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.emoney.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.emoney.delegations_sum }} NGM</div>
 
                         <div class="progress">
                             <div class="bar" style="width: 0%;"></div>
@@ -242,7 +242,7 @@
                         <div class="tokens">{{ store.networks.desmos.delegations_sum }} MBOOT</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.desmos.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -314,10 +314,10 @@
                             <div class="name">{{ store.networks.osmosis.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.osmosis.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.osmosis.delegations_sum }} OSMO</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.osmosis.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -357,10 +357,10 @@
                             <div class="name">{{ store.networks.crescent.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.crescent.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.crescent.delegations_sum }} CRE</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.crescent.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -402,10 +402,10 @@
                             <div class="name">{{ store.networks.gravity.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.gravity.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.gravity.delegations_sum }} GRAV</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.gravity.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -445,10 +445,10 @@
                             <div class="name">{{ store.networks.stargaze.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.stargaze.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.stargaze.delegations_sum }} STAR</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.stargaze.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -491,7 +491,7 @@
                         <div class="tokens">{{ store.networks.omniflix.delegations_sum }} MBOOT</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.omniflix.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -1033,6 +1033,9 @@
                 transform: rotate(360deg);
     }
 }
+
+
+
 
 
 

@@ -151,7 +151,8 @@
                                 let sum = 0
 
                                 sum += parseFloat(el.balance.amount)
-
+console.log(sum)
+console.log(store.networks[network].exponent)
                                 store.$patch((state) => state.networks[network].delegations_sum = sum / state.networks[network].exponent)
                             })
                         }
