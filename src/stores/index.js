@@ -45,7 +45,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'bostrom': {
                 name: 'Bostrom',
@@ -69,7 +70,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1
             },
             'osmosis': {
                 name: 'Osmosis',
@@ -91,7 +93,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'juno': {
                 name: 'Juno',
@@ -113,7 +116,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'emoney': {
                 name: 'E-money',
@@ -135,7 +139,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'stargaze': {
                 name: 'Stargaze',
@@ -157,7 +162,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'gravity': {
                 name: 'G-Bridge',
@@ -179,7 +185,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             // 'evmos': {
             //     name: 'Evmos',
@@ -222,7 +229,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'omniflix': {
                 name: 'Omniflix hub',
@@ -244,7 +252,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             },
             'desmos': {
                 name: 'Desmos',
@@ -266,7 +275,8 @@ export const useGlobalStore = defineStore('global', {
                 price_usdt: 0,
                 price_atom: 0,
                 price_eth: 0,
-                price_btc: 0
+                price_btc: 0,
+                exponent: 1000000
             }
         }
     })

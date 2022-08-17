@@ -148,7 +148,11 @@
                         if(data.delegation_responses){
                             data.delegation_responses.forEach(el => {
                                 // Delegations sum
-                                store.$patch((state) => state.networks[network].delegations_sum += parseFloat(el.balance.amount))
+                                let sum = 0
+
+                                sum += parseFloat(el.balance.amount)
+
+                                store.$patch((state) => state.networks[network].delegations_sum = sum / state.networks[network].exponent)
                             })
                         }
                     })
