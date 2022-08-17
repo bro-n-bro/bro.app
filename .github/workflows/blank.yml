@@ -34,6 +34,7 @@ jobs:
 
     - name: Deploy
       run: |
+        cp CNAME ./dist/CNAME
         git config --global user.name bronbro-bot
         git config --global user.email bro.n.bro.github@gmail.com
         git remote set-url origin https://${github_token}@github.com/${repository}
