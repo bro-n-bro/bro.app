@@ -3,6 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d dist",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build"
 	},
@@ -12,6 +14,7 @@
 		"@vueuse/core": "^9.1.0",
 		"core-js": "^3.8.3",
 		"crypto-browserify": "^3.12.0",
+		"gh-pages": "^4.0.0",
 		"mitt": "^3.0.0",
 		"path": "^0.12.7",
 		"pinia": "^2.0.18",
