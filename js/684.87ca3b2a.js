@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkbro_app"]=self["webpackChunkbro_app"]||[]).push([[684],{6187:function(r,e,s){s.r(e),s.d(e,{default:function(){return d}});var t=s(3396),n=s(7139),a=s.p+"img/error_404.aee0d69b.svg";const c={class:"error_info"},i={class:"cont"},o=(0,t._)("img",{src:a,alt:"",class:"img"},null,-1),l={class:"title"};function u(r,e){return(0,t.wg)(),(0,t.iD)("section",c,[(0,t._)("div",i,[o,(0,t._)("div",l,(0,n.zw)(r.$t("message.error_title_404")),1)])])}var _=s(89);const p={},f=(0,_.Z)(p,[["render",u]]);var d=f}}]);
+//# sourceMappingURL=684.87ca3b2a.js.map
