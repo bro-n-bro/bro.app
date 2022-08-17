@@ -151,8 +151,7 @@
                                 let sum = 0
 
                                 sum += parseFloat(el.balance.amount)
-console.log(sum)
-console.log(store.networks[network].exponent)
+
                                 store.$patch((state) => state.networks[network].delegations_sum = sum / state.networks[network].exponent)
                             })
                         }
@@ -231,9 +230,9 @@ console.log(store.networks[network].exponent)
                     .then(data => {
                         let result = data.balances.find(e => e.denom == store.networks[network].denom)
 
-                        if(data.balances && data.balances.length && result){
+                        if(data.balances && data.balances.length && typeof result !== "undefined"){
                             store.$patch((state) => state.networks[network].availabel = result.amount)
-                            store.$patch((state) => state.networks[network].availabel_percents = 100 - result.amount / state.networks[network].delegations_sum * 100)
+                            store.$patch((state) => state.networks[network].availabel_percents = state.networks[network].delegations_sum * 100 / (result.amount / state.networks[network].exponent))
                         }
                     })
             }
@@ -342,6 +341,25 @@ console.log(store.networks[network].exponent)
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

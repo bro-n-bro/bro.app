@@ -199,7 +199,7 @@
                         <div class="tokens">{{ store.networks.emoney.delegations_sum }} NGM</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': store.networks.emoney.availabel_percents + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -1033,6 +1033,8 @@
                 transform: rotate(360deg);
     }
 }
+
+
 
 
 
