@@ -98,18 +98,6 @@
                             })
                         }
                     })
-
-                // await fetch(`${store.networks.bostrom.lcd_api}/cosmos/distribution/v1beta1/delegators/bostrom1ke7kxdn29w2lrxt9dzusa6shvmwd8xm9gxm2zf/validators`)
-                //     .then(response => response.json())
-                //     .then(data => {
-                //         if(data.validators.length){
-                //             data.validators.forEach(el => {
-                //                 if(el == store.networks.bostrom.validator){
-                //                     store.$patch((state) => { state.networks.bostrom.status = true })
-                //                 }
-                //             })
-                //         }
-                //     })
             }
 
 
@@ -278,7 +266,7 @@
 
 
 <style>
-`.notifications
+.notifications
 {
     margin-bottom: 30px;
 }
@@ -349,5 +337,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+
 
 </style>
