@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"predeploy": "npm run build",
-		"deploy": "echo 'https://dev.bronbro.io' > ./dist/CNAME && gh-pages -d dist"",
+		"deploy": "echo 'https://dev.bronbro.io' > ./dist/CNAME && gh-pages -d dist",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build"
 	},
