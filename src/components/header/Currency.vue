@@ -19,8 +19,9 @@
     import { ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
-    const store = useGlobalStore(),
-        showDropdown = ref(false)
+    const store = useGlobalStore()
+
+    var showDropdown = ref(false)
 
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })

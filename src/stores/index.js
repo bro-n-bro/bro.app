@@ -15,6 +15,9 @@ export const useGlobalStore = defineStore('global', {
         wallets: {},
         avatar: '',
         tooltip: '',
+        BTC_price: 0,
+        ETH_price: 0,
+        ATOM_price: 0,
         balance_usdt: 0,
         balance_atom: 0,
         balance_eth: 0,
@@ -22,8 +25,13 @@ export const useGlobalStore = defineStore('global', {
         personal_APR: 0,
         RPDE: 0,
         networks: {
-            'cosmos': {
+            'cosmoshub': {
+                name: 'Cosmos hub',
                 status: false,
+                lcd_api: 'https://lcd.cosmoshub-4.bronbro.io',
+                validator: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
+                coingecko_api: 'cosmos',
+                denom: 'uatom',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -40,7 +48,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'bostrom': {
+                name: 'Bostrom',
                 status: false,
+                lcd_api: 'https://lcd.bostrom.bronbro.io',
+                validator: 'bostromvaloper1ydc5fy9fjdygvgw36u49yj39fr67pd9m5qexm8',
+                coingecko_api: 'bostrom',
+                denom: 'boot',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -58,8 +71,13 @@ export const useGlobalStore = defineStore('global', {
                 price_eth: 0,
                 price_btc: 0
             },
-            'osmo': {
+            'osmosis': {
+                name: 'Osmosis',
                 status: false,
+                lcd_api: 'https://lcd.osmosis-1.bronbro.io',
+                validator: 'osmovaloper13tk45jkxgf7w0nxquup3suwaz2tx483xe832ge',
+                coingecko_api: 'osmosis',
+                denom: 'uosmo',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -76,7 +94,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'juno': {
+                name: 'Juno',
                 status: false,
+                lcd_api: 'https://lcd.juno-1.bronbro.io',
+                validator: 'junovaloper1quqxfrxkycr0uzt4yk0d57tcq3zk7srm7sm6r8',
+                coingecko_api: 'juno-network',
+                denom: 'ujuno',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -93,7 +116,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'emoney': {
+                name: 'E-money',
                 status: false,
+                lcd_api: 'https://lcd.emoney-3.bronbro.io',
+                validator: 'emoneyvaloper149vyxd36kxpg46rralaw6eejv4d9daqc3nv642',
+                coingecko_api: 'e-money',
+                denom: 'ungm',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -109,8 +137,13 @@ export const useGlobalStore = defineStore('global', {
                 price_eth: 0,
                 price_btc: 0
             },
-            'stars': {
+            'stargaze': {
+                name: 'Stargaze',
                 status: false,
+                lcd_api: 'https://lcd.stargaze-1.bronbro.io',
+                validator: 'starsvaloper1y58hfnm90r4efhlydx0gavz57lvm7k6uulkg3h',
+                coingecko_api: 'stargaze',
+                denom: 'ustars',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -127,7 +160,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'gravity': {
+                name: 'G-Bridge',
                 status: false,
+                lcd_api: 'https://lcd.gravity-bridge-3.bronbro.io',
+                validator: 'gravityvaloper1vyd4k5j636erx5y5kdqghdu3rfjtwc48vdc7r6',
+                coingecko_api: 'graviton',
+                denom: 'ugraviton',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -143,25 +181,34 @@ export const useGlobalStore = defineStore('global', {
                 price_eth: 0,
                 price_btc: 0
             },
-            'evm': {
+            // 'evmos': {
+            //     name: 'Evmos',
+            //     status: false,
+            //     lcd_api: 'https://lcd.evmos-9001-2.bronbro.io',
+            //     validator: 'evmosvaloper1ce4vh0e5kanlgc7z0rhcemvd8erjnfzcyfecl7',
+            //     coingecko_api: 'evmos',
+            //     health: 0,
+            //     health_color: 'grey',
+            //     apr: 0,
+            //     speed: 0,
+            //     delegations_sum: 0,
+            //     validators: [],
+            //     total_annual_provision: 0,
+            //     RPDE: 0,
+            //     personal_APR: 0,
+            //     price: 0,
+            //     price_usdt: 0,
+            //     price_atom: 0,
+            //     price_eth: 0,
+            //     price_btc: 0
+            // },
+            'crescent': {
+                name: 'Crescent hub',
                 status: false,
-                health: 0,
-                health_color: 'grey',
-                apr: 0,
-                speed: 0,
-                delegations_sum: 0,
-                validators: [],
-                total_annual_provision: 0,
-                RPDE: 0,
-                personal_APR: 0,
-                price: 0,
-                price_usdt: 0,
-                price_atom: 0,
-                price_eth: 0,
-                price_btc: 0
-            },
-            'cre': {
-                status: false,
+                lcd_api: 'https://lcd.crescent-1.bronbro.io',
+                validator: 'crevaloper1c96vvme4k42zlvkc56fslmdpa2qj6u80xvqwau',
+                coingecko_api: 'crescent-network',
+                denom: 'ucre',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -178,7 +225,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'omniflix': {
+                name: 'Omniflix hub',
                 status: false,
+                lcd_api: 'https://lcd.omniflixhub-1.bronbro.io',
+                validator: 'omniflixvaloper1e8grpphncncw9hrutyvnlv77n5dejwcne58zk4',
+                coingecko_api: 'omniflix-network',
+                denom: 'uflix',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
@@ -195,7 +247,12 @@ export const useGlobalStore = defineStore('global', {
                 price_btc: 0
             },
             'desmos': {
+                name: 'Desmos',
                 status: false,
+                lcd_api: 'https://lcd.desmos-mainnet.bronbro.io',
+                validator: 'desmosvaloper1sykf8q94l8q8mqstf64ptuvp74ueyehxpgcq76',
+                coingecko_api: 'desmos',
+                denom: 'udsm',
                 health: 0,
                 health_color: 'grey',
                 apr: 0,
