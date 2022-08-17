@@ -78,5 +78,4 @@
         height: 27px;
         margin-right: 6px;
     }
-
 </style>

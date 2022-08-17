@@ -1,11 +1,9 @@
 import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
 import { createPinia } from 'pinia'
 import i18n from './locale'
 
-import App from './App.vue'
-import router from './router'
-
-// Events
 import mitt from 'mitt'
 const emitter = mitt()
 
@@ -15,7 +13,7 @@ app.use(createPinia())
 app.use(router)
 app.use(i18n)
 
-app.provide('emitter', emitter)
 app.provide('i18n', i18n)
+app.provide('emitter', emitter)
 
 app.mount('#app')

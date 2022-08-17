@@ -8,7 +8,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<meta name="SKYPE_TOOLBAR" content ="SKYPE_TOOLBAR_PARSER_COMPATIBLE">
 
-		<title>Заголовок страницы</title>
+		<title><%= htmlWebpackPlugin.options.title %></title>
 
 		<meta name="msapplication-TileColor" content="#950FFF">
 		<meta name="theme-color" content="#950FFF">
@@ -16,17 +16,13 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-		<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
-		<link rel="mask-icon" href="./safari-pinned-tab.svg" color="#950FFF">
-		<link rel="shortcut icon" href="./favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="<%= BASE_URL %>apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="<%= BASE_URL %>favicon-16x16.png">
+		<link rel="mask-icon" href="<%= BASE_URL %>safari-pinned-tab.svg" color="#950FFF">
+		<link rel="shortcut icon" href="<%= BASE_URL %>favicon-16x16.png">
 
-		<link rel="stylesheet" href="./css/styles.css" async>
-
-		<script>
-			var global = window
-		</script>
+		<link rel="stylesheet" href="<%= BASE_URL %>css/styles.css" async>
 	</head>
 
     <body>
@@ -37,7 +33,6 @@
 
         <!-- Подключение js файлов -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ipfs/0.54.2/index.min.js"></script>
-        <script src="./js/scripts.js"></script>
-        <script type="module" src="./src/main.js"></script>
+        <script src="<%= BASE_URL %>js/scripts.js"></script>
     </body>
 </html>

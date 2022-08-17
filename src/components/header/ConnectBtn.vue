@@ -72,5 +72,4 @@
     {
         width: calc(100% - 50px);
     }
-
 </style>
