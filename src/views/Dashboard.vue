@@ -68,18 +68,18 @@
                         <div class="tokens">{{ store.networks.juno.delegations_sum }} JUNO</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.juno.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.juno.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.juno.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.juno.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.juno.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -111,18 +111,18 @@
                         <div class="tokens">{{ store.networks.cosmoshub.delegations_sum }} ATOM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.cosmoshub.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.cosmoshub.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.cosmoshub.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.cosmoshub.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.cosmoshub.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -154,18 +154,18 @@
                         <div class="tokens">{{ store.networks.bostrom.delegations_sum }} MBOOT</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.bostrom.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.bostrom.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.bostrom.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.bostrom.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.bostrom.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -199,18 +199,18 @@
                         <div class="tokens">{{ store.networks.emoney.delegations_sum }} NGM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.emoney.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.emoney.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.emoney.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.emoney.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.emoney.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -239,21 +239,21 @@
                             <div class="name">{{ store.networks.desmos.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.desmos.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.desmos.delegations_sum }} DSM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.desmos.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.desmos.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.desmos.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.desmos.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.desmos.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -272,20 +272,23 @@
                     <template v-else>
                         <div class="user_name">{{ store.userName }}</div>
 
-                        <div class="balance" v-if="store.currency == 'USDT'">{{ store.balance_usdt }} {{ store.currency }}</div>
-                        <div class="balance" v-if="store.currency == 'ATOM'">{{ store.balance_atom }} {{ store.currency }}</div>
-                        <div class="balance" v-if="store.currency == 'ETH'">{{ store.balance_eth }} {{ store.currency }}</div>
-                        <div class="balance" v-if="store.currency == 'BTC'">{{ store.balance_btc }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.balance_usdt, 2) }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'ATOM'">{{ $filters.toFixed(store.balance_atom, 2) }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'ETH'">{{ $filters.toFixed(store.balance_eth, 4) }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'BTC'">{{ $filters.toFixed(store.balance_btc, 5) }} {{ store.currency }}</div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.RPDE }}</div>
+                                <div class="val" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.RPDE_usdt, 2) }}</div>
+                                <div class="val" v-if="store.currency == 'ATOM'">{{ $filters.toFixed(store.RPDE_atom, 2) }}</div>
+                                <div class="val" v-if="store.currency == 'ETH'">{{ $filters.toFixed(store.RPDE_eth, 2) }}</div>
+                                <div class="val" v-if="store.currency == 'BTC'">{{ $filters.toFixed(store.RPDE_btc, 2) }}</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.personal_APR, 2) }}%</div>
                             </div>
                         </div>
 
@@ -317,18 +320,18 @@
                         <div class="tokens">{{ store.networks.osmosis.delegations_sum }} OSMO</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.osmosis.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.osmosis.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.osmosis.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.osmosis.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.osmosis.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -360,18 +363,18 @@
                         <div class="tokens">{{ store.networks.crescent.delegations_sum }} CRE</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.crescent.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.crescent.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.crescent.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.crescent.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.crescent.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -405,18 +408,18 @@
                         <div class="tokens">{{ store.networks.gravity.delegations_sum }} GRAV</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.gravity.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.gravity.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.gravity.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.gravity.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.gravity.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -448,18 +451,18 @@
                         <div class="tokens">{{ store.networks.stargaze.delegations_sum }} STAR</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.stargaze.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.stargaze.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.stargaze.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.stargaze.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.stargaze.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -488,21 +491,21 @@
                             <div class="name">{{ store.networks.omniflix.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.omniflix.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.omniflix.delegations_sum }} FLIX</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': store.networks.omniflix.availabel_percents + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.availabel_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">{{ store.networks.omniflix.personal_APR }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.omniflix.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ store.networks.omniflix.RPDE }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.omniflix.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -678,9 +681,12 @@
 .dashboard .logo
 {
     display: flex;
+    overflow: hidden;
 
     width: 30px;
     height: 30px;
+
+    border-radius: 50%;
 
     justify-content: center;
     align-items: center;
@@ -1033,23 +1039,6 @@
                 transform: rotate(360deg);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

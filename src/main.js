@@ -9,6 +9,12 @@ const emitter = mitt()
 
 const app = createApp(App)
 
+app.config.globalProperties.$filters = {
+    toFixed(value, limit) {
+        return value.toFixed(limit)
+    }
+}
+
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
