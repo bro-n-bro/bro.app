@@ -68,7 +68,8 @@
                         <div class="tokens">{{ store.networks.juno.delegations_sum }} JUNO</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.juno.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -111,7 +112,8 @@
                         <div class="tokens">{{ store.networks.cosmoshub.delegations_sum }} ATOM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.cosmoshub.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -154,7 +156,8 @@
                         <div class="tokens">{{ store.networks.bostrom.delegations_sum }} MBOOT</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.bostrom.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -199,7 +202,8 @@
                         <div class="tokens">{{ store.networks.emoney.delegations_sum }} NGM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.emoney.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -242,7 +246,8 @@
                         <div class="tokens">{{ store.networks.desmos.delegations_sum }} DSM</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.desmos.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -320,7 +325,8 @@
                         <div class="tokens">{{ store.networks.osmosis.delegations_sum }} OSMO</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.osmosis.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -363,7 +369,8 @@
                         <div class="tokens">{{ store.networks.crescent.delegations_sum }} CRE</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.crescent.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -408,7 +415,8 @@
                         <div class="tokens">{{ store.networks.gravity.delegations_sum }} GRAV</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.gravity.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -451,7 +459,8 @@
                         <div class="tokens">{{ store.networks.stargaze.delegations_sum }} STAR</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stargaze.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -494,7 +503,8 @@
                         <div class="tokens">{{ store.networks.omniflix.delegations_sum }} FLIX</div>
 
                         <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.availabel_percents, 2) + '%'}"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.omniflix.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
@@ -732,11 +742,19 @@
 
 .dashboard .progress
 {
+    display: flex;
+    overflow: hidden;
+
     height: 13px;
     margin-bottom: 12px;
 
     border-radius: 20px;
     background: #0b2272;
+
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
 }
 
 .dashboard .progress .bar
@@ -745,8 +763,12 @@
 
     transition: width .2s linear;
 
-    border-radius: 20px;
     background: #4075fd;
+}
+
+.dashboard .progress .bar.orange
+{
+    background: orange;
 }
 
 
@@ -1039,6 +1061,11 @@
                 transform: rotate(360deg);
     }
 }
+
+
+
+
+
 
 
 
