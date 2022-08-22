@@ -63,7 +63,7 @@
             // Wallets
             store.$patch({
                 wallets: {
-                    'cosmoshub': accounts[0].address,
+                    'cosmoshub': 'cosmos14nzyt8wmx4g6zkeluelukamgsh5v4xgnmeq9y4',
                     'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data),
                     // 'bostrom': 'bostrom1gmc3y8scyx9nemnuk8tj0678mn4w5l786akryz',
                     'osmosis': toBech32('osmo', fromBech32(accounts[0].address).data),
@@ -152,14 +152,16 @@
                     await fetch(`${store.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${store.wallets[network]}`)
                         .then(response => response.json())
                         .then(data => {
+                            console.log(data)
                             if(data.delegation_responses){
-                                data.delegation_responses.forEach(el => {
-                                    // Delegations sum
-                                    let sum = 0
-                                    sum += parseFloat(el.balance.amount)
+                                // Delegations sum
+                                let sum = 0
 
-                                    store.$patch((state) => state.networks[network].delegations_sum = sum / state.networks[network].exponent)
+                                data.delegation_responses.forEach(el => {
+                                    sum += parseFloat(el.balance.amount)
                                 })
+
+                                store.$patch((state) => state.networks[network].delegations_sum = sum / state.networks[network].exponent)
                             }
                         })
                 }
