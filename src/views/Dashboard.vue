@@ -65,7 +65,7 @@
                             <div class="name">{{ store.networks.juno.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.juno.delegations_sum }} JUNO</div>
+                        <div class="tokens">{{ store.networks.juno.tokens_sum }} JUNO</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"></div>
@@ -109,7 +109,7 @@
                             <div class="name">{{ store.networks.cosmoshub.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.cosmoshub.delegations_sum }} ATOM</div>
+                        <div class="tokens">{{ store.networks.cosmoshub.tokens_sum }} ATOM</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"></div>
@@ -153,7 +153,7 @@
                             <div class="name">{{ store.networks.bostrom.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.bostrom.delegations_sum }} MBOOT</div>
+                        <div class="tokens">{{ store.networks.bostrom.tokens_sum }} MBOOT</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
@@ -199,7 +199,7 @@
                             <div class="name">{{ store.networks.emoney.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.emoney.delegations_sum }} NGM</div>
+                        <div class="tokens">{{ store.networks.emoney.tokens_sum }} NGM</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"></div>
@@ -243,7 +243,7 @@
                             <div class="name">{{ store.networks.desmos.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.desmos.delegations_sum }} DSM</div>
+                        <div class="tokens">{{ store.networks.desmos.tokens_sum }} DSM</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>
@@ -322,7 +322,7 @@
                             <div class="name">{{ store.networks.osmosis.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.osmosis.delegations_sum }} OSMO</div>
+                        <div class="tokens">{{ store.networks.osmosis.tokens_sum }} OSMO</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"></div>
@@ -366,7 +366,7 @@
                             <div class="name">{{ store.networks.crescent.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.crescent.delegations_sum }} CRE</div>
+                        <div class="tokens">{{ store.networks.crescent.tokens_sum }} CRE</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"></div>
@@ -412,7 +412,7 @@
                             <div class="name">{{ store.networks.gravity.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.gravity.delegations_sum }} GRAV</div>
+                        <div class="tokens">{{ store.networks.gravity.tokens_sum }} GRAV</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"></div>
@@ -456,7 +456,7 @@
                             <div class="name">{{ store.networks.stargaze.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.stargaze.delegations_sum }} STAR</div>
+                        <div class="tokens">{{ store.networks.stargaze.tokens_sum }} STAR</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"></div>
@@ -500,7 +500,7 @@
                             <div class="name">{{ store.networks.omniflix.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.omniflix.delegations_sum }} FLIX</div>
+                        <div class="tokens">{{ store.networks.omniflix.tokens_sum }} FLIX</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"></div>
