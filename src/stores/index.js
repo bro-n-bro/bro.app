@@ -18,6 +18,7 @@ export const useGlobalStore = defineStore('global', {
         BTC_price: 0,
         ETH_price: 0,
         ATOM_price: 0,
+        delegations_price: 0,
         balance_usdt: 0,
         balance_atom: 0,
         balance_eth: 0,

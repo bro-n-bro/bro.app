@@ -152,7 +152,6 @@
                     await fetch(`${store.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${store.wallets[network]}`)
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data)
                             if(data.delegation_responses){
                                 // Delegations sum
                                 let sum = 0
@@ -176,6 +175,61 @@
                         .then(data => store.$patch((state) => {
                             state.networks[network].rewards = parseFloat(data.total[0].amount) / state.networks[network].exponent
                         }))
+                }
+            }
+
+
+            // Network availabel tokens
+            for (let network in store.networks) {
+                if(store.networks[network].status){
+                    await fetch(`${store.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${store.wallets[network]}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let result = data.balances.find(e => e.denom == store.networks[network].denom)
+
+                            if(data.balances && data.balances.length && typeof result !== "undefined"){
+                                store.$patch((state) => state.networks[network].availabel = parseFloat(result.amount) / state.networks[network].exponent)
+
+                                store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel + state.networks[network].delegations_sum + state.networks[network].rewards)
+
+                                store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_sum * 100 / state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards * 100 / state.networks[network].tokens_sum)
+                            }
+                        })
+                }
+            }
+
+
+            // ATOM price
+            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => store.$patch((state) => state.ATOM_price = data.cosmos.usd))
+
+            // ETH price
+            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => store.$patch((state) => state.ETH_price = data.ethereum.usd))
+
+            // BTC price
+            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => store.$patch((state) => state.BTC_price = data.bitcoin.usd))
+
+            // Network price
+            for (let network in store.networks) {
+                if(store.networks[network].status){
+                    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${store.networks[network].coingecko_api}&vs_currencies=usd`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data[store.networks[network].coingecko_api].usd){
+                                store.$patch((state) => state.networks[network].price = data[store.networks[network].coingecko_api].usd)
+
+                                store.$patch((state) => state.networks[network].price_usdt = data[store.networks[network].coingecko_api].usd * state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].price_atom = state.networks[network].price / state.ATOM_price * state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].price_eth = state.networks[network].price / state.ETH_price * state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].price_btc = state.networks[network].price / state.BTC_price * state.networks[network].tokens_sum)
+                            }
+                        })
                 }
             }
 
@@ -237,61 +291,6 @@
             }
 
 
-            // Network availabel tokens
-            for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await fetch(`${store.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${store.wallets[network]}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let result = data.balances.find(e => e.denom == store.networks[network].denom)
-
-                            if(data.balances && data.balances.length && typeof result !== "undefined"){
-                                store.$patch((state) => state.networks[network].availabel = parseFloat(result.amount) / state.networks[network].exponent)
-
-                                store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel + state.networks[network].delegations_sum + state.networks[network].rewards)
-
-                                store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_sum * 100 / state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards * 100 / state.networks[network].tokens_sum)
-                            }
-                        })
-                }
-            }
-
-
-            // ATOM price
-            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => store.$patch((state) => state.ATOM_price = data.cosmos.usd))
-
-            // ETH price
-            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => store.$patch((state) => state.ETH_price = data.ethereum.usd))
-
-            // BTC price
-            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => store.$patch((state) => state.BTC_price = data.bitcoin.usd))
-
-            // Network price
-            for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${store.networks[network].coingecko_api}&vs_currencies=usd`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data[store.networks[network].coingecko_api].usd){
-                                store.$patch((state) => state.networks[network].price = data[store.networks[network].coingecko_api].usd)
-
-                                store.$patch((state) => state.networks[network].price_usdt = data[store.networks[network].coingecko_api].usd * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_atom = state.networks[network].price / state.ATOM_price * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_eth = state.networks[network].price / state.ETH_price * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_btc = state.networks[network].price / state.BTC_price * state.networks[network].tokens_sum)
-                            }
-                        })
-                }
-            }
-
-
             // Network balance
             for (let network in store.networks) {
                 store.$patch((state) => state.networks[network].balance_usdt = state.networks[network].tokens_sum * state.networks[network].price_usdt)
@@ -303,6 +302,8 @@
 
             // Account balance
             for (let network in store.networks) {
+                store.$patch((state) => state.delegations_price += store.networks[network].delegations_price)
+
                 store.$patch((state) => state.balance_usdt += store.networks[network].price_usdt)
                 store.$patch((state) => state.balance_atom += store.networks[network].price_atom)
                 store.$patch((state) => state.balance_eth += store.networks[network].price_eth)
@@ -312,9 +313,9 @@
                 store.$patch((state) => state.RPDE_atom += store.networks[network].RPDE_atom)
                 store.$patch((state) => state.RPDE_eth += store.networks[network].RPDE_eth)
                 store.$patch((state) => state.RPDE_btc += store.networks[network].RPDE_btc)
-
-                store.$patch((state) => state.personal_APR = state.RPDE_usdt / state.balance_usdt)
             }
+
+            store.$patch((state) => state.personal_APR = state.RPDE_usdt * 365.3 / state.delegations_price)
         }
     })
 
