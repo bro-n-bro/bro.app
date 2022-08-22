@@ -63,7 +63,7 @@
             // Wallets
             store.$patch({
                 wallets: {
-                    'cosmoshub': 'cosmos14nzyt8wmx4g6zkeluelukamgsh5v4xgnmeq9y4',
+                    'cosmoshub': accounts[0].address,
                     'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data),
                     // 'bostrom': 'bostrom1gmc3y8scyx9nemnuk8tj0678mn4w5l786akryz',
                     'osmosis': toBech32('osmo', fromBech32(accounts[0].address).data),
