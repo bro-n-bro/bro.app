@@ -322,6 +322,8 @@
                 store.$patch((state) => state.RPDE_btc += store.networks[network].RPDE_btc)
             }
 
+console.log(store.RPDE_usdt)
+console.log(store.delegations_price)
             store.$patch((state) => state.personal_APR = state.RPDE_usdt * 365.3 / state.delegations_price)
         }
     })
