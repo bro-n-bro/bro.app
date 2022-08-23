@@ -243,7 +243,7 @@
 
             // Network balance
             for (let network in store.networks) {
-                store.$patch((state) => state.networks[network].balance_usdt = state.networks[network].tokens_sum * state.networks[network].price_usdt)
+                store.$patch((state) => state.networks[network].balance_usdt = state.networks[network].tokens_sum * state.networks[network].price)
                 store.$patch((state) => state.networks[network].balance_atom = state.networks[network].tokens_sum * state.networks[network].price_atom)
                 store.$patch((state) => state.networks[network].balance_eth = state.networks[network].tokens_sum * state.networks[network].price_eth)
                 store.$patch((state) => state.networks[network].balance_btc = state.networks[network].tokens_sum * state.networks[network].price_btc)
@@ -408,4 +408,6 @@ console.log(store.delegations_price)
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+
 </style>
