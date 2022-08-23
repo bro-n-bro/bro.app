@@ -153,7 +153,7 @@
                             <div class="name">{{ store.networks.bostrom.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.bostrom.tokens_sum, 2) }} MBOOT</div>
+                        <div class="tokens">{{ $filters.toFixed(store.networks.bostrom.tokens_sum / store.networks.bostrom.exponent, 2) }} MBOOT</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
