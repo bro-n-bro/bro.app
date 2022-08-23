@@ -156,6 +156,10 @@
                                 data.delegation_responses.forEach(el => sum += parseFloat(el.balance.amount))
 
                                 store.$patch((state) => state.networks[network].delegations_tokens = sum / state.networks[network].exponent)
+
+                                if(network == 'bostrom') {
+                                    store.$patch((state) => state.networks.bostrom.delegations_tokens = sum)
+                                }
                             }
                         })
                 }
@@ -169,6 +173,10 @@
                         .then(response => response.json())
                         .then(data => store.$patch((state) => {
                             state.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / state.networks[network].exponent
+
+                            if(network == 'bostrom') {
+                                store.$patch((state) => state.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount))
+                            }
                         }))
                 }
             }
@@ -184,6 +192,10 @@
 
                             if(data.balances && data.balances.length && typeof result !== "undefined"){
                                 store.$patch((state) => state.networks[network].availabel_tokens = parseFloat(result.amount) / state.networks[network].exponent)
+
+                                if(network == 'bostrom') {
+                                    store.$patch((state) => state.networks.bostrom.availabel_tokens = parseFloat(result.amount))
+                                }
 
                                 store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel_tokens + state.networks[network].delegations_tokens + state.networks[network].rewards_tokens)
 
