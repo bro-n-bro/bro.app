@@ -285,10 +285,10 @@
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.RPDE_usdt, 2) }}</div>
-                                <div class="val" v-if="store.currency == 'ATOM'">{{ $filters.toFixed(store.RPDE_atom, 2) }}</div>
-                                <div class="val" v-if="store.currency == 'ETH'">{{ $filters.toFixed(store.RPDE_eth, 2) }}</div>
-                                <div class="val" v-if="store.currency == 'BTC'">{{ $filters.toFixed(store.RPDE_btc, 2) }}</div>
+                                <div class="val" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.RPDE_usdt, 3) }}</div>
+                                <div class="val" v-if="store.currency == 'ATOM'">{{ $filters.toFixed(store.RPDE_atom, 3) }}</div>
+                                <div class="val" v-if="store.currency == 'ETH'">{{ $filters.toFixed(store.RPDE_eth, 3) }}</div>
+                                <div class="val" v-if="store.currency == 'BTC'">{{ $filters.toFixed(store.RPDE_btc, 3) }}</div>
                             </div>
 
                             <div>
@@ -1061,6 +1061,12 @@
                 transform: rotate(360deg);
     }
 }
+
+
+
+
+
+
 
 
 
