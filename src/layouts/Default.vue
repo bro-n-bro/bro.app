@@ -65,7 +65,6 @@
                 wallets: {
                     'cosmoshub': accounts[0].address,
                     'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data),
-                    // 'bostrom': 'bostrom1gmc3y8scyx9nemnuk8tj0678mn4w5l786akryz',
                     'osmosis': toBech32('osmo', fromBech32(accounts[0].address).data),
                     'juno': toBech32('juno', fromBech32(accounts[0].address).data),
                     'emoney': toBech32('emoney', fromBech32(accounts[0].address).data),
@@ -221,12 +220,21 @@
                                 store.$patch((state) => state.networks[network].price = data[store.networks[network].coingecko_api].usd)
 
                                 store.$patch((state) => state.networks[network].price_usdt = state.networks[network].price * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_atom = state.networks[network].price / state.ATOM_price * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_eth = state.networks[network].price / state.ETH_price * state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].price_btc = state.networks[network].price / state.BTC_price * state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].price_atom = state.networks[network].price / state.ATOM_price)
+                                store.$patch((state) => state.networks[network].price_eth = state.networks[network].price / state.ETH_price)
+                                store.$patch((state) => state.networks[network].price_btc = state.networks[network].price / state.BTC_price)
                             }
                         })
                 }
+            }
+
+
+            // Network balance
+            for (let network in store.networks) {
+                store.$patch((state) => state.networks[network].balance_usdt = state.networks[network].tokens_sum * state.networks[network].price_usdt)
+                store.$patch((state) => state.networks[network].balance_atom = state.networks[network].tokens_sum * state.networks[network].price_atom)
+                store.$patch((state) => state.networks[network].balance_eth = state.networks[network].tokens_sum * state.networks[network].price_eth)
+                store.$patch((state) => state.networks[network].balance_btc = state.networks[network].tokens_sum * state.networks[network].price_btc)
             }
 
 
@@ -240,7 +248,7 @@
                 store.$patch((state) => state.networks[network].delegations_price_btc = state.networks[network].delegations_tokens * state.networks[network].price_btc)
 
                 // Rewards
-                store.$patch((state) => state.networks[network].rewards_tokens_price = state.networks[network].rewards_tokens * state.networks[network].price)
+                store.$patch((state) => state.networks[network].rewards_price = state.networks[network].rewards_tokens * state.networks[network].price)
                 store.$patch((state) => state.networks[network].rewards_price_usdt = state.networks[network].rewards_tokens * state.networks[network].price_usdt)
                 store.$patch((state) => state.networks[network].rewards_price_atom = state.networks[network].rewards_tokens * state.networks[network].price_atom)
                 store.$patch((state) => state.networks[network].rewards_price_eth = state.networks[network].rewards_tokens * state.networks[network].price_eth)
@@ -287,23 +295,14 @@
             }
 
 
-            // Network balance
-            for (let network in store.networks) {
-                store.$patch((state) => state.networks[network].balance_usdt = state.networks[network].tokens_sum * state.networks[network].price_usdt)
-                store.$patch((state) => state.networks[network].balance_atom = state.networks[network].tokens_sum * state.networks[network].price_atom)
-                store.$patch((state) => state.networks[network].balance_eth = state.networks[network].tokens_sum * state.networks[network].price_eth)
-                store.$patch((state) => state.networks[network].balance_btc = state.networks[network].tokens_sum * state.networks[network].price_btc)
-            }
-
-
             // Account balance
             for (let network in store.networks) {
                 store.$patch((state) => state.delegations_price += store.networks[network].delegations_price)
 
-                store.$patch((state) => state.balance_usdt += store.networks[network].price_usdt)
-                store.$patch((state) => state.balance_atom += store.networks[network].price_atom)
-                store.$patch((state) => state.balance_eth += store.networks[network].price_eth)
-                store.$patch((state) => state.balance_btc += store.networks[network].price_btc)
+                store.$patch((state) => state.balance_usdt += store.networks[network].balance_usdt)
+                store.$patch((state) => state.balance_atom += store.networks[network].balance_atom)
+                store.$patch((state) => state.balance_eth += store.networks[network].balance_eth)
+                store.$patch((state) => state.balance_btc += store.networks[network].balance_btc)
 
                 store.$patch((state) => state.RPDE_usdt += store.networks[network].RPDE_usdt)
                 store.$patch((state) => state.RPDE_atom += store.networks[network].RPDE_atom)
@@ -395,63 +394,4 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>
