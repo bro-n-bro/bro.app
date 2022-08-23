@@ -241,10 +241,10 @@
 
                 // Rewards
                 store.$patch((state) => state.networks[network].rewards_tokens_price = state.networks[network].rewards_tokens * state.networks[network].price)
-                store.$patch((state) => state.networks[network].rewards_tokens_price_usdt = state.networks[network].rewards_tokens * state.networks[network].price_usdt)
-                store.$patch((state) => state.networks[network].rewards_tokens_price_atom = state.networks[network].rewards_tokens * state.networks[network].price_atom)
-                store.$patch((state) => state.networks[network].rewards_tokens_price_eth = state.networks[network].rewards_tokens * state.networks[network].price_eth)
-                store.$patch((state) => state.networks[network].rewards_tokens_price_btc = state.networks[network].rewards_tokens * state.networks[network].price_btc)
+                store.$patch((state) => state.networks[network].rewards_price_usdt = state.networks[network].rewards_tokens * state.networks[network].price_usdt)
+                store.$patch((state) => state.networks[network].rewards_price_atom = state.networks[network].rewards_tokens * state.networks[network].price_atom)
+                store.$patch((state) => state.networks[network].rewards_price_eth = state.networks[network].rewards_tokens * state.networks[network].price_eth)
+                store.$patch((state) => state.networks[network].rewards_price_btc = state.networks[network].rewards_tokens * state.networks[network].price_btc)
             }
 
 
