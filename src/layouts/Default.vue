@@ -231,7 +231,7 @@
                             if(data[store.networks[network].coingecko_api].usd){
                                 store.$patch((state) => state.networks[network].price = data[store.networks[network].coingecko_api].usd)
 
-                                store.$patch((state) => state.networks[network].price_usdt = state.networks[network].price * state.networks[network].tokens_sum)
+                                store.$patch((state) => state.networks[network].price_usdt = state.networks[network].price)
                                 store.$patch((state) => state.networks[network].price_atom = state.networks[network].price / state.ATOM_price)
                                 store.$patch((state) => state.networks[network].price_eth = state.networks[network].price / state.ETH_price)
                                 store.$patch((state) => state.networks[network].price_btc = state.networks[network].price / state.BTC_price)
@@ -322,8 +322,6 @@
                 store.$patch((state) => state.RPDE_btc += store.networks[network].RPDE_btc)
             }
 
-console.log(store.RPDE_usdt)
-console.log(store.delegations_price)
             store.$patch((state) => state.personal_APR = state.RPDE_usdt * 365.3 / state.delegations_price)
         }
     })
@@ -408,6 +406,11 @@ console.log(store.delegations_price)
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+
+
+
+
 
 
 </style>
