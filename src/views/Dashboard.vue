@@ -168,7 +168,7 @@
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">{{ $filters.toFixed(store.networks.bostrom.RPDE, 2) }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.bostrom.RPDE / store.networks.bostrom.exponent, 2) }}</div>
                             </div>
                         </div>
 
@@ -1061,6 +1061,8 @@
                 transform: rotate(360deg);
     }
 }
+
+
 
 
 
