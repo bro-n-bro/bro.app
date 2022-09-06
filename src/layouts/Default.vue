@@ -34,6 +34,12 @@
     onMounted(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default')
+
+        // Change Keplr account
+        window.addEventListener('keplr_keystorechange', () => {
+            window.location.reload()
+            store.$reset()
+        })
     })
 
 
@@ -58,6 +64,8 @@
                 accounts[0].address,
                 offlineSigner,
             )
+
+            console.log(cosmJS.getAccount())
 
 
             // Wallets
@@ -309,20 +317,22 @@
 
             // Account balance
             for (let network in store.networks) {
-                store.$patch((state) => state.delegations_price += store.networks[network].delegations_price)
+                store.$patch((state) => state.account.delegations_price += store.networks[network].delegations_price)
 
-                store.$patch((state) => state.balance_usdt += store.networks[network].balance_usdt)
-                store.$patch((state) => state.balance_atom += store.networks[network].balance_atom)
-                store.$patch((state) => state.balance_eth += store.networks[network].balance_eth)
-                store.$patch((state) => state.balance_btc += store.networks[network].balance_btc)
+                store.$patch((state) => state.account.balance_usdt += store.networks[network].balance_usdt)
+                store.$patch((state) => state.account.balance_atom += store.networks[network].balance_atom)
+                store.$patch((state) => state.account.balance_eth += store.networks[network].balance_eth)
+                store.$patch((state) => state.account.balance_btc += store.networks[network].balance_btc)
 
-                store.$patch((state) => state.RPDE_usdt += store.networks[network].RPDE_usdt)
-                store.$patch((state) => state.RPDE_atom += store.networks[network].RPDE_atom)
-                store.$patch((state) => state.RPDE_eth += store.networks[network].RPDE_eth)
-                store.$patch((state) => state.RPDE_btc += store.networks[network].RPDE_btc)
+                store.$patch((state) => state.account.RPDE_usdt += store.networks[network].RPDE_usdt)
+                store.$patch((state) => state.account.RPDE_atom += store.networks[network].RPDE_atom)
+                store.$patch((state) => state.account.RPDE_eth += store.networks[network].RPDE_eth)
+                store.$patch((state) => state.account.RPDE_btc += store.networks[network].RPDE_btc)
             }
 
-            store.$patch((state) => state.personal_APR = state.RPDE_usdt * 365.3 / state.delegations_price * 100)
+            if(store.account.delegations_price != 0){
+                store.$patch((state) => state.account.personal_APR = state.account.RPDE_usdt * 365.3 / state.account.delegations_price * 100)
+            }
         }
     })
 
