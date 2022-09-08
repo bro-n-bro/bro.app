@@ -2,15 +2,13 @@
     <section class="dashboard">
         <div class="cont">
             <div class="row">
-                <div class="network" empty></div>
-
-                <!-- <div class="network" :class="{ empty: !store.networks.evmos.status}">
+                <div class="network" :class="{ empty: !store.networks.evmos.status}">
                     <template v-if="!store.networks.evmos.status">
                         <div class="logo">
                             <img src="../assets/images/evmos_logo.png" alt="">
                         </div>
 
-                        <div>Evmos</div>
+                        <div>{{ store.networks.evmos.name }}</div>
                     </template>
 
                     <template v-else>
@@ -19,24 +17,25 @@
                                 <img src="../assets/images/evmos_logo.png" alt="">
                             </div>
 
-                            <div class="name">Evmos</div>
+                            <div class="name">{{ store.networks.evmos.name }}</div>
                         </div>
 
-                        <div class="tokens">2,123.43 MBOOT</div>
+                        <div class="tokens">{{ $filters.toFixed(store.networks.evmos.tokens_sum, 2) }} EVMOS</div>
 
                         <div class="progress">
-                            <div class="bar" style="width: 0%;"></div>
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.evmos.rewards_percents, 2) + '%'}"></div>
                         </div>
 
                         <div class="stats">
                             <div>
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
-                                <div class="val">0%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.evmos.personal_APR, 2) }}%</div>
                             </div>
 
                             <div>
                                 <div class="label">{{ $t('message.RPDE') }}</div>
-                                <div class="val">0</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.evmos.RPDE, 2) }}</div>
                             </div>
                         </div>
 
@@ -44,7 +43,7 @@
                     </template>
 
                     <div class="shadow" :class="[store.networks.evmos.health_color]" :style="{'--speed': store.networks.evmos.speed + 's'}"></div>
-                </div> -->
+                </div>
 
 
                 <div class="network" :class="{ empty: !store.networks.juno.status}">
@@ -240,10 +239,10 @@
                                 <img src="../assets/images/desmos_logo.png" alt="">
                             </div>
 
-                            <div class="name">{{ $filters.toFixed(store.networks.desmos.name, 2) }}</div>
+                            <div class="name">{{ store.networks.desmos.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ store.networks.desmos.tokens_sum }} DSM</div>
+                        <div class="tokens">{{ $filters.toFixed(store.networks.desmos.tokens_sum, 2) }} DSM</div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>

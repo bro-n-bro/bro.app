@@ -23,7 +23,7 @@
     import { inject, onMounted } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
-    import { SigningCosmosClient } from '@cosmjs/launchpad'
+    // import { SigningCosmosClient } from '@cosmjs/launchpad'
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
 
     const emitter = inject('emitter'),
@@ -46,10 +46,21 @@
     // Event "connect wallet"
     emitter.on('connectWallet', async () => {
         // Keplr connect
-        const chainId = 'cosmoshub-4'
+        const chainId = 'cosmoshub-4',
+            chainIdDesmos = 'desmos-mainnet',
+            chainIdEvmos = 'evmos_9001-2'
 
         window.keplr.enable(chainId)
 
+        // Desmos address
+        const offlineSignerDesmos = window.getOfflineSigner(chainIdDesmos),
+        accountsDesmos = await offlineSignerDesmos.getAccounts()
+
+        // Evmos address
+        const offlineSignerEvmos = window.getOfflineSigner(chainIdEvmos),
+        accountsEvmos = await offlineSignerEvmos.getAccounts()
+
+        // Cosmos address
         const offlineSigner = window.getOfflineSigner(chainId),
             accounts = await offlineSigner.getAccounts(),
             key = await window.keplr.getKey(chainId)
@@ -58,15 +69,6 @@
             // Update store
             store.$patch({ userName: key.name })
             store.$patch({ auth: true })
-
-            const cosmJS = new SigningCosmosClient(
-                'https://lcd-cosmoshub.keplr.app/rest',
-                accounts[0].address,
-                offlineSigner,
-            )
-
-            console.log(cosmJS.getAccount())
-
 
             // Wallets
             store.$patch({
@@ -78,10 +80,10 @@
                     'emoney': toBech32('emoney', fromBech32(accounts[0].address).data),
                     'stargaze': toBech32('stars', fromBech32(accounts[0].address).data),
                     'gravity': toBech32('gravity', fromBech32(accounts[0].address).data),
-                    // 'evmos': toBech32('evm', fromBech32(accounts[0].address).data),
+                    'evmos': accountsEvmos[0].address,
                     'crescent': toBech32('cre', fromBech32(accounts[0].address).data),
                     'omniflix': toBech32('omniflix', fromBech32(accounts[0].address).data),
-                    'desmos': toBech32('desmos', fromBech32(accounts[0].address).data),
+                    'desmos': accountsDesmos[0].address
                 }
             })
 
@@ -117,36 +119,34 @@
 				.then(response => response.json())
 				.then(data => {
                     data.infos.forEach(el => {
-                        if(el.network != 'evmos'){
-                            store.$patch((state) => {
-                                state.networks[el.network].health = el.health
-                                state.networks[el.network].apr = el.apr
+                        store.$patch((state) => {
+                            state.networks[el.network].health = el.health
+                            state.networks[el.network].apr = el.apr
 
-                                switch (true) {
-                                    case el.health >= 0 && el.health < 7:
-                                        state.networks[el.network].health_color = 'red'
-                                        break
-                                    case el.health >= 7 && el.health < 13:
-                                        state.networks[el.network].health_color = 'orange'
-                                        break
-                                    case el.health >= 13:
-                                        state.networks[el.network].health_color = 'green'
-                                        break
-                                }
+                            switch (true) {
+                                case el.health >= 0 && el.health < 7:
+                                    state.networks[el.network].health_color = 'red'
+                                    break
+                                case el.health >= 7 && el.health < 13:
+                                    state.networks[el.network].health_color = 'orange'
+                                    break
+                                case el.health >= 13:
+                                    state.networks[el.network].health_color = 'green'
+                                    break
+                            }
 
-                                switch (true) {
-                                    case el.apr < 0.15:
-                                        state.networks[el.network].speed = 4
-                                        break
-                                    case el.apr >= 0.15 && el.apr < 4:
-                                        state.networks[el.network].speed = 4.28378 - 1.89189 * el.apr
-                                        break
-                                    case el.apr >= 4:
-                                        state.networks[el.network].speed = 0.5
-                                        break
-                                }
-                            })
-                        }
+                            switch (true) {
+                                case el.apr < 0.15:
+                                    state.networks[el.network].speed = 4
+                                    break
+                                case el.apr >= 0.15 && el.apr < 4:
+                                    state.networks[el.network].speed = 4.28378 - 1.89189 * el.apr
+                                    break
+                                case el.apr >= 4:
+                                    state.networks[el.network].speed = 0.5
+                                    break
+                            }
+                        })
                     })
             })
 
@@ -160,7 +160,6 @@
                             if(data.delegation_responses){
                                 // Delegations tokens
                                 let sum = 0
-
                                 data.delegation_responses.forEach(el => sum += parseFloat(el.balance.amount))
 
                                 store.$patch((state) => state.networks[network].delegations_tokens = sum / state.networks[network].exponent)
@@ -204,12 +203,12 @@
                                 if(network == 'bostrom') {
                                     store.$patch((state) => state.networks.bostrom.availabel_tokens = parseFloat(result.amount))
                                 }
-
-                                store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel_tokens + state.networks[network].delegations_tokens + state.networks[network].rewards_tokens)
-
-                                store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_tokens * 100 / state.networks[network].tokens_sum)
-                                store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards_tokens * 100 / state.networks[network].tokens_sum)
                             }
+
+                            store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel_tokens + state.networks[network].delegations_tokens + state.networks[network].rewards_tokens)
+
+                            store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_tokens * 100 / state.networks[network].tokens_sum)
+                            store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards_tokens * 100 / state.networks[network].tokens_sum)
                         })
                 }
             }
