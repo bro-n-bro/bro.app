@@ -7,8 +7,11 @@
 
         <div class="dropdown">
             <div><button class="btn" :class="{ active: store.currency == 'BTC' }" @click.prevent="selectCurrency('BTC')">BTC</button></div>
+            
             <div><button class="btn" :class="{ active: store.currency == 'ETH' }" @click.prevent="selectCurrency('ETH')">ETH</button></div>
+
             <div><button class="btn" :class="{ active: store.currency == 'ATOM' }" @click.prevent="selectCurrency('ATOM')">ATOM</button></div>
+
             <div><button class="btn" :class="{ active: store.currency == 'USDT' }" @click.prevent="selectCurrency('USDT')">USDT</button></div>
         </div>
     </div>
@@ -26,7 +29,7 @@
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })
 
-        this.showDropdown = false
+        this.showDropdown = !this.showDropdown
     }
 </script>
 

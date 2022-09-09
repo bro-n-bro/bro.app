@@ -2,8 +2,8 @@
     <section class="dashboard">
         <div class="cont">
             <div class="row">
-                <div class="network" :class="{ empty: !store.networks.evmos.status}">
-                    <template v-if="!store.networks.evmos.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.evmos.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/evmos_logo.png" alt="">
                         </div>
@@ -39,15 +39,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.evmos.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.evmos.health_color]" :style="{'--speed': store.networks.evmos.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.juno.status}">
-                    <template v-if="!store.networks.juno.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.juno.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/juno_logo.png" alt="">
                         </div>
@@ -83,15 +85,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.juno.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.juno.health_color]" :style="{'--speed': store.networks.juno.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.cosmoshub.status}">
-                    <template v-if="!store.networks.cosmoshub.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.cosmoshub.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/cosmos_logo.png" alt="">
                         </div>
@@ -127,15 +131,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.cosmoshub.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.cosmoshub.health_color]" :style="{'--speed': store.networks.cosmoshub.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.bostrom.status}">
-                    <template v-if="!store.networks.bostrom.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.bostrom.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/bostrom_logo.png" alt="">
                         </div>
@@ -171,7 +177,9 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.bostrom.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.bostrom.health_color]" :style="{'--speed': store.networks.bostrom.speed + 's'}"></div>
@@ -180,8 +188,8 @@
 
 
             <div class="row">
-                <div class="network" :class="{ empty: !store.networks.emoney.status}">
-                    <template v-if="!store.networks.emoney.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.emoney.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/e-money_logo.png" alt="">
                         </div>
@@ -217,15 +225,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.emoney.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.emoney.health_color]" :style="{'--speed': store.networks.emoney.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.desmos.status}">
-                    <template v-if="!store.networks.desmos.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.desmos.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/desmos_logo.png" alt="">
                         </div>
@@ -261,7 +271,9 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.desmos.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.desmos.health_color]" :style="{'--speed': store.networks.desmos.speed + 's'}"></div>
@@ -303,8 +315,8 @@
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.osmosis.status}">
-                    <template v-if="!store.networks.osmosis.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.osmosis.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/osmosis_logo.png" alt="">
                         </div>
@@ -340,15 +352,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.osmosis.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.osmosis.health_color]" :style="{'--speed': store.networks.osmosis.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.crescent.status}">
-                    <template v-if="!store.networks.crescent.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.crescent.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/crescent_logo.png" alt="">
                         </div>
@@ -384,7 +398,9 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.crescent.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.crescent.health_color]" :style="{'--speed': store.networks.crescent.speed + 's'}"></div>
@@ -393,8 +409,8 @@
 
 
             <div class="row">
-                <div class="network" :class="{ empty: !store.networks.gravity.status}">
-                    <template v-if="!store.networks.gravity.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.gravity.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/g-bridge_logo.png" alt="">
                         </div>
@@ -430,15 +446,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.gravity.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.gravity.health_color]" :style="{'--speed': store.networks.gravity.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.stargaze.status}">
-                    <template v-if="!store.networks.stargaze.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stargaze.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/stargaze_logo.png" alt="">
                         </div>
@@ -474,15 +492,17 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.stargaze.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.stargaze.health_color]" :style="{'--speed': store.networks.stargaze.speed + 's'}"></div>
                 </div>
 
 
-                <div class="network" :class="{ empty: !store.networks.omniflix.status}">
-                    <template v-if="!store.networks.omniflix.status">
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.omniflix.status && store.auth}">
+                    <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/omniflix_logo.png" alt="">
                         </div>
@@ -518,12 +538,13 @@
                             </div>
                         </div>
 
-                        <a href="/" class="details_btn">{{ $t('message.details') }}</a>
+                        <a href="/" class="details_btn" v-if="store.networks.omniflix.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.omniflix.health_color]" :style="{'--speed': store.networks.omniflix.speed + 's'}"></div>
                 </div>
-
 
                 <div class="network hidden"></div>
             </div>
@@ -694,6 +715,7 @@
 
     width: 30px;
     height: 30px;
+    position: relative;
 
     border-radius: 50%;
 
@@ -1060,27 +1082,4 @@
                 transform: rotate(360deg);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

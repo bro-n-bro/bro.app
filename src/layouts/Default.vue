@@ -14,13 +14,16 @@
     </section>
 
     <RouterView />
+
+    <ManageModal v-if="showManageModal"/>
 </template>
 
 
 <script setup>
     import Header  from '../components/Header.vue'
+    import ManageModal  from '../components/ManageModal.vue'
 
-    import { inject, onMounted } from 'vue'
+    import { inject, onMounted, ref } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
     // import { SigningCosmosClient } from '@cosmjs/launchpad'
@@ -29,7 +32,8 @@
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
         store = useGlobalStore()
-
+        
+    var showManageModal = ref(false)
 
     onMounted(() => {
         // Set default notification
@@ -340,91 +344,92 @@
     emitter.on('setNotification', function(notice) {
         store.$patch({ tooltip: notice })
     })
+
+
+    // Event "open manage modal"
+    emitter.on('open_manage_modal', function() {
+        showManageModal = !showManageModal
+    })
+
+    // Event "close manage modal"
+    emitter.on('close_manage_modal', function() {
+        showManageModal = !showManageModal
+    })
 </script>
 
 
 <style>
-.notifications
-{
-    margin-bottom: 30px;
-}
+    .notifications
+    {
+        margin-bottom: 30px;
+    }
 
 
-.notifications .data
-{
-    font-size: 14px;
-    line-height: 150%;
+    .notifications .data
+    {
+        font-size: 14px;
+        line-height: 150%;
 
-    display: flex;
+        display: flex;
 
-    width: 953px;
-    max-width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 20px;
+        width: 953px;
+        max-width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 20px;
 
-    border-radius: 20px;
-    background: #141414;
+        border-radius: 20px;
+        background: #141414;
 
-    justify-content: space-between;
-    align-items: flex-start;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-}
-
-
-.notifications .icon
-{
-    display: flex;
-
-    width: 52px;
-    height: 52px;
-
-    border: 1px solid rgba(217, 217, 217, .1);
-    border-radius: 50%;
-
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-wrap: wrap;
-}
-
-.notifications .icon svg
-{
-    display: block;
-
-    width: 30px;
-    height: 30px;
-}
-
-.notifications .icon + *
-{
-    width: calc(100% - 67px);
-    margin-left: auto;
-}
-
-.notifications span
-{
-    display: -webkit-box;
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    align-self: center;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
 
 
+    .notifications .icon
+    {
+        display: flex;
 
+        width: 52px;
+        height: 52px;
 
+        border: 1px solid rgba(217, 217, 217, .1);
+        border-radius: 50%;
 
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
 
+    .notifications .icon svg
+    {
+        display: block;
 
+        width: 30px;
+        height: 30px;
+    }
 
+    .notifications .icon + *
+    {
+        width: calc(100% - 67px);
+        margin-left: auto;
+    }
 
+    .notifications span
+    {
+        display: -webkit-box;
+        overflow: hidden;
 
+        text-overflow: ellipsis;
+
+        align-self: center;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
 
 
 

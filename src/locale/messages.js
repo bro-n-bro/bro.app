@@ -16,13 +16,30 @@ export default {
             // Buttons
             'connect_wallet': 'Connect wallet',
             'details': 'Details',
+            'delegate_btn': 'Delegate to your Bro',
 
             // Dashboard
             'personal_apr': 'Personal APR',
             'RPDE': 'RPDE',
 
             // Notofications
-            'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.'
+            'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
+
+            // Manage modal
+            'manage_modal_action_delegate': 'Delegate',
+            'manage_modal_action_redelegate': 'Redelegate',
+            'manage_modal_validator_name': 'Bro_n_Bro',
+            'manage_modal_commission': 'Commission',
+            'manage_modal_notice_title': 'Staking will lock up your funds for 14 days',
+            'manage_modal_notice_desc': 'Once you undelegate your staked EVMOS, you will need to wait 14 days for your tokens to be liquid',
+            'manage_modal_my_delegation': 'My delegation',
+            'manage_modal_available_balance': 'Available Balance',
+            'manage_modal_amount': 'Amount to Delegate',
+            'manage_modal_max_btn': 'MAX',
+            'manage_modal_validator_label': 'Validator from Redelegate',
+            'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
+            'manage_modal_back_btn': 'Back',
+            'manage_modal_delegate_btn': 'Delegate',
         }
     }
 }
