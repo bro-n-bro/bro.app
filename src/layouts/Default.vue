@@ -15,7 +15,7 @@
 
     <RouterView />
 
-    <ManageModal v-if="showManageModal"/>
+    <ManageModal v-show="store.showManageModal"/>
 </template>
 
 
@@ -23,7 +23,7 @@
     import Header  from '../components/Header.vue'
     import ManageModal  from '../components/ManageModal.vue'
 
-    import { inject, onMounted, ref } from 'vue'
+    import { inject, onMounted } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
     // import { SigningCosmosClient } from '@cosmjs/launchpad'
@@ -32,8 +32,6 @@
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
         store = useGlobalStore()
-        
-    var showManageModal = ref(false)
 
     onMounted(() => {
         // Set default notification
@@ -195,26 +193,24 @@
 
             // Network availabel tokens
             for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await fetch(`${store.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${store.wallets[network]}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let result = data.balances.find(e => e.denom == store.networks[network].denom)
+                await fetch(`${store.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${store.wallets[network]}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let result = data.balances.find(e => e.denom == store.networks[network].denom)
 
-                            if(data.balances && data.balances.length && typeof result !== "undefined"){
-                                store.$patch((state) => state.networks[network].availabel_tokens = parseFloat(result.amount) / state.networks[network].exponent)
+                        if(data.balances && data.balances.length && typeof result !== "undefined"){
+                            store.$patch((state) => state.networks[network].availabel_tokens = parseFloat(result.amount) / state.networks[network].exponent)
 
-                                if(network == 'bostrom') {
-                                    store.$patch((state) => state.networks.bostrom.availabel_tokens = parseFloat(result.amount))
-                                }
+                            if(network == 'bostrom') {
+                                store.$patch((state) => state.networks.bostrom.availabel_tokens = parseFloat(result.amount))
                             }
+                        }
 
-                            store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel_tokens + state.networks[network].delegations_tokens + state.networks[network].rewards_tokens)
+                        store.$patch((state) => state.networks[network].tokens_sum = state.networks[network].availabel_tokens + state.networks[network].delegations_tokens + state.networks[network].rewards_tokens)
 
-                            store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_tokens * 100 / state.networks[network].tokens_sum)
-                            store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards_tokens * 100 / state.networks[network].tokens_sum)
-                        })
-                }
+                        store.$patch((state) => state.networks[network].delegations_percents = state.networks[network].delegations_tokens * 100 / state.networks[network].tokens_sum)
+                        store.$patch((state) => state.networks[network].rewards_percents = state.networks[network].rewards_tokens * 100 / state.networks[network].tokens_sum)
+                    })
             }
 
 
@@ -347,13 +343,25 @@
 
 
     // Event "open manage modal"
-    emitter.on('open_manage_modal', function() {
-        showManageModal = !showManageModal
+    emitter.on('open_manage_modal', async function(modal_data) {
+        await fetch(`${store.networks[modal_data.network].lcd_api}/cosmos/staking/v1beta1/params`)
+            .then(response => response.json())
+            .then(data => {
+                store.$patch((state) => {
+                    state.showManageModal = true,
+                    state.networkManageModal = modal_data.network,
+                    state.networks[modal_data.network].unbonding_time = parseInt(data.params.unbonding_time)
+                })
+
+                document.body.classList.add('lock')
+            })
     })
 
     // Event "close manage modal"
     emitter.on('close_manage_modal', function() {
-        showManageModal = !showManageModal
+        store.$patch({ showManageModal: false })
+
+        document.body.classList.remove('lock')
     })
 </script>
 
@@ -430,6 +438,20 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

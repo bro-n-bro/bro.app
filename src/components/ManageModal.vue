@@ -9,12 +9,12 @@
                 <form class="form" @submit.prevent="onSubmit">
                     <div class="type">
                         <label>
-                            <input type="radio" name="type" value="delegate" checked>
+                            <input type="radio" value="delegate" v-model="formData.type">
                             <div>{{ $t('message.manage_modal_action_delegate') }}</div>
                         </label>
 
                         <label>
-                            <input type="radio" name="type" value="redelegate">
+                            <input type="radio" value="redelegate" v-model="formData.type">
                             <div>{{ $t('message.manage_modal_action_redelegate') }}</div>
                         </label>
                     </div>
@@ -36,20 +36,29 @@
                     </div>
 
                     <div class="notice">
-                        <div class="title">{{ $t('message.manage_modal_notice_title') }}</div>
+                        <div class="title">
+                            {{ $t('message.manage_modal_notice_title', {
+                                unbonding_time: store.networks[store.networkManageModal].unbonding_time/60/60/24
+                            }) }}
+                        </div>
 
-                        <div class="desc">{{ $t('message.manage_modal_notice_desc') }}</div>
+                        <div class="desc">
+                            {{ $t('message.manage_modal_notice_desc', {
+                                currency: store.networks[store.networkManageModal].token_name,
+                                unbonding_time: store.networks[store.networkManageModal].unbonding_time/60/60/24
+                            }) }}
+                        </div>
                     </div>
 
                     <div class="tokens">
                         <div>
                             <div class="label">{{ $t('message.manage_modal_my_delegation') }}</div>
-                            <div class="val">3.37K EVMOS</div>
+                            <div class="val">{{ store.networks[store.networkManageModal].delegations_tokens }} {{ store.networks[store.networkManageModal].token_name }}</div>
                         </div>
 
                         <div>
                             <div class="label">{{ $t('message.manage_modal_available_balance') }}</div>
-                            <div class="val">0.64 EVMOS</div>
+                            <div class="val">{{ store.networks[store.networkManageModal].availabel_tokens }} {{ store.networks[store.networkManageModal].token_name }}</div>
                         </div>
                     </div>
 
@@ -57,25 +66,33 @@
                         <div class="label">{{ $t('message.manage_modal_amount') }}</div>
 
                         <div class="field">
-                            <input type="number" name="amount" value="" class="input">
+                            <input type="number" class="input" v-model="formData.amount">
 
-                            <div class="unit">EVMOS</div>
+                            <div class="unit">{{ store.networks[store.networkManageModal].token_name }}</div>
 
-                            <button type="button" class="max_btn">{{ $t('message.manage_modal_max_btn') }}</button>
+                            <button type="button" class="max_btn" @click.prevent="formData.amount = store.networks[store.networkManageModal].availabel_tokens">
+                                {{ $t('message.manage_modal_max_btn') }}
+                            </button>
                         </div>
                     </div>
 
                     <div class="validate_from">
-                        <div class="label">{{ $t('message.manage_modal_validator_label') }}</div>
+                        <div class="label" v-if="formData.type == 'delegate'">
+                            {{ $t('message.manage_modal_validator_label') }}
+                        </div>
+                        
+                        <div class="label" v-else>
+                            {{ $t('message.manage_modal_validator_label2') }}
+                        </div>
 
                         <div class="field">
-                            <input type="text" name="validator" value="Bro_n_Bro" class="input" readonly>
+                            <input type="text" class="input" :readonly="formData.type == 'delegate'"  v-model="formData.validator">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
                             </div>
 
-                            <button type="button" class="clear_btn">
+                            <button type="button" class="clear_btn" @click.prevent="formData.validator = ''">
                                 <svg><use xlink:href="/sprite.svg#ic_close"></use></svg>
                             </button>
 
@@ -99,7 +116,7 @@
                         </div>
 
                         <div class="fees">
-                            {{ $t('message.manage_modal_fees', { value: 0.0001, currency: 'EVMOS' }) }}
+                            {{ $t('message.manage_modal_fees', { value: 0.0001, currency: store.networks[store.networkManageModal].token_name }) }}
                         </div>
                     </div>
 
@@ -112,6 +129,8 @@
                             {{ $t('message.manage_modal_delegate_btn') }}
                         </button>
                     </div>
+
+                    <pre>{{ formData }}</pre>
                 </form>
             </div>
         </div>
@@ -122,7 +141,18 @@
 
 
 <script setup>
-    const commision = 5
+    import { inject, ref } from 'vue'
+    import { useGlobalStore } from '@/stores'
+
+    const emitter = inject('emitter'),
+        store = useGlobalStore(),
+        i18n = inject('i18n'),
+        commision = 5,
+        formData = ref({
+            type: 'delegate',
+            amount: 0,
+            validator: i18n.global.t('message.manage_modal_validator_name')
+        })
 
     function onSubmit() {
         
@@ -527,8 +557,8 @@
     {
         display: block;
 
-        width: 12px;
-        height: 12px;
+        width: 20px;
+        height: 20px;
     }
 
     #manage_modal .validate_from .input:read-only ~ .clear_btn
@@ -672,6 +702,89 @@
         border-color: #950fff;
         background: #950fff;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

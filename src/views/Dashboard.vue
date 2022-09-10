@@ -20,7 +20,10 @@
                             <div class="name">{{ store.networks.evmos.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.evmos.tokens_sum, 2) }} EVMOS</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.evmos.tokens_sum, 2) }}
+                            {{ store.networks.evmos.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}"></div>
@@ -41,7 +44,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.evmos.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'evmos' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.evmos.health_color]" :style="{'--speed': store.networks.evmos.speed + 's'}"></div>
@@ -66,7 +69,10 @@
                             <div class="name">{{ store.networks.juno.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.juno.tokens_sum, 2) }} JUNO</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.juno.tokens_sum, 2) }}
+                            {{ store.networks.juno.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"></div>
@@ -87,7 +93,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.juno.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'juno' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.juno.health_color]" :style="{'--speed': store.networks.juno.speed + 's'}"></div>
@@ -112,7 +118,10 @@
                             <div class="name">{{ store.networks.cosmoshub.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.cosmoshub.tokens_sum, 2) }} ATOM</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.cosmoshub.tokens_sum, 2) }}
+                            {{ store.networks.cosmoshub.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"></div>
@@ -133,7 +142,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.cosmoshub.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'cosmoshub' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.cosmoshub.health_color]" :style="{'--speed': store.networks.cosmoshub.speed + 's'}"></div>
@@ -158,7 +167,10 @@
                             <div class="name">{{ store.networks.bostrom.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.bostrom.tokens_sum / store.networks.bostrom.exponent, 2) }} MBOOT</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.bostrom.tokens_sum / store.networks.bostrom.exponent, 2) }}
+                            {{ store.networks.bostrom.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
@@ -179,7 +191,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.bostrom.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'bostrom' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.bostrom.health_color]" :style="{'--speed': store.networks.bostrom.speed + 's'}"></div>
@@ -206,7 +218,10 @@
                             <div class="name">{{ store.networks.emoney.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.emoney.tokens_sum, 2) }} NGM</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.emoney.tokens_sum, 2) }}
+                            {{ store.networks.emoney.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"></div>
@@ -227,7 +242,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.emoney.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'emoney' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.emoney.health_color]" :style="{'--speed': store.networks.emoney.speed + 's'}"></div>
@@ -252,7 +267,10 @@
                             <div class="name">{{ store.networks.desmos.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.desmos.tokens_sum, 2) }} DSM</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.desmos.tokens_sum, 2) }}
+                            {{ store.networks.desmos.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>
@@ -273,7 +291,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.desmos.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'desmos' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.desmos.health_color]" :style="{'--speed': store.networks.desmos.speed + 's'}"></div>
@@ -333,7 +351,10 @@
                             <div class="name">{{ store.networks.osmosis.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.osmosis.tokens_sum, 2) }} OSMO</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.osmosis.tokens_sum, 2) }}
+                            {{ store.networks.osmosis.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"></div>
@@ -354,7 +375,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.osmosis.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'osmosis' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.osmosis.health_color]" :style="{'--speed': store.networks.osmosis.speed + 's'}"></div>
@@ -379,7 +400,10 @@
                             <div class="name">{{ store.networks.crescent.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.crescent.tokens_sum, 2) }} CRE</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.crescent.tokens_sum, 2) }}
+                            {{ store.networks.crescent.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"></div>
@@ -400,7 +424,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.crescent.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'crescent' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.crescent.health_color]" :style="{'--speed': store.networks.crescent.speed + 's'}"></div>
@@ -427,7 +451,10 @@
                             <div class="name">{{ store.networks.gravity.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.gravity.tokens_sum, 2) }} GRAV</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.gravity.tokens_sum, 2) }}
+                            {{ store.networks.gravity.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"></div>
@@ -448,7 +475,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.gravity.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'gravity' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.gravity.health_color]" :style="{'--speed': store.networks.gravity.speed + 's'}"></div>
@@ -473,7 +500,10 @@
                             <div class="name">{{ store.networks.stargaze.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.stargaze.tokens_sum, 2) }} STAR</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.stargaze.tokens_sum, 2) }}
+                            {{ store.networks.stargaze.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"></div>
@@ -494,7 +524,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.stargaze.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'stargaze' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.stargaze.health_color]" :style="{'--speed': store.networks.stargaze.speed + 's'}"></div>
@@ -519,7 +549,10 @@
                             <div class="name">{{ store.networks.omniflix.name }}</div>
                         </div>
 
-                        <div class="tokens">{{ $filters.toFixed(store.networks.omniflix.tokens_sum, 2) }} FLIX</div>
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.omniflix.tokens_sum, 2) }}
+                            {{ store.networks.omniflix.token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"></div>
@@ -540,7 +573,7 @@
 
                         <a href="/" class="details_btn" v-if="store.networks.omniflix.status && store.auth">{{ $t('message.details') }}</a>
 
-                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal')">{{ $t('message.delegate_btn') }}</button>
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'omniflix' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.omniflix.health_color]" :style="{'--speed': store.networks.omniflix.speed + 's'}"></div>
@@ -972,6 +1005,11 @@
     background: #282828;
 }
 
+.dashboard .network.disabled .shadow:after
+{
+    background: #212121;
+}
+
 
 
 .dashboard .row > *.account:before
@@ -1082,4 +1120,27 @@
                 transform: rotate(360deg);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>

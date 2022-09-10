@@ -23,6 +23,7 @@ const networks = {
         validator: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
         coingecko_api: 'cosmos',
         denom: 'uatom',
+        token_name: 'ATOM',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -64,7 +65,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'bostrom': {
         name: 'Bostrom',
@@ -73,6 +75,7 @@ const networks = {
         validator: 'bostromvaloper1ydc5fy9fjdygvgw36u49yj39fr67pd9m5qexm8',
         coingecko_api: 'bostrom',
         denom: 'boot',
+        token_name: 'MBOOT',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -114,7 +117,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'osmosis': {
         name: 'Osmosis',
@@ -123,6 +127,7 @@ const networks = {
         validator: 'osmovaloper13tk45jkxgf7w0nxquup3suwaz2tx483xe832ge',
         coingecko_api: 'osmosis',
         denom: 'uosmo',
+        token_name: 'OSMO',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -164,7 +169,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'juno': {
         name: 'Juno',
@@ -173,6 +179,7 @@ const networks = {
         validator: 'junovaloper1quqxfrxkycr0uzt4yk0d57tcq3zk7srm7sm6r8',
         coingecko_api: 'juno-network',
         denom: 'ujuno',
+        token_name: 'JUNO',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -214,7 +221,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'emoney': {
         name: 'E-money',
@@ -223,6 +231,7 @@ const networks = {
         validator: 'emoneyvaloper149vyxd36kxpg46rralaw6eejv4d9daqc3nv642',
         coingecko_api: 'e-money',
         denom: 'ungm',
+        token_name: 'NGM',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -264,7 +273,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'stargaze': {
         name: 'Stargaze',
@@ -273,6 +283,7 @@ const networks = {
         validator: 'starsvaloper1y58hfnm90r4efhlydx0gavz57lvm7k6uulkg3h',
         coingecko_api: 'stargaze',
         denom: 'ustars',
+        token_name: 'STAR',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -314,7 +325,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'gravity': {
         name: 'G-Bridge',
@@ -323,6 +335,7 @@ const networks = {
         validator: 'gravityvaloper1vyd4k5j636erx5y5kdqghdu3rfjtwc48vdc7r6',
         coingecko_api: 'graviton',
         denom: 'ugraviton',
+        token_name: 'GRAV',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -364,7 +377,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'evmos': {
         name: 'Evmos',
@@ -373,6 +387,7 @@ const networks = {
         validator: 'evmosvaloper1ce4vh0e5kanlgc7z0rhcemvd8erjnfzcyfecl7',
         coingecko_api: 'evmos',
         denom: 'evmos',
+        token_name: 'EVMOS',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -414,7 +429,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'crescent': {
         name: 'Crescent hub',
@@ -423,6 +439,7 @@ const networks = {
         validator: 'crevaloper1c96vvme4k42zlvkc56fslmdpa2qj6u80xvqwau',
         coingecko_api: 'crescent-network',
         denom: 'ucre',
+        token_name: 'CRE',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -464,7 +481,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'omniflix': {
         name: 'Omniflix hub',
@@ -473,6 +491,7 @@ const networks = {
         validator: 'omniflixvaloper1e8grpphncncw9hrutyvnlv77n5dejwcne58zk4',
         coingecko_api: 'omniflix-network',
         denom: 'uflix',
+        token_name: 'FLIX',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -514,7 +533,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     },
     'desmos': {
         name: 'Desmos',
@@ -523,6 +543,7 @@ const networks = {
         validator: 'desmosvaloper1sykf8q94l8q8mqstf64ptuvp74ueyehxpgcq76',
         coingecko_api: 'desmos',
         denom: 'udsm',
+        token_name: 'DSM',
         health: 0,
         health_color: 'grey',
         apr: 0,
@@ -564,7 +585,8 @@ const networks = {
         rewards_price_eth: 0,
         rewards_price_btc: 0,
         rewards_percents: 0,
-        tokens_sum: 0
+        tokens_sum: 0,
+        unbonding_time: 0
     }
 }
 
@@ -586,6 +608,8 @@ export const useGlobalStore = defineStore('global', {
         ETH_price: 0,
         ATOM_price: 0,
         account,
-        networks
+        networks,
+        showManageModal: false,
+        networkManageModal: 'cosmoshub'
     })
 })
