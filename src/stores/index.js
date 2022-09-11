@@ -386,7 +386,7 @@ const networks = {
         lcd_api: 'https://lcd.evmos-9001-2.bronbro.io',
         validator: 'evmosvaloper1ce4vh0e5kanlgc7z0rhcemvd8erjnfzcyfecl7',
         coingecko_api: 'evmos',
-        denom: 'evmos',
+        denom: 'aevmos',
         token_name: 'EVMOS',
         health: 0,
         health_color: 'grey',
@@ -610,6 +610,7 @@ export const useGlobalStore = defineStore('global', {
         account,
         networks,
         showManageModal: false,
-        networkManageModal: 'cosmoshub'
+        networkManageModal: 'cosmoshub',
+        showManageSuccessModal: false
     })
 })

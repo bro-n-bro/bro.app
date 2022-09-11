@@ -15,13 +15,16 @@
 
     <RouterView />
 
-    <ManageModal v-show="store.showManageModal"/>
+    <ManageModal v-if="store.showManageModal" />
+
+    <ManageSuccessModal v-if="store.showManageSuccessModal" />
 </template>
 
 
 <script setup>
     import Header  from '../components/Header.vue'
     import ManageModal  from '../components/ManageModal.vue'
+    import ManageSuccessModal  from '../components/ManageSuccessModal.vue'
 
     import { inject, onMounted } from 'vue'
     import { RouterView } from 'vue-router'
@@ -363,81 +366,59 @@
 
         document.body.classList.remove('lock')
     })
+
+    // Event "open manage success modal"
+    emitter.on('open_manage_success_modal', async function() {
+        store.$patch({ showManageSuccessModal: true })
+
+        document.body.classList.add('lock')
+    })
+
+    // Event "close manage success modal"
+    emitter.on('close_manage_success_modal', function() {
+        store.$patch({ showManageSuccessModal: false })
+
+        document.body.classList.remove('lock')
+    })
 </script>
 
 
 <style>
-    .notifications
-    {
-        margin-bottom: 30px;
-    }
+.notifications
+{
+    margin-bottom: 30px;
+}
 
 
-    .notifications .data
-    {
-        font-size: 14px;
-        line-height: 150%;
-
-        display: flex;
-
-        width: 953px;
-        max-width: 100%;
-        margin-right: auto;
-        margin-left: auto;
-        padding: 20px;
-
-        border-radius: 20px;
-        background: #141414;
-
-        justify-content: space-between;
-        align-items: flex-start;
-        align-content: flex-start;
-        flex-wrap: wrap;
-        font-feature-settings: 'pnum' on, 'lnum' on;
-    }
+.notifications .data
+{
+    font-size: 14px;  line-height: 150%;  display: flex;  align-content: flex-start;  align-items: flex-start;  flex-wrap: wrap;  justify-content: space-between;  width: 953px;  max-width: 100%;  margin-right: auto;  margin-left: auto;  padding: 20px;  border-radius: 20px;  background: #141414;  font-feature-settings: 'pnum' on, 'lnum' on;
+}
 
 
-    .notifications .icon
-    {
-        display: flex;
+.notifications .icon
+{
+    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 52px;  height: 52px;  border: 1px solid rgba(217, 217, 217, .1);  border-radius: 50%;
+}
 
-        width: 52px;
-        height: 52px;
+.notifications .icon svg
+{
+    display: block;  width: 30px;  height: 30px;
+}
 
-        border: 1px solid rgba(217, 217, 217, .1);
-        border-radius: 50%;
+.notifications .icon + *
+{
+    width: calc(100% - 67px);  margin-left: auto;
+}
 
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
+.notifications span
+{
+    display: -webkit-box;  overflow: hidden;  align-self: center;  -webkit-box-orient: vertical;  text-overflow: ellipsis;  -webkit-line-clamp: 2;
+}
 
-    .notifications .icon svg
-    {
-        display: block;
 
-        width: 30px;
-        height: 30px;
-    }
 
-    .notifications .icon + *
-    {
-        width: calc(100% - 67px);
-        margin-left: auto;
-    }
 
-    .notifications span
-    {
-        display: -webkit-box;
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-        align-self: center;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-    }
 
 
 

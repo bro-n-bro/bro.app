@@ -41,6 +41,9 @@ export default {
             'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
             'manage_modal_back_btn': 'Back',
             'manage_modal_delegate_btn': 'Delegate',
+
+            'manage_modal_success_title': "Oooops, seems you don't have a Keplr extension",
+            'manage_modal_success_desc': "Oooops, seems you don't have a Keplr extension",
         }
     }
 }
