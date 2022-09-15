@@ -1,6 +1,8 @@
 <template>
     <Header />
 
+    <!-- <pre>{{ store }}</pre> -->
+
     <section class="notifications">
         <div class="cont">
             <div class="data">
@@ -42,9 +44,14 @@
 
         // Change Keplr account
         window.addEventListener('keplr_keystorechange', () => {
-            window.location.reload()
-            store.$reset()
+            store.reset()
+            emitter.emit('connectWallet')
         })
+
+        // Refresh page
+        if(store.auth){
+            emitter.emit('connectWallet')
+        }
     })
 
 

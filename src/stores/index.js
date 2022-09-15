@@ -3,8 +3,8 @@ import { useLocalStorage } from '@vueuse/core'
 
 
 const account = {
-    userName: '',
-    avatar: '',
+    userName: useLocalStorage('userName', ''),
+    avatar: useLocalStorage('avatar', ''),
     delegations_price: 0,
     balance_usdt: 0,
     balance_atom: 0,
@@ -16,6 +16,7 @@ const account = {
     RPDE_eth: 0,
     RPDE_btc: 0
 }
+
 
 const networks = {
     'cosmoshub': {
@@ -644,16 +645,16 @@ const networks = {
     }
 }
 
+window.localStorage.setItem('account', JSON.stringify(account))
+window.localStorage.setItem('networks', JSON.stringify(networks))
+
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         node: null,
         IPFSStatus: false,
-        // auth: useLocalStorage('auth', false),
-        // userName: useLocalStorage('userName', ''),
-        // currency: useLocalStorage('currency', 'BTC'),
-        auth: false,
-        currency: 'BTC',
+        auth: useLocalStorage('auth', false),
+        currency: useLocalStorage('currency', 'BTC'),
         wallets: {},
         tooltip: '',
         BTC_price: 0,
@@ -664,5 +665,20 @@ export const useGlobalStore = defineStore('global', {
         showManageModal: false,
         networkManageModal: 'cosmoshub',
         showManageSuccessModal: false
-    })
+    }),
+
+    actions: {
+        reset() {
+            let defaultAccount = JSON.parse(window.localStorage.getItem('account')),
+                defaultNetworks = JSON.parse(window.localStorage.getItem('networks'))
+
+            defaultAccount.userName = useLocalStorage('userName', '')
+            defaultAccount.avatar = useLocalStorage('avatar', '')
+
+            Object.assign(this, {
+                account: defaultAccount,
+                networks: defaultNetworks
+            })
+        }
+    }
 })
