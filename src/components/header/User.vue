@@ -4,10 +4,10 @@
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
 
-        <div class="name">{{ store.userName }}</div>
+        <div class="name">{{ store.account.userName }}</div>
 
         <div class="photo">
-            <img :src="store.avatar" alt="" v-if="store.avatar">
+            <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
         </div>
     </div>
 </template>

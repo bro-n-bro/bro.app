@@ -579,7 +579,54 @@
                     <div class="shadow" :class="[store.networks.omniflix.health_color]" :style="{'--speed': store.networks.omniflix.speed + 's'}"></div>
                 </div>
 
-                <div class="network hidden"></div>
+
+                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stride.status && store.auth}">
+                    <template v-if="!store.auth">
+                        <div class="logo">
+                            <img src="../assets/images/stride_logo.png" alt="">
+                        </div>
+
+                        <div>{{ store.networks.stride.name }}</div>
+                    </template>
+
+                    <template v-else>
+                        <div class="head">
+                            <div class="logo">
+                                <img src="../assets/images/stride_logo.png" alt="">
+                            </div>
+
+                            <div class="name">{{ store.networks.stride.name }}</div>
+                        </div>
+
+                        <div class="tokens">
+                            {{ $filters.toFixed(store.networks.stride.tokens_sum, 2) }}
+                            {{ store.networks.stride.token_name }}
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stride.delegations_percents, 2) + '%'}"></div>
+                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stride.rewards_percents, 2) + '%'}"></div>
+                        </div>
+
+                        <div class="stats">
+                            <div>
+                                <div class="label">{{ $t('message.personal_apr') }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.stride.personal_APR, 2) }}%</div>
+                            </div>
+
+                            <div>
+                                <div class="label">{{ $t('message.RPDE') }}</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.stride.RPDE, 2) }}</div>
+                            </div>
+                        </div>
+
+                        <a href="/" class="details_btn" v-if="store.networks.stride.status && store.auth">{{ $t('message.details') }}</a>
+
+                        <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'stride' })">{{ $t('message.delegate_btn') }}</button>
+                    </template>
+
+                    <div class="shadow" :class="[store.networks.stride.health_color]" :style="{'--speed': store.networks.stride.speed + 's'}"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -675,13 +722,14 @@
 
 .dashboard .logo
 {
-    position: relative;  display: flex;  overflow: hidden;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 30px;  height: 30px;  border-radius: 50%;
+    position: relative;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 30px;  height: 30px;  border-radius: 50%;
 }
 
 
 .dashboard .logo img
 {
     display: block;  max-width: 100%;  max-height: 100%;
+    border-radius: inherit;
 }
 
 
@@ -784,7 +832,7 @@
 
 .dashboard .network.empty .logo:after
 {
-    position: absolute;  z-index: 2;  top: 0;  left: 0;  display: block;  width: 100%;  height: 100%;  content: '';  border-radius: 50%;  background: rgba(20, 20, 20, .8);
+    position: absolute;  z-index: 2;  top: -1px;  left: -1px;  display: block;  width: calc(100% + 2px);  height: calc(100% + 2px);  content: '';  border-radius: 50%;  background: rgba(20, 20, 20, .8);
 }
 
 

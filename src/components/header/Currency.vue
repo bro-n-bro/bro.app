@@ -50,6 +50,7 @@
         line-height: 18px;
 
         display: flex;
+        min-width: 70px;
 
         pointer-events: auto;
 

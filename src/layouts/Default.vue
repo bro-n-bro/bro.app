@@ -71,8 +71,8 @@
             key = await window.keplr.getKey(chainId)
 
         if (key) {
-            // Update store
-            store.$patch({ userName: key.name })
+            // Update store,
+            store.$patch((state) => state.account.userName = key.name)
             store.$patch({ auth: true })
 
             // Wallets
@@ -88,7 +88,8 @@
                     'evmos': accountsEvmos[0].address,
                     'crescent': toBech32('cre', fromBech32(accounts[0].address).data),
                     'omniflix': toBech32('omniflix', fromBech32(accounts[0].address).data),
-                    'desmos': accountsDesmos[0].address
+                    'desmos': accountsDesmos[0].address,
+                    'stride': toBech32('stride', fromBech32(accounts[0].address).data),
                 }
             })
 
@@ -98,8 +99,8 @@
                 .then(response => response.json())
                 .then(data => {
                     data.txs
-                        ? store.$patch({ avatar: 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to })
-                        : store.$patch({ avatar: `https://robohash.org/${store.userName.toLowerCase()}?set=set4` })
+                        ? store.$patch((state) => state.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to)
+                        : store.$patch((state) => state.account.avatar = `https://robohash.org/${store.account.userName.toLowerCase()}?set=set4`)
                 })
 
 
@@ -124,34 +125,36 @@
 				.then(response => response.json())
 				.then(data => {
                     data.infos.forEach(el => {
-                        store.$patch((state) => {
-                            state.networks[el.network].health = el.health
-                            state.networks[el.network].apr = el.apr
+                        if(store.networks[el.network]){
+                            store.$patch((state) => {
+                                state.networks[el.network].health = el.health
+                                state.networks[el.network].apr = el.apr
 
-                            switch (true) {
-                                case el.health >= 0 && el.health < 7:
-                                    state.networks[el.network].health_color = 'red'
-                                    break
-                                case el.health >= 7 && el.health < 13:
-                                    state.networks[el.network].health_color = 'orange'
-                                    break
-                                case el.health >= 13:
-                                    state.networks[el.network].health_color = 'green'
-                                    break
-                            }
+                                switch (true) {
+                                    case el.health >= 0 && el.health < 7:
+                                        state.networks[el.network].health_color = 'red'
+                                        break
+                                    case el.health >= 7 && el.health < 13:
+                                        state.networks[el.network].health_color = 'orange'
+                                        break
+                                    case el.health >= 13:
+                                        state.networks[el.network].health_color = 'green'
+                                        break
+                                }
 
-                            switch (true) {
-                                case el.apr < 0.15:
-                                    state.networks[el.network].speed = 4
-                                    break
-                                case el.apr >= 0.15 && el.apr < 4:
-                                    state.networks[el.network].speed = 4.28378 - 1.89189 * el.apr
-                                    break
-                                case el.apr >= 4:
-                                    state.networks[el.network].speed = 0.5
-                                    break
-                            }
-                        })
+                                switch (true) {
+                                    case el.apr < 0.15:
+                                        state.networks[el.network].speed = 4
+                                        break
+                                    case el.apr >= 0.15 && el.apr < 4:
+                                        state.networks[el.network].speed = 4.28378 - 1.89189 * el.apr
+                                        break
+                                    case el.apr >= 4:
+                                        state.networks[el.network].speed = 0.5
+                                        break
+                                }
+                            })
+                        }
                     })
             })
 
