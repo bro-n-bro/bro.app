@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"@cosmjs/encoding": "^0.28.11",
-		"@cosmjs/launchpad": "^0.27.1",
+		"@cosmjs/stargate": "^0.29.0",
 		"@vueuse/core": "^9.1.0",
 		"core-js": "^3.8.3",
 		"crypto-browserify": "^3.12.0",

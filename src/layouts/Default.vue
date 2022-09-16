@@ -31,8 +31,9 @@
     import { inject, onMounted } from 'vue'
     import { RouterView } from 'vue-router'
     import { useGlobalStore } from '@/stores'
-    // import { SigningCosmosClient } from '@cosmjs/launchpad'
+
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
+    import { SigningStargateClient, assertIsBroadcastTxSuccess } from '@cosmjs/stargate'
 
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
@@ -76,6 +77,12 @@
         const offlineSigner = window.getOfflineSigner(chainId),
             accounts = await offlineSigner.getAccounts(),
             key = await window.keplr.getKey(chainId)
+
+        // Stargate
+        const rpcEndpoint = 'https://stargate.cosmos.network/',
+            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner)
+
+        console.log(client)
 
         if (key) {
             // Update store,
