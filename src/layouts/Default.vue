@@ -33,7 +33,7 @@
     import { useGlobalStore } from '@/stores'
 
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
-    import { SigningStargateClient, assertIsBroadcastTxSuccess } from '@cosmjs/stargate'
+    import { SigningStargateClient } from '@cosmjs/stargate'
 
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
@@ -77,12 +77,6 @@
         const offlineSigner = window.getOfflineSigner(chainId),
             accounts = await offlineSigner.getAccounts(),
             key = await window.keplr.getKey(chainId)
-
-        // Stargate
-        const rpcEndpoint = 'https://stargate.cosmos.network/',
-            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner)
-
-        console.log(client)
 
         if (key) {
             // Update store,
@@ -352,6 +346,40 @@
             if(store.account.delegations_price != 0){
                 store.$patch((state) => state.account.personal_APR = state.account.RPDE_usdt * 365.3 / state.account.delegations_price * 100)
             }
+
+
+            // Stargate
+            const rpcEndpoint = 'https://rpc.cosmoshub-4.bronbro.io/',
+                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                msg = {
+                    delegatorAddress: accounts[0].address,
+                    validatorAddress: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
+                    amount: {
+                        denom: 'boot',
+                        amount: '10000'
+                    }
+                },
+                msgAny = {
+                    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                    value: msg
+                },
+                fee = {
+                    amount: [{
+                        denom: 'boot',
+                        amount: '2000'
+                    }],
+                    gas: '180000'
+                },
+                memo = ''
+
+                const result = await client.signAndBroadcast(
+                    accounts[0].address,
+                    [msgAny],
+                    fee,
+                    memo
+                )
+
+                console.log(result)
         }
     })
 
