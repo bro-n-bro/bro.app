@@ -6,13 +6,21 @@
                     <img src="/logo.svg" alt="">
                 </div>
 
+                <transition name="fade" mode="out-in" appear type="animation">
                 <IPFS />
+                </transition>
 
+                <transition name="fade" mode="out-in" appear type="animation">
                 <Currency v-if="store.auth" />
+                </transition>
 
+                <transition name="fade" mode="out-in" appear type="animation">
                 <User v-if="store.auth" />
+                </transition>
 
+                <transition name="fade" mode="out-in" appear type="animation">
                 <ConnectBtn v-if="!store.auth" />
+                </transition>
             </div>
         </div>
     </header>
@@ -32,50 +40,33 @@
 
 
 <style>
-    header
-    {
-        position: relative;
-        z-index: 90;
-        top: 0;
-        left: 0;
-
-        width: 100%;
-        padding: 20px 0;
-
-        transition: .2s linear;
-    }
+header
+{
+    position: relative;  z-index: 90;  top: 0;  left: 0;  width: 100%;  padding: 20px 0;  transition: .2s linear;
+}
 
 
-    header .cont
-    {
-        max-width: 100%;
-        padding: 0 20px;
-    }
+header .cont
+{
+    max-width: 100%;  padding: 0 20px;
+}
 
 
-    header .info
-    {
-        padding: 11px 20px;
-
-        border-radius: 42px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-    }
+header .info
+{
+    align-content: center;  align-items: center;  justify-content: space-between;  padding: 11px 20px;  border-radius: 42px;
+}
 
 
 
-    header .logo
-    {
-        margin-right: auto;
-    }
+header .logo
+{
+    margin-right: auto;
+}
 
-    header .logo img
-    {
-        display: block;
+header .logo img
+{
+    display: block;  max-width: 100%;  height: 70px;
+}
 
-        max-width: 100%;
-        height: 70px;
-    }
 </style>

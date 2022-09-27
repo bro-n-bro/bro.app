@@ -1,5 +1,6 @@
 <template>
     <section class="modal" id="manage_modal">
+        <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('close_manage_modal')">
@@ -124,8 +125,11 @@
                 </form>
             </div>
         </div>
+        </transition>
 
+        <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay" @click.prevent="emitter.emit('close_manage_modal')"></div>
+        </transition>
     </section>
 </template>
 
@@ -133,6 +137,7 @@
 <script setup>
     import { inject, reactive, onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { SigningStargateClient } from '@cosmjs/stargate'
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
@@ -180,9 +185,44 @@
 
 
     // Submit form
-    function onSubmit() {
-        emitter.emit('close_manage_modal')
-        emitter.emit('open_manage_success_modal')
+    async function onSubmit() {
+            // Stargate
+            if(form.amount > 0) {
+                const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
+                    rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                    client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                    msg = {
+                        delegatorAddress: store.wallets[store.networkManageModal],
+                        validatorAddress: store.networks[store.networkManageModal].validator,
+                        amount: {
+                            denom: store.networks[store.networkManageModal].denom,
+                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                        }
+                    },
+                    msgAny = {
+                        typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                        value: msg
+                    },
+                    fee = {
+                        amount: [{
+                            denom: store.networks[store.networkManageModal].denom,
+                            amount: '0'
+                        }],
+                        gas: '180000'
+                    },
+                    memo = '',
+                    result = await client.signAndBroadcast(
+                        store.wallets[store.networkManageModal],
+                        [msgAny],
+                        fee,
+                        memo
+                    )
+
+                    if(result.code == 0){
+                        emitter.emit('close_manage_modal')
+                        emitter.emit('open_manage_success_modal')
+                    }
+            }
     }
 </script>
 
@@ -488,157 +528,5 @@
 {
     color: #fff;  border-color: #950fff;  background: #950fff;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </style>

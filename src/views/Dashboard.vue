@@ -1,4 +1,5 @@
 <template>
+    <transition name="fade" mode="out-in" appear type="animation">
     <section class="dashboard">
         <div class="cont">
             <div class="row">
@@ -306,7 +307,7 @@
                     <template v-else>
                         <div class="user_name">{{ store.userName }}</div>
 
-                        <div class="balance" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.account.balance_usdt, 2) }} {{ store.currency }}</div>
+                        <div class="balance" v-if="store.currency == 'USDT'">{{ $filters.toFixed(store.account.balance_usdt, 1) }} {{ store.currency }}</div>
                         <div class="balance" v-if="store.currency == 'ATOM'">{{ $filters.toFixed(store.account.balance_atom, 2) }} {{ store.currency }}</div>
                         <div class="balance" v-if="store.currency == 'ETH'">{{ $filters.toFixed(store.account.balance_eth, 4) }} {{ store.currency }}</div>
                         <div class="balance" v-if="store.currency == 'BTC'">{{ $filters.toFixed(store.account.balance_btc, 5) }} {{ store.currency }}</div>
@@ -630,6 +631,7 @@
             </div>
         </div>
     </section>
+    </transition>
 </template>
 
 
@@ -728,8 +730,7 @@
 
 .dashboard .logo img
 {
-    display: block;  max-width: 100%;  max-height: 100%;
-    border-radius: inherit;
+    display: block;  max-width: 100%;  max-height: 100%;  border-radius: inherit;
 }
 
 
@@ -925,29 +926,5 @@
                       -webkit-transform: rotate(360deg);                              transform: rotate(360deg);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </style>
