@@ -692,6 +692,7 @@ export const useGlobalStore = defineStore('global', {
     }),
 
     actions: {
+        // Reset account/networks state
         reset() {
             let defaultAccount = JSON.parse(window.localStorage.getItem('account')),
                 defaultNetworks = JSON.parse(window.localStorage.getItem('networks'))
@@ -703,6 +704,267 @@ export const useGlobalStore = defineStore('global', {
                 account: defaultAccount,
                 networks: defaultNetworks
             })
+        },
+
+        
+        // Avatar
+        getAvatar() {
+            fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
+                .then(response => response.json())
+                .then(data => {
+                    data.txs
+                        ? this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
+                        : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
+                })
+        },
+
+
+        // Networks health
+        getNetworksHealth(network) {
+            fetch('https://rpc.bronbro.io/bro_data/')
+				.then(response => response.json())
+				.then(data => {
+                    data.infos.forEach(el => {
+                        if(this.networks[el.network]) {
+                            this.networks[el.network].health = el.health
+                            this.networks[el.network].apr = el.apr
+
+                            switch (true) {
+                                case el.health >= 0 && el.health < 7:
+                                    this.networks[el.network].health_color = 'red'
+                                    break
+                                case el.health >= 7 && el.health < 13:
+                                    this.networks[el.network].health_color = 'orange'
+                                    break
+                                case el.health >= 13:
+                                    this.networks[el.network].health_color = 'green'
+                                    break
+                            }
+
+                            switch (true) {
+                                case el.apr < 0.15:
+                                    this.networks[el.network].speed = 4
+                                    break
+                                case el.apr >= 0.15 && el.apr < 4:
+                                    this.networks[el.network].speed = 4.28378 - 1.89189 * el.apr
+                                    break
+                                case el.apr >= 4:
+                                    this.networks[el.network].speed = 0.5
+                                    break
+                            }
+                        }
+                    })
+            })
+        },
+
+
+        // Currencies price
+        getCurrenciesPrice() {
+            // ATOM price
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => this.ATOM_price = data.cosmos.usd)
+
+            // ETH price
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => this.ETH_price = data.ethereum.usd)
+
+            // BTC price
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => this.BTC_price = data.bitcoin.usd)
+        },
+
+
+        // Networks status
+        async getNetworkStatus(network) {
+            await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.validators && data.validators.length) {
+                        data.validators.forEach(el => {
+                            if(el == this.networks[network].validator) {
+                                this.networks[network].status = true
+                            }
+                        })
+                    }
+                })
+        },
+
+
+        // Networks delegations tokens
+        async getNetworkDelegationTokens(network) {
+            await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${this.wallets[network]}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.delegation_responses) {
+                        let sum = 0
+
+                        data.delegation_responses.forEach(el => sum += parseFloat(el.balance.amount))
+
+                        this.networks[network].delegations_tokens = sum / this.networks[network].exponent
+
+                        if(network == 'bostrom') {
+                            this.networks.bostrom.delegations_tokens = sum
+                        }
+                    }
+                })
+        },
+
+
+        // Network rewards tokens
+        async getNetworkRewardTokens(network) {
+            await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / this.networks[network].exponent
+
+                    if(network == 'bostrom') {
+                        this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount)
+                    }
+                })
+        },
+
+
+        // Network availabel tokens
+        async getNetworkAvailabelTokens(network) {
+            await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
+                .then(response => response.json())
+                .then(data => {
+                    let result = data.balances.find(e => e.denom == this.networks[network].denom)
+
+                    if(data.balances && data.balances.length && typeof result !== "undefined"){
+                        this.networks[network].availabel_tokens = parseFloat(result.amount) / this.networks[network].exponent
+
+                        if(network == 'bostrom') {
+                            this.networks.bostrom.availabel_tokens = parseFloat(result.amount)
+                        }
+                    }
+
+                    this.networks[network].tokens_sum = this.networks[network].availabel_tokens + this.networks[network].delegations_tokens + this.networks[network].rewards_tokens
+
+                    this.networks[network].delegations_percents = this.networks[network].delegations_tokens * 100 / this.networks[network].tokens_sum
+
+                    this.networks[network].rewards_percents = this.networks[network].rewards_tokens * 100 / this.networks[network].tokens_sum
+                })
+        },
+
+
+        // Network price
+        async getNetworkPrice(network) {
+            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${this.networks[network].coingecko_api}&vs_currencies=usd`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data[this.networks[network].coingecko_api].usd){
+                        this.networks[network].price = data[this.networks[network].coingecko_api].usd
+
+                        this.networks[network].price_usdt = data[this.networks[network].coingecko_api].usd
+                        this.networks[network].price_atom = this.networks[network].price / this.ATOM_price
+                        this.networks[network].price_eth = this.networks[network].price / this.ETH_price
+                        this.networks[network].price_btc = this.networks[network].price / this.BTC_price
+                    }
+                })
+        },
+
+
+        // Network balance
+        getNetworkBalance(network) {
+            this.networks[network].balance_usdt = this.networks[network].tokens_sum * this.networks[network].price
+            this.networks[network].balance_atom = this.networks[network].tokens_sum * this.networks[network].price_atom
+            this.networks[network].balance_eth = this.networks[network].tokens_sum * this.networks[network].price_eth
+            this.networks[network].balance_btc = this.networks[network].tokens_sum * this.networks[network].price_btc
+        },
+
+
+        // Network delegations price
+        getDelegationsPrice(network) {
+            this.networks[network].delegations_price = this.networks[network].delegations_tokens * this.networks[network].price
+            this.networks[network].delegations_price_usdt = this.networks[network].delegations_tokens * this.networks[network].price_usdt
+            this.networks[network].delegations_price_atom = this.networks[network].delegations_tokens * this.networks[network].price_atom
+            this.networks[network].delegations_price_eth = this.networks[network].delegations_tokens * this.networks[network].price_eth
+            this.networks[network].delegations_price_btc = this.networks[network].delegations_tokens * this.networks[network].price_btc
+        },
+
+
+        // Network rewards price
+        getRewardsPrice(network) {
+            this.networks[network].rewards_price = this.networks[network].rewards_tokens * this.networks[network].price
+            this.networks[network].rewards_price_usdt = this.networks[network].rewards_tokens * this.networks[network].price_usdt
+            this.networks[network].rewards_price_atom = this.networks[network].rewards_tokens * this.networks[network].price_atom
+            this.networks[network].rewards_price_eth = this.networks[network].rewards_tokens * this.networks[network].price_eth
+            this.networks[network].rewards_price_btc = this.networks[network].rewards_tokens * this.networks[network].price_btc
+        },
+
+
+        // Network data
+        async getNetworkData(network) {
+            await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegators/${this.wallets[network]}/validators`)
+                .then(response => response.json())
+                .then(data => {
+                    // Validators
+                    if(data.validators.length){
+                        this.networks[network].validators.push(data.validators.find(e => e.operator_address == this.networks[network].validator))
+                    }
+
+                    // Annual provision
+                    this.networks[network].validators.forEach(el => {
+                        el.annual_provision = this.networks[network].delegations_tokens * this.networks[network].apr * (1 - el.commission.commission_rates.rate)
+
+                        // Total annual provision
+                        this.networks[network].total_annual_provision += el.annual_provision
+                    })
+
+                    // RPDE
+                    this.networks[network].RPDE = this.networks[network].total_annual_provision / 365.3
+
+                    this.networks[network].RPDE_usdt = this.networks[network].price_usdt * this.networks[network].RPDE
+                    this.networks[network].RPDE_atom = this.networks[network].price_atom * this.networks[network].RPDE
+                    this.networks[network].RPDE_eth = this.networks[network].price_eth * this.networks[network].RPDE
+                    this.networks[network].RPDE_btc = this.networks[network].price_btc * this.networks[network].RPDE
+
+                    this.networks[network].RPDE_year_usdt = this.networks[network].RPDE_usdt * 365.3
+                    this.networks[network].RPDE_year_atom = this.networks[network].RPDE_atom * 365.3
+                    this.networks[network].RPDE_year_eth = this.networks[network].RPDE_eth * 365.3
+                    this.networks[network].RPDE_year_btc = this.networks[network].RPDE_btc * 365.3
+
+                    // Personal APR
+                    this.networks[network].personal_APR = this.networks[network].total_annual_provision / this.networks[network].delegations_tokens * 100
+                })
+        },
+
+
+        // Account balance
+        getAccountBalance(network) {
+            this.account.delegations_price += this.networks[network].delegations_price
+
+            this.account.balance_usdt += this.networks[network].balance_usdt
+            this.account.balance_atom += this.networks[network].balance_atom
+            this.account.balance_eth += this.networks[network].balance_eth
+            this.account.balance_btc += this.networks[network].balance_btc
+
+            this.account.RPDE_usdt += this.networks[network].RPDE_usdt
+            this.account.RPDE_atom += this.networks[network].RPDE_atom
+            this.account.RPDE_eth += this.networks[network].RPDE_eth
+            this.account.RPDE_btc += this.networks[network].RPDE_btc
+        },
+
+
+        // Update one network
+        async updateNetwork(network) {
+            await this.getNetworkDelegationTokens(network)
+            await this.getNetworkRewardTokens(network)
+            await this.getNetworkAvailabelTokens(network)
+            await this.getNetworkPrice(network)
+
+            this.getNetworkBalance(network)
+            this.getDelegationsPrice(network)
+            this.getRewardsPrice(network)
+
+            await this.getNetworkData(network)
+
+            this.getAccountBalance(network)
         }
     }
 })

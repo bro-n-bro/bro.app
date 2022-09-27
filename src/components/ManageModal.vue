@@ -218,9 +218,13 @@
                         memo
                     )
 
+                    console.log(result)
+
                     if(result.code == 0){
                         emitter.emit('close_manage_modal')
                         emitter.emit('open_manage_success_modal')
+
+                        await store.updateNetwork(store.networkManageModal)
                     }
             }
     }
