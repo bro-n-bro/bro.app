@@ -1,7 +1,7 @@
 <template>
     <Header />
 
-    <pre>{{ store }}</pre>
+    <!-- <pre>{{ store }}</pre> -->
 
     <transition name="fade" mode="out-in" appear type="animation">
     <section class="notifications">
