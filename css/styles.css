@@ -141,7 +141,7 @@ body
 
 body.lock
 {
-    position: fixed;  top: 0;  left: 0;  overflow: hidden;  width: 100%;  height: 100%;  min-height: -moz-available;  min-height: -webkit-fill-available;  min-height:         fill-available;
+    position: fixed;  top: 0;  left: 0;  overflow: hidden;  width: calc(100% - var(--scroll_width));  height: 100%;  min-height: -moz-available;  min-height: -webkit-fill-available;  min-height:         fill-available;
 }
 
 
@@ -265,4 +265,75 @@ button
 .modal.success .btns .btn:hover
 {
     color: #000;  background: #fff;
+}
+
+
+
+/*---------------
+    Animation
+---------------*/
+.fade-enter-active
+{
+    animation: .3s linear fade;
+}
+
+.fade-leave-active
+{
+    animation: .3s linear fadeReverse;
+}
+
+
+.fadeUp-enter-active
+{
+    animation: .3s linear fadeUp;
+}
+
+.fadeUp-leave-active
+{
+    animation: .3s linear fadeUpReverse;
+}
+
+
+
+/*---------------
+    Keyframes
+---------------*/
+@keyframes fade
+{
+    0%
+    {
+        opacity: 0;
+    }
+}
+
+
+@keyframes fadeReverse
+{
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+
+
+@keyframes fadeUp
+{
+    0%
+    {
+        transform: translateY(25%);
+
+        opacity: 0;
+    }
+}
+
+
+@keyframes fadeUpReverse
+{
+    100%
+    {
+        transform: translateY(25%);
+
+        opacity: 0;
+    }
 }
