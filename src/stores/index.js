@@ -702,6 +702,7 @@ export const useGlobalStore = defineStore('global', {
         networkManageModal: 'cosmoshub',
         showManageSuccessModal: false,
         loaderManageModal: false,
+        showCurrencyDropdown: false
     }),
 
     actions: {

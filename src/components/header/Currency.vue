@@ -1,12 +1,12 @@
 <template>
     <div class="currency">
-        <button class="btn" :class="{ active: showDropdown }" @click.prevent="showDropdown = !showDropdown">
+        <button class="btn" :class="{ active: store.showCurrencyDropdown }" @click.prevent="store.showCurrencyDropdown = true">
             <span>{{ store.currency }}</span>
             <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
         <transition name="fadeUp" mode="out-in">
-        <div class="dropdown" v-show="showDropdown">
+        <div class="dropdown" v-show="store.showCurrencyDropdown">
             <div><button class="btn" :class="{ active: store.currency == 'BTC' }" @click.prevent="selectCurrency('BTC')">BTC</button></div>
 
             <div><button class="btn" :class="{ active: store.currency == 'ETH' }" @click.prevent="selectCurrency('ETH')">ETH</button></div>
@@ -21,17 +21,14 @@
 
 
 <script setup>
-    import { ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore()
 
-    var showDropdown = ref(false)
-
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })
 
-        this.showDropdown = !this.showDropdown
+        store.showCurrencyDropdown = false
     }
 </script>
 
