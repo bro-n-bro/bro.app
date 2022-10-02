@@ -51,20 +51,41 @@
 
 
 <style scoped>
-.ipfs_status
-{
-    font-size: 15px;  font-weight: 500;  line-height: 18px;  position: relative;  padding-left: 21px;  color: #eb5757;
-}
+    .ipfs_status
+    {
+        color: #eb5757;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 18px;
 
-.ipfs_status.green
-{
-    color: #1bc562;
-}
+        position: relative;
+
+        padding-left: 21px;
+    }
+
+    .ipfs_status.green
+    {
+        color: #1bc562;
+    }
 
 
-.ipfs_status:before
-{
-    position: absolute;  top: 0;  bottom: 0;  left: 0;  display: block;  width: 11px;  height: 11px;  margin: auto;  content: '';  border-radius: 50%;  background: currentColor;
-}
+    .ipfs_status:before
+    {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+
+        display: block;
+
+        width: 11px;
+        height: 11px;
+        margin: auto;
+
+        content: '';
+
+        border-radius: 50%;
+        background: currentColor;
+    }
 
 </style>

@@ -40,33 +40,51 @@
 
 
 <style>
-header
-{
-    position: relative;  z-index: 90;  top: 0;  left: 0;  width: 100%;  padding: 20px 0;  transition: .2s linear;
-}
+    header
+    {
+        position: relative;
+        z-index: 90;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        padding: 20px 0;
+
+        transition: .2s linear;
+    }
 
 
-header .cont
-{
-    max-width: 100%;  padding: 0 20px;
-}
+    header .cont
+    {
+        max-width: 100%;
+        padding: 0 20px;
+    }
 
 
-header .info
-{
-    align-content: center;  align-items: center;  justify-content: space-between;  padding: 11px 20px;  border-radius: 42px;
-}
+    header .info
+    {
+        padding: 11px 20px;
+
+        border-radius: 42px;
+
+        align-content: center;
+        align-items: center;
+        justify-content: space-between;
+    }
 
 
 
-header .logo
-{
-    margin-right: auto;
-}
+    header .logo
+    {
+        margin-right: auto;
+    }
 
-header .logo img
-{
-    display: block;  max-width: 100%;  height: 70px;
-}
+    header .logo img
+    {
+        display: block;
+
+        max-width: 100%;
+        height: 70px;
+    }
 
 </style>

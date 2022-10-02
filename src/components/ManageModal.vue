@@ -3,6 +3,10 @@
         <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content">
             <div class="data">
+                <div class="loader_wrap" v-if="store.loaderManageModal">
+                    <div class="loader"><span></span></div>
+                </div>
+
                 <button class="close_btn" @click.prevent="emitter.emit('close_manage_modal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
@@ -81,7 +85,7 @@
                         <div class="label" v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_validator_label') }}
                         </div>
-                        
+
                         <div class="label" v-else>
                             {{ $t('message.manage_modal_validator_label2') }}
                         </div>
@@ -160,8 +164,14 @@
             await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
                 .then(response => response.json())
                 .then(data => {
-                    if(data.validators.length){
-                        form.validators = data.validators
+                    let result = data.validators.filter(el => {
+                        if(el.operator_address != store.networks[store.networkManageModal].validator) {
+                            return el
+                        }
+                    })
+
+                    if(result.length){
+                        form.validators = result
                     }
                 })
         }
@@ -173,7 +183,7 @@
         form.validator.operator_address = ''
         form.validator.name = ''
     }
-    
+
 
     // Set validator info
     function setValidator(validator) {
@@ -188,7 +198,10 @@
     async function onSubmit() {
             // Stargate
             if(form.amount > 0) {
-                const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
+                store.loaderManageModal = !store.loaderManageModal
+
+                try {
+                    const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                     rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                     client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                     msg = {
@@ -208,7 +221,7 @@
                             denom: store.networks[store.networkManageModal].denom,
                             amount: '0'
                         }],
-                        gas: '180000'
+                        gas: '190000'
                     },
                     memo = '',
                     result = await client.signAndBroadcast(
@@ -218,319 +231,570 @@
                         memo
                     )
 
-                    console.log(result)
-
                     if(result.code == 0){
                         emitter.emit('close_manage_modal')
                         emitter.emit('open_manage_success_modal')
 
-                        await store.updateNetwork(store.networkManageModal)
+                        store.loaderManageModal = !store.loaderManageModal
+
+                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                     }
+
+                    if(result.code == 11){
+                        console.log(result.rawLog)
+                    }
+                } catch (error) {
+                    console.log(error)
+                    store.loaderManageModal = !store.loaderManageModal
+                }
             }
     }
 </script>
 
 
 <style>
-#manage_modal .type
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: flex-start;  margin-bottom: 22px;  margin-left: -8px;  padding-right: 60px;
-}
+    #manage_modal .type
+    {
+        display: flex;
 
-#manage_modal .type > *
-{
-    margin-bottom: 8px;  margin-left: 8px;
-}
+        margin-bottom: 22px;
+        margin-left: -8px;
+        padding-right: 60px;
 
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
 
-#manage_modal .type label
-{
-    font-size: 14px;  font-weight: 500;  line-height: 17px;  display: block;  cursor: pointer;  color: #464646;
-}
+    #manage_modal .type > *
+    {
+        margin-bottom: 8px;
+        margin-left: 8px;
+    }
 
 
-#manage_modal .type input
-{
-    display: none;
-}
+    #manage_modal .type label
+    {
+        color: #464646;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 17px;
 
+        display: block;
 
-#manage_modal .type label div
-{
-    padding: 14px;  transition: .2s linear;  border-radius: 14px;  background: #191919;
-}
+        cursor: pointer;
+    }
 
 
-#manage_modal .type label input:checked + div
-{
-    color: #000;  background: #fff;
-}
+    #manage_modal .type input
+    {
+        display: none;
+    }
 
 
-#manage_modal .validator
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: space-between;
-}
+    #manage_modal .type label div
+    {
+        padding: 14px;
 
+        transition: .2s linear;
 
-#manage_modal .validator .logo
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 51px;  height: 45px;
-}
+        border-radius: 14px;
+        background: #191919;
+    }
 
-#manage_modal .validator .logo img
-{
-    display: block;  width: 100%;  height: 100%;
-}
 
-#manage_modal .validator .logo + *
-{
-    width: calc(100% - 59px);
-}
+    #manage_modal .type label input:checked + div
+    {
+        color: #000;
 
+        background: #fff;
+    }
 
-#manage_modal .validator .name
-{
-    font-size: 20px;  font-weight: 600;  line-height: 24px;
-}
 
+    #manage_modal .validator
+    {
+        display: flex;
 
-#manage_modal .validator .commission
-{
-    font-size: 14px;  line-height: 17px;  margin-top: 4px;  color: #f2f2f2;
-}
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
 
-#manage_modal .validator .commission .sep,
-#manage_modal .validator .commission .val
-{
-    font-weight: 600;  margin-left: 6px;  color: #fff;
-}
 
+    #manage_modal .validator .logo
+    {
+        display: flex;
 
-#manage_modal .notice
-{
-    margin-top: 20px;  padding: 13px;  border: 1px solid rgba(255, 255, 255, .1);  border-radius: 20px;
-}
+        width: 51px;
+        height: 45px;
 
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-#manage_modal .notice .title
-{
-    font-weight: 600;  line-height: 19px;  margin-bottom: 14px;
-}
+    #manage_modal .validator .logo img
+    {
+        display: block;
 
+        width: 100%;
+        height: 100%;
+    }
 
-#manage_modal .notice .desc
-{
-    font-size: 14px;  line-height: 130%;  color: #8e8e8e;
-}
+    #manage_modal .validator .logo + *
+    {
+        width: calc(100% - 59px);
+    }
 
 
-#manage_modal .tokens
-{
-    margin-top: 26px;
-}
+    #manage_modal .validator .name
+    {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 24px;
+    }
 
 
-#manage_modal .tokens > *
-{
-    line-height: 19px;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: space-between;  color: #fff;
-}
+    #manage_modal .validator .commission
+    {
+        color: #f2f2f2;
+        font-size: 14px;
+        line-height: 17px;
 
-#manage_modal .tokens > * + *
-{
-    margin-top: 16px;
-}
+        margin-top: 4px;
+    }
 
+    #manage_modal .validator .commission .sep,
+    #manage_modal .validator .commission .val
+    {
+        color: #fff;
+        font-weight: 600;
 
-#manage_modal .tokens .val
-{
-    font-weight: 600;  white-space: nowrap;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
+        margin-left: 6px;
+    }
 
 
-#manage_modal .amount
-{
-    margin-top: 30px;
-}
+    #manage_modal .notice
+    {
+        margin-top: 20px;
+        padding: 13px;
 
+        border: 1px solid rgba(255, 255, 255, .1);
+        border-radius: 20px;
+    }
 
-#manage_modal .amount .label
-{
-    line-height: 19px;  margin-bottom: 16px;
-}
 
+    #manage_modal .notice .title
+    {
+        font-weight: 600;
+        line-height: 19px;
 
-#manage_modal .amount .field
-{
-    position: relative;
-}
+        margin-bottom: 14px;
+    }
 
 
-#manage_modal .amount .input
-{
-    font-family: var(--font_family);  font-size: var(--font_size);  font-weight: 500;  line-height: 19px;  display: block;  width: 100%;  height: 55px;  padding: 0 154px 0 9px;  transition: border-color .2s linear;  color: currentColor;  border: 1px solid rgba(255, 255, 255, .05);  border-radius: 17px;  background: none;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
+    #manage_modal .notice .desc
+    {
+        color: #8e8e8e;
+        font-size: 14px;
+        line-height: 130%;
+    }
 
-#manage_modal .amount .input:focus
-{
-    border-color: #950fff;
-}
 
+    #manage_modal .tokens
+    {
+        margin-top: 26px;
+    }
 
-#manage_modal .amount .unit
-{
-    line-height: 19px;  position: absolute;  z-index: 3;  top: 0;  right: 80px;  bottom: 0;  height: 19px;  margin: auto;  white-space: nowrap;  text-transform: uppercase;  color: #8e8e8e;
-}
 
+    #manage_modal .tokens > *
+    {
+        color: #fff;
+        line-height: 19px;
 
-#manage_modal .amount .max_btn
-{
-    line-height: 19px;  position: absolute;  z-index: 3;  top: 0;  right: 10px;  bottom: 0;  display: block;  width: 60px;  height: 39px;  margin: auto;  transition: .2s linear;  text-transform: uppercase;  border: 1px solid #fff;  border-radius: 14px;
-}
+        display: flex;
 
-#manage_modal .amount .max_btn:hover
-{
-    color: #000;  border-color: #fff;  background: #fff;
-}
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
 
+    #manage_modal .tokens > * + *
+    {
+        margin-top: 16px;
+    }
 
-#manage_modal .validate_from
-{
-    margin-top: 30px;
-}
 
+    #manage_modal .tokens .val
+    {
+        font-weight: 600;
 
-#manage_modal .validate_from .label
-{
-    line-height: 19px;  margin-bottom: 16px;
-}
+        white-space: nowrap;
 
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
 
-#manage_modal .validate_from .field
-{
-    position: relative;
-}
 
+    #manage_modal .amount
+    {
+        margin-top: 30px;
+    }
 
-#manage_modal .validate_from .input
-{
-    font-family: var(--font_family);  font-size: var(--font_size);  font-weight: 500;  line-height: 19px;  display: block;  width: 100%;  height: 55px;  padding: 0 77px 0 9px;  transition: border-color .2s linear;  color: currentColor;  border: 1px solid rgba(255, 255, 255, .05);  border-radius: 17px;  background: none;
-}
 
-#manage_modal .validate_from .input:read-only
-{
-    pointer-events: none;
-}
+    #manage_modal .amount .label
+    {
+        line-height: 19px;
 
-#manage_modal .validate_from .input:focus
-{
-    border-color: #950fff;
-}
+        margin-bottom: 16px;
+    }
 
 
-#manage_modal .validate_from .arr
-{
-    position: absolute;  z-index: 3;  top: 0;  right: 44px;  bottom: 0;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 24px;  height: 24px;  margin: auto;  pointer-events: none;
-}
+    #manage_modal .amount .field
+    {
+        position: relative;
+    }
 
-#manage_modal .validate_from .arr svg
-{
-    display: block;  width: 15px;  height: 16px;
-}
 
-#manage_modal .validate_from .input:read-only ~ .arr
-{
-    display: none;
-}
+    #manage_modal .amount .input
+    {
+        color: currentColor;
+        font-family: var(--font_family);
+        font-size: var(--font_size);
+        font-weight: 500;
+        line-height: 19px;
 
+        display: block;
 
-#manage_modal .validate_from .clear_btn
-{
-    position: absolute;  z-index: 3;  top: 0;  right: 10px;  bottom: 0;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 24px;  height: 24px;  margin: auto;
-}
+        width: 100%;
+        height: 55px;
+        padding: 0 154px 0 9px;
 
-#manage_modal .validate_from .clear_btn svg
-{
-    display: block;  width: 20px;  height: 20px;
-}
+        transition: border-color .2s linear;
 
-#manage_modal .validate_from .input:read-only ~ .clear_btn
-{
-    display: none;
-}
+        border: 1px solid rgba(255, 255, 255, .05);
+        border-radius: 17px;
+        background: none;
 
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
 
-#manage_modal .validate_from .dropdown
-{
-    position: absolute;  z-index: 5;  top: 100%;  left: 0;  display: none;  width: 100%;  margin-top: 10px;  padding: 6px 4px;  border-radius: 10px;  background: #101010;
-}
+    #manage_modal .amount .input:focus
+    {
+        border-color: #950fff;
+    }
 
-#manage_modal .validate_from .input.active ~ .dropdown
-{
-    display: block;
-}
 
+    #manage_modal .amount .unit
+    {
+        color: #8e8e8e;
+        line-height: 19px;
 
-#manage_modal .validate_from .dropdown .scroll
-{
-    overflow: auto;  max-height: 128px;  padding-right: 4px;
-}
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 80px;
+        bottom: 0;
 
-#manage_modal .validate_from .dropdown .scroll::-webkit-scrollbar
-{
-    width: 4px;  height: 4px;  border-radius: 5px;
-}
+        height: 19px;
+        margin: auto;
 
-#manage_modal .validate_from .dropdown .scroll > * + *
-{
-    margin-top: 4px;
-}
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
 
 
-#manage_modal .validate_from .dropdown .btn
-{
-    font-size: 14px;  line-height: 17px;  display: block;  width: 100%;  padding: 6px;  transition: background .2s linear;  text-align: left;  pointer-events: auto;  border-radius: 8px;
-}
+    #manage_modal .amount .max_btn
+    {
+        line-height: 19px;
 
-#manage_modal .validate_from .dropdown .btn:hover,
-#manage_modal .validate_from .dropdown .btn.active
-{
-    background: #191919;
-}
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 10px;
+        bottom: 0;
 
+        display: block;
 
-#manage_modal .validate_from .fees
-{
-    font-size: 14px;  line-height: 17px;  margin-top: 14px;  color: #f2f2f2;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
+        width: 60px;
+        height: 39px;
+        margin: auto;
 
+        transition: .2s linear;
+        text-transform: uppercase;
 
-#manage_modal .btns
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: flex-end;  margin-top: 30px;  margin-bottom: -10px;  margin-left: -10px;
-}
+        border: 1px solid #fff;
+        border-radius: 14px;
+    }
 
-#manage_modal .btns > *
-{
-    margin-bottom: 10px;  margin-left: 10px;
-}
+    #manage_modal .amount .max_btn:hover
+    {
+        color: #000;
 
+        border-color: #fff;
+        background: #fff;
+    }
 
-#manage_modal .btns .btn
-{
-    font-weight: 500;  line-height: 19px;  display: block;  padding: 13px;  transition: .2s linear;  color: #fff;  border: 1px solid #353535;  border-radius: 16px;
-}
 
+    #manage_modal .validate_from
+    {
+        margin-top: 30px;
+    }
 
-#manage_modal .btns .btn:hover
-{
-    color: #000;  border-color: #fff;  background: #fff;
-}
 
+    #manage_modal .validate_from .label
+    {
+        line-height: 19px;
 
-#manage_modal .btns .btn.submit_btn
-{
-    color: #fff;  border-color: #950fff;  background: #950fff;
-}
+        margin-bottom: 16px;
+    }
+
+
+    #manage_modal .validate_from .field
+    {
+        position: relative;
+    }
+
+
+    #manage_modal .validate_from .input
+    {
+        color: currentColor;
+        font-family: var(--font_family);
+        font-size: var(--font_size);
+        font-weight: 500;
+        line-height: 19px;
+
+        display: block;
+
+        width: 100%;
+        height: 55px;
+        padding: 0 77px 0 9px;
+
+        transition: border-color .2s linear;
+
+        border: 1px solid rgba(255, 255, 255, .05);
+        border-radius: 17px;
+        background: none;
+    }
+
+    #manage_modal .validate_from .input:read-only
+    {
+        pointer-events: none;
+    }
+
+    #manage_modal .validate_from .input:focus
+    {
+        border-color: #950fff;
+    }
+
+
+    #manage_modal .validate_from .arr
+    {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 44px;
+        bottom: 0;
+
+        display: flex;
+
+        width: 24px;
+        height: 24px;
+        margin: auto;
+
+        pointer-events: none;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #manage_modal .validate_from .arr svg
+    {
+        display: block;
+
+        width: 15px;
+        height: 16px;
+    }
+
+    #manage_modal .validate_from .input:read-only ~ .arr
+    {
+        display: none;
+    }
+
+
+    #manage_modal .validate_from .clear_btn
+    {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 10px;
+        bottom: 0;
+
+        display: flex;
+
+        width: 24px;
+        height: 24px;
+        margin: auto;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #manage_modal .validate_from .clear_btn svg
+    {
+        display: block;
+
+        width: 20px;
+        height: 20px;
+    }
+
+    #manage_modal .validate_from .input:read-only ~ .clear_btn
+    {
+        display: none;
+    }
+
+
+    #manage_modal .validate_from .dropdown
+    {
+        position: absolute;
+        z-index: 5;
+        top: 100%;
+        left: 0;
+
+        display: none;
+
+        width: 100%;
+        margin-top: 10px;
+        padding: 6px 4px;
+
+        border-radius: 10px;
+        background: #101010;
+    }
+
+    #manage_modal .validate_from .input.active ~ .dropdown
+    {
+        display: block;
+    }
+
+
+    #manage_modal .validate_from .dropdown .scroll
+    {
+        overflow: auto;
+
+        max-height: 128px;
+        padding-right: 4px;
+    }
+
+    #manage_modal .validate_from .dropdown .scroll::-webkit-scrollbar
+    {
+        width: 4px;
+        height: 4px;
+
+        border-radius: 5px;
+    }
+
+    #manage_modal .validate_from .dropdown .scroll > * + *
+    {
+        margin-top: 4px;
+    }
+
+
+    #manage_modal .validate_from .dropdown .btn
+    {
+        font-size: 14px;
+        line-height: 17px;
+
+        display: block;
+
+        width: 100%;
+        padding: 6px;
+
+        transition: background .2s linear;
+        text-align: left;
+        pointer-events: auto;
+
+        border-radius: 8px;
+    }
+
+    #manage_modal .validate_from .dropdown .btn:hover,
+    #manage_modal .validate_from .dropdown .btn.active
+    {
+        background: #191919;
+    }
+
+
+    #manage_modal .validate_from .fees
+    {
+        color: #f2f2f2;
+        font-size: 14px;
+        line-height: 17px;
+
+        margin-top: 14px;
+
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
+
+
+    #manage_modal .btns
+    {
+        display: flex;
+
+        margin-top: 30px;
+        margin-bottom: -10px;
+        margin-left: -10px;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    #manage_modal .btns > *
+    {
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+
+    #manage_modal .btns .btn
+    {
+        color: #fff;
+        font-weight: 500;
+        line-height: 19px;
+
+        display: block;
+
+        padding: 13px;
+
+        transition: .2s linear;
+
+        border: 1px solid #353535;
+        border-radius: 16px;
+    }
+
+
+    #manage_modal .btns .btn:hover
+    {
+        color: #000;
+
+        border-color: #fff;
+        background: #fff;
+    }
+
+
+    #manage_modal .btns .btn.submit_btn
+    {
+        color: #fff;
+
+        border-color: #950fff;
+        background: #950fff;
+    }
 
 </style>

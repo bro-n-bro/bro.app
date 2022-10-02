@@ -26,10 +26,17 @@
                             {{ store.networks.evmos.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.evmos.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.evmos.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.evmos.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.evmos.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.evmos.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -75,10 +82,17 @@
                             {{ store.networks.juno.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.juno.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.juno.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.juno.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.juno.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.juno.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -95,8 +109,6 @@
                         <a href="/" class="details_btn" v-if="store.networks.juno.status && store.auth">{{ $t('message.details') }}</a>
 
                         <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: 'juno' })">{{ $t('message.delegate_btn') }}</button>
-
-                        <button class="delegate_btn" @click.prevent="emitter.emit('open_manage_modal', { network: 'juno' })">{{ $t('message.delegate_btn') }}</button>
                     </template>
 
                     <div class="shadow" :class="[store.networks.juno.health_color]" :style="{'--speed': store.networks.juno.speed + 's'}"></div>
@@ -126,10 +138,17 @@
                             {{ store.networks.cosmoshub.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.cosmoshub.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.cosmoshub.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.cosmoshub.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.cosmoshub.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.cosmoshub.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -175,10 +194,17 @@
                             {{ store.networks.bostrom.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.bostrom.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.bostrom.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.bostrom.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.bostrom.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.bostrom.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -226,10 +252,17 @@
                             {{ store.networks.emoney.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.emoney.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.emoney.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.emoney.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.emoney.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.emoney.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -275,10 +308,17 @@
                             {{ store.networks.desmos.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.desmos.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.desmos.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.desmos.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.desmos.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.desmos.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -359,10 +399,17 @@
                             {{ store.networks.osmosis.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.osmosis.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.osmosis.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.osmosis.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.osmosis.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.osmosis.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -408,10 +455,17 @@
                             {{ store.networks.crescent.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.crescent.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.crescent.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.crescent.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.crescent.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.crescent.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -459,10 +513,17 @@
                             {{ store.networks.gravity.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.gravity.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.gravity.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.gravity.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.gravity.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.gravity.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -508,10 +569,17 @@
                             {{ store.networks.stargaze.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.stargaze.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.stargaze.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.stargaze.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.stargaze.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stargaze.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -557,10 +625,17 @@
                             {{ store.networks.omniflix.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.omniflix.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.omniflix.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.omniflix.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.omniflix.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.omniflix.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -606,10 +681,17 @@
                             {{ store.networks.stride.token_name }}
                         </div>
 
-                        <div class="progress">
+                        <div class="visualization">
+                            <div class="staked" v-show="store.networks.stride.delegations_tokens"></div>
+                            <div class="liquid" v-show="store.networks.stride.availabel_tokens"></div>
+                            <div class="rewards" v-show="store.networks.stride.rewards_tokens"></div>
+                            <div class="IBC" v-show="store.networks.stride.ibc_tokens"></div>
+                        </div>
+
+                        <!-- <div class="progress">
                             <div class="bar" :style="{'width': $filters.toFixed(store.networks.stride.delegations_percents, 2) + '%'}"></div>
                             <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stride.rewards_percents, 2) + '%'}"></div>
-                        </div>
+                        </div> -->
 
                         <div class="stats">
                             <div>
@@ -647,286 +729,578 @@
 
 
 <style scoped>
-.dashboard
-{
-    padding-bottom: 24px;
-}
-
-
-.dashboard .row
-{
-    justify-content: center;  margin-bottom: -7px;  margin-left: -7px;
-}
-
-.dashboard .row + .row
-{
-    margin-top: -82px;
-}
-
-
-.dashboard .row > *
-{
-    width: calc(20% - 7px);  margin-bottom: 7px;  margin-left: 7px;
-}
-
-
-.dashboard .row > *
-{
-    position: relative;  z-index: 3;  display: flex;  flex-direction: column;  width: 280px;  height: 324px;  padding: 40px 38px 52px;  pointer-events: none;  color: #fff;
-}
-
-.dashboard .row > *:before
-{
-    position: absolute;  z-index: -1;  top: 0;  left: 0;  display: block;  width: 100%;  height: 100%;  content: '';  background: #141414;  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-}
-
-.dashboard .row > *.hidden:before
-{
-    display: none;
-}
-
-
-.dashboard .shadow
-{
-    position: absolute;  z-index: -2;  top: -3px;  left: -3px;  display: block;  width: calc(100% + 6px);  height: calc(100% + 6px);  --speed: 10s;  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-}
-
-
-.dashboard .shadow:after
-{
-    position: absolute;  top: -24px;  left: -24px;  display: block;  width: calc(100% + 48px);  height: calc(100% + 48px);  content: '';          -webkit-animation: spin var(--speed) linear infinite;             -moz-animation: spin var(--speed) linear infinite;                  animation: spin var(--speed) linear infinite;
-}
-
-.dashboard .shadow.green:after
-{
-      background:    -moz-linear-gradient(top, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);      background: -webkit-linear-gradient(top, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);      background:         linear-gradient(to bottom, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);
-}
-
-.dashboard .shadow.orange:after
-{
-      background:    -moz-linear-gradient(top, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);      background: -webkit-linear-gradient(top, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);      background:         linear-gradient(to bottom, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);
-}
-
-.dashboard .shadow.red:after
-{
-      background:    -moz-linear-gradient(top, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);      background: -webkit-linear-gradient(top, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);      background:         linear-gradient(to bottom, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);
-}
-
-.dashboard .shadow.grey:after
-{
-    background: #212121;
-}
-
-
-.dashboard .head
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 100%;  margin-bottom: 20px;
-}
-
-
-.dashboard .logo
-{
-    position: relative;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 30px;  height: 30px;  border-radius: 50%;
-}
-
-
-.dashboard .logo img
-{
-    display: block;  max-width: 100%;  max-height: 100%;  border-radius: inherit;
-}
-
-
-.dashboard .name
-{
-    font-size: 18px;  font-weight: 500;  line-height: 22px;  max-width: calc(100% - 40px);  margin-left: 10px;
-}
-
-
-.dashboard .tokens
-{
-    font-size: 18px;  font-weight: 600;  line-height: 22px;  margin-bottom: 10px;  text-align: center;  white-space: nowrap;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
-
-
-.dashboard .progress
-{
-    display: flex;  overflow: hidden;  align-content: stretch;  align-items: stretch;  flex-wrap: wrap;  justify-content: flex-start;  height: 13px;  margin-bottom: 12px;  border-radius: 20px;  background: #0b2272;
-}
-
-.dashboard .progress .bar
-{
-    height: 13px;  transition: width .2s linear;  background: #4075fd;
-}
-
-.dashboard .progress .bar.orange
-{
-    background: orange;
-}
-
-
-.dashboard .stats
-{
-    font-size: 12px;  line-height: 15px;  width: 100%;  margin-bottom: 20px;
-}
-
-
-.dashboard .stats > *
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: nowrap;  justify-content: space-between;
-}
-
-.dashboard .stats > * + *
-{
-    margin-top: 7px;  padding-top: 6px;  border-top: 1px solid rgba(255, 255, 255, .05);
-}
-
-
-.dashboard .stats .label
-{
-    position: relative;  margin-right: 10px;
-}
-
-
-.dashboard .stats .val
-{
-    font-weight: 500;
-}
-
-
-.dashboard .details_btn,
-.dashboard .delegate_btn
-{
-    font-size: 12px;  font-weight: 600;  line-height: 15px;  display: block;  margin: auto auto 0;  padding: 9px 29px 10px;  transition: .2s linear;  text-decoration: none;  pointer-events: auto;  color: currentColor;  border: 1px solid #353535;  border-radius: 40px;
-}
-
-.dashboard .delegate_btn,
-.dashboard .details_btn:hover
-{
-    color: #fff;  border-color: #950fff;  background: #950fff;
-}
-
-
-
-.dashboard .network.empty
-{
-    font-size: 30px;  font-weight: 700;  line-height: 36px;  align-content: center;  align-items: center;  flex-direction: row;  flex-wrap: wrap;  justify-content: center;  text-align: center;  color: #464646;
-}
-
-.dashboard .network.empty .shadow:after
-{
-    background: #212121;
-}
-
-
-.dashboard .network.empty .logo
-{
-    position: relative;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 60px;  height: 60px;  margin: 0 auto 10px;
-}
-
-.dashboard .network.empty .logo + div
-{
-    width: 100%;
-}
-
-.dashboard .network.empty .logo img
-{
-    display: block;  max-width: 100%;  max-height: 100%;  border-radius: 50%;
-}
-
-.dashboard .network.empty .logo:after
-{
-    position: absolute;  z-index: 2;  top: -1px;  left: -1px;  display: block;  width: calc(100% + 2px);  height: calc(100% + 2px);  content: '';  border-radius: 50%;  background: rgba(20, 20, 20, .8);
-}
-
-
-
-.dashboard .row > *.disabled
-{
-    color: #464646;
-}
-
-.dashboard .disabled .logo:after
-{
-    position: absolute;  z-index: 2;  top: 0;  left: 0;  display: block;  width: 100%;  height: 100%;  content: '';  opacity: .8;  border-radius: inherit;  background: #141414;
-}
-
-.dashboard .disabled .progress,
-.dashboard .disabled .progress .bar
-{
-    background: #282828;
-}
-
-.dashboard .network.disabled .shadow:after
-{
-    background: #212121;
-}
-
-
-
-.dashboard .row > *.account:before
-{
-    background: #3c0666;
-}
-
-
-.dashboard .account
-{
-    position: relative;
-}
-
-
-.dashboard .account .user_name
-{
-    font-size: 18px;  font-weight: 500;  line-height: 22px;  overflow: hidden;  width: 102px;  margin: 0 auto 20px;  text-align: center;  white-space: nowrap;  text-overflow: ellipsis;
-}
-
-
-.dashboard .account .balance
-{
-    font-size: 30px;  font-weight: 700;  line-height: 36px;  margin-bottom: 18px;  text-align: center;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
-
-
-.dashboard .account .connect_wallet_btn
-{
-    font-size: 12px;  font-weight: 600;  line-height: 15px;  position: absolute;  top: 0;  right: 0;  bottom: 0;  left: 0;  display: block;  width: 128px;  height: 35px;  margin: auto;  transition: .2s linear;  pointer-events: auto;  color: #000;  border-radius: 50px;  background: #fff;
-}
-
-.dashboard .account .connect_wallet_btn:hover
-{
-    color: #fff;  background: #950fff;
-}
-
-
-.dashboard .account .shadow:after
-{
-    background: #950fff;
-}
-
-
-
-@-moz-keyframes spin
-{
-    100%
+    .dashboard
     {
-        -moz-transform: rotate(360deg);
+        padding-bottom: 24px;
     }
-}
 
-@-webkit-keyframes spin
-{
-    100%
-    {
-        -webkit-transform: rotate(360deg);
-    }
-}
 
-@keyframes spin
-{
-    100%
+    .dashboard .row
     {
-                      -webkit-transform: rotate(360deg);                              transform: rotate(360deg);
+        margin-bottom: -7px;
+        margin-left: -7px;
+
+        justify-content: center;
     }
-}
+
+    .dashboard .row + .row
+    {
+        margin-top: -82px;
+    }
+
+
+    .dashboard .row > *
+    {
+        width: calc(20% - 7px);
+        margin-bottom: 7px;
+        margin-left: 7px;
+    }
+
+
+    .dashboard .row > *
+    {
+        color: #fff;
+
+        position: relative;
+        z-index: 3;
+
+        display: flex;
+        flex-direction: column;
+
+        width: 280px;
+        height: 324px;
+        padding: 48px 38px 64px;
+
+        pointer-events: none;
+    }
+
+    .dashboard .row > *:before
+    {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+
+        background: #141414;
+
+        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    }
+
+    .dashboard .row > *.hidden:before
+    {
+        display: none;
+    }
+
+
+    .dashboard .shadow
+    {
+        position: absolute;
+        z-index: -2;
+        top: -3px;
+        left: -3px;
+
+        display: block;
+
+        width: calc(100% + 6px);
+        height: calc(100% + 6px);
+
+        --speed: 10s;
+        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    }
+
+
+    .dashboard .shadow:after
+    {
+        position: absolute;
+        top: -24px;
+        left: -24px;
+
+        display: block;
+
+        width: calc(100% + 48px);
+        height: calc(100% + 48px);
+
+        content: '';
+        -webkit-animation: spin var(--speed) linear infinite;
+           -moz-animation: spin var(--speed) linear infinite;
+                animation: spin var(--speed) linear infinite;
+    }
+
+    .dashboard .shadow.green:after
+    {
+        background:    -moz-linear-gradient(top, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);
+        background: -webkit-linear-gradient(top, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);
+        background:         linear-gradient(to bottom, rgba(92, 255, 15, 1) 0%, rgba(0, 47, 5, .3) 100%);
+    }
+
+    .dashboard .shadow.orange:after
+    {
+        background:    -moz-linear-gradient(top, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);
+        background: -webkit-linear-gradient(top, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);
+        background:         linear-gradient(to bottom, rgba(255, 101, 15, 1) 0%, rgba(96, 24, 2, .3) 100%);
+    }
+
+    .dashboard .shadow.red:after
+    {
+        background:    -moz-linear-gradient(top, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);
+        background: -webkit-linear-gradient(top, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);
+        background:         linear-gradient(to bottom, rgba(255, 15, 15, 1) 0%, rgba(87, 0, 0, .3) 100%);
+    }
+
+    .dashboard .shadow.grey:after
+    {
+        background: #212121;
+    }
+
+
+    .dashboard .head
+    {
+        display: flex;
+
+        width: 100%;
+        margin-bottom: 20px;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+
+    .dashboard .logo
+    {
+        position: relative;
+
+        display: flex;
+
+        width: 30px;
+        height: 30px;
+
+        border-radius: 50%;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+
+    .dashboard .logo img
+    {
+        display: block;
+
+        max-width: 100%;
+        max-height: 100%;
+
+        border-radius: inherit;
+    }
+
+
+    .dashboard .name
+    {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 22px;
+
+        max-width: calc(100% - 40px);
+        margin-left: 10px;
+    }
+
+
+    .dashboard .tokens
+    {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 22px;
+
+        margin-bottom: 10px;
+
+        text-align: center;
+        white-space: nowrap;
+
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
+
+
+    .dashboard .visualization
+    {
+        display: flex;
+
+        height: 12px;
+        margin-bottom: 12px;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: nowrap;
+    }
+
+    .dashboard .visualization > *
+    {
+        width: 100%;
+        height: 12px;
+
+        border-radius: 20px;
+    }
+
+    .dashboard .visualization > * + *
+    {
+        margin-left: 6px;
+    }
+
+    .dashboard .visualization .staked
+    {
+        background: #0b2272;
+    }
+
+    .dashboard .visualization .liquid
+    {
+        background: #4075fd;
+    }
+
+    .dashboard .visualization .rewards
+    {
+        background: #f17344;
+    }
+
+    .dashboard .visualization .IBC
+    {
+        background: #9b3915;
+    }
+
+
+    .dashboard .progress
+    {
+        display: flex;
+        overflow: hidden;
+
+        height: 13px;
+        margin-bottom: 12px;
+
+        border-radius: 20px;
+        background: #0b2272;
+
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .dashboard .progress .bar
+    {
+        height: 13px;
+
+        transition: width .2s linear;
+
+        background: #4075fd;
+    }
+
+    .dashboard .progress .bar.orange
+    {
+        background: orange;
+    }
+
+
+    .dashboard .stats
+    {
+        font-size: 12px;
+        line-height: 15px;
+
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+
+    .dashboard .stats > *
+    {
+        display: flex;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .dashboard .stats > * + *
+    {
+        margin-top: 7px;
+        padding-top: 6px;
+
+        border-top: 1px solid rgba(255, 255, 255, .05);
+    }
+
+
+    .dashboard .stats .label
+    {
+        position: relative;
+
+        margin-right: 10px;
+    }
+
+
+    .dashboard .stats .val
+    {
+        font-weight: 500;
+    }
+
+
+    .dashboard .details_btn,
+    .dashboard .delegate_btn
+    {
+        color: currentColor;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 15px;
+
+        display: block;
+
+        margin: auto auto 0;
+        padding: 9px 29px 10px;
+
+        transition: .2s linear;
+        text-decoration: none;
+        pointer-events: auto;
+
+        border: 1px solid #353535;
+        border-radius: 40px;
+    }
+
+    .dashboard .delegate_btn,
+    .dashboard .details_btn:hover
+    {
+        color: #fff;
+
+        border-color: #950fff;
+        background: #950fff;
+    }
+
+
+
+    .dashboard .network.empty
+    {
+        color: #464646;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 36px;
+
+        flex-direction: row;
+
+        text-align: center;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .dashboard .network.empty .shadow:after
+    {
+        background: #212121;
+    }
+
+
+    .dashboard .network.empty .logo
+    {
+        position: relative;
+
+        display: flex;
+
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 10px;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .dashboard .network.empty .logo + div
+    {
+        width: 100%;
+    }
+
+    .dashboard .network.empty .logo img
+    {
+        display: block;
+
+        max-width: 100%;
+        max-height: 100%;
+
+        border-radius: 50%;
+    }
+
+    .dashboard .network.empty .logo:after
+    {
+        position: absolute;
+        z-index: 2;
+        top: -1px;
+        left: -1px;
+
+        display: block;
+
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+
+        content: '';
+
+        border-radius: 50%;
+        background: rgba(20, 20, 20, .8);
+    }
+
+
+
+    .dashboard .row > *.disabled
+    {
+        color: #464646;
+    }
+
+    .dashboard .disabled .logo:after
+    {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+
+        opacity: .8;
+        border-radius: inherit;
+        background: #141414;
+    }
+
+    .dashboard .disabled .progress,
+    .dashboard .disabled .progress .bar
+    {
+        background: #282828;
+    }
+
+    .dashboard .network.disabled .shadow:after
+    {
+        background: #212121;
+    }
+
+
+
+    .dashboard .row > *.account:before
+    {
+        background: #3c0666;
+    }
+
+
+    .dashboard .account
+    {
+        position: relative;
+    }
+
+
+    .dashboard .account .user_name
+    {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 22px;
+
+        overflow: hidden;
+
+        width: 102px;
+        margin: 0 auto 20px;
+
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+
+    .dashboard .account .balance
+    {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 36px;
+
+        margin-bottom: 18px;
+
+        text-align: center;
+
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
+
+
+    .dashboard .account .connect_wallet_btn
+    {
+        color: #000;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 15px;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        display: block;
+
+        width: 128px;
+        height: 35px;
+        margin: auto;
+
+        transition: .2s linear;
+        pointer-events: auto;
+
+        border-radius: 50px;
+        background: #fff;
+    }
+
+    .dashboard .account .connect_wallet_btn:hover
+    {
+        color: #fff;
+
+        background: #950fff;
+    }
+
+
+    .dashboard .account .shadow:after
+    {
+        background: #950fff;
+    }
+
+
+
+    @-moz-keyframes spin
+    {
+        100%
+        {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes spin
+    {
+        100%
+        {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin
+    {
+        100%
+        {
+            -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+        }
+    }
 
 </style>

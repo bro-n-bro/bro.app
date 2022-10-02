@@ -21,31 +21,83 @@
 
 
 <style scoped>
-.user
-{
-    font-size: 14px;  line-height: 17px;  display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: space-between;  margin-left: 40px;  padding: 15px 10px;  text-align: left; color: #fff;  border-radius: 20px;  background: #141414;
-}
+    .user
+    {
+        color: #fff;
+        font-size: 14px;
+        line-height: 17px;
+
+        display: flex;
+
+        margin-left: 40px;
+        padding: 15px 10px;
+
+        text-align: left;
+
+        border-radius: 20px;
+        background: #141414;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
 
 
-.user .icon
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 40px;  height: 40px;  margin-right: 10px;  border-radius: 50%;  background: #950fff;
-}
+    .user .icon
+    {
+        display: flex;
 
-.user .icon svg
-{
-    display: block;  width: 20px;  height: 20px;
-}
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+
+        border-radius: 50%;
+        background: #950fff;
+
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .user .icon svg
+    {
+        display: block;
+
+        width: 20px;
+        height: 20px;
+    }
 
 
-.user .photo
-{
-    position: relative;  overflow: hidden;  width: 40px;  height: 40px;  margin-left: 26px;  border-radius: 50%;  background: #353535;
-}
+    .user .photo
+    {
+        position: relative;
 
-.user .photo img
-{
-    position: absolute;  top: 0;  left: 0;  display: block;  width: 100%;  height: 100%;  border-radius: inherit;  object-fit: cover;
-}
+        overflow: hidden;
+
+        width: 40px;
+        height: 40px;
+        margin-left: 26px;
+
+        border-radius: 50%;
+        background: #353535;
+    }
+
+    .user .photo img
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        border-radius: inherit;
+
+        object-fit: cover;
+    }
 
 </style>

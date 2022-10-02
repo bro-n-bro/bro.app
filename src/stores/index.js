@@ -33,6 +33,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -87,6 +88,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -141,6 +143,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
@@ -195,6 +198,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
@@ -249,6 +253,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -303,6 +308,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -357,6 +363,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -411,6 +418,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -465,6 +473,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -519,6 +528,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -573,6 +583,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -627,6 +638,7 @@ const networks = {
         health_color: 'grey',
         apr: 0,
         speed: 0,
+        ibc_tokens: 0,
         availabel_tokens: 0,
         delegations_tokens: 0,
         delegations_percents: 0,
@@ -688,7 +700,8 @@ export const useGlobalStore = defineStore('global', {
         networks,
         showManageModal: false,
         networkManageModal: 'cosmoshub',
-        showManageSuccessModal: false
+        showManageSuccessModal: false,
+        loaderManageModal: false,
     }),
 
     actions: {
@@ -706,7 +719,7 @@ export const useGlobalStore = defineStore('global', {
             })
         },
 
-        
+
         // Avatar
         getAvatar() {
             fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
@@ -722,10 +735,10 @@ export const useGlobalStore = defineStore('global', {
         // Networks health
         getNetworksHealth(network) {
             fetch('https://rpc.bronbro.io/bro_data/')
-				.then(response => response.json())
-				.then(data => {
+                .then(response => response.json())
+                .then(data => {
                     data.infos.forEach(el => {
-                        if(this.networks[el.network]) {
+                        if (this.networks[el.network]) {
                             this.networks[el.network].health = el.health
                             this.networks[el.network].apr = el.apr
 
@@ -754,7 +767,7 @@ export const useGlobalStore = defineStore('global', {
                             }
                         }
                     })
-            })
+                })
         },
 
 
@@ -782,9 +795,9 @@ export const useGlobalStore = defineStore('global', {
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)
                 .then(response => response.json())
                 .then(data => {
-                    if(data.validators && data.validators.length) {
+                    if (data.validators && data.validators.length) {
                         data.validators.forEach(el => {
-                            if(el == this.networks[network].validator) {
+                            if (el == this.networks[network].validator) {
                                 this.networks[network].status = true
                             }
                         })
@@ -798,14 +811,14 @@ export const useGlobalStore = defineStore('global', {
             await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${this.wallets[network]}`)
                 .then(response => response.json())
                 .then(data => {
-                    if(data.delegation_responses) {
+                    if (data.delegation_responses) {
                         let sum = 0
 
                         data.delegation_responses.forEach(el => sum += parseFloat(el.balance.amount))
 
                         this.networks[network].delegations_tokens = sum / this.networks[network].exponent
 
-                        if(network == 'bostrom') {
+                        if (network == 'bostrom') {
                             this.networks.bostrom.delegations_tokens = sum
                         }
                     }
@@ -818,11 +831,12 @@ export const useGlobalStore = defineStore('global', {
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
-                    this.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / this.networks[network].exponent
+                    if (data.total.length) {
+                        this.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / this.networks[network].exponent
 
-                    if(network == 'bostrom') {
-                        this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount)
+                        if (network == 'bostrom') {
+                            this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount)
+                        }
                     }
                 })
         },
@@ -833,21 +847,33 @@ export const useGlobalStore = defineStore('global', {
             await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
                 .then(response => response.json())
                 .then(data => {
-                    let result = data.balances.find(e => e.denom == this.networks[network].denom)
+                    let availabel = data.balances.find(e => e.denom == this.networks[network].denom),
+                        ibc = data.balances.filter(e => e.denom.includes('ibc/'))
 
-                    if(data.balances && data.balances.length && typeof result !== "undefined"){
-                        this.networks[network].availabel_tokens = parseFloat(result.amount) / this.networks[network].exponent
+                    // Availabel tokens
+                    if (data.balances && data.balances.length && typeof availabel !== "undefined") {
+                        this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
 
-                        if(network == 'bostrom') {
-                            this.networks.bostrom.availabel_tokens = parseFloat(result.amount)
+                        if (network == 'bostrom') {
+                            this.networks.bostrom.availabel_tokens = parseFloat(availabel.amount)
                         }
                     }
 
-                    this.networks[network].tokens_sum = this.networks[network].availabel_tokens + this.networks[network].delegations_tokens + this.networks[network].rewards_tokens
+                    // IBC tokens
+                    if (data.balances && data.balances.length && typeof ibc !== "undefined") {
+                        ibc.forEach(el => {
+                            this.networks[network].ibc_tokens += parseFloat(el.amount) / this.networks[network].exponent
 
-                    this.networks[network].delegations_percents = this.networks[network].delegations_tokens * 100 / this.networks[network].tokens_sum
+                            if (network == 'bostrom') {
+                                this.networks[network].ibc_tokens += parseFloat(el.amount)
+                            }
+                        })
+                    }
 
-                    this.networks[network].rewards_percents = this.networks[network].rewards_tokens * 100 / this.networks[network].tokens_sum
+                    this.networks[network].tokens_sum = this.networks[network].availabel_tokens + this.networks[network].delegations_tokens + this.networks[network].rewards_tokens + this.networks[network].ibc_tokens
+
+                    // this.networks[network].delegations_percents = this.networks[network].delegations_tokens * 100 / this.networks[network].tokens_sum
+                    // this.networks[network].rewards_percents = this.networks[network].rewards_tokens * 100 / this.networks[network].tokens_sum
                 })
         },
 
@@ -857,7 +883,7 @@ export const useGlobalStore = defineStore('global', {
             await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${this.networks[network].coingecko_api}&vs_currencies=usd`)
                 .then(response => response.json())
                 .then(data => {
-                    if(data[this.networks[network].coingecko_api].usd){
+                    if (data[this.networks[network].coingecko_api].usd) {
                         this.networks[network].price = data[this.networks[network].coingecko_api].usd
 
                         this.networks[network].price_usdt = data[this.networks[network].coingecko_api].usd
@@ -904,7 +930,7 @@ export const useGlobalStore = defineStore('global', {
                 .then(response => response.json())
                 .then(data => {
                     // Validators
-                    if(data.validators.length){
+                    if (data.validators.length) {
                         this.networks[network].validators.push(data.validators.find(e => e.operator_address == this.networks[network].validator))
                     }
 

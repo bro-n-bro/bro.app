@@ -124,16 +124,12 @@
 
             // Networks delegations tokens
             for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await store.getNetworkDelegationTokens(network)
-                }
+                await store.getNetworkDelegationTokens(network)
             }
 
             // Network rewords tokens
             for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await store.getNetworkRewardTokens(network)
-                }
+                await store.getNetworkRewardTokens(network)
             }
 
             // Network availabel tokens
@@ -141,11 +137,14 @@
                 await store.getNetworkAvailabelTokens(network)
             }
 
+            // Network IBC tokens
+            // for (let network in store.networks) {
+            //     await store.getNetworkIBCTokens(network)
+            // }
+
             // Network price
             for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await store.getNetworkPrice(network)
-                }
+                await store.getNetworkPrice(network)
             }
 
             // Network balance
@@ -164,9 +163,7 @@
 
             // Networks data
             for (let network in store.networks) {
-                if(store.networks[network].status){
-                    await store.getNetworkData(network)
-                }
+                await store.getNetworkData(network)
             }
 
             // Account balance
@@ -226,36 +223,76 @@
 
 
 <style>
-.notifications
-{
-    margin-bottom: 30px;
-}
+    .notifications
+    {
+        margin-bottom: 30px;
+    }
 
 
-.notifications .data
-{
-    font-size: 14px;  line-height: 150%;  display: flex;  align-content: flex-start;  align-items: flex-start;  flex-wrap: wrap;  justify-content: space-between;  width: 953px;  max-width: 100%;  margin-right: auto;  margin-left: auto;  padding: 20px;  border-radius: 20px;  background: #141414;  font-feature-settings: 'pnum' on, 'lnum' on;
-}
+    .notifications .data
+    {
+        font-size: 14px;
+        line-height: 150%;
+
+        display: flex;
+
+        width: 953px;
+        max-width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 20px;
+
+        border-radius: 20px;
+        background: #141414;
+
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
 
 
-.notifications .icon
-{
-    display: flex;  align-content: center;  align-items: center;  flex-wrap: wrap;  justify-content: center;  width: 52px;  height: 52px;  border: 1px solid rgba(217, 217, 217, .1);  border-radius: 50%;
-}
+    .notifications .icon
+    {
+        display: flex;
 
-.notifications .icon svg
-{
-    display: block;  width: 30px;  height: 30px;
-}
+        width: 52px;
+        height: 52px;
 
-.notifications .icon + *
-{
-    width: calc(100% - 67px);  margin-left: auto;
-}
+        border: 1px solid rgba(217, 217, 217, .1);
+        border-radius: 50%;
 
-.notifications span
-{
-    display: -webkit-box;  overflow: hidden;  align-self: center;  -webkit-box-orient: vertical;  text-overflow: ellipsis;  -webkit-line-clamp: 2;
-}
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .notifications .icon svg
+    {
+        display: block;
+
+        width: 30px;
+        height: 30px;
+    }
+
+    .notifications .icon + *
+    {
+        width: calc(100% - 67px);
+        margin-left: auto;
+    }
+
+    .notifications span
+    {
+        display: -webkit-box;
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        align-self: center;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
 
 </style>
