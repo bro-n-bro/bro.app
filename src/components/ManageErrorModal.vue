@@ -3,19 +3,21 @@
         <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content">
             <div class="data">
-                <button class="close_btn" @click.prevent="emitter.emit('close_manage_success_modal')">
+                <button class="close_btn" @click.prevent="emitter.emit('close_manage_error_modal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
 
                 <div class="icon">
-                    <img src="../assets/images/success_modal.svg" alt="">
+                    <img src="../assets/images/error_modal.svg" alt="">
                 </div>
 
-                <div class="title" v-html="$t('message.manage_modal_success_title', { network: store.networkManageModal, hash: store.lastTXS })"></div>
+                <div class="title">
+                    {{ store.manageError }}
+                </div>
 
                 <div class="btns">
-                    <div><button class="btn close_btn" @click.prevent="emitter.emit('close_manage_success_modal')">
-                        {{ $t('message.manage_modal_success_back_btn') }}
+                    <div><button class="btn close_btn" @click.prevent="tryAgain">
+                        {{ $t('message.manage_modal_again_btn') }}
                     </button></div>
                 </div>
             </div>
@@ -23,7 +25,7 @@
         </transition>
 
         <transition name="fade" mode="out-in" appear type="animation">
-        <div class="overlay" @click.prevent="emitter.emit('close_manage_success_modal')"></div>
+        <div class="overlay" @click.prevent="emitter.emit('close_manage_error_modal')"></div>
         </transition>
     </section>
 </template>
@@ -35,4 +37,10 @@
 
     const emitter = inject('emitter'),
         store = useGlobalStore()
+
+
+    function tryAgain() {
+        emitter.emit('close_manage_error_modal')
+        emitter.emit('open_manage_modal')
+    }
 </script>

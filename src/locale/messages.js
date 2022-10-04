@@ -41,9 +41,22 @@ export default {
             'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
             'manage_modal_back_btn': 'Back',
             'manage_modal_delegate_btn': 'Delegate',
+            'manage_modal_success_back_btn': 'Got it!',
+            'manage_modal_again_btn': 'Try again!',
 
-            'manage_modal_success_title': "Oooops, seems you don't have a Keplr extension",
-            'manage_modal_success_desc': "Oooops, seems you don't have a Keplr extension",
+            'manage_modal_success_title': "<a href='https://www.mintscan.io/{network}/txs/{hash}' target='_blank' rel='noopener nofollow'>Transaction</a><br> is successfully broadcasted",
+
+            'manage_modal_error_2': "tx parse error",
+            'manage_modal_error_3': "invalid sequence",
+            'manage_modal_error_4': "unauthorized",
+            'manage_modal_error_5': "insufficient funds",
+            'manage_modal_error_6': "unknown request",
+            'manage_modal_error_7': "invalid address",
+            'manage_modal_error_8': "invalid pubkey",
+            'manage_modal_error_9': "unknown address",
+            'manage_modal_error_10': "invalid coins",
+            'manage_modal_error_11': "Broadcasting transaction failed: out of gas try again and increase gas amount",
+            'manage_modal_error_rejected': "The transaction has been rejected",
         }
     }
 }

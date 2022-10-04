@@ -371,7 +371,7 @@ button
 
 .modal.success .modal_content .data
 {
-    padding: 96px 20px 20px;
+    padding: 96px 20px 40px;
 }
 
 
@@ -397,6 +397,13 @@ button
     line-height: 130%;
 
     text-align: center;
+}
+
+.modal.success .title a
+{
+    color: #950fff;
+
+    text-decoration: none;
 }
 
 

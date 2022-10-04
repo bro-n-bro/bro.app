@@ -699,10 +699,14 @@ export const useGlobalStore = defineStore('global', {
         account,
         networks,
         showManageModal: false,
-        networkManageModal: 'cosmoshub',
         showManageSuccessModal: false,
+        showManageErrorModal: false,
+        showManageRejectModal: false,
         loaderManageModal: false,
-        showCurrencyDropdown: false
+        showCurrencyDropdown: false,
+        networkManageModal: 'cosmoshub',
+        lastTXS: '',
+        manageError: ''
     }),
 
     actions: {

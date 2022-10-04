@@ -202,50 +202,53 @@
 
                 try {
                     const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
-                    rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                    client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                    msg = {
-                        delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorAddress: store.networks[store.networkManageModal].validator,
-                        amount: {
-                            denom: store.networks[store.networkManageModal].denom,
-                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                        }
-                    },
-                    msgAny = {
-                        typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
-                        value: msg
-                    },
-                    fee = {
-                        amount: [{
-                            denom: store.networks[store.networkManageModal].denom,
-                            amount: '0'
-                        }],
-                        gas: '190000'
-                    },
-                    memo = '',
-                    result = await client.signAndBroadcast(
-                        store.wallets[store.networkManageModal],
-                        [msgAny],
-                        fee,
-                        memo
-                    )
+                        rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                        client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                        msg = {
+                            delegatorAddress: store.wallets[store.networkManageModal],
+                            validatorAddress: store.networks[store.networkManageModal].validator,
+                            amount: {
+                                denom: store.networks[store.networkManageModal].denom,
+                                amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                            }
+                        },
+                        msgAny = {
+                            typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                            value: msg
+                        },
+                        fee = {
+                            amount: [{
+                                denom: store.networks[store.networkManageModal].denom,
+                                amount: '0'
+                            }],
+                            gas: '190000'
+                        },
+                        memo = '',
+                        result = await client.signAndBroadcast(
+                            store.wallets[store.networkManageModal],
+                            [msgAny],
+                            fee,
+                            memo
+                        )
 
-                    if(result.code == 0){
-                        emitter.emit('close_manage_modal')
-                        emitter.emit('open_manage_success_modal')
-
-                        store.loaderManageModal = !store.loaderManageModal
-
-                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-                    }
-
-                    if(result.code == 11){
-                        console.log(result.rawLog)
-                    }
-                } catch (error) {
-                    console.log(error)
                     store.loaderManageModal = !store.loaderManageModal
+                    store.lastTXS = result.transactionHash
+
+                    emitter.emit('close_manage_modal')
+                    emitter.emit('open_manage_success_modal')
+
+                    setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                } catch (error) {
+                    let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+
+                    errorCode
+                        ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                        : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                    store.loaderManageModal = !store.loaderManageModal
+
+                    emitter.emit('close_manage_modal')
+                    emitter.emit('open_manage_error_modal')
                 }
             }
     }
