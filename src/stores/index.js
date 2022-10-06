@@ -961,31 +961,31 @@ export const useGlobalStore = defineStore('global', {
                     // Validators
                     if (data.validators.length) {
                         this.networks[network].validators.push(data.validators.find(e => e.operator_address == this.networks[network].validator))
+
+                        // Annual provision
+                        this.networks[network].validators.forEach(el => {
+                            el.annual_provision = this.networks[network].delegations_tokens * this.networks[network].apr * (1 - el.commission.commission_rates.rate)
+
+                            // Total annual provision
+                            this.networks[network].total_annual_provision += el.annual_provision
+                        })
+
+                        // RPDE
+                        this.networks[network].RPDE = this.networks[network].total_annual_provision / 365.3
+
+                        this.networks[network].RPDE_usdt = this.networks[network].price_usdt * this.networks[network].RPDE
+                        this.networks[network].RPDE_atom = this.networks[network].price_atom * this.networks[network].RPDE
+                        this.networks[network].RPDE_eth = this.networks[network].price_eth * this.networks[network].RPDE
+                        this.networks[network].RPDE_btc = this.networks[network].price_btc * this.networks[network].RPDE
+
+                        this.networks[network].RPDE_year_usdt = this.networks[network].RPDE_usdt * 365.3
+                        this.networks[network].RPDE_year_atom = this.networks[network].RPDE_atom * 365.3
+                        this.networks[network].RPDE_year_eth = this.networks[network].RPDE_eth * 365.3
+                        this.networks[network].RPDE_year_btc = this.networks[network].RPDE_btc * 365.3
+
+                        // Personal APR
+                        this.networks[network].personal_APR = this.networks[network].total_annual_provision / this.networks[network].delegations_tokens * 100
                     }
-
-                    // Annual provision
-                    this.networks[network].validators.forEach(el => {
-                        el.annual_provision = this.networks[network].delegations_tokens * this.networks[network].apr * (1 - el.commission.commission_rates.rate)
-
-                        // Total annual provision
-                        this.networks[network].total_annual_provision += el.annual_provision
-                    })
-
-                    // RPDE
-                    this.networks[network].RPDE = this.networks[network].total_annual_provision / 365.3
-
-                    this.networks[network].RPDE_usdt = this.networks[network].price_usdt * this.networks[network].RPDE
-                    this.networks[network].RPDE_atom = this.networks[network].price_atom * this.networks[network].RPDE
-                    this.networks[network].RPDE_eth = this.networks[network].price_eth * this.networks[network].RPDE
-                    this.networks[network].RPDE_btc = this.networks[network].price_btc * this.networks[network].RPDE
-
-                    this.networks[network].RPDE_year_usdt = this.networks[network].RPDE_usdt * 365.3
-                    this.networks[network].RPDE_year_atom = this.networks[network].RPDE_atom * 365.3
-                    this.networks[network].RPDE_year_eth = this.networks[network].RPDE_eth * 365.3
-                    this.networks[network].RPDE_year_btc = this.networks[network].RPDE_btc * 365.3
-
-                    // Personal APR
-                    this.networks[network].personal_APR = this.networks[network].total_annual_provision / this.networks[network].delegations_tokens * 100
                 })
         },
 

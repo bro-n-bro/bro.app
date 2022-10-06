@@ -4,9 +4,11 @@
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
 
-        <div class="name">{{ store.account.userName }}</div>
+        <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
+            {{ store.account.userName }}
+            </div>
 
-        <div class="photo">
+        <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
         </div>
     </div>
@@ -14,9 +16,11 @@
 
 
 <script setup>
+    import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
-    const store = useGlobalStore()
+    const store = useGlobalStore(),
+        emitter = inject('emitter')
 </script>
 
 

@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" :readonly="form.type == 'delegate'"  v-model="form.validator.name" @focus.self="$event.target.classList.add('active')">
+                            <input type="text" class="input" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>

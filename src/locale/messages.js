@@ -4,7 +4,6 @@ export default {
         message: {
             // IPFS
             'ipfs': "Ipfs node",
-            'ipfs_notice': "Built-in IPFS node is active.",
 
             // Error page
             'error_title_404': "Page was lost in space.... Are you sure that it exist?",
@@ -25,6 +24,26 @@ export default {
 
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
+
+            'ipfs_active_notice': "Built-in IPFS node is active and resolving the content",
+            'ipfs_not_active_notice': "Built-in IPFS node isn't active and can't resolve the content",
+
+            'currency_notice': "The currency for the account valuation",
+            'username_notice': "Chosen keplr account",
+            'avatar_notice': "You Moon passport avatar",
+
+            'network_notice': "This network health is {health}. That's why it's {color}. The APR of this network is {APR}. The frequency of blinking depends on the network APR value.",
+            'network_sum_notice': "The sum of your tokens in {network} network",
+            'network_staked_tokens_notice': "The amount of staked tokens is {value} {denom}",
+            'network_liquid_tokens_notice': "The amount of liquid tokens is {value} {denom}",
+            'network_rewards_tokens_notice': "The amount of ready-to-claim reward tokens is {value} {denom}",
+            'network_ibc_tokens_notice': "The amount {denom} tokens outside the {network} is {value} {denom}",
+            'network_personal_APR_notice': "Your personal APR, given validators commissions",
+            'network_RPDE_notice': "Rewards Per Day Estimation. The amount of {denom} tokens you're earning per day.",
+
+            'account_balance_notice': "Your account valuation in the chosen currency",
+            'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
+            'account_RPDE_notice': "Rewards Per Day Estimation. The number of tokens in the chosen currency you earn per day from all displayed networks.",
 
             // Manage modal
             'manage_modal_action_delegate': 'Delegate',

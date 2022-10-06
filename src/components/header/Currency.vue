@@ -1,5 +1,5 @@
 <template>
-    <div class="currency">
+    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.currency_notice'))">
         <button class="btn" :class="{ active: store.showCurrencyDropdown }" @click.prevent="store.showCurrencyDropdown = true">
             <span>{{ store.currency }}</span>
             <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -21,9 +21,12 @@
 
 
 <script setup>
+    import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
-    const store = useGlobalStore()
+    const store = useGlobalStore(),
+        emitter = inject('emitter')
+
 
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })

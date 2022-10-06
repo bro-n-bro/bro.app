@@ -1,5 +1,5 @@
 <template>
-    <div class="ipfs_status" :class="{ green: store.IPFSStatus }" @mouseover="emitter.emit('setNotification', $t('message.ipfs_notice'))">
+    <div class="ipfs_status" :class="{ green: store.IPFSStatus }" @mouseover="setNotice">
         <div>{{ $t('message.ipfs') }}</div>
     </div>
 </template>
@@ -46,6 +46,13 @@
     if (node !== null) {
         store.$patch({ node: node })
         store.$patch({ IPFSStatus: true })
+    }
+
+
+    function setNotice() {
+        store.IPFSStatus
+            ? emitter.emit('setNotification', i18n.global.t('message.ipfs_active_notice'))
+            : emitter.emit('setNotification', i18n.global.t('message.ipfs_not_active_notice'))
     }
 </script>
 
