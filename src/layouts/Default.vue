@@ -159,7 +159,9 @@
 
             // Networks data
             for (let network in store.networks) {
-                await store.getNetworkData(network)
+                if(network.status){
+                    await store.getNetworkData(network)
+                }
             }
 
             // Account balance

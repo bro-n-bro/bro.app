@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { useLocalStorage } from '@vueuse/core'
+import { CyberClient } from '@cybercongress/cyber-js'
+import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 
 
 const account = {
@@ -709,6 +711,7 @@ window.localStorage.setItem('networks', JSON.stringify(networks))
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
+        CONTRACT_ADDRESS_PASSPORT: 'bostrom1xut80d09q0tgtch8p0z4k5f88d3uvt8cvtzm5h3tu3tsy4jk9xlsfzhxel',
         node: null,
         IPFSStatus: false,
         auth: useLocalStorage('auth', false),
@@ -728,7 +731,8 @@ export const useGlobalStore = defineStore('global', {
         showCurrencyDropdown: false,
         networkManageModal: 'cosmoshub',
         lastTXS: '',
-        manageError: ''
+        manageError: '',
+        jsCyber: null
     }),
 
     actions: {
@@ -748,19 +752,36 @@ export const useGlobalStore = defineStore('global', {
 
 
         // Avatar
-        getAvatar() {
-            fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
-                .then(response => response.json())
-                .then(data => {
-                    data.txs
-                        ? this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
-                        : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
-                })
+        async getAvatar() {
+            try {
+                const tendermintClient = await Tendermint34Client.connect('https://rpc.bostrom.cybernode.ai')
+
+                this.jsCyber = new CyberClient(tendermintClient)
+
+                const response = await this.jsCyber.queryContractSmart(
+                    this.CONTRACT_ADDRESS_PASSPORT,
+                    {
+                        active_passport: {
+                            address: this.wallets.bostrom
+                        }
+                    }
+                )
+
+                this.account.avatar = `https://ipfs.io/ipfs/${response.extension.avatar}`
+            } catch (error) {
+                fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.txs
+                            ? this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
+                            : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
+                    })
+            }
         },
 
 
         // Networks health
-        getNetworksHealth(network) {
+        getNetworksHealth() {
             fetch('https://rpc.bronbro.io/bro_data/')
                 .then(response => response.json())
                 .then(data => {
