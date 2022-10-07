@@ -140,7 +140,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.juno.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.juno.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.juno.ibc_tokens, 2),
                                 denom: store.networks.juno.token_name,
                                 network: store.networks.juno.name
                             }))"></div>
@@ -228,7 +228,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.cosmoshub.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.cosmoshub.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.cosmoshub.ibc_tokens, 2),
                                 denom: store.networks.cosmoshub.token_name,
                                 network: store.networks.cosmoshub.name
                             }))"></div>
@@ -316,7 +316,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.bostrom.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.bostrom.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.bostrom.ibc_tokens, 2),
                                 denom: store.networks.bostrom.token_name,
                                 network: store.networks.bostrom.name
                             }))"></div>
@@ -406,7 +406,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.emoney.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.emoney.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.emoney.ibc_tokens, 2),
                                 denom: store.networks.emoney.token_name,
                                 network: store.networks.emoney.name
                             }))"></div>
@@ -494,7 +494,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.desmos.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.desmos.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.desmos.ibc_tokens, 2),
                                 denom: store.networks.desmos.token_name,
                                 network: store.networks.desmos.name
                             }))"></div>
@@ -647,7 +647,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.osmosis.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.osmosis.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.osmosis.ibc_tokens, 2),
                                 denom: store.networks.osmosis.token_name,
                                 network: store.networks.osmosis.name
                             }))"></div>
@@ -735,7 +735,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.crescent.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.crescent.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.crescent.ibc_tokens, 2),
                                 denom: store.networks.crescent.token_name,
                                 network: store.networks.crescent.name
                             }))"></div>
@@ -825,7 +825,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.gravity.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.gravity.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.gravity.ibc_tokens, 2),
                                 denom: store.networks.gravity.token_name,
                                 network: store.networks.gravity.name
                             }))"></div>
@@ -913,7 +913,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stargaze.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stargaze.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.stargaze.ibc_tokens, 2),
                                 denom: store.networks.stargaze.token_name,
                                 network: store.networks.stargaze.name
                             }))"></div>
@@ -1001,7 +1001,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.omniflix.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.omniflix.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.omniflix.ibc_tokens, 2),
                                 denom: store.networks.omniflix.token_name,
                                 network: store.networks.omniflix.name
                             }))"></div>
@@ -1089,7 +1089,7 @@
 
                             <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stride.ibc_percents, 2) + '%'}"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stride.rewards_tokens, 2),
+                                value: $filters.toFixed(store.networks.stride.ibc_tokens, 2),
                                 denom: store.networks.stride.token_name,
                                 network: store.networks.stride.name
                             }))"></div>

@@ -898,23 +898,21 @@ export const useGlobalStore = defineStore('global', {
                     let availabel = data.balances.find(e => e.denom == this.networks[network].denom),
                         ibc = data.balances.filter(e => e.denom.includes('ibc/'))
 
-                    // Availabel tokens
                     if (data.balances && data.balances.length && typeof availabel !== "undefined") {
+                        // Availabel tokens
                         this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
 
                         if (network == 'bostrom') {
                             this.networks.bostrom.availabel_tokens = parseFloat(availabel.amount)
                         }
-                    }
 
-                    // IBC tokens
-                    if (data.balances && data.balances.length && typeof ibc !== "undefined") {
+                        // IBC tokens
                         ibc.forEach(el => {
-                            this.networks[network].ibc_tokens += parseFloat(el.amount) / this.networks[network].exponent
+                            // this.networks[network].ibc_tokens += parseFloat(el.amount) / this.networks[network].exponent
 
-                            if (network == 'bostrom') {
-                                this.networks[network].ibc_tokens += parseFloat(el.amount)
-                            }
+                            // if (network == 'bostrom') {
+                            //     this.networks[network].ibc_tokens += parseFloat(el.amount)
+                            // }
                         })
                     }
 
