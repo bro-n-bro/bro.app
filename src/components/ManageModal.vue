@@ -279,7 +279,7 @@
 
     #manage_modal .type label
     {
-        color: #464646;
+        color: rgba(255, 255, 255, .5);
         font-size: 14px;
         font-weight: 500;
         line-height: 17px;
@@ -303,7 +303,7 @@
         transition: .2s linear;
 
         border-radius: 14px;
-        background: #191919;
+background: #191919;
     }
 
 

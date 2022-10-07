@@ -1385,22 +1385,22 @@
 
     .dashboard .visualization .staked
     {
-        background: #0b2272;
+        background: #950FFF;
     }
 
     .dashboard .visualization .liquid
     {
-        background: #4075fd;
+        background: #EB5757;
     }
 
     .dashboard .visualization .rewards
     {
-        background: #f17344;
+        background: #1BC562;
     }
 
     .dashboard .visualization .IBC
     {
-        background: #9b3915;
+        background: #C5811B;
     }
 
 
