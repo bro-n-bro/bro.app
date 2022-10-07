@@ -18,7 +18,7 @@
                             <div>{{ $t('message.manage_modal_action_delegate') }}</div>
                         </label>
 
-                        <label v-show="form.validators.length" @click="form.validator.name = ''">
+                        <label v-show="form.validators.length" @click="clearValidator">
                             <input type="radio" value="redelegate" v-model="form.type">
                             <div>{{ $t('message.manage_modal_action_redelegate') }}</div>
                         </label>
@@ -30,7 +30,9 @@
                         </div>
 
                         <div>
-                            <div class="name">{{ $t('message.manage_modal_validator_name') }}</div>
+                            <div class="name">
+                                {{ $t('message.manage_modal_validator_name') }}
+                            </div>
 
                             <div class="commission">
                                 {{ $t('message.manage_modal_commission') }}
@@ -57,23 +59,37 @@
 
                     <div class="tokens">
                         <div>
-                            <div class="label">{{ $t('message.manage_modal_my_delegation') }}</div>
-                            <div class="val">{{ store.networks[store.networkManageModal].delegations_tokens }} {{ store.networks[store.networkManageModal].token_name }}</div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_my_delegation') }}
+                            </div>
+
+                            <div class="val">
+                                {{ store.networks[store.networkManageModal].delegations_tokens }} {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
                         </div>
 
                         <div>
-                            <div class="label">{{ $t('message.manage_modal_available_balance') }}</div>
-                            <div class="val">{{ store.networks[store.networkManageModal].availabel_tokens }} {{ store.networks[store.networkManageModal].token_name }}</div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_available_balance') }}
+                            </div>
+
+                            <div class="val">
+                                {{ store.networks[store.networkManageModal].availabel_tokens }} {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
                         </div>
                     </div>
 
                     <div class="amount">
-                        <div class="label">{{ $t('message.manage_modal_amount') }}</div>
+                        <div class="label">
+                            {{ $t('message.manage_modal_amount') }}
+                        </div>
 
                         <div class="field">
-                            <input type="text" class="input" v-model="form.amount">
+                            <input type="text" class="input" v-model="form.amount" @input="event => event.target.value > store.networks[store.networkManageModal].availabel_tokens ? form.amount = store.networks[store.networkManageModal].availabel_tokens : event.target.value">
 
-                            <div class="unit">{{ store.networks[store.networkManageModal].token_name }}</div>
+                            <div class="unit">
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
 
                             <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens">
                                 {{ $t('message.manage_modal_max_btn') }}
@@ -91,7 +107,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')">
+                            <input type="text" class="input" id="validatorInput" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')" @blur.self="hideDropdown">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -130,6 +146,7 @@
             </div>
         </div>
         </transition>
+
 
         <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay" @click.prevent="emitter.emit('close_manage_modal')"></div>
@@ -191,6 +208,16 @@
         form.validator.name = validator.description.moniker
 
         document.querySelector('#manage_modal .validate_from .input').classList.remove('active')
+    }
+
+
+    // Hide dropdown
+    function hideDropdown() {
+        setTimeout(() => {
+            let validatorInput = document.getElementById('validatorInput')
+
+            validatorInput.classList.remove('active')
+        }, 100)
     }
 
 
