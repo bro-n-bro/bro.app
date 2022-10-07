@@ -303,7 +303,7 @@
         transition: .2s linear;
 
         border-radius: 14px;
-background: #191919;
+        background: #191919;
     }
 
 
