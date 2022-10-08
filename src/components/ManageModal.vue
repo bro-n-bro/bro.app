@@ -91,7 +91,7 @@
                                 {{ store.networks[store.networkManageModal].token_name }}
                             </div>
 
-                            <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens * 0.99999">
+                            <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens - 0.01">
                                 {{ $t('message.manage_modal_max_btn') }}
                             </button>
                         </div>
@@ -260,8 +260,6 @@
                                 fee,
                                 memo
                             )
-
-                        console.log(result)
 
                         store.loaderManageModal = !store.loaderManageModal
                         store.lastTXS = result.transactionHash
