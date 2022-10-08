@@ -139,7 +139,13 @@
                         </button>
 
                         <button type="submit" class="btn submit_btn">
+                            <template v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_delegate_btn') }}
+                            </template>
+
+                            <template v-if="form.type == 'redelegate'">
+                            {{ $t('message.manage_modal_redelegate_btn') }}
+                            </template>
                         </button>
                     </div>
                 </form>
@@ -223,55 +229,125 @@
             if(form.amount > 0) {
                 store.loaderManageModal = !store.loaderManageModal
 
-                try {
-                    const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
-                        rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                        client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                        msg = {
-                            delegatorAddress: store.wallets[store.networkManageModal],
-                            validatorAddress: store.networks[store.networkManageModal].validator,
-                            amount: {
-                                denom: store.networks[store.networkManageModal].denom,
-                                amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                            }
-                        },
-                        msgAny = {
-                            typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
-                            value: msg
-                        },
-                        fee = {
-                            amount: [{
-                                denom: store.networks[store.networkManageModal].denom,
-                                amount: '0'
-                            }],
-                            gas: '190000'
-                        },
-                        memo = '',
-                        result = await client.signAndBroadcast(
-                            store.wallets[store.networkManageModal],
-                            [msgAny],
-                            fee,
-                            memo
-                        )
+                if(form.type == 'delegate') {
+                    try {
+                        const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
+                            rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                            msg = {
+                                delegatorAddress: store.wallets[store.networkManageModal],
+                                validatorAddress: store.networks[store.networkManageModal].validator,
+                                amount: {
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                }
+                            },
+                            msgAny = {
+                                typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                                value: msg
+                            },
+                            fee = {
+                                amount: [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                gas: '19000'
+                            },
+                            memo = '',
+                            result = await client.signAndBroadcast(
+                                store.wallets[store.networkManageModal],
+                                [msgAny],
+                                fee,
+                                memo
+                            )
 
-                    store.loaderManageModal = !store.loaderManageModal
-                    store.lastTXS = result.transactionHash
+                        console.log(result)
 
-                    emitter.emit('close_manage_modal')
-                    emitter.emit('open_manage_success_modal')
+                        store.loaderManageModal = !store.loaderManageModal
+                        store.lastTXS = result.transactionHash
 
-                    setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-                } catch (error) {
-                    let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+                        emitter.emit('close_manage_modal')
+                        emitter.emit('open_manage_success_modal')
 
-                    errorCode
-                        ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
-                        : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                    } catch (error) {
+                        let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
-                    store.loaderManageModal = !store.loaderManageModal
+                        errorCode
+                            ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                            : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
-                    emitter.emit('close_manage_modal')
-                    emitter.emit('open_manage_error_modal')
+                        store.loaderManageModal = !store.loaderManageModal
+
+                        emitter.emit('close_manage_modal')
+                        emitter.emit('open_manage_error_modal')
+                    }
+                }
+
+
+                if(form.type == 'redelegate') {
+                    try {
+                        const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
+                            rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                            msg = {
+                                delegatorAddress: store.wallets[store.networkManageModal],
+                                validatorSrcAddress: form.validator.operator_address,
+                                validatorDstAddress: store.networks[store.networkManageModal].validator,
+                                amount: {
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                }
+                            },
+                            msgAny = {
+                                typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
+                                value: msg
+                            },
+                            fee = {
+                                amount: [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                gas: '180000'
+                            },
+                            memo = '',
+                            result = await client.signAndBroadcast(
+                                store.wallets[store.networkManageModal],
+                                [msgAny],
+                                fee,
+                                memo
+                            )
+
+                        if(result.code != 0){
+                            store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)
+
+                            store.loaderManageModal = !store.loaderManageModal
+
+                            emitter.emit('close_manage_modal')
+                            emitter.emit('open_manage_error_modal')
+
+                            return false
+                        }
+
+                        store.loaderManageModal = !store.loaderManageModal
+                        store.lastTXS = result.transactionHash
+
+                        emitter.emit('close_manage_modal')
+                        emitter.emit('open_manage_success_modal')
+
+                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                    } catch (error) {
+                        let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+
+                        errorCode
+                            ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                            : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                        store.loaderManageModal = !store.loaderManageModal
+
+                        emitter.emit('close_manage_modal')
+                        emitter.emit('open_manage_error_modal')
+                    }
                 }
             }
     }

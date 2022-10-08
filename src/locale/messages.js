@@ -61,6 +61,7 @@ export default {
             'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
             'manage_modal_back_btn': 'Back',
             'manage_modal_delegate_btn': 'Delegate',
+            'manage_modal_redelegate_btn': 'Redelegate',
             'manage_modal_success_back_btn': 'Got it!',
             'manage_modal_again_btn': 'Try again!',
 
