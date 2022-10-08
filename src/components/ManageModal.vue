@@ -74,7 +74,15 @@
                             </div>
 
                             <div class="val">
-                                {{ store.networks[store.networkManageModal].availabel_tokens }} {{ store.networks[store.networkManageModal].token_name }}
+                                <template v-if="form.validator.availabel_tokens">
+                                {{ form.validator.availabel_tokens }}
+                                </template>
+
+                                <template v-else>
+                                {{ store.networks[store.networkManageModal].availabel_tokens }}
+                                </template>
+
+                                {{ store.networks[store.networkManageModal].token_name }}
                             </div>
                         </div>
                     </div>
@@ -176,6 +184,7 @@
             validators: [],
             validator: {
                 operator_address: '',
+                availabel_tokens: 0,
                 name: i18n.global.t('message.manage_modal_validator_name')
             }
         })
@@ -187,6 +196,7 @@
             await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
                 .then(response => response.json())
                 .then(data => {
+
                     let result = data.validators.filter(el => {
                         if(el.operator_address != store.networks[store.networkManageModal].validator) {
                             return el
@@ -205,6 +215,7 @@
     function clearValidator() {
         form.validator.operator_address = ''
         form.validator.name = ''
+        form.validator.availabel_tokens = 0
     }
 
 
@@ -218,6 +229,7 @@
     function setValidator(validator) {
         form.validator.operator_address = validator.operator_address
         form.validator.name = validator.description.moniker
+        form.validator.availabel_tokens = 0 / store.networks[store.networkManageModal].exponent
 
         hideDropdown()
     }
