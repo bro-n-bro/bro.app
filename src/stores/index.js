@@ -908,11 +908,24 @@ export const useGlobalStore = defineStore('global', {
 
                         // IBC tokens
                         ibc.forEach(el => {
-                            // this.networks[network].ibc_tokens += parseFloat(el.amount) / this.networks[network].exponent
+                            fetch(`${this.networks[network].lcd_api}/ibc/apps/transfer/v1/denom_traces/${el.denom.substr(4)}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    let baseDenom = data.denom_trace.base_denom,
+                                        baseNetwork = ''
 
-                            // if (network == 'bostrom') {
-                            //     this.networks[network].ibc_tokens += parseFloat(el.amount)
-                            // }
+                                    for (const tempNetwork in this.networks) {
+                                        if (this.networks[tempNetwork].denom == baseDenom) {
+                                            baseNetwork = tempNetwork
+                                        }
+                                    }
+
+                                    this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
+
+                                    if (baseNetwork == 'bostrom') {
+                                        this.networks.bostrom.ibc_tokens += parseFloat(el.amount)
+                                    }
+                                })
                         })
                     }
 

@@ -159,7 +159,7 @@
 
             // Networks data
             for (let network in store.networks) {
-                if(network.status){
+                if(store.networks[network].status){
                     await store.getNetworkData(network)
                 }
             }

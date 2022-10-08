@@ -91,7 +91,7 @@
                                 {{ store.networks[store.networkManageModal].token_name }}
                             </div>
 
-                            <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens">
+                            <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens * 0.99999">
                                 {{ $t('message.manage_modal_max_btn') }}
                             </button>
                         </div>
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" id="validatorInput" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')" @blur.self="hideDropdown">
+                            <input type="text" class="input" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')" @blur.self="hideDropdown">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -202,22 +202,18 @@
     }
 
 
+    // Hide dropdown
+    function hideDropdown() {
+        setTimeout(() => document.querySelector('#manage_modal .validate_from .input').classList.remove('active'), 100)
+    }
+
+
     // Set validator info
     function setValidator(validator) {
         form.validator.operator_address = validator.operator_address
         form.validator.name = validator.description.moniker
 
-        document.querySelector('#manage_modal .validate_from .input').classList.remove('active')
-    }
-
-
-    // Hide dropdown
-    function hideDropdown() {
-        setTimeout(() => {
-            let validatorInput = document.getElementById('validatorInput')
-
-            validatorInput.classList.remove('active')
-        }, 100)
+        hideDropdown()
     }
 
 
