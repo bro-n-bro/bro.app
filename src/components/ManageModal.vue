@@ -13,7 +13,7 @@
 
                 <form class="form" @submit.prevent="onSubmit">
                     <div class="type">
-                        <label @click="form.validator.name = $t('message.manage_modal_validator_name')">
+                        <label @click="clearValidator; form.validator.name = $t('message.manage_modal_validator_name')">
                             <input type="radio" value="delegate" v-model="form.type">
                             <div>{{ $t('message.manage_modal_action_delegate') }}</div>
                         </label>
@@ -64,7 +64,15 @@
                             </div>
 
                             <div class="val">
-                                {{ store.networks[store.networkManageModal].delegations_tokens }} {{ store.networks[store.networkManageModal].token_name }}
+                                <template v-if="form.validator.availabel_tokens">
+                                {{ form.validator.availabel_tokens }}
+                                </template>
+
+                                <template v-else>
+                                {{ store.networks[store.networkManageModal].delegations_tokens }}
+                                </template>
+
+                                {{ store.networks[store.networkManageModal].token_name }}
                             </div>
                         </div>
 
@@ -93,13 +101,13 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" v-model="form.amount" @input="event => event.target.value > store.networks[store.networkManageModal].availabel_tokens ? form.amount = store.networks[store.networkManageModal].availabel_tokens : event.target.value">
+                            <input type="text" class="input" v-model="form.amount" @input="setAmount">
 
                             <div class="unit">
                                 {{ store.networks[store.networkManageModal].token_name }}
                             </div>
 
-                            <button type="button" class="max_btn" @click.prevent="form.amount = store.networks[store.networkManageModal].availabel_tokens - 0.01">
+                            <button type="button" class="max_btn" @click.prevent="setMAX">
                                 {{ $t('message.manage_modal_max_btn') }}
                             </button>
                         </div>
@@ -115,7 +123,11 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" :readonly="form.type == 'delegate'" v-model="form.validator.name" @focus.self="$event.target.classList.add('active')" @blur.self="hideDropdown">
+                            <input type="text" class="input"
+                                :readonly="form.type == 'delegate'"
+                                v-model="form.validator.name"
+                                @focus.self="$event.target.classList.add('active')"
+                                @blur.self="hideDropdown">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -229,9 +241,33 @@
     function setValidator(validator) {
         form.validator.operator_address = validator.operator_address
         form.validator.name = validator.description.moniker
-        form.validator.availabel_tokens = 0 / store.networks[store.networkManageModal].exponent
+        form.validator.availabel_tokens = store.networks[store.networkManageModal].delegations[validator.operator_address]
+
+        form.amount = form.validator.availabel_tokens - 0.01
 
         hideDropdown()
+    }
+
+
+    // Set Amount
+    function setAmount(event) {
+        if(form.validator.availabel_tokens) {
+            if(event.target.value > form.validator.availabel_tokens){
+                form.amount = form.validator.availabel_tokens - 0.01
+            }
+        } else {
+            if(event.target.value > store.networks[store.networkManageModal].availabel_tokens){
+                form.amount = store.networks[store.networkManageModal].availabel_tokens - 0.01
+            }
+        }
+    }
+
+
+    // Set MAX
+    function setMAX() {
+        form.validator.operator_address
+            ? form.amount = form.validator.availabel_tokens - 0.01
+            : form.amount = store.networks[store.networkManageModal].availabel_tokens - 0.01
     }
 
 
@@ -246,17 +282,16 @@
                         const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                             rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                             client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                            msg = {
-                                delegatorAddress: store.wallets[store.networkManageModal],
-                                validatorAddress: store.networks[store.networkManageModal].validator,
-                                amount: {
-                                    denom: store.networks[store.networkManageModal].denom,
-                                    amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                                }
-                            },
                             msgAny = {
                                 typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
-                                value: msg
+                                value: {
+                                    delegatorAddress: store.wallets[store.networkManageModal],
+                                    validatorAddress: store.networks[store.networkManageModal].validator,
+                                    amount: {
+                                        denom: store.networks[store.networkManageModal].denom,
+                                        amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                    }
+                                }
                             },
                             fee = {
                                 amount: [{
@@ -266,12 +301,7 @@
                                 gas: '19000'
                             },
                             memo = '',
-                            result = await client.signAndBroadcast(
-                                store.wallets[store.networkManageModal],
-                                [msgAny],
-                                fee,
-                                memo
-                            )
+                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
                         store.loaderManageModal = !store.loaderManageModal
                         store.lastTXS = result.transactionHash
@@ -300,33 +330,27 @@
                         const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                             rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                             client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                            msg = {
-                                delegatorAddress: store.wallets[store.networkManageModal],
-                                validatorSrcAddress: form.validator.operator_address,
-                                validatorDstAddress: store.networks[store.networkManageModal].validator,
-                                amount: {
-                                    denom: store.networks[store.networkManageModal].denom,
-                                    amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                                }
-                            },
                             msgAny = {
                                 typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
-                                value: msg
+                                value: {
+                                    delegatorAddress: store.wallets[store.networkManageModal],
+                                    validatorSrcAddress: form.validator.operator_address,
+                                    validatorDstAddress: store.networks[store.networkManageModal].validator,
+                                    amount: {
+                                        denom: store.networks[store.networkManageModal].denom,
+                                        amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                    }
+                                }
                             },
                             fee = {
                                 amount: [{
                                     denom: store.networks[store.networkManageModal].denom,
                                     amount: '0'
                                 }],
-                                gas: '180000'
+                                gas: '19000'
                             },
                             memo = '',
-                            result = await client.signAndBroadcast(
-                                store.wallets[store.networkManageModal],
-                                [msgAny],
-                                fee,
-                                memo
-                            )
+                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
                         if(result.code != 0){
                             store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)

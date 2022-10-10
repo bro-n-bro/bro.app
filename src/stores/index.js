@@ -7,16 +7,16 @@ import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 const account = {
     userName: useLocalStorage('userName', ''),
     avatar: useLocalStorage('avatar', ''),
-    delegations_price: 0,
     balance_usdt: 0,
     balance_atom: 0,
     balance_eth: 0,
     balance_btc: 0,
-    personal_APR: 0,
     RPDE_usdt: 0,
     RPDE_atom: 0,
     RPDE_eth: 0,
-    RPDE_btc: 0
+    RPDE_btc: 0,
+    personal_APR: 0,
+    staked_price: 0
 }
 
 
@@ -27,54 +27,69 @@ const networks = {
         lcd_api: 'https://lcd.cosmoshub-4.bronbro.io',
         rpc_api: 'https://rpc.cosmoshub-4.bronbro.io/',
         validator: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
-        coingecko_api: 'cosmos',
         denom: 'uatom',
         token_name: 'ATOM',
         chainId: 'cosmoshub-4',
+        coingecko_api: 'cosmos',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -84,54 +99,69 @@ const networks = {
         lcd_api: 'https://lcd.bostrom.bronbro.io',
         rpc_api: 'https://rpc.bostrom.bronbro.io',
         validator: 'bostromvaloper1ydc5fy9fjdygvgw36u49yj39fr67pd9m5qexm8',
-        coingecko_api: 'bostrom',
         denom: 'boot',
         token_name: 'MBOOT',
         chainId: 'bostrom',
+        coingecko_api: 'bostrom',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -141,53 +171,68 @@ const networks = {
         lcd_api: 'https://lcd.osmosis-1.bronbro.io',
         rpc_api: 'https://rpc.osmosis-1.bronbro.io',
         validator: 'osmovaloper13tk45jkxgf7w0nxquup3suwaz2tx483xe832ge',
-        coingecko_api: 'osmosis',
         denom: 'uosmo',
         token_name: 'OSMO',
         chainId: 'osmosis-1',
+        coingecko_api: 'osmosis',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -197,53 +242,68 @@ const networks = {
         lcd_api: 'https://lcd.juno-1.bronbro.io',
         rpc_api: 'https://rpc.juno-1.bronbro.io',
         validator: 'junovaloper1quqxfrxkycr0uzt4yk0d57tcq3zk7srm7sm6r8',
-        coingecko_api: 'juno-network',
         denom: 'ujuno',
         token_name: 'JUNO',
         chainId: 'juno-1',
+        coingecko_api: 'juno-network',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -253,54 +313,69 @@ const networks = {
         lcd_api: 'https://lcd.emoney-3.bronbro.io',
         rpc_api: 'https://rpc.emoney-3.bronbro.io',
         validator: 'emoneyvaloper149vyxd36kxpg46rralaw6eejv4d9daqc3nv642',
-        coingecko_api: 'e-money',
         denom: 'ungm',
         token_name: 'NGM',
         chainId: 'emoney-3',
+        coingecko_api: 'e-money',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -310,54 +385,69 @@ const networks = {
         lcd_api: 'https://lcd.stargaze-1.bronbro.io',
         rpc_api: 'https://rpc.stargaze-1.bronbro.io',
         validator: 'starsvaloper1y58hfnm90r4efhlydx0gavz57lvm7k6uulkg3h',
-        coingecko_api: 'stargaze',
         denom: 'ustars',
         token_name: 'STAR',
         chainId: 'stargaze-1',
+        coingecko_api: 'stargaze',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -367,54 +457,69 @@ const networks = {
         lcd_api: 'https://lcd.gravity-bridge-3.bronbro.io',
         rpc_api: 'https://rpc.gravity-bridge-3.bronbro.io',
         validator: 'gravityvaloper1vyd4k5j636erx5y5kdqghdu3rfjtwc48vdc7r6',
-        coingecko_api: 'graviton',
         denom: 'ugraviton',
         token_name: 'GRAV',
         chainId: 'gravity-bridge-3',
+        coingecko_api: 'graviton',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -424,54 +529,69 @@ const networks = {
         lcd_api: 'https://lcd.evmos-9001-2.bronbro.io',
         rpc_api: 'https://rpc.evmos-9001-2.bronbro.io',
         validator: 'evmosvaloper1ce4vh0e5kanlgc7z0rhcemvd8erjnfzcyfecl7',
-        coingecko_api: 'evmos',
         denom: 'aevmos',
         token_name: 'EVMOS',
         chainId: 'evmos_9001-2',
+        coingecko_api: 'evmos',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000000000000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000000000000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -481,54 +601,69 @@ const networks = {
         lcd_api: 'https://lcd.crescent-1.bronbro.io',
         rpc_api: 'https://rpc.crescent-1.bronbro.io',
         validator: 'crevaloper1c96vvme4k42zlvkc56fslmdpa2qj6u80xvqwau',
-        coingecko_api: 'crescent-network',
         denom: 'ucre',
         token_name: 'CRE',
         chainId: 'crescent-1',
+        coingecko_api: 'crescent-network',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -538,54 +673,69 @@ const networks = {
         lcd_api: 'https://lcd.omniflixhub-1.bronbro.io',
         rpc_api: 'https://rpc.omniflixhub-1.bronbro.io',
         validator: 'omniflixvaloper1e8grpphncncw9hrutyvnlv77n5dejwcne58zk4',
-        coingecko_api: 'omniflix-network',
         denom: 'uflix',
         token_name: 'FLIX',
         chainId: 'omniflixhub-1',
+        coingecko_api: 'omniflix-network',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -595,54 +745,69 @@ const networks = {
         lcd_api: 'https://lcd.desmos-mainnet.bronbro.io',
         rpc_api: 'https://rpc.desmos-mainnet.bronbro.io',
         validator: 'desmosvaloper1sykf8q94l8q8mqstf64ptuvp74ueyehxpgcq76',
-        coingecko_api: 'desmos',
         denom: 'udsm',
         token_name: 'DSM',
         chainId: 'desmos-mainnet',
+        coingecko_api: 'desmos',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     },
@@ -652,54 +817,69 @@ const networks = {
         lcd_api: 'https://lcd.stride-1.bronbro.io',
         rpc_api: 'https://rpc.stride-1.bronbro.io',
         validator: 'stridevaloper1hl95uhecs4rwe0g432mknz2tsl84f0ltexpzc3',
-        coingecko_api: 'stride',
         denom: 'ustrd',
         token_name: 'STRD',
         chainId: 'stride-1',
+        coingecko_api: 'stride',
+
         health: 0,
         health_color: 'grey',
-        apr: 0,
-        speed: 0,
+
         ibc_tokens: 0,
         ibc_percents: 0,
+
         availabel_tokens: 0,
         availabel_percents: 0,
+
         delegations_tokens: 0,
         delegations_percents: 0,
+
         delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
         delegations_price_btc: 0,
-        validators: [],
-        total_annual_provision: 0,
-        RPDE: 0,
-        RPDE_usdt: 0,
-        RPDE_atom: 0,
-        RPDE_eth: 0,
-        RPDE_btc: 0,
-        RPDE_year_usdt: 0,
-        RPDE_year_atom: 0,
-        RPDE_year_eth: 0,
-        RPDE_year_btc: 0,
-        personal_APR: 0,
-        price: 0,
-        price_usdt: 0,
-        price_atom: 0,
-        price_eth: 0,
-        price_btc: 0,
-        balance_usdt: 0,
-        balance_atom: 0,
-        balance_eth: 0,
-        balance_btc: 0,
-        exponent: 1000000,
+
         rewards_tokens: 0,
+        rewards_percents: 0,
+
         rewards_price: 0,
         rewards_price_usdt: 0,
         rewards_price_atom: 0,
         rewards_price_eth: 0,
         rewards_price_btc: 0,
-        rewards_percents: 0,
+
+        validators: [],
+        delegations: [],
+
+        RPDE: 0,
+        RPDE_usdt: 0,
+        RPDE_atom: 0,
+        RPDE_eth: 0,
+        RPDE_btc: 0,
+
+        RPDE_year_usdt: 0,
+        RPDE_year_atom: 0,
+        RPDE_year_eth: 0,
+        RPDE_year_btc: 0,
+
+        price: 0,
+        price_usdt: 0,
+        price_atom: 0,
+        price_eth: 0,
+        price_btc: 0,
+
+        balance_usdt: 0,
+        balance_atom: 0,
+        balance_eth: 0,
+        balance_btc: 0,
+
+        apr: 0,
+        personal_APR: 0,
+
+        speed: 0,
+        total_annual_provision: 0,
+        exponent: 1000000,
         tokens_sum: 0,
         unbonding_time: 0
     }
@@ -862,13 +1042,17 @@ export const useGlobalStore = defineStore('global', {
                     if (data.delegation_responses) {
                         let sum = 0
 
-                        data.delegation_responses.forEach(el => sum += parseFloat(el.balance.amount))
+                        data.delegation_responses.forEach(el => {
+                            sum += parseFloat(el.balance.amount)
+
+                            this.networks[network].delegations[el.delegation.validator_address] = el.delegation.shares / this.networks[network].exponent
+                        })
 
                         this.networks[network].delegations_tokens = sum / this.networks[network].exponent
 
-                        if (network == 'bostrom') {
-                            this.networks.bostrom.delegations_tokens = sum
-                        }
+                        // if (network == 'bostrom') {
+                        //     this.networks.bostrom.delegations_tokens = sum / this.networks.bostrom.exponent
+                        // }
                     }
                 })
         },
@@ -882,9 +1066,9 @@ export const useGlobalStore = defineStore('global', {
                     if (data.total.length) {
                         this.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / this.networks[network].exponent
 
-                        if (network == 'bostrom') {
-                            this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount)
-                        }
+                        // if (network == 'bostrom') {
+                        //     this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount) / this.networks.bostrom.exponent
+                        // }
                     }
                 })
         },
@@ -902,9 +1086,9 @@ export const useGlobalStore = defineStore('global', {
                         // Availabel tokens
                         this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
 
-                        if (network == 'bostrom') {
-                            this.networks.bostrom.availabel_tokens = parseFloat(availabel.amount)
-                        }
+                        // if (network == 'bostrom') {
+                        //     this.networks.bostrom.availabel_tokens = parseFloat(availabel.amount) / this.networks.bostrom.exponent
+                        // }
 
                         // IBC tokens
                         ibc.forEach(el => {
@@ -922,9 +1106,9 @@ export const useGlobalStore = defineStore('global', {
 
                                     this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
 
-                                    if (baseNetwork == 'bostrom') {
-                                        this.networks.bostrom.ibc_tokens += parseFloat(el.amount)
-                                    }
+                                    // if (baseNetwork == 'bostrom') {
+                                    //     this.networks.bostrom.ibc_tokens += parseFloat(el.amount)
+                                    // }
                                 })
                         })
                     }
@@ -1024,7 +1208,7 @@ export const useGlobalStore = defineStore('global', {
 
         // Account balance
         getAccountBalance(network) {
-            this.account.delegations_price += this.networks[network].delegations_price
+            this.account.staked_price += this.networks[network].delegations_price
 
             this.account.balance_usdt += this.networks[network].balance_usdt
             this.account.balance_atom += this.networks[network].balance_atom
