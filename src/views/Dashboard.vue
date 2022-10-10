@@ -1405,35 +1405,35 @@
 
 
     /* .dashboard .progress
-                                    {
-                                        display: flex;
-                                        overflow: hidden;
+                                            {
+                                                display: flex;
+                                                overflow: hidden;
 
-                                        height: 13px;
-                                        margin-bottom: 12px;
+                                                height: 13px;
+                                                margin-bottom: 12px;
 
-                                        border-radius: 20px;
-                                        background: #0b2272;
+                                                border-radius: 20px;
+                                                background: #0b2272;
 
-                                        align-content: stretch;
-                                        align-items: stretch;
-                                        flex-wrap: wrap;
-                                        justify-content: flex-start;
-                                    }
+                                                align-content: stretch;
+                                                align-items: stretch;
+                                                flex-wrap: wrap;
+                                                justify-content: flex-start;
+                                            }
 
-                                    .dashboard .progress .bar
-                                    {
-                                        height: 13px;
+                                            .dashboard .progress .bar
+                                            {
+                                                height: 13px;
 
-                                        transition: width .2s linear;
+                                                transition: width .2s linear;
 
-                                        background: #4075fd;
-                                    }
+                                                background: #4075fd;
+                                            }
 
-                                    .dashboard .progress .bar.orange
-                                    {
-                                        background: orange;
-                                    } */
+                                            .dashboard .progress .bar.orange
+                                            {
+                                                background: orange;
+                                            } */
 
 
     .dashboard .stats

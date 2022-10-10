@@ -1049,10 +1049,6 @@ export const useGlobalStore = defineStore('global', {
                         })
 
                         this.networks[network].delegations_tokens = sum / this.networks[network].exponent
-
-                        // if (network == 'bostrom') {
-                        //     this.networks.bostrom.delegations_tokens = sum / this.networks.bostrom.exponent
-                        // }
                     }
                 })
         },
@@ -1064,11 +1060,9 @@ export const useGlobalStore = defineStore('global', {
                 .then(response => response.json())
                 .then(data => {
                     if (data.total.length) {
-                        this.networks[network].rewards_tokens = parseFloat(data.total[0].amount) / this.networks[network].exponent
+                        let result = data.total.find(el => el.denom == this.networks[network].denom)
 
-                        // if (network == 'bostrom') {
-                        //     this.networks.bostrom.rewards_tokens = parseFloat(data.total[0].amount) / this.networks.bostrom.exponent
-                        // }
+                        this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
                     }
                 })
         },
@@ -1086,10 +1080,6 @@ export const useGlobalStore = defineStore('global', {
                         // Availabel tokens
                         this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
 
-                        // if (network == 'bostrom') {
-                        //     this.networks.bostrom.availabel_tokens = parseFloat(availabel.amount) / this.networks.bostrom.exponent
-                        // }
-
                         // IBC tokens
                         ibc.forEach(el => {
                             fetch(`${this.networks[network].lcd_api}/ibc/apps/transfer/v1/denom_traces/${el.denom.substr(4)}`)
@@ -1105,10 +1095,6 @@ export const useGlobalStore = defineStore('global', {
                                     }
 
                                     this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
-
-                                    // if (baseNetwork == 'bostrom') {
-                                    //     this.networks.bostrom.ibc_tokens += parseFloat(el.amount)
-                                    // }
                                 })
                         })
                     }
