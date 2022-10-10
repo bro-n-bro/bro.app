@@ -7,16 +7,19 @@ import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 const account = {
     userName: useLocalStorage('userName', ''),
     avatar: useLocalStorage('avatar', ''),
+
     balance_usdt: 0,
     balance_atom: 0,
     balance_eth: 0,
     balance_btc: 0,
+
     RPDE_usdt: 0,
     RPDE_atom: 0,
     RPDE_eth: 0,
     RPDE_btc: 0,
+
     personal_APR: 0,
-    staked_price: 0
+    delegations_price: 0
 }
 
 
@@ -188,6 +191,7 @@ const networks = {
         delegations_tokens: 0,
         delegations_percents: 0,
 
+        delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
@@ -259,6 +263,7 @@ const networks = {
         delegations_tokens: 0,
         delegations_percents: 0,
 
+        delegations_price: 0,
         delegations_price_usdt: 0,
         delegations_price_atom: 0,
         delegations_price_eth: 0,
@@ -1194,7 +1199,7 @@ export const useGlobalStore = defineStore('global', {
 
         // Account balance
         getAccountBalance(network) {
-            this.account.staked_price += this.networks[network].delegations_price
+            this.account.delegations_price += this.networks[network].delegations_price
 
             this.account.balance_usdt += this.networks[network].balance_usdt
             this.account.balance_atom += this.networks[network].balance_atom

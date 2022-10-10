@@ -1,5 +1,5 @@
 <template>
-    <div class="user">
+    <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="user">
         <div class="icon">
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
@@ -11,7 +11,7 @@
         <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
         </div>
-    </div>
+    </a>
 </template>
 
 
@@ -37,6 +37,7 @@
         padding: 15px 10px;
 
         text-align: left;
+        text-decoration: none;
 
         border-radius: 20px;
         background: #141414;

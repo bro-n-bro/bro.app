@@ -65,11 +65,11 @@
 
                             <div class="val">
                                 <template v-if="form.validator.availabel_tokens">
-                                {{ form.validator.availabel_tokens }}
+                                {{ $filters.toFixed(form.validator.availabel_tokens, 2) }}
                                 </template>
 
                                 <template v-else>
-                                {{ store.networks[store.networkManageModal].delegations_tokens }}
+                                {{ $filters.toFixed(store.networks[store.networkManageModal].delegations_tokens, 2) }}
                                 </template>
 
                                 {{ store.networks[store.networkManageModal].token_name }}
@@ -83,11 +83,11 @@
 
                             <div class="val">
                                 <template v-if="form.validator.availabel_tokens">
-                                {{ form.validator.availabel_tokens }}
+                                {{ $filters.toFixed(form.validator.availabel_tokens, 2) }}
                                 </template>
 
                                 <template v-else>
-                                {{ store.networks[store.networkManageModal].availabel_tokens }}
+                                {{ $filters.toFixed(store.networks[store.networkManageModal].availabel_tokens, 2) }}
                                 </template>
 
                                 {{ store.networks[store.networkManageModal].token_name }}
@@ -140,7 +140,7 @@
                             <div class="dropdown">
                                 <div class="scroll">
                                     <div v-for="validator in form.validators">
-                                        <button type="button" class="btn" @click.prevent="setValidator(validator)">
+                                        <button type="button" class="btn" @click.stop.prevent="setValidator(validator)">
                                             {{ validator.description.moniker }}
                                         </button>
                                     </div>
@@ -233,7 +233,7 @@
 
     // Hide dropdown
     function hideDropdown() {
-        setTimeout(() => document.querySelector('#manage_modal .validate_from .input').classList.remove('active'), 100)
+        setTimeout(() => document.querySelector('#manage_modal .validate_from .input').classList.remove('active'), 150)
     }
 
 
