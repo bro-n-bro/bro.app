@@ -1,9 +1,12 @@
 <template>
+    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <Header />
+    </vue-sticky-element>
 
     <!-- <pre>{{ store }}</pre> -->
 
     <transition name="fade" mode="out-in" appear type="animation">
+    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <section class="notifications">
         <div class="cont">
             <div class="data">
@@ -15,6 +18,7 @@
             </div>
         </div>
     </section>
+    </vue-sticky-element>
     </transition>
 
     <RouterView />
@@ -110,7 +114,9 @@
 
 
             // Avatar
-            store.getAvatar()
+            if (store.node !== null) {
+                store.getAvatar()
+            }
 
             // Networks health
             store.getNetworksHealth()
@@ -310,6 +316,19 @@
         align-self: center;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+    }
+
+
+    .notifications.vue-sticky-element--stuck
+    {
+        transform: translateY(0%) !important;
+    }
+
+    .notifications.vue-sticky-element--stuck .data
+    {
+        margin: 10px 0 10px 280px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
 </style>

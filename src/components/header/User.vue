@@ -1,5 +1,5 @@
 <template>
-    <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="user">
+    <div class="user">
         <div class="icon">
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
@@ -8,10 +8,10 @@
             {{ store.account.userName }}
             </div>
 
-        <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
-            <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
-        </div>
-    </a>
+        <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+            <img :src="store.account.avatar" alt="" v-show="store.account.avatar">
+        </a>
+    </div>
 </template>
 
 
@@ -37,7 +37,6 @@
         padding: 15px 10px;
 
         text-align: left;
-        text-decoration: none;
 
         border-radius: 20px;
         background: #141414;
@@ -77,13 +76,18 @@
 
     .user .photo
     {
+        color: currentColor;
+
         position: relative;
 
+        display: block;
         overflow: hidden;
 
         width: 40px;
         height: 40px;
         margin-left: 26px;
+
+        text-decoration: none;
 
         border-radius: 50%;
         background: #353535;

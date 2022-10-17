@@ -6,7 +6,7 @@ import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 
 const account = {
     userName: useLocalStorage('userName', ''),
-    avatar: useLocalStorage('avatar', ''),
+    avatar: '',
 
     balance_usdt: 0,
     balance_atom: 0,
@@ -936,6 +936,47 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
+        // IPFS
+        async startIPFS() {
+            this.node = await Ipfs.create({
+                // repo: 'ipfs-repo-cyber',
+                init: true,
+                start: true,
+                relay: {
+                    enabled: true,
+                    hop: {
+                        enabled: true,
+                    },
+                },
+                EXPERIMENTAL: {
+                    pubsub: true,
+                },
+                config: {
+                    Addresses: {
+                        Swarm: [
+                            // '/dns4/star.thedisco.zone/tcp/9090/wss/p2p-webrtc-star',
+                            // '/dns6/star.thedisco.zone/tcp/9090/wss/p2p-webrtc-star',
+                            '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
+                            // '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
+                        ],
+                    },
+                    Bootstrap: [
+                        // '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB'
+                        '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
+                        // '/dns6/ipfs.thedisco.zone/tcp/4430/wss/p2p/12D3KooWChhhfGdB9GJy1GbhghAAKCUR99oCymMEVS4eUcEy67nt',
+                        // '/dns4/ipfs.thedisco.zone/tcp/4430/wss/p2p/12D3KooWChhhfGdB9GJy1GbhghAAKCUR99oCymMEVS4eUcEy67nt',
+                    ],
+                },
+            })
+
+            if (this.node !== null) {
+                this.IPFSStatus = true
+
+                if (this.auth) this.getAvatar()
+            }
+        },
+
+
         // Avatar
         async getAvatar() {
             try {
@@ -952,8 +993,24 @@ export const useGlobalStore = defineStore('global', {
                     }
                 )
 
-                this.account.avatar = `https://ipfs.io/ipfs/${response.extension.avatar}`
+                for await (const file of this.node.get(response.extension.avatar)) {
+                    const content = []
+
+                    if (file.content) {
+                        for await (const chunk of file.content) {
+                            content.push(chunk)
+                        }
+
+                        let image = URL.createObjectURL(new Blob(content, {
+                            type: 'image/jpeg'
+                        }))
+
+                        this.account.avatar = image
+                    }
+                }
             } catch (error) {
+                console.log(error)
+
                 fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
                     .then(response => response.json())
                     .then(data => {

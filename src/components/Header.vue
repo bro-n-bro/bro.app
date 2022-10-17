@@ -18,9 +18,7 @@
                 <User v-if="store.auth" />
                 </transition>
 
-                <transition name="fade" mode="out-in" appear type="animation">
                 <ConnectBtn v-if="!store.auth" />
-                </transition>
             </div>
         </div>
     </header>
@@ -51,6 +49,8 @@
         padding: 20px 0;
 
         transition: .2s linear;
+
+        background: var(--bg);
     }
 
 
@@ -85,6 +85,15 @@
 
         max-width: 100%;
         height: 70px;
+    }
+
+
+
+    header.vue-sticky-element--stuck
+    {
+        padding: 0;
+
+        transform: translateY(0%) !important;
     }
 
 </style>

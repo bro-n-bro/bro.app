@@ -6,47 +6,12 @@
 
 
 <script setup>
-    import { inject } from 'vue'
+    import { inject, onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        i18n = inject('i18n'),
-        node = Ipfs.create({
-        // repo: 'ipfs-repo-cyber',
-        init: true,
-        start: true,
-        relay: {
-            enabled: true,
-            hop: {
-                enabled: true,
-            },
-        },
-        EXPERIMENTAL: {
-            pubsub: true,
-        },
-        config: {
-            Addresses: {
-                Swarm: [
-                    // '/dns4/star.thedisco.zone/tcp/9090/wss/p2p-webrtc-star',
-                    // '/dns6/star.thedisco.zone/tcp/9090/wss/p2p-webrtc-star',
-                    '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
-                    // '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
-                ],
-            },
-            Bootstrap: [
-                // '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB'
-                '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
-                // '/dns6/ipfs.thedisco.zone/tcp/4430/wss/p2p/12D3KooWChhhfGdB9GJy1GbhghAAKCUR99oCymMEVS4eUcEy67nt',
-                // '/dns4/ipfs.thedisco.zone/tcp/4430/wss/p2p/12D3KooWChhhfGdB9GJy1GbhghAAKCUR99oCymMEVS4eUcEy67nt',
-            ],
-        },
-    })
-
-    if (node !== null) {
-        store.$patch({ node: node })
-        store.$patch({ IPFSStatus: true })
-    }
+        i18n = inject('i18n')
 
 
     function setNotice() {
@@ -54,6 +19,11 @@
             ? emitter.emit('setNotification', i18n.global.t('message.ipfs_active_notice'))
             : emitter.emit('setNotification', i18n.global.t('message.ipfs_not_active_notice'))
     }
+
+
+    onMounted(async () => {
+        await store.startIPFS()
+    })
 </script>
 
 

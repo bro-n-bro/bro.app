@@ -32,27 +32,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}" v-show="store.networks.evmos.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.evmos.delegations_tokens, 2),
+                                value: store.networks.evmos.delegations_tokens,
                                 denom: store.networks.evmos.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.evmos.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.evmos.availabel_percents, 2) + '%'}" v-show="store.networks.evmos.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.evmos.availabel_tokens, 2),
+                                value: store.networks.evmos.availabel_tokens,
                                 denom: store.networks.evmos.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.evmos.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.evmos.rewards_percents, 2) + '%'}" v-show="store.networks.evmos.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.evmos.rewards_tokens, 2),
+                                value: store.networks.evmos.rewards_tokens,
                                 denom: store.networks.evmos.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.evmos.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.evmos.ibc_percents, 2) + '%'}" v-show="store.networks.evmos.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.evmos.ibc_tokens, 2),
+                                value: store.networks.evmos.ibc_tokens,
                                 denom: store.networks.evmos.token_name,
                                 network: store.networks.evmos.name
                             }))"></div>
@@ -120,27 +120,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}" v-show="store.networks.juno.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.juno.delegations_tokens, 2),
+                                value: store.networks.juno.delegations_tokens,
                                 denom: store.networks.juno.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.juno.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.juno.availabel_percents, 2) + '%'}" v-show="store.networks.juno.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.juno.availabel_tokens, 2),
+                                value: store.networks.juno.availabel_tokens,
                                 denom: store.networks.juno.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.juno.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.juno.rewards_percents, 2) + '%'}" v-show="store.networks.juno.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.juno.rewards_tokens, 2),
+                                value: store.networks.juno.rewards_tokens,
                                 denom: store.networks.juno.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.juno.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.juno.ibc_percents, 2) + '%'}" v-show="store.networks.juno.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.juno.ibc_tokens, 2),
+                                value: store.networks.juno.ibc_tokens,
                                 denom: store.networks.juno.token_name,
                                 network: store.networks.juno.name
                             }))"></div>
@@ -208,27 +208,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}" v-show="store.networks.cosmoshub.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.cosmoshub.delegations_tokens, 2),
+                                value: store.networks.cosmoshub.delegations_tokens,
                                 denom: store.networks.cosmoshub.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.cosmoshub.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.cosmoshub.availabel_percents, 2) + '%'}" v-show="store.networks.cosmoshub.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.cosmoshub.availabel_tokens, 2),
+                                value: store.networks.cosmoshub.availabel_tokens,
                                 denom: store.networks.cosmoshub.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.cosmoshub.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.cosmoshub.rewards_percents, 2) + '%'}" v-show="store.networks.cosmoshub.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.cosmoshub.rewards_tokens, 2),
+                                value: store.networks.cosmoshub.rewards_tokens,
                                 denom: store.networks.cosmoshub.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.cosmoshub.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.cosmoshub.ibc_percents, 2) + '%'}" v-show="store.networks.cosmoshub.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.cosmoshub.ibc_tokens, 2),
+                                value: store.networks.cosmoshub.ibc_tokens,
                                 denom: store.networks.cosmoshub.token_name,
                                 network: store.networks.cosmoshub.name
                             }))"></div>
@@ -296,27 +296,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}" v-show="store.networks.bostrom.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.bostrom.delegations_tokens, 2),
+                                value: store.networks.bostrom.delegations_tokens,
                                 denom: store.networks.bostrom.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.bostrom.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.bostrom.availabel_percents, 2) + '%'}" v-show="store.networks.bostrom.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.bostrom.availabel_tokens, 2),
+                                value: store.networks.bostrom.availabel_tokens,
                                 denom: store.networks.bostrom.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.bostrom.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.bostrom.rewards_percents, 2) + '%'}" v-show="store.networks.bostrom.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.bostrom.rewards_tokens, 2),
+                                value: store.networks.bostrom.rewards_tokens,
                                 denom: store.networks.bostrom.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.bostrom.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.bostrom.ibc_percents, 2) + '%'}" v-show="store.networks.bostrom.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.bostrom.ibc_tokens, 2),
+                                value: store.networks.bostrom.ibc_tokens,
                                 denom: store.networks.bostrom.token_name,
                                 network: store.networks.bostrom.name
                             }))"></div>
@@ -386,27 +386,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}" v-show="store.networks.emoney.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.emoney.delegations_tokens, 2),
+                                value: store.networks.emoney.delegations_tokens,
                                 denom: store.networks.emoney.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.emoney.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.emoney.availabel_percents, 2) + '%'}" v-show="store.networks.emoney.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.emoney.availabel_tokens, 2),
+                                value: store.networks.emoney.availabel_tokens,
                                 denom: store.networks.emoney.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.emoney.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.emoney.rewards_percents, 2) + '%'}" v-show="store.networks.emoney.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.emoney.rewards_tokens, 2),
+                                value: store.networks.emoney.rewards_tokens,
                                 denom: store.networks.emoney.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.emoney.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.emoney.ibc_percents, 2) + '%'}" v-show="store.networks.emoney.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.emoney.ibc_tokens, 2),
+                                value: store.networks.emoney.ibc_tokens,
                                 denom: store.networks.emoney.token_name,
                                 network: store.networks.emoney.name
                             }))"></div>
@@ -474,27 +474,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}" v-show="store.networks.desmos.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.desmos.delegations_tokens, 2),
+                                value: store.networks.desmos.delegations_tokens,
                                 denom: store.networks.desmos.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.desmos.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.desmos.availabel_percents, 2) + '%'}" v-show="store.networks.desmos.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.desmos.availabel_tokens, 2),
+                                value: store.networks.desmos.availabel_tokens,
                                 denom: store.networks.desmos.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.desmos.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.desmos.rewards_percents, 2) + '%'}" v-show="store.networks.desmos.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.desmos.rewards_tokens, 2),
+                                value: store.networks.desmos.rewards_tokens,
                                 denom: store.networks.desmos.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.desmos.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.desmos.ibc_percents, 2) + '%'}" v-show="store.networks.desmos.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.desmos.ibc_tokens, 2),
+                                value: store.networks.desmos.ibc_tokens,
                                 denom: store.networks.desmos.token_name,
                                 network: store.networks.desmos.name
                             }))"></div>
@@ -571,15 +571,15 @@
                                     </template>
 
                                     <template v-if="store.currency == 'ATOM'">
-                                    {{ $filters.toFixed(store.account.RPDE_usdt, 3) }}
+                                    {{ $filters.toFixed(store.account.RPDE_atom, 3) }}
                                     </template>
 
                                     <template v-if="store.currency == 'ETH'">
-                                    {{ $filters.toFixed(store.account.RPDE_usdt, 3) }}
+                                    {{ $filters.toFixed(store.account.RPDE_eth, 3) }}
                                     </template>
 
                                     <template v-if="store.currency == 'BTC'">
-                                    {{ $filters.toFixed(store.account.RPDE_usdt, 3) }}
+                                    {{ $filters.toFixed(store.account.RPDE_btc, 3) }}
                                     </template>
                                 </div>
                             </div>
@@ -627,27 +627,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}" v-show="store.networks.osmosis.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.osmosis.delegations_tokens, 2),
+                                value: store.networks.osmosis.delegations_tokens,
                                 denom: store.networks.osmosis.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.osmosis.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.osmosis.availabel_percents, 2) + '%'}" v-show="store.networks.osmosis.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.osmosis.availabel_tokens, 2),
+                                value: store.networks.osmosis.availabel_tokens,
                                 denom: store.networks.osmosis.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.osmosis.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.osmosis.rewards_percents, 2) + '%'}" v-show="store.networks.osmosis.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.osmosis.rewards_tokens, 2),
+                                value: store.networks.osmosis.rewards_tokens,
                                 denom: store.networks.osmosis.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.osmosis.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.osmosis.ibc_percents, 2) + '%'}" v-show="store.networks.osmosis.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.osmosis.ibc_tokens, 2),
+                                value: store.networks.osmosis.ibc_tokens,
                                 denom: store.networks.osmosis.token_name,
                                 network: store.networks.osmosis.name
                             }))"></div>
@@ -715,27 +715,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}" v-show="store.networks.crescent.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.crescent.delegations_tokens, 2),
+                                value: store.networks.crescent.delegations_tokens,
                                 denom: store.networks.crescent.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.crescent.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.crescent.availabel_percents, 2) + '%'}" v-show="store.networks.crescent.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.crescent.availabel_tokens, 2),
+                                value: store.networks.crescent.availabel_tokens,
                                 denom: store.networks.crescent.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.crescent.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.crescent.rewards_percents, 2) + '%'}" v-show="store.networks.crescent.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.crescent.rewards_tokens, 2),
+                                value: store.networks.crescent.rewards_tokens,
                                 denom: store.networks.crescent.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.crescent.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.crescent.ibc_percents, 2) + '%'}" v-show="store.networks.crescent.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.crescent.ibc_tokens, 2),
+                                value: store.networks.crescent.ibc_tokens,
                                 denom: store.networks.crescent.token_name,
                                 network: store.networks.crescent.name
                             }))"></div>
@@ -805,27 +805,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}" v-show="store.networks.gravity.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.gravity.delegations_tokens, 2),
+                                value: store.networks.gravity.delegations_tokens,
                                 denom: store.networks.gravity.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.gravity.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.gravity.availabel_percents, 2) + '%'}" v-show="store.networks.gravity.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.gravity.availabel_tokens, 2),
+                                value: store.networks.gravity.availabel_tokens,
                                 denom: store.networks.gravity.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.gravity.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.gravity.rewards_percents, 2) + '%'}" v-show="store.networks.gravity.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.gravity.rewards_tokens, 2),
+                                value: store.networks.gravity.rewards_tokens,
                                 denom: store.networks.gravity.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.gravity.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.gravity.ibc_percents, 2) + '%'}" v-show="store.networks.gravity.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.gravity.ibc_tokens, 2),
+                                value: store.networks.gravity.ibc_tokens,
                                 denom: store.networks.gravity.token_name,
                                 network: store.networks.gravity.name
                             }))"></div>
@@ -893,27 +893,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}" v-show="store.networks.stargaze.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stargaze.delegations_tokens, 2),
+                                value: store.networks.stargaze.delegations_tokens,
                                 denom: store.networks.stargaze.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.stargaze.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.stargaze.availabel_percents, 2) + '%'}" v-show="store.networks.stargaze.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stargaze.availabel_tokens, 2),
+                                value: store.networks.stargaze.availabel_tokens,
                                 denom: store.networks.stargaze.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.stargaze.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.stargaze.rewards_percents, 2) + '%'}" v-show="store.networks.stargaze.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stargaze.rewards_tokens, 2),
+                                value: store.networks.stargaze.rewards_tokens,
                                 denom: store.networks.stargaze.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stargaze.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stargaze.ibc_percents, 2) + '%'}" v-show="store.networks.stargaze.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stargaze.ibc_tokens, 2),
+                                value: store.networks.stargaze.ibc_tokens,
                                 denom: store.networks.stargaze.token_name,
                                 network: store.networks.stargaze.name
                             }))"></div>
@@ -981,27 +981,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}" v-show="store.networks.omniflix.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.omniflix.delegations_tokens, 2),
+                                value: store.networks.omniflix.delegations_tokens,
                                 denom: store.networks.omniflix.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.omniflix.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.omniflix.availabel_percents, 2) + '%'}" v-show="store.networks.omniflix.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.omniflix.availabel_tokens, 2),
+                                value: store.networks.omniflix.availabel_tokens,
                                 denom: store.networks.omniflix.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.omniflix.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.omniflix.rewards_percents, 2) + '%'}" v-show="store.networks.omniflix.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.omniflix.rewards_tokens, 2),
+                                value: store.networks.omniflix.rewards_tokens,
                                 denom: store.networks.omniflix.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.omniflix.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.omniflix.ibc_percents, 2) + '%'}" v-show="store.networks.omniflix.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.omniflix.ibc_tokens, 2),
+                                value: store.networks.omniflix.ibc_tokens,
                                 denom: store.networks.omniflix.token_name,
                                 network: store.networks.omniflix.name
                             }))"></div>
@@ -1069,27 +1069,27 @@
                         </div>
 
                         <div class="visualization">
-                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.stride.delegations_percents, 2) + '%'}"
+                            <div class="staked" :style="{'width': $filters.toFixed(store.networks.stride.delegations_percents, 2) + '%'}" v-show="store.networks.stride.delegations_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stride.delegations_tokens, 2),
+                                value: store.networks.stride.delegations_tokens,
                                 denom: store.networks.stride.token_name
                             }))"></div>
 
-                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.stride.availabel_percents, 2) + '%'}"
+                            <div class="liquid" :style="{'width': $filters.toFixed(store.networks.stride.availabel_percents, 2) + '%'}" v-show="store.networks.stride.availabel_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stride.availabel_tokens, 2),
+                                value: store.networks.stride.availabel_tokens,
                                 denom: store.networks.stride.token_name
                             }))"></div>
 
-                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.stride.rewards_percents, 2) + '%'}"
+                            <div class="rewards" :style="{'width': $filters.toFixed(store.networks.stride.rewards_percents, 2) + '%'}" v-show="store.networks.stride.rewards_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stride.rewards_tokens, 2),
+                                value: store.networks.stride.rewards_tokens,
                                 denom: store.networks.stride.token_name
                             }))"></div>
 
-                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stride.ibc_percents, 2) + '%'}"
+                            <div class="IBC" :style="{'width': $filters.toFixed(store.networks.stride.ibc_percents, 2) + '%'}" v-show="store.networks.stride.ibc_tokens"
                             @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                                value: $filters.toFixed(store.networks.stride.ibc_tokens, 2),
+                                value: store.networks.stride.ibc_tokens,
                                 denom: store.networks.stride.token_name,
                                 network: store.networks.stride.name
                             }))"></div>
@@ -1405,35 +1405,35 @@
 
 
     /* .dashboard .progress
-                                            {
-                                                display: flex;
-                                                overflow: hidden;
+                                                                                    {
+                                                                                        display: flex;
+                                                                                        overflow: hidden;
 
-                                                height: 13px;
-                                                margin-bottom: 12px;
+                                                                                        height: 13px;
+                                                                                        margin-bottom: 12px;
 
-                                                border-radius: 20px;
-                                                background: #0b2272;
+                                                                                        border-radius: 20px;
+                                                                                        background: #0b2272;
 
-                                                align-content: stretch;
-                                                align-items: stretch;
-                                                flex-wrap: wrap;
-                                                justify-content: flex-start;
-                                            }
+                                                                                        align-content: stretch;
+                                                                                        align-items: stretch;
+                                                                                        flex-wrap: wrap;
+                                                                                        justify-content: flex-start;
+                                                                                    }
 
-                                            .dashboard .progress .bar
-                                            {
-                                                height: 13px;
+                                                                                    .dashboard .progress .bar
+                                                                                    {
+                                                                                        height: 13px;
 
-                                                transition: width .2s linear;
+                                                                                        transition: width .2s linear;
 
-                                                background: #4075fd;
-                                            }
+                                                                                        background: #4075fd;
+                                                                                    }
 
-                                            .dashboard .progress .bar.orange
-                                            {
-                                                background: orange;
-                                            } */
+                                                                                    .dashboard .progress .bar.orange
+                                                                                    {
+                                                                                        background: orange;
+                                                                                    } */
 
 
     .dashboard .stats

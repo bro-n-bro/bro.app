@@ -1,6 +1,6 @@
 <template>
-    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.currency_notice'))">
-        <button class="btn" :class="{ active: store.showCurrencyDropdown }" @click.prevent="store.showCurrencyDropdown = true">
+    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.currency_notice'))" v-click-out="clickOut">
+        <button class="btn" :class="{ active: store.showCurrencyDropdown }" @click.prevent="store.showCurrencyDropdown = !store.showCurrencyDropdown">
             <span>{{ store.currency }}</span>
             <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
@@ -31,6 +31,11 @@
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })
 
+        store.showCurrencyDropdown = false
+    }
+
+
+    function clickOut() {
         store.showCurrencyDropdown = false
     }
 </script>

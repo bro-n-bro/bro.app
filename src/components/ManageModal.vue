@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" v-model="form.amount" @input="setAmount">
+                            <input type="text" class="input" v-model="form.amount" @input="setAmount" placeholder="0">
 
                             <div class="unit">
                                 {{ store.networks[store.networkManageModal].token_name }}
@@ -122,12 +122,11 @@
                             {{ $t('message.manage_modal_validator_label2') }}
                         </div>
 
-                        <div class="field">
+                        <div class="field" v-click-out="hideDropdown">
                             <input type="text" class="input"
                                 :readonly="form.type == 'delegate'"
                                 v-model="form.validator.name"
-                                @focus.self="$event.target.classList.add('active')"
-                                @blur.self="hideDropdown">
+                                @focus.self="$event.target.classList.add('active')">
 
                             <div class="arr">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -192,7 +191,7 @@
         commision = 5,
         form = reactive({
             type: 'delegate',
-            amount: 0,
+            amount: '',
             validators: [],
             validator: {
                 operator_address: '',
