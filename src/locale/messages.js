@@ -55,6 +55,7 @@ export default {
             'manage_modal_my_delegation': 'My delegation',
             'manage_modal_available_balance': 'Available Balance',
             'manage_modal_amount': 'Amount to Delegate',
+            'manage_modal_amount2': 'Amount to Redelegate',
             'manage_modal_max_btn': 'MAX',
             'manage_modal_validator_label': 'Validator to delegate',
             'manage_modal_validator_label2': 'Validator from Redelegate',

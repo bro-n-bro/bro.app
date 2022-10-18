@@ -14,7 +14,6 @@
 		"@cosmjs/tendermint-rpc": "^0.29.0",
 		"@cybercongress/cyber-js": "^0.3.3",
 		"@vueuse/core": "^9.1.0",
-		"buffer": "^6.0.3",
 		"core-js": "^3.8.3",
 		"crypto-browserify": "^3.12.0",
 		"gh-pages": "^4.0.0",
@@ -30,7 +29,8 @@
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "~5.0.0",
 		"@vue/cli-plugin-router": "~5.0.0",
-		"@vue/cli-service": "~5.0.0"
+		"@vue/cli-service": "~5.0.0",
+		"buffer": "^6.0.3"
 	},
 	"browserslist": [
 		"> 1%",

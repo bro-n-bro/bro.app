@@ -78,14 +78,20 @@
         const offlineSignerDesmos = window.getOfflineSigner(chainIdDesmos),
             accountsDesmos = await offlineSignerDesmos.getAccounts()
 
-        // Evmos address
-        const offlineSignerEvmos = window.getOfflineSigner(chainIdEvmos),
-            accountsEvmos = await offlineSignerEvmos.getAccounts()
-
         // Cosmos address
         const offlineSigner = window.getOfflineSigner(chainId),
             accounts = await offlineSigner.getAccounts(),
             key = await window.keplr.getKey(chainId)
+
+        // Evmos address
+        try{
+            const offlineSignerEvmos = window.getOfflineSigner(chainIdEvmos),
+                accountsEvmos = await offlineSignerEvmos.getAccounts()
+
+            store.$patch((state) => state.wallets.evmos = accountsEvmos[0].address)
+        } catch(error) {
+            console.log(error)
+        }
 
 
         if (key) {
@@ -104,7 +110,6 @@
                     'emoney': toBech32('emoney', fromBech32(accounts[0].address).data),
                     'stargaze': toBech32('stars', fromBech32(accounts[0].address).data),
                     'gravity': toBech32('gravity', fromBech32(accounts[0].address).data),
-                    'evmos': accountsEvmos[0].address,
                     'crescent': toBech32('cre', fromBech32(accounts[0].address).data),
                     'omniflix': toBech32('omniflix', fromBech32(accounts[0].address).data),
                     'desmos': accountsDesmos[0].address,

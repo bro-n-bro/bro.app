@@ -97,7 +97,13 @@
 
                     <div class="amount">
                         <div class="label">
+                            <template v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_amount') }}
+                            </template>
+
+                            <template v-else>
+                            {{ $t('message.manage_modal_amount2') }}
+                            </template>
                         </div>
 
                         <div class="field">
@@ -277,7 +283,7 @@
                 store.loaderManageModal = !store.loaderManageModal
 
                 if(form.type == 'delegate') {
-                    try {
+                    // try {
                         const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                             rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                             client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
@@ -295,12 +301,11 @@
                             fee = {
                                 amount: [{
                                     denom: store.networks[store.networkManageModal].denom,
-                                    amount: '0'
+                                    amount: '2000'
                                 }],
-                                gas: '19000'
+                                gas: '20000'
                             },
-                            memo = '',
-                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
 
                         store.loaderManageModal = !store.loaderManageModal
                         store.lastTXS = result.transactionHash
@@ -309,18 +314,18 @@
                         emitter.emit('open_manage_success_modal')
 
                         setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-                    } catch (error) {
-                        let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+                    // } catch (error) {
+                    //     let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
-                        errorCode
-                            ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
-                            : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+                    //     errorCode
+                    //         ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                    //         : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
-                        store.loaderManageModal = !store.loaderManageModal
+                    //     store.loaderManageModal = !store.loaderManageModal
 
-                        emitter.emit('close_manage_modal')
-                        emitter.emit('open_manage_error_modal')
-                    }
+                    //     emitter.emit('close_manage_modal')
+                    //     emitter.emit('open_manage_error_modal')
+                    // }
                 }
 
 
@@ -346,10 +351,9 @@
                                     denom: store.networks[store.networkManageModal].denom,
                                     amount: '0'
                                 }],
-                                gas: '19000'
+                                gas: '20000'
                             },
-                            memo = '',
-                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
 
                         if(result.code != 0){
                             store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)
