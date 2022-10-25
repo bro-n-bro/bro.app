@@ -75,10 +75,12 @@ export const useGlobalStore = defineStore('global', {
         // Set user info
         async setUserInfo(user) {
             this.account.userName = user.userName
-            this.account.auth = user.auth
+            this.auth = user.auth
 
             // Start IPFS
-            await this.startIPFS()
+            if (!this.node) {
+                await this.startIPFS()
+            }
 
             // Get avatar
             if (this.node) {
