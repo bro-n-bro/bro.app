@@ -1,14 +1,18 @@
 <template>
+    <!-- Header -->
+    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <Header />
+    </vue-sticky-element>
 
+    <!-- Router view -->
     <RouterView />
 </template>
 
 
 <script setup>
-    import Header  from '../components/Header.vue'
-
     import { RouterView } from 'vue-router'
+
+    import Header  from '../components/Header.vue'
 </script>
 
 
@@ -51,5 +55,24 @@
     margin-left: auto;
 }
 
+
+.error_info .back_btn
+{
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+
+    display: inline-block;
+
+    margin-top: 40px;
+    padding: 17px 30px;
+
+    vertical-align: top;
+    text-decoration: none;
+
+    border-radius: 20px;
+    background: #950fff;
+}
 
 </style>

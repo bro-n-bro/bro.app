@@ -4,7 +4,7 @@
             <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
         </div>
 
-        <span>{{ $t('message.connect_wallet') }}</span>
+        <span>{{ $t('message.connect_wallet_btn') }}</span>
     </button>
 </template>
 

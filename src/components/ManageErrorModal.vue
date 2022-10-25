@@ -39,6 +39,7 @@
         store = useGlobalStore()
 
 
+    // Back to manage modal
     function tryAgain() {
         emitter.emit('close_manage_error_modal')
         emitter.emit('open_manage_modal')

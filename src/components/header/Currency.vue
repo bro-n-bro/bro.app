@@ -28,13 +28,14 @@
         emitter = inject('emitter')
 
 
+    // Select currency
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })
 
         store.showCurrencyDropdown = false
     }
 
-
+    // Сlick element outside
     function clickOut() {
         store.showCurrencyDropdown = false
     }

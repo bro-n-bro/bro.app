@@ -21,6 +21,14 @@ const routes = [
 		}
 	},
 	{
+		path: '/under_construction',
+		name: 'Under construction',
+		component: () => import('../views/UnderConstruction.vue'),
+		meta: {
+			layout: errorLayut
+		}
+	},
+	{
 		path: '/',
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
@@ -28,16 +36,6 @@ const routes = [
 			layout: defaultLayut
 		}
 	},
-	// {
-	// 	path: '/',
-	// 	name: 'home',
-	// 	component: HomeView
-	// },
-	// {
-	// 	path: '/about',
-	// 	name: 'about',
-	// 	component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-	// }
 ]
 
 const router = createRouter({

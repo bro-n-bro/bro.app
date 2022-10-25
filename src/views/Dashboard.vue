@@ -3,6 +3,7 @@
     <section class="dashboard">
         <div class="cont">
             <div class="row">
+                <!-- Evmos -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.evmos.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -13,8 +14,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.evmos.health, 2),
                             color: store.networks.evmos.health_color,
                             APR: $filters.toFixed(store.networks.evmos.apr * 100, 2)
@@ -58,16 +58,11 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.evmos.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.evmos.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
 
-                                <div class="val"> {{ $filters.toFixed(store.networks.evmos.personal_APR, 2) }}%</div>
+                                <div class="val">{{ $filters.toFixed(store.networks.evmos.personal_APR, 2) }}%</div>
                             </div>
 
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_RPDE_notice', { denom: store.networks.evmos.token_name}))">
@@ -91,6 +86,7 @@
                 </div>
 
 
+                <!-- Juno -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.juno.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -101,8 +97,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.juno.health, 2),
                             color: store.networks.juno.health_color,
                             APR: $filters.toFixed(store.networks.juno.apr * 100, 2)
@@ -146,11 +141,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.juno.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.juno.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -179,6 +169,7 @@
                 </div>
 
 
+                <!-- Сosmos hub -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.cosmoshub.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -189,8 +180,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.cosmoshub.health, 2),
                             color: store.networks.cosmoshub.health_color,
                             APR: $filters.toFixed(store.networks.cosmoshub.apr * 100, 2)
@@ -234,11 +224,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.cosmoshub.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.cosmoshub.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -267,6 +252,7 @@
                 </div>
 
 
+                <!-- Bostrom -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.bostrom.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -277,8 +263,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.bostrom.health, 2),
                             color: store.networks.bostrom.health_color,
                             APR: $filters.toFixed(store.networks.bostrom.apr * 100, 2)
@@ -322,11 +307,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.bostrom.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.bostrom.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -356,6 +336,7 @@
             </div>
 
 
+            <!-- E-money -->
             <div class="row">
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.emoney.status && store.auth}">
                     <template v-if="!store.auth">
@@ -367,8 +348,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.emoney.health, 2),
                             color: store.networks.emoney.health_color,
                             APR: $filters.toFixed(store.networks.emoney.apr * 100, 2)
@@ -412,11 +392,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.emoney.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.emoney.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -445,6 +420,7 @@
                 </div>
 
 
+                <!-- Desmos -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.desmos.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -455,8 +431,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.desmos.health, 2),
                             color: store.networks.desmos.health_color,
                             APR: $filters.toFixed(store.networks.desmos.apr * 100, 2)
@@ -500,11 +475,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.desmos.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.desmos.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -533,9 +503,10 @@
                 </div>
 
 
+                <!-- Account -->
                 <div class="account">
                     <button class="connect_wallet_btn" @click.prevent="emitter.emit('connectWallet')" v-if="!store.auth">
-                        {{ $t('message.connect_wallet') }}
+                        {{ $t('message.connect_wallet_btn') }}
                     </button>
 
                     <template v-else>
@@ -591,13 +562,14 @@
                             </div>
                         </div>
 
-                        <!-- <a href="/" class="details_btn">{{ $t('message.details') }}</a> -->
+                        <router-link to="/under_construction" class="details_btn">{{ $t('message.details_btn') }}</router-link>
                     </template>
 
                     <div class="shadow"></div>
                 </div>
 
 
+                <!-- Osmosis -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.osmosis.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -608,8 +580,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.osmosis.health, 2),
                             color: store.networks.osmosis.health_color,
                             APR: $filters.toFixed(store.networks.osmosis.apr * 100, 2)
@@ -653,11 +624,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.osmosis.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.osmosis.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -686,6 +652,7 @@
                 </div>
 
 
+                <!-- Crescent -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.crescent.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -696,8 +663,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.crescent.health, 2),
                             color: store.networks.crescent.health_color,
                             APR: $filters.toFixed(store.networks.crescent.apr * 100, 2)
@@ -741,11 +707,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.crescent.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.crescent.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -775,6 +736,7 @@
             </div>
 
 
+            <!-- Gravity bridge -->
             <div class="row">
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.gravity.status && store.auth}">
                     <template v-if="!store.auth">
@@ -786,8 +748,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.gravity.health, 2),
                             color: store.networks.gravity.health_color,
                             APR: $filters.toFixed(store.networks.gravity.apr * 100, 2)
@@ -831,11 +792,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.gravity.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.gravity.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -864,6 +820,7 @@
                 </div>
 
 
+                <!-- Stargaze -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stargaze.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -874,8 +831,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.stargaze.health, 2),
                             color: store.networks.stargaze.health_color,
                             APR: $filters.toFixed(store.networks.stargaze.apr * 100, 2)
@@ -919,11 +875,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stargaze.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stargaze.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -952,6 +903,7 @@
                 </div>
 
 
+                <!-- Omniflix hub -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.omniflix.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -962,8 +914,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.omniflix.health, 2),
                             color: store.networks.omniflix.health_color,
                             APR: $filters.toFixed(store.networks.omniflix.apr * 100, 2)
@@ -1007,11 +958,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.omniflix.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.omniflix.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -1040,6 +986,7 @@
                 </div>
 
 
+                <!-- Stride -->
                 <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stride.status && store.auth}">
                     <template v-if="!store.auth">
                         <div class="logo">
@@ -1050,8 +997,7 @@
                     </template>
 
                     <template v-else>
-                        <div class="head"
-                        @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
+                        <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.stride.health, 2),
                             color: store.networks.stride.health_color,
                             APR: $filters.toFixed(store.networks.stride.apr * 100, 2)
@@ -1095,11 +1041,6 @@
                             }))"></div>
                         </div>
 
-                        <!-- <div class="progress">
-                            <div class="bar" :style="{'width': $filters.toFixed(store.networks.stride.delegations_percents, 2) + '%'}"></div>
-                            <div class="bar orange" :style="{'width': $filters.toFixed(store.networks.stride.rewards_percents, 2) + '%'}"></div>
-                        </div> -->
-
                         <div class="stats">
                             <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
@@ -1127,6 +1068,8 @@
                     <div class="shadow" :class="[store.networks.stride.health_color]" :style="{'--speed': store.networks.stride.speed + 's'}"></div>
                 </div>
             </div>
+
+            <!-- <pre>{{ store }}</pre> -->
         </div>
     </section>
     </transition>
@@ -1404,38 +1347,6 @@
     }
 
 
-    /* .dashboard .progress
-                                                                                    {
-                                                                                        display: flex;
-                                                                                        overflow: hidden;
-
-                                                                                        height: 13px;
-                                                                                        margin-bottom: 12px;
-
-                                                                                        border-radius: 20px;
-                                                                                        background: #0b2272;
-
-                                                                                        align-content: stretch;
-                                                                                        align-items: stretch;
-                                                                                        flex-wrap: wrap;
-                                                                                        justify-content: flex-start;
-                                                                                    }
-
-                                                                                    .dashboard .progress .bar
-                                                                                    {
-                                                                                        height: 13px;
-
-                                                                                        transition: width .2s linear;
-
-                                                                                        background: #4075fd;
-                                                                                    }
-
-                                                                                    .dashboard .progress .bar.orange
-                                                                                    {
-                                                                                        background: orange;
-                                                                                    } */
-
-
     .dashboard .stats
     {
         font-size: 12px;
@@ -1614,12 +1525,6 @@
         background: #141414;
     }
 
-    .dashboard .disabled .progress,
-    .dashboard .disabled .progress .bar
-    {
-        background: #282828;
-    }
-
     .dashboard .network.disabled .shadow:after
     {
         background: #212121;
@@ -1675,6 +1580,12 @@
         pointer-events: auto;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
+    }
+
+
+    .dashboard .account .details_btn
+    {
+        border-color: rgba(255, 255, 255, .2);
     }
 
 

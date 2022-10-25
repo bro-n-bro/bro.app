@@ -6,13 +6,7 @@ module.exports = defineConfig({
 	configureWebpack: {
 		resolve: {
 			fallback: {
-				"crypto": require.resolve('crypto-browserify'),
-				// "buffer": false,
-				// crypto: false,
-				// events: false,
-				// path: false,
-				// stream: false,
-				// string_decoder: false,
+				crypto: require.resolve('crypto-browserify')
 			}
 		}
 	}

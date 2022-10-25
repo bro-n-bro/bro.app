@@ -8,15 +8,19 @@ export default {
             // Error page
             'error_title_404': "Page was lost in space.... Are you sure that it exist?",
 
+            // Under construction page
+            'under_construction_title': "This part of site is under construction",
+
             // Keplr Error page
             'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
             'keplr_install_btn': "Install Keplr",
 
             // Buttons
-            'connect_wallet': 'Connect wallet',
-            'details': 'Details',
+            'connect_wallet_btn': 'Connect wallet',
+            'details_btn': 'Details',
             'manage_btn': 'Manage',
             'delegate_btn': 'Delegate to your Bro',
+            'back_home_btn': 'Back to home',
 
             // Dashboard
             'personal_apr': 'Personal APR',

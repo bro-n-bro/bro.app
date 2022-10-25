@@ -6,7 +6,7 @@
 
 
 <script setup>
-    import { inject, onMounted } from 'vue'
+    import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
@@ -14,16 +14,12 @@
         i18n = inject('i18n')
 
 
+    // Set notice
     function setNotice() {
         store.IPFSStatus
             ? emitter.emit('setNotification', i18n.global.t('message.ipfs_active_notice'))
             : emitter.emit('setNotification', i18n.global.t('message.ipfs_not_active_notice'))
     }
-
-
-    onMounted(async () => {
-        await store.startIPFS()
-    })
 </script>
 
 
