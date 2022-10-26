@@ -41,10 +41,16 @@
     import { useGlobalStore } from '@/stores'
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
 
+    // Components
     import Header  from '../components/Header.vue'
     import ManageModal  from '../components/ManageModal.vue'
     import ManageSuccessModal  from '../components/ManageSuccessModal.vue'
     import ManageErrorModal  from '../components/ManageErrorModal.vue'
+
+    // Config
+    import desmosConfig from '@/config/chain/desmos'
+    import crescentConfig from '@/config/chain/crescent'
+    import omniflixConfig from '@/config/chain/omniflix'
 
 
     const emitter = inject('emitter'),
@@ -72,9 +78,7 @@
     // Event "connect wallet"
     emitter.on('connectWallet', async () => {
         // Keplr connect
-        const chainId = 'cosmoshub-4',
-            chainIdDesmos = 'desmos-mainnet',
-            chainIdEvmos = 'evmos_9001-2'
+        const chainId = 'cosmoshub-4'
 
         window.keplr.enable(chainId)
 
@@ -111,7 +115,7 @@
             //======== Evmos
             try{
                 // Singer
-                const offlineSignerEvmos = window.getOfflineSigner(chainIdEvmos),
+                const offlineSignerEvmos = window.getOfflineSigner('evmos_9001-2'),
                     accountsEvmos = await offlineSignerEvmos.getAccounts()
 
                 // Set wallet address
@@ -351,7 +355,7 @@
             // ======== Desmos
             try{
                 // Desmos singer
-                const offlineSignerDesmos = window.getOfflineSigner(chainIdDesmos),
+                const offlineSignerDesmos = window.getOfflineSigner('desmos-mainnet'),
                     accountsDesmos = await offlineSignerDesmos.getAccounts()
 
                 // Set wallet address
@@ -392,46 +396,62 @@
                 })
             } catch (error) {
                 console.log(error)
+
+                window.keplr.experimentalSuggestChain(desmosConfig).then(() => {
+                    store.updateNetwork('desmos')
+                })
             }
 
 
             //======== Crescent hub
-            // Set wallet address
-            store.setWallet('crescent', toBech32('cre', fromBech32(accounts[0].address).data))
+            try{
+                // Singer
+                const offlineSignerCrescent = window.getOfflineSigner('crescent-1'),
+                    accountsCrescent = await offlineSignerCrescent.getAccounts()
 
-            // Get status
-            store.getNetworkStatus('crescent')
+                // Set wallet address
+                store.setWallet('crescent', toBech32('cre', fromBech32(accounts[0].address).data))
 
-            // Get network tokens
-            store.getNetworkTokens('crescent').then(() => {
-                // Calc network tokens sum
-                store.calcNetworkTokensSum('crescent')
+                // Get status
+                store.getNetworkStatus('crescent')
 
-                if(store.networks.crescent.status){
-                    // Get network data
-                    let crescentData = store.getNetworkData('crescent')
+                // Get network tokens
+                store.getNetworkTokens('crescent').then(() => {
+                    // Calc network tokens sum
+                    store.calcNetworkTokensSum('crescent')
 
-                    // Get network price
-                    let crescentPrice = store.getNetworkPrice('crescent')
+                    if(store.networks.crescent.status){
+                        // Get network data
+                        let crescentData = store.getNetworkData('crescent')
 
-                    Promise.all([crescentData, crescentPrice, promiseCurrencies]).then(() => {
-                        // Calc network RPDE
-                        store.calcNetworkRPDEInCurrency('crescent')
+                        // Get network price
+                        let crescentPrice = store.getNetworkPrice('crescent')
 
-                        // Calc network balance
-                        store.calcNetworkBalance('crescent')
+                        Promise.all([crescentData, crescentPrice, promiseCurrencies]).then(() => {
+                            // Calc network RPDE
+                            store.calcNetworkRPDEInCurrency('crescent')
 
-                        // Calc delegations price
-                        store.calcDelegationsPrice('crescent')
+                            // Calc network balance
+                            store.calcNetworkBalance('crescent')
 
-                        // Calc rewards price
-                        store.calcRewardsPrice('crescent')
+                            // Calc delegations price
+                            store.calcDelegationsPrice('crescent')
 
-                        // Update account balance
-                        store.updateAccountBalance()
-                    })
-                }
-            })
+                            // Calc rewards price
+                            store.calcRewardsPrice('crescent')
+
+                            // Update account balance
+                            store.updateAccountBalance()
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+
+                window.keplr.experimentalSuggestChain(crescentConfig).then(() => {
+                    store.updateNetwork('crescent')
+                })
+            }
 
 
             //======== Gravity bridge
@@ -513,42 +533,54 @@
 
 
             //======== Omniflix hub
-            // Set wallet address
-            store.setWallet('omniflix', toBech32('omniflix', fromBech32(accounts[0].address).data))
+            try{
+                // Singer
+                const offlineSignerOmniflix = window.getOfflineSigner('omniflixhub-1'),
+                    accountsOmniflix = await offlineSignerOmniflix.getAccounts()
 
-            // Get status
-            store.getNetworkStatus('omniflix')
+                // Set wallet address
+                store.setWallet('omniflix', toBech32('omniflix', fromBech32(accounts[0].address).data))
 
-            // Get network tokens
-            store.getNetworkTokens('omniflix').then(() => {
-                // Calc network tokens sum
-                store.calcNetworkTokensSum('omniflix')
+                // Get status
+                store.getNetworkStatus('omniflix')
 
-                if(store.networks.omniflix.status){
-                    // Get network data
-                    let omniflixData = store.getNetworkData('omniflix')
+                // Get network tokens
+                store.getNetworkTokens('omniflix').then(() => {
+                    // Calc network tokens sum
+                    store.calcNetworkTokensSum('omniflix')
 
-                    // Get network price
-                    let omniflixPrice = store.getNetworkPrice('omniflix')
+                    if(store.networks.omniflix.status){
+                        // Get network data
+                        let omniflixData = store.getNetworkData('omniflix')
 
-                    Promise.all([omniflixData, omniflixPrice, promiseCurrencies]).then(() => {
-                        // Calc network RPDE
-                        store.calcNetworkRPDEInCurrency('omniflix')
+                        // Get network price
+                        let omniflixPrice = store.getNetworkPrice('omniflix')
 
-                        // Calc network balance
-                        store.calcNetworkBalance('omniflix')
+                        Promise.all([omniflixData, omniflixPrice, promiseCurrencies]).then(() => {
+                            // Calc network RPDE
+                            store.calcNetworkRPDEInCurrency('omniflix')
 
-                        // Calc delegations price
-                        store.calcDelegationsPrice('omniflix')
+                            // Calc network balance
+                            store.calcNetworkBalance('omniflix')
 
-                        // Calc rewards price
-                        store.calcRewardsPrice('omniflix')
+                            // Calc delegations price
+                            store.calcDelegationsPrice('omniflix')
 
-                        // Update account balance
-                        store.updateAccountBalance()
-                    })
-                }
-            })
+                            // Calc rewards price
+                            store.calcRewardsPrice('omniflix')
+
+                            // Update account balance
+                            store.updateAccountBalance()
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+
+                window.keplr.experimentalSuggestChain(omniflixConfig).then(() => {
+                    store.updateNetwork('omniflix')
+                })
+            }
 
 
             //======== Stride
@@ -588,6 +620,10 @@
                     })
                 }
             })
+
+
+            // Update account balance
+            setTimeout(() => store.updateAccountBalance())
         }
     })
 
@@ -659,6 +695,8 @@
     .notifications
     {
         margin-bottom: 30px;
+
+        pointer-events: none;
     }
 
 
@@ -736,7 +774,8 @@
 
     .notifications.vue-sticky-element--stuck .data
     {
-        margin: 10px 0 10px 280px;
+        width: calc(100% - 747px);
+        margin: 10px 0 10px 240px;
         padding-top: 10px;
         padding-bottom: 10px;
     }

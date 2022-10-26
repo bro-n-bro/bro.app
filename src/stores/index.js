@@ -230,6 +230,7 @@ export const useGlobalStore = defineStore('global', {
                     }
                 })
 
+
             // Rewards tokens
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
                 .then(response => response.json())
@@ -240,6 +241,7 @@ export const useGlobalStore = defineStore('global', {
                         this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
                     }
                 })
+
 
             // Availabel/IBC tokens
             await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
@@ -473,6 +475,33 @@ export const useGlobalStore = defineStore('global', {
 
         // Update network
         async updateNetwork(network) {
+            if (network == 'desmos') {
+                // Desmos singer
+                const offlineSignerDesmos = window.getOfflineSigner('desmos-mainnet'),
+                    accountsDesmos = await offlineSignerDesmos.getAccounts()
+
+                // Set wallet address
+                this.setWallet('desmos', accountsDesmos[0].address)
+            }
+
+            if (network == 'crescent') {
+                // Crescent singer
+                const offlineSignerCrescent = window.getOfflineSigner('crescent-1'),
+                    accountsCrescent = await offlineSignerCrescent.getAccounts()
+
+                // Set wallet address
+                this.setWallet('crescent', accountsCrescent[0].address)
+            }
+
+            if (network == 'omniflix') {
+                // Omniflix hub singer
+                const offlineSignerOmniflix = window.getOfflineSigner('omniflixhub-1'),
+                    accountsOmniflix = await offlineSignerOmniflix.getAccounts()
+
+                // Set wallet address
+                this.setWallet('crescent', accountsOmniflix[0].address)
+            }
+
             // Get status
             this.getNetworkStatus(network)
 

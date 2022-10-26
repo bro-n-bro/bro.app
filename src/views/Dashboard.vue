@@ -1069,7 +1069,7 @@
                 </div>
             </div>
 
-            <!-- <pre>{{ store }}</pre> -->
+            <!-- <pre>{{ store.networks }}</pre> -->
         </div>
     </section>
     </transition>
