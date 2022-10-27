@@ -352,108 +352,6 @@
             })
 
 
-            // ======== Desmos
-            try{
-                // Desmos singer
-                const offlineSignerDesmos = window.getOfflineSigner('desmos-mainnet'),
-                    accountsDesmos = await offlineSignerDesmos.getAccounts()
-
-                // Set wallet address
-                store.setWallet('desmos', accountsDesmos[0].address)
-
-                // Get status
-                store.getNetworkStatus('desmos')
-
-                // Get network tokens
-                store.getNetworkTokens('desmos').then(() => {
-                    // Calc network tokens sum
-                    store.calcNetworkTokensSum('desmos')
-
-                    if(store.networks.desmos.status){
-                        // Get network data
-                        let desmosData = store.getNetworkData('desmos')
-
-                        // Get network price
-                        let desmosPrice = store.getNetworkPrice('desmos')
-
-                        Promise.all([desmosData, desmosPrice, promiseCurrencies]).then(() => {
-                            // Calc network RPDE
-                            store.calcNetworkRPDEInCurrency('desmos')
-
-                            // Calc network balance
-                            store.calcNetworkBalance('desmos')
-
-                            // Calc delegations price
-                            store.calcDelegationsPrice('desmos')
-
-                            // Calc rewards price
-                            store.calcRewardsPrice('desmos')
-
-                            // Update account balance
-                            store.updateAccountBalance()
-                        })
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-
-                window.keplr.experimentalSuggestChain(desmosConfig).then(() => {
-                    store.updateNetwork('desmos')
-                })
-            }
-
-
-            //======== Crescent hub
-            try{
-                // Singer
-                const offlineSignerCrescent = window.getOfflineSigner('crescent-1'),
-                    accountsCrescent = await offlineSignerCrescent.getAccounts()
-
-                // Set wallet address
-                store.setWallet('crescent', toBech32('cre', fromBech32(accounts[0].address).data))
-
-                // Get status
-                store.getNetworkStatus('crescent')
-
-                // Get network tokens
-                store.getNetworkTokens('crescent').then(() => {
-                    // Calc network tokens sum
-                    store.calcNetworkTokensSum('crescent')
-
-                    if(store.networks.crescent.status){
-                        // Get network data
-                        let crescentData = store.getNetworkData('crescent')
-
-                        // Get network price
-                        let crescentPrice = store.getNetworkPrice('crescent')
-
-                        Promise.all([crescentData, crescentPrice, promiseCurrencies]).then(() => {
-                            // Calc network RPDE
-                            store.calcNetworkRPDEInCurrency('crescent')
-
-                            // Calc network balance
-                            store.calcNetworkBalance('crescent')
-
-                            // Calc delegations price
-                            store.calcDelegationsPrice('crescent')
-
-                            // Calc rewards price
-                            store.calcRewardsPrice('crescent')
-
-                            // Update account balance
-                            store.updateAccountBalance()
-                        })
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-
-                window.keplr.experimentalSuggestChain(crescentConfig).then(() => {
-                    store.updateNetwork('crescent')
-                })
-            }
-
-
             //======== Gravity bridge
             // Set wallet address
             store.setWallet('gravity', toBech32('gravity', fromBech32(accounts[0].address).data))
@@ -532,57 +430,6 @@
             })
 
 
-            //======== Omniflix hub
-            try{
-                // Singer
-                const offlineSignerOmniflix = window.getOfflineSigner('omniflixhub-1'),
-                    accountsOmniflix = await offlineSignerOmniflix.getAccounts()
-
-                // Set wallet address
-                store.setWallet('omniflix', toBech32('omniflix', fromBech32(accounts[0].address).data))
-
-                // Get status
-                store.getNetworkStatus('omniflix')
-
-                // Get network tokens
-                store.getNetworkTokens('omniflix').then(() => {
-                    // Calc network tokens sum
-                    store.calcNetworkTokensSum('omniflix')
-
-                    if(store.networks.omniflix.status){
-                        // Get network data
-                        let omniflixData = store.getNetworkData('omniflix')
-
-                        // Get network price
-                        let omniflixPrice = store.getNetworkPrice('omniflix')
-
-                        Promise.all([omniflixData, omniflixPrice, promiseCurrencies]).then(() => {
-                            // Calc network RPDE
-                            store.calcNetworkRPDEInCurrency('omniflix')
-
-                            // Calc network balance
-                            store.calcNetworkBalance('omniflix')
-
-                            // Calc delegations price
-                            store.calcDelegationsPrice('omniflix')
-
-                            // Calc rewards price
-                            store.calcRewardsPrice('omniflix')
-
-                            // Update account balance
-                            store.updateAccountBalance()
-                        })
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-
-                window.keplr.experimentalSuggestChain(omniflixConfig).then(() => {
-                    store.updateNetwork('omniflix')
-                })
-            }
-
-
             //======== Stride
             // Set wallet address
             store.setWallet('stride', toBech32('stride', fromBech32(accounts[0].address).data))
@@ -614,6 +461,162 @@
 
                         // Calc rewards price
                         store.calcRewardsPrice('stride')
+
+                        // Update account balance
+                        store.updateAccountBalance()
+                    })
+                }
+            })
+
+
+            const checkChains = [
+                {
+                    chainId: 'desmos-mainnet',
+                    name: 'desmos',
+                    config: desmosConfig
+                },
+                {
+                    chainId: 'crescent-1',
+                    name: 'crescent',
+                    config: crescentConfig
+                },
+                {
+                    chainId: 'omniflixhub-1',
+                    name: 'omniflix',
+                    config: omniflixConfig
+                }
+            ]
+
+            var accountsDesmos = {}
+
+
+            // Check chains in Keplr
+            for (let i in checkChains) {
+                try{
+                    let offlineSigner = window.getOfflineSigner(checkChains[i].chainId),
+                        accounts = await offlineSigner.getAccounts()
+
+                    if(checkChains[i].chainId == 'desmos-mainnet'){
+                        accountsDesmos = accounts
+                    }
+                } catch (error) {
+                    console.log(error)
+
+                    // Add chain in Keplr
+                    await window.keplr.experimentalSuggestChain(checkChains[i].config).then(() => store.updateNetwork(checkChains[i].name))
+                }
+            }
+
+
+            // ======== Desmos
+            // Set wallet address
+            store.setWallet('desmos', accountsDesmos[0].address)
+
+            // Get status
+            store.getNetworkStatus('desmos')
+
+            // Get network tokens
+            store.getNetworkTokens('desmos').then(() => {
+                // Calc network tokens sum
+                store.calcNetworkTokensSum('desmos')
+
+                if(store.networks.desmos.status){
+                    // Get network data
+                    let desmosData = store.getNetworkData('desmos')
+
+                    // Get network price
+                    let desmosPrice = store.getNetworkPrice('desmos')
+
+                    Promise.all([desmosData, desmosPrice, promiseCurrencies]).then(() => {
+                        // Calc network RPDE
+                        store.calcNetworkRPDEInCurrency('desmos')
+
+                        // Calc network balance
+                        store.calcNetworkBalance('desmos')
+
+                        // Calc delegations price
+                        store.calcDelegationsPrice('desmos')
+
+                        // Calc rewards price
+                        store.calcRewardsPrice('desmos')
+
+                        // Update account balance
+                        store.updateAccountBalance()
+                    })
+                }
+            })
+
+
+            //======== Crescent hub
+            // Set wallet address
+            store.setWallet('crescent', toBech32('cre', fromBech32(accounts[0].address).data))
+
+            // Get status
+            store.getNetworkStatus('crescent')
+
+            // Get network tokens
+            store.getNetworkTokens('crescent').then(() => {
+                // Calc network tokens sum
+                store.calcNetworkTokensSum('crescent')
+
+                if(store.networks.crescent.status){
+                    // Get network data
+                    let crescentData = store.getNetworkData('crescent')
+
+                    // Get network price
+                    let crescentPrice = store.getNetworkPrice('crescent')
+
+                    Promise.all([crescentData, crescentPrice, promiseCurrencies]).then(() => {
+                        // Calc network RPDE
+                        store.calcNetworkRPDEInCurrency('crescent')
+
+                        // Calc network balance
+                        store.calcNetworkBalance('crescent')
+
+                        // Calc delegations price
+                        store.calcDelegationsPrice('crescent')
+
+                        // Calc rewards price
+                        store.calcRewardsPrice('crescent')
+
+                        // Update account balance
+                        store.updateAccountBalance()
+                    })
+                }
+            })
+
+
+            //======== Omniflix hub
+            // Set wallet address
+            store.setWallet('omniflix', toBech32('omniflix', fromBech32(accounts[0].address).data))
+
+            // Get status
+            store.getNetworkStatus('omniflix')
+
+            // Get network tokens
+            store.getNetworkTokens('omniflix').then(() => {
+                // Calc network tokens sum
+                store.calcNetworkTokensSum('omniflix')
+
+                if(store.networks.omniflix.status){
+                    // Get network data
+                    let omniflixData = store.getNetworkData('omniflix')
+
+                    // Get network price
+                    let omniflixPrice = store.getNetworkPrice('omniflix')
+
+                    Promise.all([omniflixData, omniflixPrice, promiseCurrencies]).then(() => {
+                        // Calc network RPDE
+                        store.calcNetworkRPDEInCurrency('omniflix')
+
+                        // Calc network balance
+                        store.calcNetworkBalance('omniflix')
+
+                        // Calc delegations price
+                        store.calcDelegationsPrice('omniflix')
+
+                        // Calc rewards price
+                        store.calcRewardsPrice('omniflix')
 
                         // Update account balance
                         store.updateAccountBalance()

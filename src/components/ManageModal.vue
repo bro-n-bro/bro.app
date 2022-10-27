@@ -284,7 +284,7 @@
                 store.loaderManageModal = !store.loaderManageModal
 
                 if(form.type == 'delegate') {
-                    try {
+                    // try {
                         const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                             rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                             client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
@@ -320,22 +320,22 @@
 
                         // Update network
                         setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-                    } catch (error) {
-                        // Get error code
-                        let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+                    // } catch (error) {
+                    //     // Get error code
+                    //     let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
-                        // Get error title
-                        errorCode
-                            ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
-                            : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+                    //     // Get error title
+                    //     errorCode
+                    //         ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                    //         : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
-                        // Disable loader
-                        store.loaderManageModal = !store.loaderManageModal
+                    //     // Disable loader
+                    //     store.loaderManageModal = !store.loaderManageModal
 
-                        // Open error modal
-                        emitter.emit('close_manage_modal')
-                        emitter.emit('open_manage_error_modal')
-                    }
+                    //     // Open error modal
+                    //     emitter.emit('close_manage_modal')
+                    //     emitter.emit('open_manage_error_modal')
+                    // }
                 }
 
 

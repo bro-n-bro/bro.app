@@ -1,6 +1,6 @@
 <svg width="0" height="0" class="hidden">
-  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 16" id="ic_arr_down">
-    <path d="M11.875 5.8125L7.5 10.1875L3.125 5.8125" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="ic_arr_down">
+    <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
   </symbol>
   <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 37" id="ic_close">
     <path d="M10.1367 26.3639L18.0007 18.5M25.8646 10.636L18.0007 18.5M18.0007 18.5L10.1367 10.636M18.0007 18.5L25.8646 26.3639" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>

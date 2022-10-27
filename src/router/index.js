@@ -47,7 +47,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
 	// Keplr
 	if (!window.keplr && to.name !== 'KeplrError') {
-		router().push({ name: 'KeplrError' })
+		router.push({ name: 'KeplrError' })
 	} else {
 		next()
 	}
