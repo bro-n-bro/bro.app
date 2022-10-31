@@ -4,7 +4,11 @@
         <div class="cont">
             <div class="row">
                 <!-- Evmos -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.evmos.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.evmos.status && store.auth,
+                    default: store.networks.evmos.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/evmos_logo.png" alt="">
@@ -87,7 +91,11 @@
 
 
                 <!-- Juno -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.juno.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.juno.status && store.auth,
+                    default: store.networks.juno.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/juno_logo.png" alt="">
@@ -170,7 +178,11 @@
 
 
                 <!-- Сosmos hub -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.cosmoshub.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.cosmoshub.status && store.auth,
+                    default: store.networks.cosmoshub.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/cosmos_logo.png" alt="">
@@ -253,7 +265,11 @@
 
 
                 <!-- Bostrom -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.bostrom.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.bostrom.status && store.auth,
+                    default: store.networks.bostrom.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/bostrom_logo.png" alt="">
@@ -338,7 +354,11 @@
 
             <!-- E-money -->
             <div class="row">
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.emoney.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.emoney.status && store.auth,
+                    default: store.networks.emoney.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/e-money_logo.png" alt="">
@@ -421,7 +441,11 @@
 
 
                 <!-- Desmos -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.desmos.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.desmos.status && store.auth,
+                    default: store.networks.desmos.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/desmos_logo.png" alt="">
@@ -570,7 +594,11 @@
 
 
                 <!-- Osmosis -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.osmosis.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.osmosis.status && store.auth,
+                    default: store.networks.osmosis.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/osmosis_logo.png" alt="">
@@ -653,7 +681,11 @@
 
 
                 <!-- Crescent -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.crescent.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.crescent.status && store.auth,
+                    default: store.networks.crescent.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/crescent_logo.png" alt="">
@@ -738,7 +770,11 @@
 
             <!-- Gravity bridge -->
             <div class="row">
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.gravity.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.gravity.status && store.auth,
+                    default: store.networks.gravity.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/g-bridge_logo.png" alt="">
@@ -821,7 +857,11 @@
 
 
                 <!-- Stargaze -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stargaze.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.stargaze.status && store.auth,
+                    default: store.networks.stargaze.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/stargaze_logo.png" alt="">
@@ -904,7 +944,11 @@
 
 
                 <!-- Omniflix hub -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.omniflix.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.omniflix.status && store.auth,
+                    default: store.networks.omniflix.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/omniflix_logo.png" alt="">
@@ -987,7 +1031,11 @@
 
 
                 <!-- Stride -->
-                <div class="network" :class="{ empty: !store.auth, disabled: !store.networks.stride.status && store.auth}">
+                <div class="network" :class="{
+                    empty: !store.auth,
+                    disabled: !store.networks.stride.status && store.auth,
+                    default: store.networks.stride.tokens_sum
+                }">
                     <template v-if="!store.auth">
                         <div class="logo">
                             <img src="../assets/images/stride_logo.png" alt="">
@@ -1506,7 +1554,7 @@
         color: #464646;
     }
 
-    .dashboard .disabled .logo:after
+    .dashboard .disabled:not(.default) .logo:after
     {
         position: absolute;
         z-index: 2;
@@ -1535,6 +1583,12 @@
     .dashboard .network:not(.disabled) .tokens
     {
         pointer-events: auto;
+    }
+
+    .dashboard .network.default .head,
+    .dashboard .network.default .tokens
+    {
+        color: #fff;
     }
 
 

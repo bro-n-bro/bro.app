@@ -115,7 +115,7 @@
             //======== Evmos
             try{
                 // Singer
-                const offlineSignerEvmos = window.getOfflineSigner('evmos_9001-2'),
+                const offlineSignerEvmos = window.getOfflineSigner(store.networks.evmos.chainId),
                     accountsEvmos = await offlineSignerEvmos.getAccounts()
 
                 // Set wallet address

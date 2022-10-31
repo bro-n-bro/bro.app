@@ -190,6 +190,9 @@
     import { inject, reactive, onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { SigningStargateClient } from '@cosmjs/stargate'
+    import { createTxRaw } from '@evmos/proto'
+    import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
+    import { createTxMsgDelegate, createTxMsgBeginRedelegate, createTxRawEIP712 } from '@evmos/transactions'
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
@@ -284,58 +287,150 @@
                 store.loaderManageModal = !store.loaderManageModal
 
                 if(form.type == 'delegate') {
-                    // try {
-                        const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
-                            rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                            msgAny = {
-                                typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
-                                value: {
-                                    delegatorAddress: store.wallets[store.networkManageModal],
-                                    validatorAddress: store.networks[store.networkManageModal].validator,
-                                    amount: {
-                                        denom: store.networks[store.networkManageModal].denom,
-                                        amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                    if(store.networkManageModal == 'evmos'){
+                        try {
+                            fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
+                                .then(response => response.json())
+                                .then(async data => {
+                                    const chain = {
+                                        chainId: 9001,
+                                        cosmosChainId: store.networks.evmos.chainId,
                                     }
-                                }
-                            },
-                            fee = {
-                                amount: [{
-                                    denom: store.networks[store.networkManageModal].denom,
-                                    amount: '0'
-                                }],
-                                gas: '300000'
-                            },
-                            result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
 
-                        // Disable loader
-                        store.loaderManageModal = !store.loaderManageModal
+                                    const sender = {
+                                        accountAddress: store.wallets.evmos,
+                                        sequence: data.account.base_account.sequence,
+                                        accountNumber: data.account.base_account.account_number,
+                                        pubkey: data.account.base_account.pub_key.key,
+                                    }
 
-                        // Set TXS
-                        store.lastTXS = result.transactionHash
+                                    const fee = {
+                                        amount: '0',
+                                        denom: store.networks.evmos.denom,
+                                        gas: '20000',
+                                    }
 
-                        // Open success modal
-                        emitter.emit('close_manage_modal')
-                        emitter.emit('open_manage_success_modal')
+                                    const params = {
+                                        validatorAddress: store.networks.evmos.validator,
+                                        amount: `${form.amount * store.networks.evmos.exponent}`,
+                                        denom: store.networks.evmos.denom,
+                                    }
 
-                        // Update network
-                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-                    // } catch (error) {
-                    //     // Get error code
-                    //     let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+                                    const msg = createTxMsgDelegate(chain, sender, fee, '', params)
 
-                    //     // Get error title
-                    //     errorCode
-                    //         ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
-                    //         : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+                                    let sign = await window?.keplr?.signDirect(
+                                        store.networks.evmos.chainId,
+                                        sender.accountAddress,
+                                        {
+                                            bodyBytes: msg.signDirect.body.serializeBinary(),
+                                            authInfoBytes: msg.signDirect.authInfo.serializeBinary(),
+                                            chainId: store.networks.evmos.chainId,
+                                            accountNumber: sender.accountNumber,
+                                        },
+                                        { isEthereum: true }
+                                    )
 
-                    //     // Disable loader
-                    //     store.loaderManageModal = !store.loaderManageModal
+                                    let rawTx = createTxRaw(sign.signed.bodyBytes, sign.signed.authInfoBytes, [
+                                        new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))
+                                    ])
 
-                    //     // Open error modal
-                    //     emitter.emit('close_manage_modal')
-                    //     emitter.emit('open_manage_error_modal')
-                    // }
+                                    // Broadcast it
+                                    const postOptions = {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: generatePostBodyBroadcast(rawTx),
+                                    }
+
+                                    let broadcastPost = await fetch(`https://lcd.evmos-9001-2.bronbro.io${generateEndpointBroadcast()}`, postOptions)
+
+                                    let response = await broadcastPost.json()
+
+                                    console.log(response)
+
+                                    if(response.tx_response.code != 0){
+                                        // Get error title
+                                        store.manageError = i18n.global.t(`message.manage_modal_error_${response.tx_response.code}`)
+
+                                        // Disable loader
+                                        store.loaderManageModal = !store.loaderManageModal
+
+                                        // Open error modal
+                                        emitter.emit('close_manage_modal')
+                                        emitter.emit('open_manage_error_modal')
+
+                                        return false
+                                    }
+
+                                    // Disable loader
+                                    store.loaderManageModal = !store.loaderManageModal
+
+                                    // Set TXS
+                                    store.lastTXS = response.tx_response.txhash
+
+                                    // Open success modal
+                                    emitter.emit('close_manage_modal')
+                                    emitter.emit('open_manage_success_modal')
+
+                                    // Update network
+                                    setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                                })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else {
+                        try {
+                            const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
+                                rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                                msgAny = {
+                                    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                                    value: {
+                                        delegatorAddress: store.wallets[store.networkManageModal],
+                                        validatorAddress: store.networks[store.networkManageModal].validator,
+                                        amount: {
+                                            denom: store.networks[store.networkManageModal].denom,
+                                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                        }
+                                    }
+                                },
+                                fee = {
+                                    amount: [{
+                                        denom: store.networks[store.networkManageModal].denom,
+                                        amount: '0'
+                                    }],
+                                    gas: '300000'
+                                },
+                                result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
+
+                            // Disable loader
+                            store.loaderManageModal = !store.loaderManageModal
+
+                            // Set TXS
+                            store.lastTXS = result.transactionHash
+
+                            // Open success modal
+                            emitter.emit('close_manage_modal')
+                            emitter.emit('open_manage_success_modal')
+
+                            // Update network
+                            setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                        } catch (error) {
+                            // Get error code
+                            let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
+
+                            // Get error title
+                            errorCode
+                                ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+                                : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                            // Disable loader
+                            store.loaderManageModal = !store.loaderManageModal
+
+                            // Open error modal
+                            emitter.emit('close_manage_modal')
+                            emitter.emit('open_manage_error_modal')
+                        }
+                    }
                 }
 
 
