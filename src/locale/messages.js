@@ -6,7 +6,7 @@ export default {
             'ipfs': "Ipfs node",
 
             // Error page
-            'error_title_404': "Page was lost in space.... Are you sure that it exist?",
+            'error_title_404': "Page was lost in space....<br> Are you sure that it exist?",
 
             // Under construction page
             'under_construction_title': "This part of site is under construction",

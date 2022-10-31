@@ -272,6 +272,7 @@ export const useGlobalStore = defineStore('global', {
 
                                     // Recalc
                                     this.calcNetworkTokensSum(baseNetwork)
+                                    this.calcNetworkBalance(baseNetwork)
                                 })
                         })
                     }

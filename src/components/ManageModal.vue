@@ -623,7 +623,7 @@
 
     #manage_modal .type label
     {
-        color: rgba(255, 255, 255, .5);
+        color: #fff;
         font-size: 14px;
         font-weight: 500;
         line-height: 17px;
@@ -642,10 +642,11 @@
 
     #manage_modal .type label div
     {
-        padding: 14px;
+        padding: 13px;
 
         transition: .2s linear;
 
+        border: 1px solid;
         border-radius: 14px;
         background: #191919;
     }
