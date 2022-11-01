@@ -104,12 +104,12 @@
             })
 
 
-            // Get networks health
-            store.getNetworksHealth()
-
-
             // Get currencies price
             let promiseCurrencies = store.getCurrenciesPrice()
+
+
+            // Get networks info
+            promiseCurrencies.then(store.getNetworksInfo())
 
 
             //======== Evmos
@@ -133,10 +133,7 @@
                         // Get network data
                         let promiseData = store.getNetworkData('evmos')
 
-                        // Get network price
-                        let promisePrice = store.getNetworkPrice('evmos')
-
-                        Promise.all([promiseData, promisePrice, promiseCurrencies]).then(() => {
+                        Promise.all([promiseData, promiseCurrencies]).then(() => {
                             // Calc network RPDE
                             store.calcNetworkRPDEInCurrency('evmos')
 
@@ -175,10 +172,7 @@
                     // Get network data
                     let junoData = store.getNetworkData('juno')
 
-                    // Get network price
-                    let junoPrice = store.getNetworkPrice('juno')
-
-                    Promise.all([junoData, junoPrice, promiseCurrencies]).then(() => {
+                    Promise.all([junoData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('juno')
 
@@ -214,10 +208,7 @@
                     // Get network data
                     let cosmoshubData = store.getNetworkData('cosmoshub')
 
-                    // Get network price
-                    let cosmoshubPrice = store.getNetworkPrice('cosmoshub')
-
-                    Promise.all([cosmoshubData, cosmoshubPrice, promiseCurrencies]).then(() => {
+                    Promise.all([cosmoshubData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('cosmoshub')
 
@@ -251,10 +242,7 @@
                     // Get network data
                     let bostromData = store.getNetworkData('bostrom')
 
-                    // Get network price
-                    let bostromPrice = store.getNetworkPrice('bostrom')
-
-                    Promise.all([bostromData, bostromPrice, promiseCurrencies]).then(() => {
+                    Promise.all([bostromData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('bostrom')
 
@@ -290,10 +278,7 @@
                     // Get network data
                     let osmosisData = store.getNetworkData('osmosis')
 
-                    // Get network price
-                    let osmosisPrice = store.getNetworkPrice('osmosis')
-
-                    Promise.all([osmosisData, osmosisPrice, promiseCurrencies]).then(() => {
+                    Promise.all([osmosisData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('osmosis')
 
@@ -329,10 +314,7 @@
                     // Get network data
                     let emoneyData = store.getNetworkData('emoney')
 
-                    // Get network price
-                    let emoneyPrice = store.getNetworkPrice('emoney')
-
-                    Promise.all([emoneyData, emoneyPrice, promiseCurrencies]).then(() => {
+                    Promise.all([emoneyData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('emoney')
 
@@ -368,10 +350,7 @@
                     // Get network data
                     let gravityData = store.getNetworkData('gravity')
 
-                    // Get network price
-                    let gravityPrice = store.getNetworkPrice('gravity')
-
-                    Promise.all([gravityData, gravityPrice, promiseCurrencies]).then(() => {
+                    Promise.all([gravityData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('gravity')
 
@@ -407,10 +386,7 @@
                     // Get network data
                     let stargazeData = store.getNetworkData('stargaze')
 
-                    // Get network price
-                    let stargazePrice = store.getNetworkPrice('stargaze')
-
-                    Promise.all([stargazeData, stargazePrice, promiseCurrencies]).then(() => {
+                    Promise.all([stargazeData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('stargaze')
 
@@ -446,10 +422,7 @@
                     // Get network data
                     let strideData = store.getNetworkData('stride')
 
-                    // Get network price
-                    let stridePrice = store.getNetworkPrice('stride')
-
-                    Promise.all([strideData, stridePrice, promiseCurrencies]).then(() => {
+                    Promise.all([strideData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('stride')
 
@@ -524,10 +497,7 @@
                     // Get network data
                     let desmosData = store.getNetworkData('desmos')
 
-                    // Get network price
-                    let desmosPrice = store.getNetworkPrice('desmos')
-
-                    Promise.all([desmosData, desmosPrice, promiseCurrencies]).then(() => {
+                    Promise.all([desmosData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('desmos')
 
@@ -563,10 +533,7 @@
                     // Get network data
                     let crescentData = store.getNetworkData('crescent')
 
-                    // Get network price
-                    let crescentPrice = store.getNetworkPrice('crescent')
-
-                    Promise.all([crescentData, crescentPrice, promiseCurrencies]).then(() => {
+                    Promise.all([crescentData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('crescent')
 
@@ -602,10 +569,7 @@
                     // Get network data
                     let omniflixData = store.getNetworkData('omniflix')
 
-                    // Get network price
-                    let omniflixPrice = store.getNetworkPrice('omniflix')
-
-                    Promise.all([omniflixData, omniflixPrice, promiseCurrencies]).then(() => {
+                    Promise.all([omniflixData, promiseCurrencies]).then(() => {
                         // Calc network RPDE
                         store.calcNetworkRPDEInCurrency('omniflix')
 

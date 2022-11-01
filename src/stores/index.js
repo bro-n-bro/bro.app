@@ -321,20 +321,20 @@ export const useGlobalStore = defineStore('global', {
 
 
         // Network price
-        async getNetworkPrice(network) {
-            await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${this.networks[network].coingecko_api}&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data[this.networks[network].coingecko_api].usd) {
-                        this.networks[network].price = data[this.networks[network].coingecko_api].usd
+        // async getNetworkPrice(network) {
+        //     await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${this.networks[network].coingecko_api}&vs_currencies=usd`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data[this.networks[network].coingecko_api].usd) {
+        //                 this.networks[network].price = data[this.networks[network].coingecko_api].usd
 
-                        this.networks[network].price_usdt = data[this.networks[network].coingecko_api].usd
-                        this.networks[network].price_atom = this.networks[network].price / this.ATOM_price
-                        this.networks[network].price_eth = this.networks[network].price / this.ETH_price
-                        this.networks[network].price_btc = this.networks[network].price / this.BTC_price
-                    }
-                })
-        },
+        //                 this.networks[network].price_usdt = data[this.networks[network].coingecko_api].usd
+        //                 this.networks[network].price_atom = this.networks[network].price / this.ATOM_price
+        //                 this.networks[network].price_eth = this.networks[network].price / this.ETH_price
+        //                 this.networks[network].price_btc = this.networks[network].price / this.BTC_price
+        //             }
+        //         })
+        // },
 
 
         // Network balance
@@ -380,8 +380,8 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
-        // Networks health
-        getNetworksHealth() {
+        // Networks info
+        getNetworksInfo() {
             fetch('https://rpc.bronbro.io/bro_data/')
                 .then(response => response.json())
                 .then(data => {
@@ -389,6 +389,12 @@ export const useGlobalStore = defineStore('global', {
                         if (this.networks[el.network]) {
                             this.networks[el.network].health = el.health
                             this.networks[el.network].apr = el.apr
+
+                            this.networks[el.network].price = el.price
+                            this.networks[el.network].price_usdt = el.price
+                            this.networks[el.network].price_atom = el.price / this.ATOM_price
+                            this.networks[el.network].price_eth = el.price / this.ETH_price
+                            this.networks[el.network].price_btc = el.price / this.BTC_price
 
                             switch (true) {
                                 case el.health >= 0 && el.health < 7:
@@ -421,20 +427,13 @@ export const useGlobalStore = defineStore('global', {
 
         // Currencies price
         async getCurrenciesPrice() {
-            // ATOM price
-            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=cosmos&vs_currencies=usd`)
+            await fetch('https://rpc.bronbro.io/get_prices')
                 .then(response => response.json())
-                .then(data => this.ATOM_price = data.cosmos.usd)
-
-            // ETH price
-            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => this.ETH_price = data.ethereum.usd)
-
-            // BTC price
-            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
-                .then(response => response.json())
-                .then(data => this.BTC_price = data.bitcoin.usd)
+                .then(data => {
+                    this.ATOM_price = data.cosmos
+                    this.ETH_price = data.ethereum
+                    this.BTC_price = data.bitcoin
+                })
         },
 
 
