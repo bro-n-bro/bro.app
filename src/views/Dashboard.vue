@@ -1311,6 +1311,27 @@
 
         max-width: calc(100% - 40px);
         margin-left: 10px;
+        transition: text-shadow .2s linear;
+    }
+
+    .dashboard .name:hover{
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+         2px 5px 15px rgba(149, 15, 255, 0.45);
     }
 
 
@@ -1326,6 +1347,27 @@
         white-space: nowrap;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
+        transition: text-shadow .2s linear;
+    }
+
+    .dashboard .tokens:hover{
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+         2px 5px 15px rgba(149, 15, 255, 0.45);
     }
 
 
@@ -1364,7 +1406,7 @@
         min-width: 24px;
         height: 12px;
 
-        transition: width .2s linear;
+        transition: .2s linear;
 
         border-radius: 10px;
     }
@@ -1394,6 +1436,26 @@
         background: #c5811b;
     }
 
+    .dashboard .visualization .staked:hover
+    {
+        box-shadow: 2px 5px 15px rgba(149, 15, 255, 0.45);
+    }
+
+    .dashboard .visualization .liquid:hover
+    {
+        box-shadow: 2px 5px 15px rgba(235, 87, 87, 0.45);
+    }
+
+    .dashboard .visualization .rewards:hover
+    {
+        box-shadow: 2px 5px 15px rgba(27, 197, 98, 0.45);
+    }
+
+    .dashboard .visualization .IBC:hover
+    {
+        box-shadow: 2px 5px 15px rgba(197, 129, 27, 0.45);
+    }
+
 
     .dashboard .stats
     {
@@ -1418,7 +1480,29 @@
         align-items: center;
         flex-wrap: nowrap;
         justify-content: space-between;
+        transition: text-shadow .2s linear;
     }
+
+    .dashboard .stats > *:hover{
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+         2px 5px 15px rgba(149, 15, 255, 0.45);
+    }
+
 
     .dashboard .stats > * + *
     {
@@ -1634,6 +1718,27 @@
         pointer-events: auto;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
+        transition: text-shadow .2s linear;
+    }
+
+    .dashboard .account .balance:hover{
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
+		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
+         2px 5px 15px rgba(149, 15, 255, 0.45);
     }
 
 
