@@ -427,7 +427,7 @@ export const useGlobalStore = defineStore('global', {
 
         // Currencies price
         async getCurrenciesPrice() {
-            await fetch('https://rpc.bronbro.io/get_prices')
+            await fetch('https://rpc.bronbro.io/get_prices/')
                 .then(response => response.json())
                 .then(data => {
                     this.ATOM_price = data.cosmos
