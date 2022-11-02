@@ -269,10 +269,6 @@ export const useGlobalStore = defineStore('global', {
                                     }
 
                                     this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
-
-                                    // Recalc
-                                    this.calcNetworkTokensSum(baseNetwork)
-                                    this.calcNetworkBalance(baseNetwork)
                                 })
                         })
                     }
@@ -318,23 +314,6 @@ export const useGlobalStore = defineStore('global', {
                     }
                 })
         },
-
-
-        // Network price
-        // async getNetworkPrice(network) {
-        //     await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${this.networks[network].coingecko_api}&vs_currencies=usd`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             if (data[this.networks[network].coingecko_api].usd) {
-        //                 this.networks[network].price = data[this.networks[network].coingecko_api].usd
-
-        //                 this.networks[network].price_usdt = data[this.networks[network].coingecko_api].usd
-        //                 this.networks[network].price_atom = this.networks[network].price / this.ATOM_price
-        //                 this.networks[network].price_eth = this.networks[network].price / this.ETH_price
-        //                 this.networks[network].price_btc = this.networks[network].price / this.BTC_price
-        //             }
-        //         })
-        // },
 
 
         // Network balance
@@ -430,15 +409,21 @@ export const useGlobalStore = defineStore('global', {
             await fetch('https://rpc.bronbro.io/get_prices/')
                 .then(response => response.json())
                 .then(data => {
-                    this.ATOM_price = data.cosmos
-                    this.ETH_price = data.ethereum
-                    this.BTC_price = data.bitcoin
+                    this.ATOM_price = parseFloat(data.cosmos)
+                    this.ETH_price = parseFloat(data.ethereum)
+                    this.BTC_price = parseFloat(data.bitcoin)
                 })
         },
 
 
         // Account balance
         updateAccountBalance() {
+            // Recalc
+            for (let network in this.networks) {
+                this.calcNetworkTokensSum(network)
+                this.calcNetworkBalance(network)
+            }
+
             this.account.delegations_price = 0
 
             this.account.balance_usdt = 0

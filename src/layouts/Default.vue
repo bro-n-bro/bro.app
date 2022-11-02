@@ -601,10 +601,6 @@
                     })
                 }
             })
-
-
-            // Update account balance
-            setTimeout(() => store.updateAccountBalance())
         }
     })
 
