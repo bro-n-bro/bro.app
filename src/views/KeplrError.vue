@@ -5,10 +5,12 @@
 
             <div class="title" v-html="$t('message.keplr_error_title')"></div>
 
-            <button class="connect_btn">
-                <img src="../assets/images/keplr_logo.png" alt="" class="icon">
-                <span>{{ $t('message.keplr_install_btn') }}</span>
-            </button>
+            <div class="link">
+                <a href="https://www.keplr.app/download" target="_blank" rel="noopener nofollow">
+                    <img src="../assets/images/keplr_logo.png" alt="" class="icon">
+                    <span>{{ $t('message.keplr_install_btn') }}</span>
+                </a>
+            </div>
         </div>
     </section>
 </template>
@@ -49,7 +51,20 @@
 }
 
 
-.wallet_error .connect_btn
+.wallet_error .link
+{
+    display: flex;
+
+    margin-top: 40px;
+
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+
+.wallet_error .link a
 {
     color: #fff;
     font-weight: 600;
@@ -57,8 +72,10 @@
 
     display: flex;
 
-    margin: 40px auto 0;
+    margin: 0 auto;
     padding: 13px 30px;
+
+    text-decoration: none;
 
     border-radius: 20px;
     background: #950fff;
@@ -70,7 +87,7 @@
 }
 
 
-.wallet_error .connect_btn .icon
+.wallet_error .link a .icon
 {
     display: block;
 

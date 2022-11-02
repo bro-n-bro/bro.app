@@ -1,5 +1,5 @@
 const network = {
-    name: 'Omniflix hub',
+    name: 'OmniFlix Network',
     status: false,
     lcd_api: 'https://lcd.omniflixhub-1.bronbro.io',
     rpc_api: 'https://rpc.omniflixhub-1.bronbro.io',

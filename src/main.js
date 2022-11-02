@@ -3,7 +3,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import i18n from './locale'
-import VStickyElement from 'vue-sticky-element'
 
 
 // Events
@@ -19,7 +18,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
-app.use(VStickyElement)
 
 
 // Vue provide
@@ -49,4 +47,6 @@ const clickOutside = {
     unmounted: el => document.removeEventListener('click', el.clickOutsideEvent),
 }
 
+
+// Directives
 app.directive('clickOut', clickOutside).mount('#app')

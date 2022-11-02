@@ -1,8 +1,6 @@
 <template>
     <!-- Header -->
-    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <Header />
-    </vue-sticky-element>
 
     <!-- Router view -->
     <RouterView />
@@ -74,6 +72,7 @@
     border-radius: 20px;
     background: #950fff;
 }
+
 
 
 </style>

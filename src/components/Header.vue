@@ -40,7 +40,7 @@
 <style>
     header
     {
-        position: relative;
+        position: fixed;
         z-index: 90;
         top: 0;
         left: 0;

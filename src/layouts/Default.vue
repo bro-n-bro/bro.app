@@ -1,12 +1,9 @@
 <template>
     <!-- Header -->
-    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <Header />
-    </vue-sticky-element>
 
     <!-- Notifications -->
     <transition name="fade" mode="out-in" appear type="animation">
-    <vue-sticky-element visibleOnDirection="down" stickMode="element-start">
     <section class="notifications">
         <div class="cont">
             <div class="data">
@@ -18,7 +15,6 @@
             </div>
         </div>
     </section>
-    </vue-sticky-element>
     </transition>
 
     <!-- Router view -->
@@ -62,16 +58,34 @@
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default')
 
+
         // Change Keplr account
         window.addEventListener('keplr_keystorechange', () => {
             store.reset()
             emitter.emit('connectWallet')
         })
 
+
         // Refresh page
         if(store.auth && store.recalc){
             emitter.emit('connectWallet')
         }
+
+
+        // Sticky notification
+        const notificatios = document.querySelector('.notifications')
+
+        notificatios.stickyEvent = () => {
+            setTimeout(() => {
+                window.scrollY > 32
+                    ? notificatios.classList.add('stuck')
+                    : notificatios.classList.remove('stuck')
+            })
+        }
+
+
+        // Scroll event
+        document.addEventListener('scroll', notificatios.stickyEvent)
     })
 
 
@@ -661,8 +675,14 @@
 <style>
     .notifications
     {
-        margin-bottom: 30px;
+        position: fixed;
+        z-index: 91;
+        top: 132px;
+        left: 0;
 
+        width: 100%;
+
+        transition: top .2s linear;
         pointer-events: none;
     }
 
@@ -678,7 +698,9 @@
         max-width: 100%;
         margin-right: auto;
         margin-left: auto;
-        padding: 20px;
+        padding: 19px 20px;
+
+        transition: .2s linear;
 
         border-radius: 20px;
         background: #141414;
@@ -734,17 +756,19 @@
     }
 
 
-    .notifications.vue-sticky-element--stuck
+
+    .notifications.stuck
     {
-        transform: translateY(0%) !important;
+        top: 31px;
     }
 
-    .notifications.vue-sticky-element--stuck .data
+    .notifications.stuck .data
     {
         width: calc(100% - 747px);
-        margin: 10px 0 10px 240px;
         padding-top: 10px;
         padding-bottom: 10px;
+
+        transform: translateX(-152px);
     }
 
 </style>

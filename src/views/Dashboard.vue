@@ -1311,27 +1311,29 @@
 
         max-width: calc(100% - 40px);
         margin-left: 10px;
+
         transition: text-shadow .2s linear;
     }
 
-    .dashboard .name:hover{
-        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-         2px 5px 15px rgba(149, 15, 255, 0.45);
+    .dashboard .name:hover
+    {
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
+        0   -1px 0   rgba( 149, 15, 255, .6 ),
+        -0    1px 0   rgba( 149, 15, 255, .6 ),
+        0    1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -0   0   rgba( 149, 15, 255, .6 ),
+        1px -0   0   rgba( 149, 15, 255, .6 ),
+        -1px  0   0   rgba( 149, 15, 255, .6 ),
+        1px  0   0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        2px 5px 15px rgba(149, 15, 255, .45);
     }
 
 
@@ -1343,31 +1345,32 @@
 
         margin-bottom: 10px;
 
+        transition: text-shadow .2s linear;
         text-align: center;
         white-space: nowrap;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
-        transition: text-shadow .2s linear;
     }
 
-    .dashboard .tokens:hover{
-        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-         2px 5px 15px rgba(149, 15, 255, 0.45);
+    .dashboard .tokens:hover
+    {
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
+        0   -1px 0   rgba( 149, 15, 255, .6 ),
+        -0    1px 0   rgba( 149, 15, 255, .6 ),
+        0    1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -0   0   rgba( 149, 15, 255, .6 ),
+        1px -0   0   rgba( 149, 15, 255, .6 ),
+        -1px  0   0   rgba( 149, 15, 255, .6 ),
+        1px  0   0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        2px 5px 15px rgba(149, 15, 255, .45);
     }
 
 
@@ -1438,22 +1441,22 @@
 
     .dashboard .visualization .staked:hover
     {
-        box-shadow: 2px 5px 15px rgba(149, 15, 255, 0.45);
+        box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
     }
 
     .dashboard .visualization .liquid:hover
     {
-        box-shadow: 2px 5px 15px rgba(235, 87, 87, 0.45);
+        box-shadow: 2px 5px 15px rgba(235, 87, 87, .45);
     }
 
     .dashboard .visualization .rewards:hover
     {
-        box-shadow: 2px 5px 15px rgba(27, 197, 98, 0.45);
+        box-shadow: 2px 5px 15px rgba(27, 197, 98, .45);
     }
 
     .dashboard .visualization .IBC:hover
     {
-        box-shadow: 2px 5px 15px rgba(197, 129, 27, 0.45);
+        box-shadow: 2px 5px 15px rgba(197, 129, 27, .45);
     }
 
 
@@ -1476,31 +1479,33 @@
     {
         display: flex;
 
+        transition: text-shadow .2s linear;
+
         align-content: center;
         align-items: center;
         flex-wrap: nowrap;
         justify-content: space-between;
-        transition: text-shadow .2s linear;
     }
 
-    .dashboard .stats > *:hover{
-        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-         2px 5px 15px rgba(149, 15, 255, 0.45);
+    .dashboard .stats > *:hover
+    {
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
+        0   -1px 0   rgba( 149, 15, 255, .6 ),
+        -0    1px 0   rgba( 149, 15, 255, .6 ),
+        0    1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -0   0   rgba( 149, 15, 255, .6 ),
+        1px -0   0   rgba( 149, 15, 255, .6 ),
+        -1px  0   0   rgba( 149, 15, 255, .6 ),
+        1px  0   0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        2px 5px 15px rgba(149, 15, 255, .45);
     }
 
 
@@ -1714,31 +1719,38 @@
 
         margin-bottom: 18px;
 
+        transition: text-shadow .2s linear;
         text-align: center;
         pointer-events: auto;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
-        transition: text-shadow .2s linear;
     }
 
-    .dashboard .account .balance:hover{
-        text-shadow: -0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0   -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		 0    1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px -0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		 1px  0   0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px -1px 0   rgba( 149, 15, 255, 0.6 ),
-		-1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-		 1px  1px 0   rgba( 149, 15, 255, 0.6 ),
-         2px 5px 15px rgba(149, 15, 255, 0.45);
+    .dashboard .account .balance:hover
+    {
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
+        0   -1px 0   rgba( 149, 15, 255, .6 ),
+        -0    1px 0   rgba( 149, 15, 255, .6 ),
+        0    1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -0   0   rgba( 149, 15, 255, .6 ),
+        1px -0   0   rgba( 149, 15, 255, .6 ),
+        -1px  0   0   rgba( 149, 15, 255, .6 ),
+        1px  0   0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        2px 5px 15px rgba(149, 15, 255, .45);
+    }
+
+
+    .dashboard .account .stats
+    {
+        pointer-events: auto;
     }
 
 
