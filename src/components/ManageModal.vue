@@ -907,7 +907,9 @@
 
     #manage_modal .validate_from .label
     {
-        line-height: 19px;
+        color: #8e8e8e;
+        font-size: 14px;
+        line-height: 17px;
 
         margin-bottom: 16px;
     }
