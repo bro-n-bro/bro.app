@@ -26,7 +26,7 @@
 
                     <div class="validator">
                         <div class="logo">
-                            <img src="../assets/images/logo_mini_black.svg" alt="">
+                            <img src="../assets/images/logo_mini.svg" alt="">
                         </div>
 
                         <div>
@@ -95,30 +95,6 @@
                         </div>
                     </div>
 
-                    <div class="amount">
-                        <div class="label">
-                            <template v-if="form.type == 'delegate'">
-                            {{ $t('message.manage_modal_amount') }}
-                            </template>
-
-                            <template v-else>
-                            {{ $t('message.manage_modal_amount2') }}
-                            </template>
-                        </div>
-
-                        <div class="field">
-                            <input type="text" class="input" v-model="form.amount" @input="setAmount" placeholder="0">
-
-                            <div class="unit">
-                                {{ store.networks[store.networkManageModal].token_name }}
-                            </div>
-
-                            <button type="button" class="max_btn" @click.prevent="setMAX">
-                                {{ $t('message.manage_modal_max_btn') }}
-                            </button>
-                        </div>
-                    </div>
-
                     <div class="validate_from">
                         <div class="label" v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_validator_label') }}
@@ -151,6 +127,30 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="amount">
+                        <div class="label">
+                            <template v-if="form.type == 'delegate'">
+                            {{ $t('message.manage_modal_amount') }}
+                            </template>
+
+                            <template v-else>
+                            {{ $t('message.manage_modal_amount2') }}
+                            </template>
+                        </div>
+
+                        <div class="field">
+                            <input type="text" class="input" v-model="form.amount" @input="setAmount" placeholder="0">
+
+                            <div class="unit">
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
+
+                            <button type="button" class="max_btn" @click.prevent="setMAX">
+                                {{ $t('message.manage_modal_max_btn') }}
+                            </button>
                         </div>
 
                         <div class="fees">
@@ -675,8 +675,8 @@
     {
         display: flex;
 
-        width: 51px;
-        height: 45px;
+        width: 65px;
+        height: 58px;
 
         align-content: center;
         align-items: center;
@@ -694,23 +694,23 @@
 
     #manage_modal .validator .logo + *
     {
-        width: calc(100% - 59px);
+        width: calc(100% - 73px);
     }
 
 
     #manage_modal .validator .name
     {
-        font-size: 20px;
-        font-weight: 600;
-        line-height: 24px;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 36px;
     }
 
 
     #manage_modal .validator .commission
     {
-        color: #f2f2f2;
-        font-size: 14px;
-        line-height: 17px;
+        color: #8e8e8e;
+        font-size: 12px;
+        line-height: 15px;
 
         margin-top: 4px;
     }
@@ -728,10 +728,12 @@
     #manage_modal .notice
     {
         margin-top: 20px;
-        padding: 13px;
+        padding: 14px;
 
-        border: 1px solid rgba(255, 255, 255, .1);
-        border-radius: 20px;
+        text-align: center;
+
+        border-radius: 17px;
+        background: #191919;
     }
 
 
@@ -740,15 +742,19 @@
         font-weight: 600;
         line-height: 19px;
 
-        margin-bottom: 14px;
+        margin-bottom: 6px;
     }
 
 
     #manage_modal .notice .desc
     {
         color: #8e8e8e;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 130%;
+
+        width: 324px;
+        max-width: 100%;
+        margin: 0 auto;
     }
 
 
@@ -760,9 +766,6 @@
 
     #manage_modal .tokens > *
     {
-        color: #fff;
-        line-height: 19px;
-
         display: flex;
 
         align-content: center;
@@ -774,6 +777,14 @@
     #manage_modal .tokens > * + *
     {
         margin-top: 16px;
+    }
+
+
+    #manage_modal .tokens .label
+    {
+        color: #8e8e8e;
+        font-size: 14px;
+        line-height: 17px;
     }
 
 
@@ -795,7 +806,9 @@
 
     #manage_modal .amount .label
     {
-        line-height: 19px;
+        color: #8e8e8e;
+        font-size: 14px;
+        line-height: 17px;
 
         margin-bottom: 16px;
     }
@@ -813,13 +826,12 @@
         font-family: var(--font_family);
         font-size: var(--font_size);
         font-weight: 500;
-        line-height: 19px;
 
         display: block;
 
         width: 100%;
         height: 55px;
-        padding: 0 154px 0 9px;
+        padding: 0 154px 2px 9px;
 
         transition: border-color .2s linear;
 
@@ -913,13 +925,12 @@
         font-family: var(--font_family);
         font-size: var(--font_size);
         font-weight: 500;
-        line-height: 19px;
 
         display: block;
 
         width: 100%;
         height: 55px;
-        padding: 0 77px 0 9px;
+        padding: 0 77px 3px 9px;
 
         transition: border-color .2s linear;
 
@@ -965,8 +976,8 @@
     {
         display: block;
 
-        width: 15px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
     }
 
     #manage_modal .validate_from .input:read-only ~ .arr
@@ -999,8 +1010,8 @@
     {
         display: block;
 
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
     }
 
     #manage_modal .validate_from .input:read-only ~ .clear_btn
@@ -1078,13 +1089,13 @@
     }
 
 
-    #manage_modal .validate_from .fees
+    #manage_modal .fees
     {
-        color: #f2f2f2;
+        color: #555;
         font-size: 14px;
         line-height: 17px;
 
-        margin-top: 14px;
+        margin-top: 10px;
 
         font-feature-settings: 'pnum' on, 'lnum' on;
     }

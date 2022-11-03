@@ -61,7 +61,7 @@ export default {
             'manage_modal_amount': 'Amount to Delegate',
             'manage_modal_amount2': 'Amount to Redelegate',
             'manage_modal_max_btn': 'MAX',
-            'manage_modal_validator_label': 'Validator to delegate',
+            'manage_modal_validator_label': 'Validator to Delegate',
             'manage_modal_validator_label2': 'Validator from Redelegate',
             'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
             'manage_modal_back_btn': 'Back',
