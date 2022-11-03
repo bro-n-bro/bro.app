@@ -272,7 +272,7 @@ button
 .modal
 {
     position: fixed;
-    z-index: 90;
+    z-index: 100;
     top: 0;
     left: 0;
 
