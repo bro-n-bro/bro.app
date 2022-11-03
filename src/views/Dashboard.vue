@@ -1441,22 +1441,22 @@
 
     .dashboard .visualization .staked:hover
     {
-        box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
+        box-shadow: 2px 5px 15px rgba(149, 15, 255, .65);
     }
 
     .dashboard .visualization .liquid:hover
     {
-        box-shadow: 2px 5px 15px rgba(235, 87, 87, .45);
+        box-shadow: 2px 5px 15px rgba(235, 87, 87, .65);
     }
 
     .dashboard .visualization .rewards:hover
     {
-        box-shadow: 2px 5px 15px rgba(27, 197, 98, .45);
+        box-shadow: 2px 5px 15px rgba(27, 197, 98, .65);
     }
 
     .dashboard .visualization .IBC:hover
     {
-        box-shadow: 2px 5px 15px rgba(197, 129, 27, .45);
+        box-shadow: 2px 5px 15px rgba(197, 129, 27, .65);
     }
 
 

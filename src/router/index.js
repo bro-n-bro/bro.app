@@ -44,13 +44,13 @@ const router = createRouter({
 })
 
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
 	// Keplr
-	!window?.keplr && to.name != 'KeplrError'
+	!window.keplr && to.name != 'KeplrError'
 		? router.push({ name: 'KeplrError' })
 		: next()
 
-	window?.keplr && to.name == 'KeplrError'
+	window.keplr && to.name == 'KeplrError'
 		? router.push({ name: 'Dashboard' })
 		: next()
 })

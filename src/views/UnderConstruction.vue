@@ -9,3 +9,15 @@
         </div>
     </section>
 </template>
+
+
+<script setup>
+    import { useGlobalStore } from '@/stores'
+
+
+    const store = useGlobalStore()
+
+
+    // Pre connect
+    store.preConnect()
+</script>

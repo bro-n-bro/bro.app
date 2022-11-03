@@ -75,6 +75,7 @@
     margin: 0 auto;
     padding: 13px 30px;
 
+    transition: box-shadow .2s linear;
     text-decoration: none;
 
     border-radius: 20px;
@@ -94,6 +95,11 @@
     width: 27px;
     height: 27px;
     margin-right: 6px;
+}
+
+.wallet_error .link a:hover
+{
+    box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
 }
 
 </style>

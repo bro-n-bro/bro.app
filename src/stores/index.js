@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useLocalStorage } from '@vueuse/core'
 import { CyberClient } from '@cybercongress/cyber-js'
 import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
+import { fromBech32, toBech32 } from '@cosmjs/encoding'
 
 // Account
 import account from '@/stores/account'
@@ -72,6 +73,36 @@ export const useGlobalStore = defineStore('global', {
     }),
 
     actions: {
+        // Pre connect
+        async preConnect() {
+            // Keplr connect
+            const chainId = 'cosmoshub-4'
+
+            window.keplr.enable(chainId)
+
+            // Cosmos singer
+            const offlineSigner = window.getOfflineSigner(chainId),
+                accounts = await offlineSigner.getAccounts(),
+                key = await window.keplr.getKey(chainId)
+
+
+            // Pre wallets
+            this.$patch({
+                wallets: {
+                    'cosmoshub': accounts[0].address,
+                    'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data)
+                }
+            })
+
+
+            // Set user info
+            this.setUserInfo({
+                userName: key.name,
+                auth: true
+            })
+        },
+
+
         // Set user info
         async setUserInfo(user) {
             this.account.userName = user.userName

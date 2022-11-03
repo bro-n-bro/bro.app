@@ -8,9 +8,19 @@
 
 
 <script setup>
+    import { useGlobalStore } from '@/stores'
     import { RouterView } from 'vue-router'
 
+
+    // Components
     import Header  from '../components/Header.vue'
+
+
+    const store = useGlobalStore()
+
+
+    // Pre connect
+    store.preConnect()
 </script>
 
 
@@ -66,6 +76,7 @@
     margin-top: 40px;
     padding: 17px 30px;
 
+    transition: box-shadow .2s linear;
     vertical-align: top;
     text-decoration: none;
 
@@ -73,6 +84,9 @@
     background: #950fff;
 }
 
-
+.error_info .back_btn:hover
+{
+    box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
+}
 
 </style>
