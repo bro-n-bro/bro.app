@@ -68,7 +68,8 @@ const network = {
     total_annual_provision: 0,
     exponent: 1000000000000000000,
     tokens_sum: 0,
-    unbonding_time: 0
+    unbonding_time: 0,
+    gas: '250000'
 }
 
 export default network

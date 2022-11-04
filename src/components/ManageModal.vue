@@ -290,28 +290,26 @@
                 if(form.type == 'delegate') {
                     if(store.networkManageModal == 'evmos'){
                         try {
-                            fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
+                            // Create request
+                            await fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
                                 .then(response => response.json())
                                 .then(async data => {
                                     const chain = {
                                         chainId: 9001,
                                         cosmosChainId: store.networks.evmos.chainId,
-                                    }
-
-                                    const sender = {
+                                    },
+                                    sender = {
                                         accountAddress: store.wallets.evmos,
                                         sequence: data.account.base_account.sequence,
                                         accountNumber: data.account.base_account.account_number,
                                         pubkey: data.account.base_account.pub_key.key,
-                                    }
-
-                                    const fee = {
+                                    },
+                                    fee = {
                                         amount: '0',
                                         denom: store.networks.evmos.denom,
-                                        gas: '20000',
-                                    }
-
-                                    const params = {
+                                        gas: store.networks.evmos.gas,
+                                    },
+                                    params = {
                                         validatorAddress: store.networks.evmos.validator,
                                         amount: `${form.amount * store.networks.evmos.exponent}`,
                                         denom: store.networks.evmos.denom,
@@ -374,13 +372,26 @@
                                     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                                 })
                         } catch (error) {
-                            console.log(error)
+                            // Get error title
+                            store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                            // Disable loader
+                            store.loaderManageModal = !store.loaderManageModal
+
+                            // Open error modal
+                            emitter.emit('close_manage_modal')
+                            emitter.emit('open_manage_error_modal')
                         }
                     } else {
                         try {
+                            // Create request
                             const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                                 rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                                gasPrice = [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner, { gasPrice }),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
                                     value: {
@@ -391,15 +402,18 @@
                                             amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
                                         }
                                     }
-                                },
-                                fee = {
-                                    amount: [{
-                                        denom: store.networks[store.networkManageModal].denom,
-                                        amount: '0'
-                                    }],
-                                    gas: '300000'
-                                },
-                                result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
+                                }
+
+                            if(store.networkManageModal != 'emoney'){
+                                const gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+                            }
+
+                            const fee = {
+                                amount: gasPrice,
+                                gas: store.networkManageModal != 'emoney' ? `${gasUsed}` : store.networks.emoney.gas
+                            }
+
+                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
 
                             // Disable loader
                             store.loaderManageModal = !store.loaderManageModal
@@ -437,28 +451,26 @@
                 if(form.type == 'redelegate') {
                     if(store.networkManageModal == 'evmos'){
                         try {
+                            // Create request
                             fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
                                 .then(response => response.json())
                                 .then(async data => {
                                     const chain = {
                                         chainId: 9001,
                                         cosmosChainId: store.networks.evmos.chainId,
-                                    }
-
-                                    const sender = {
+                                    },
+                                    sender = {
                                         accountAddress: store.wallets.evmos,
                                         sequence: data.account.base_account.sequence,
                                         accountNumber: data.account.base_account.account_number,
                                         pubkey: data.account.base_account.pub_key.key,
-                                    }
-
-                                    const fee = {
+                                    },
+                                    fee = {
                                         amount: '0',
                                         denom: store.networks.evmos.denom,
-                                        gas: '20000',
-                                    }
-
-                                    const params = {
+                                        gas: store.networks.evmos.gas,
+                                    },
+                                    params = {
                                         validatorSrcAddress: form.validator.operator_address,
                                         validatorDstAddress: store.networks.evmos.validator,
                                         amount: `${form.amount * store.networks.evmos.exponent}`,
@@ -526,9 +538,14 @@
                         }
                     } else {
                         try {
+                            // Create request
                             const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                                 rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                                gasPrice = [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner, { gasPrice }),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
                                     value: {
@@ -540,15 +557,18 @@
                                             amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
                                         }
                                     }
-                                },
-                                fee = {
-                                    amount: [{
-                                        denom: store.networks[store.networkManageModal].denom,
-                                        amount: '0'
-                                    }],
-                                    gas: '20000'
-                                },
-                                result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
+                                }
+
+                            if(store.networkManageModal != 'emoney'){
+                                const gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+                            }
+
+                            const fee = {
+                                amount: gasPrice,
+                                gas: store.networkManageModal != 'emoney' ? `${gasUsed}` : store.networks.emoney.gas
+                            }
+
+                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
 
                             if(result.code != 0){
                                 // Get error title
