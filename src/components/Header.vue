@@ -26,6 +26,7 @@
 
 
 <script setup>
+    import { onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     import IPFS from '../components/header/IPFS.vue'
@@ -34,6 +35,22 @@
     import ConnectBtn from '../components/header/ConnectBtn.vue'
 
     const store = useGlobalStore()
+
+
+    onMounted(() => {
+        // Sticky header
+        const header = document.querySelector('header')
+
+        header.stickyEvent = () => {
+            setTimeout(() => {
+                window.scrollY > 32
+                    ? header.classList.add('stuck')
+                    : header.classList.remove('stuck')
+            })
+        }
+
+        document.addEventListener('scroll', header.stickyEvent)
+    })
 </script>
 
 
@@ -47,9 +64,10 @@
 
         width: 100%;
         padding: 20px 0;
+    }
 
-        transition: .2s linear;
-
+    header.stuck
+    {
         background: var(--bg);
     }
 

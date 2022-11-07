@@ -83,8 +83,6 @@
             })
         }
 
-
-        // Scroll event
         document.addEventListener('scroll', notificatios.stickyEvent)
     })
 
@@ -645,7 +643,7 @@
     .notifications
     {
         position: fixed;
-        z-index: 91;
+        z-index: 89;
         top: 132px;
         left: 0;
 
@@ -729,6 +727,7 @@
     .notifications.stuck
     {
         top: 31px;
+        z-index: 91;
     }
 
     .notifications.stuck .data
