@@ -5,7 +5,7 @@ const network = {
     rpc_api: 'https://rpc.stargaze-1.bronbro.io',
     validator: 'starsvaloper1y58hfnm90r4efhlydx0gavz57lvm7k6uulkg3h',
     denom: 'ustars',
-    token_name: 'STAR',
+    token_name: 'STARS',
     chainId: 'stargaze-1',
     coingecko_api: 'stargaze',
 

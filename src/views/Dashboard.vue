@@ -20,8 +20,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.evmos.health, 2),
-                            color: store.networks.evmos.health_color,
-                            APR: $filters.toFixed(store.networks.evmos.apr * 100, 2)
+                            color: store.networks.evmos.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/evmos_logo.png" alt="">
@@ -107,8 +106,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.juno.health, 2),
-                            color: store.networks.juno.health_color,
-                            APR: $filters.toFixed(store.networks.juno.apr * 100, 2)
+                            color: store.networks.juno.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/juno_logo.png" alt="">
@@ -194,8 +192,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.cosmoshub.health, 2),
-                            color: store.networks.cosmoshub.health_color,
-                            APR: $filters.toFixed(store.networks.cosmoshub.apr * 100, 2)
+                            color: store.networks.cosmoshub.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/cosmos_logo.png" alt="">
@@ -281,8 +278,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.bostrom.health, 2),
-                            color: store.networks.bostrom.health_color,
-                            APR: $filters.toFixed(store.networks.bostrom.apr * 100, 2)
+                            color: store.networks.bostrom.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/bostrom_logo.png" alt="">
@@ -370,8 +366,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.emoney.health, 2),
-                            color: store.networks.emoney.health_color,
-                            APR: $filters.toFixed(store.networks.emoney.apr * 100, 2)
+                            color: store.networks.emoney.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/e-money_logo.png" alt="">
@@ -457,8 +452,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.desmos.health, 2),
-                            color: store.networks.desmos.health_color,
-                            APR: $filters.toFixed(store.networks.desmos.apr * 100, 2)
+                            color: store.networks.desmos.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/desmos_logo.png" alt="">
@@ -610,8 +604,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.osmosis.health, 2),
-                            color: store.networks.osmosis.health_color,
-                            APR: $filters.toFixed(store.networks.osmosis.apr * 100, 2)
+                            color: store.networks.osmosis.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/osmosis_logo.png" alt="">
@@ -697,8 +690,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.crescent.health, 2),
-                            color: store.networks.crescent.health_color,
-                            APR: $filters.toFixed(store.networks.crescent.apr * 100, 2)
+                            color: store.networks.crescent.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/crescent_logo.png" alt="">
@@ -786,8 +778,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.gravity.health, 2),
-                            color: store.networks.gravity.health_color,
-                            APR: $filters.toFixed(store.networks.gravity.apr * 100, 2)
+                            color: store.networks.gravity.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/g-bridge_logo.png" alt="">
@@ -873,8 +864,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.stargaze.health, 2),
-                            color: store.networks.stargaze.health_color,
-                            APR: $filters.toFixed(store.networks.stargaze.apr * 100, 2)
+                            color: store.networks.stargaze.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/stargaze_logo.png" alt="">
@@ -960,8 +950,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.omniflix.health, 2),
-                            color: store.networks.omniflix.health_color,
-                            APR: $filters.toFixed(store.networks.omniflix.apr * 100, 2)
+                            color: store.networks.omniflix.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/omniflix_logo.png" alt="">
@@ -1047,8 +1036,7 @@
                     <template v-else>
                         <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                             health: $filters.toFixed(store.networks.stride.health, 2),
-                            color: store.networks.stride.health_color,
-                            APR: $filters.toFixed(store.networks.stride.apr * 100, 2)
+                            color: store.networks.stride.health_color
                         }))">
                             <div class="logo">
                                 <img src="../assets/images/stride_logo.png" alt="">
@@ -1560,6 +1548,11 @@
 
         border-color: #950fff;
         background: #950fff;
+    }
+
+    .dashboard .disabled:not(.default) .delegate_btn
+    {
+        opacity: 0.65;
     }
 
 

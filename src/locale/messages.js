@@ -36,7 +36,7 @@ export default {
             'username_notice': "Chosen keplr account",
             'avatar_notice': "You Moon passport avatar",
 
-            'network_notice': "This network health is {health}. That's why it's {color}. The APR of this network is {APR}. The frequency of blinking depends on the network APR value.",
+            'network_notice': "The network healt is {health}. That’s why it’s {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network.",
             'network_sum_notice': "The sum of your tokens in {network} network",
             'network_staked_tokens_notice': "The amount of staked tokens is {value} {denom}",
             'network_liquid_tokens_notice': "The amount of liquid tokens is {value} {denom}",
