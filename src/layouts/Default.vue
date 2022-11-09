@@ -28,6 +28,9 @@
 
     <!-- Manage error modal -->
     <ManageErrorModal v-if="store.showManageErrorModal" />
+
+    <!-- Feedback -->
+    <Feedback />
 </template>
 
 
@@ -42,6 +45,7 @@
     import ManageModal  from '../components/ManageModal.vue'
     import ManageSuccessModal  from '../components/ManageSuccessModal.vue'
     import ManageErrorModal  from '../components/ManageErrorModal.vue'
+    import Feedback  from '../components/Feedback.vue'
 
     // Config
     import desmosConfig from '@/config/chain/desmos'

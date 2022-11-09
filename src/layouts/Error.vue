@@ -4,6 +4,9 @@
 
     <!-- Router view -->
     <RouterView />
+
+    <!-- Feedback -->
+    <Feedback />
 </template>
 
 
@@ -11,13 +14,11 @@
     import { useGlobalStore } from '@/stores'
     import { RouterView } from 'vue-router'
 
-
     // Components
     import Header  from '../components/Header.vue'
-
+    import Feedback  from '../components/Feedback.vue'
 
     const store = useGlobalStore()
-
 
     // Pre connect
     store.preConnect()
@@ -88,5 +89,8 @@
 {
     box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
 }
+
+
+
 
 </style>

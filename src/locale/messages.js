@@ -114,6 +114,13 @@ export default {
             'manage_modal_error_41': "invalid gas limit",
 
             'manage_modal_error_rejected': "The transaction has been rejected",
+
+
+            // Feedback
+            'feedback_title': 'Report a bug here',
+            'feedback_desc': 'Share them with us',
+            'feedback_telegram_link': 'Telegram',
+            'feedback_github_link': 'Github',
         }
     }
 }
