@@ -118,7 +118,7 @@ export default {
 
             // Feedback
             'feedback_title': 'Report a bug here',
-            'feedback_desc': 'Share them with us',
+            'feedback_desc': 'Share it with us',
             'feedback_telegram_link': 'Telegram',
             'feedback_github_link': 'Github',
         }
