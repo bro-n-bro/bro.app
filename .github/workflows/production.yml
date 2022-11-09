@@ -34,5 +34,5 @@ jobs:
       with:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
           BRANCH: production
-          FOLDER: build
+          FOLDER: dist
           CLEAN: true
