@@ -1,7 +1,7 @@
 <template>
     <div class="feedback">
         <button class="btn" @click.prevent="isActive = !isActive" :class="{ active: isActive }">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_feedback"></use></svg>
+            <svg class="icon"><use xlink:href="/sprite.svg#ic_bug"></use></svg>
         </button>
 
         <div class="info">
