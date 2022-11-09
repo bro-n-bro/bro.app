@@ -34,7 +34,7 @@ export default {
 
             'currency_notice': "The currency for the account valuation",
             'username_notice': "Chosen keplr account",
-            'avatar_notice': "You Moon passport avatar",
+            'avatar_notice': "Your Moon passport avatar",
 
             'network_notice': "The network health is {health}. That’s why it’s {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network.",
             'network_sum_notice': "The sum of your tokens in {network} network",
