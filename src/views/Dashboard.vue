@@ -1105,7 +1105,7 @@
                 </div>
             </div>
 
-            <!-- <pre>{{ store.networks }}</pre> -->
+            <!-- <pre>{{ store.account }}</pre> -->
         </div>
     </section>
     </transition>
@@ -1552,7 +1552,7 @@
 
     .dashboard .disabled:not(.default) .delegate_btn
     {
-        opacity: 0.65;
+        opacity: .65;
     }
 
 

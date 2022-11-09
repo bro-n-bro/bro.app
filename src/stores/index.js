@@ -299,7 +299,11 @@ export const useGlobalStore = defineStore('global', {
                                         }
                                     }
 
+                                    // Add tokens
                                     this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
+
+                                    // Calc network tokens sum
+                                    this.calcNetworkTokensSum(baseNetwork)
                                 })
                         })
                     }
@@ -443,6 +447,8 @@ export const useGlobalStore = defineStore('global', {
                     this.ATOM_price = parseFloat(data.cosmos)
                     this.ETH_price = parseFloat(data.ethereum)
                     this.BTC_price = parseFloat(data.bitcoin)
+
+                    this.getNetworksInfo()
                 })
         },
 

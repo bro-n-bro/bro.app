@@ -83,6 +83,7 @@
             })
         }
 
+        document.addEventListener('DOMContentLoaded', notificatios.stickyEvent)
         document.addEventListener('scroll', notificatios.stickyEvent)
     })
 
@@ -94,11 +95,7 @@
 
 
         // Get currencies price
-        let promiseCurrencies = store.getCurrenciesPrice()
-
-
-        // Get networks info
-        promiseCurrencies.then(store.getNetworksInfo())
+        let promiseCurrencies = await store.getCurrenciesPrice()
 
 
         //======== Evmos
@@ -726,8 +723,8 @@
 
     .notifications.stuck
     {
-        top: 31px;
         z-index: 91;
+        top: 31px;
     }
 
     .notifications.stuck .data
