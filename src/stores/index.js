@@ -81,7 +81,7 @@ export const useGlobalStore = defineStore('global', {
             window.keplr.enable(chainId)
 
             // Cosmos singer
-            const offlineSigner = window.getOfflineSigner(chainId),
+            const offlineSigner = await window.getOfflineSigner(chainId),
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
@@ -497,9 +497,12 @@ export const useGlobalStore = defineStore('global', {
 
         // Update network
         async updateNetwork(network) {
+            this.networks[network].validators = []
+            this.networks[network].total_annual_provision = 0
+
             if (network == 'desmos') {
                 // Desmos singer
-                const offlineSignerDesmos = window.getOfflineSigner('desmos-mainnet'),
+                const offlineSignerDesmos = await window.getOfflineSigner('desmos-mainnet'),
                     accountsDesmos = await offlineSignerDesmos.getAccounts()
 
                 // Set wallet address
@@ -508,7 +511,7 @@ export const useGlobalStore = defineStore('global', {
 
             if (network == 'crescent') {
                 // Crescent singer
-                const offlineSignerCrescent = window.getOfflineSigner('crescent-1'),
+                const offlineSignerCrescent = await window.getOfflineSigner('crescent-1'),
                     accountsCrescent = await offlineSignerCrescent.getAccounts()
 
                 // Set wallet address
@@ -517,7 +520,7 @@ export const useGlobalStore = defineStore('global', {
 
             if (network == 'omniflix') {
                 // Omniflix hub singer
-                const offlineSignerOmniflix = window.getOfflineSigner('omniflixhub-1'),
+                const offlineSignerOmniflix = await window.getOfflineSigner('omniflixhub-1'),
                     accountsOmniflix = await offlineSignerOmniflix.getAccounts()
 
                 // Set wallet address
@@ -536,10 +539,7 @@ export const useGlobalStore = defineStore('global', {
                     // Get network data
                     let networkData = this.getNetworkData(network)
 
-                    // Get network price
-                    let networkPrice = this.getNetworkPrice(network)
-
-                    Promise.all([networkData, networkPrice]).then(() => {
+                    Promise.all([networkData]).then(() => {
                         // Calc network RPDE
                         this.calcNetworkRPDEInCurrency(network)
 

@@ -105,7 +105,7 @@
         //======== Evmos
         try{
             // Singer
-            const offlineSignerEvmos = window.getOfflineSigner(store.networks.evmos.chainId),
+            const offlineSignerEvmos = await window.getOfflineSigner(store.networks.evmos.chainId),
                 accountsEvmos = await offlineSignerEvmos.getAccounts()
 
             // Set wallet address
@@ -453,7 +453,7 @@
         // Check chains in Keplr
         for (let i in checkChains) {
             try{
-                let offlineSigner = window.getOfflineSigner(checkChains[i].chainId),
+                let offlineSigner = await window.getOfflineSigner(checkChains[i].chainId),
                     accounts = await offlineSigner.getAccounts()
 
                 if(checkChains[i].chainId == 'desmos-mainnet'){

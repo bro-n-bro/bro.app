@@ -251,7 +251,7 @@
         form.validator.name = validator.description.moniker
         form.validator.availabel_tokens = store.networks[store.networkManageModal].delegations[validator.operator_address]
 
-        form.amount = form.validator.availabel_tokens - 0.01
+        form.amount = form.validator.availabel_tokens - 0.00
 
         hideDropdown()
     }
@@ -385,8 +385,13 @@
                     } else {
                         try {
                             // Create request
-                            const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
-                                rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
+
+                            Object.assign(offlineSigner, {
+                                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
+                            })
+
+                            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                                 client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
@@ -540,8 +545,13 @@
                     } else {
                         try {
                             // Create request
-                            const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
-                                rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
+
+                            Object.assign(offlineSigner, {
+                                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
+                            })
+
+                            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                                 client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
