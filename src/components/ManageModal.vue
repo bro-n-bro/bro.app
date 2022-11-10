@@ -288,7 +288,7 @@
 
                 // Delegate
                 if(form.type == 'delegate') {
-                    if(store.networkManageModal == 'evmos'){
+                    if(store.networkManageModal == 'evmos') {
                         try {
                             // Create request
                             await fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
@@ -387,11 +387,7 @@
                             // Create request
                             const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                                 rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                                gasPrice = [{
-                                    denom: store.networks[store.networkManageModal].denom,
-                                    amount: '0'
-                                }],
-                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner, { gasPrice }),
+                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
                                     value: {
@@ -399,18 +395,23 @@
                                         validatorAddress: store.networks[store.networkManageModal].validator,
                                         amount: {
                                             denom: store.networks[store.networkManageModal].denom,
-                                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
+                                            amount: (form.amount * store.networks[store.networkManageModal].exponent).toString()
                                         }
                                     }
                                 }
 
+                            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+
                             if(store.networkManageModal != 'emoney'){
-                                const gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+                                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
                             }
 
                             const fee = {
-                                amount: gasPrice,
-                                gas: store.networkManageModal != 'emoney' ? `${gasUsed}` : store.networks.emoney.gas
+                                amount: [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                gas: Math.round(gasUsed * 1.3).toString()
                             }
 
                             const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
@@ -541,11 +542,7 @@
                             // Create request
                             const offlineSigner = window.getOfflineSigner(store.networks[store.networkManageModal].chainId),
                                 rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                                gasPrice = [{
-                                    denom: store.networks[store.networkManageModal].denom,
-                                    amount: '0'
-                                }],
-                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner, { gasPrice }),
+                                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                                 msgAny = {
                                     typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
                                     value: {
@@ -559,13 +556,18 @@
                                     }
                                 }
 
+                            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+
                             if(store.networkManageModal != 'emoney'){
-                                const gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+                                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
                             }
 
                             const fee = {
-                                amount: gasPrice,
-                                gas: store.networkManageModal != 'emoney' ? `${gasUsed}` : store.networks.emoney.gas
+                                amount: [{
+                                    denom: store.networks[store.networkManageModal].denom,
+                                    amount: '0'
+                                }],
+                                gas: Math.round(gasUsed * 1.3).toString()
                             }
 
                             const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
