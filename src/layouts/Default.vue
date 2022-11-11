@@ -453,7 +453,7 @@
         // Check chains in Keplr
         for (let i in checkChains) {
             try{
-                let offlineSigner = await window.getOfflineSigner(checkChains[i].chainId),
+                let offlineSigner = await window.getOfflineSignerAuto(checkChains[i].chainId),
                     accounts = await offlineSigner.getAccounts()
 
                 if(checkChains[i].chainId == 'desmos-mainnet'){

@@ -1105,7 +1105,7 @@
                 </div>
             </div>
 
-            <!-- <pre>{{ store.networks.stargaze }}</pre> -->
+            <!-- <pre>{{ store.wallets }}</pre> -->
         </div>
     </section>
     </transition>
