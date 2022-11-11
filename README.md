@@ -1,7 +1,7 @@
 # Bro.app
 
 <p align="center">
-<img src="https://bronbro.io/images/logo.svg" width=250>
+<img src="https://app.bronbro.io/logo.svg" width=250>
 </p>
 
 <div align='center'>

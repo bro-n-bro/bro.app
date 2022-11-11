@@ -551,7 +551,7 @@
                         </div>
 
                         <div class="stats">
-                            <div @mouseover="emitter.emit('setNotification', $t('message.account_personal_APR_notice'))">
+                            <div @mouseover="emitter.emit('setNotification', $t('message.account_RPDE_notice'))">
                                 <div class="label">{{ $t('message.RPDE') }}</div>
 
                                 <div class="val">
@@ -573,7 +573,7 @@
                                 </div>
                             </div>
 
-                            <div @mouseover="emitter.emit('setNotification', $t('message.account_RPDE_notice'))">
+                            <div @mouseover="emitter.emit('setNotification', $t('message.account_personal_APR_notice'))">
                                 <div class="label">{{ $t('message.personal_apr') }}</div>
 
                                 <div class="val">{{ $filters.toFixed(store.account.personal_APR, 2) }}%</div>
@@ -1105,7 +1105,7 @@
                 </div>
             </div>
 
-            <!-- <pre>{{ store.account }}</pre> -->
+            <!-- <pre>{{ store.wallets }}</pre> -->
         </div>
     </section>
     </transition>

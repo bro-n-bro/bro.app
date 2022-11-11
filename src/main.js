@@ -49,4 +49,8 @@ const clickOutside = {
 
 
 // Directives
-app.directive('clickOut', clickOutside).mount('#app')
+app.directive('clickOut', clickOutside)
+
+
+// Mount (Timeout for Keplr)
+setTimeout(() => app.mount('#app'), 100)
