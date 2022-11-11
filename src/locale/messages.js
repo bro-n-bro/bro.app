@@ -63,7 +63,7 @@ export default {
             'manage_modal_max_btn': 'MAX',
             'manage_modal_validator_label': 'Validator to Delegate',
             'manage_modal_validator_label2': 'Validator from Redelegate',
-            'manage_modal_fees': '{value} {currency} is reserved for transcation fees',
+            'manage_modal_fees': '{value} {currency} is reserved for transaction fees',
             'manage_modal_back_btn': 'Back',
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',

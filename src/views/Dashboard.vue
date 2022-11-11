@@ -1157,7 +1157,7 @@
         height: 324px;
         margin-bottom: 7px;
         margin-left: 7px;
-        padding: 48px 38px 64px;
+        padding: 58px 38px 64px;
 
         pointer-events: none;
     }
