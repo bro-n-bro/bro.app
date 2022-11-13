@@ -371,6 +371,13 @@ export const useGlobalStore = defineStore('global', {
             this.networks[network].balance_atom = this.networks[network].tokens_sum * this.networks[network].price_atom
             this.networks[network].balance_eth = this.networks[network].tokens_sum * this.networks[network].price_eth
             this.networks[network].balance_btc = this.networks[network].tokens_sum * this.networks[network].price_btc
+
+            if (network == 'bostrom') {
+                this.networks.bostrom.balance_usdt = this.networks.bostrom.tokens_sum * this.networks.bostrom.exponent * this.networks.bostrom.price_usdt
+                this.networks.bostrom.balance_atom = this.networks.bostrom.tokens_sum * this.networks.bostrom.exponent * this.networks.bostrom.price_atom
+                this.networks.bostrom.balance_eth = this.networks.bostrom.tokens_sum * this.networks.bostrom.exponent * this.networks.bostrom.price_eth
+                this.networks.bostrom.balance_btc = this.networks.bostrom.tokens_sum * this.networks.bostrom.exponent * this.networks.bostrom.price_btc
+            }
         },
 
 
@@ -381,6 +388,14 @@ export const useGlobalStore = defineStore('global', {
             this.networks[network].delegations_price_atom = this.networks[network].delegations_tokens * this.networks[network].price_atom
             this.networks[network].delegations_price_eth = this.networks[network].delegations_tokens * this.networks[network].price_eth
             this.networks[network].delegations_price_btc = this.networks[network].delegations_tokens * this.networks[network].price_btc
+
+            if (network == 'bostrom') {
+                this.networks.bostrom.delegations_price = this.networks.bostrom.delegations_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price
+                this.networks.bostrom.delegations_price_usdt = this.networks.bostrom.delegations_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_usdt
+                this.networks.bostrom.delegations_price_atom = this.networks.bostrom.delegations_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_atom
+                this.networks.bostrom.delegations_price_eth = this.networks.bostrom.delegations_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_eth
+                this.networks.bostrom.delegations_price_btc = this.networks.bostrom.delegations_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_btc
+            }
         },
 
 
@@ -391,6 +406,14 @@ export const useGlobalStore = defineStore('global', {
             this.networks[network].rewards_price_atom = this.networks[network].rewards_tokens * this.networks[network].price_atom
             this.networks[network].rewards_price_eth = this.networks[network].rewards_tokens * this.networks[network].price_eth
             this.networks[network].rewards_price_btc = this.networks[network].rewards_tokens * this.networks[network].price_btc
+
+            if (network == 'bostrom') {
+                this.networks.bostrom.rewards_price = this.networks.bostrom.rewards_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price
+                this.networks.bostrom.rewards_price_usdt = this.networks.bostrom.rewards_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_usdt
+                this.networks.bostrom.rewards_price_atom = this.networks.bostrom.rewards_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_atom
+                this.networks.bostrom.rewards_price_eth = this.networks.bostrom.rewards_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_eth
+                this.networks.bostrom.rewards_price_btc = this.networks.bostrom.rewards_tokens * this.networks.bostrom.exponent * this.networks.bostrom.price_btc
+            }
         },
 
 

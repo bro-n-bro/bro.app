@@ -1105,7 +1105,7 @@
                 </div>
             </div>
 
-            <!-- <pre>{{ store.wallets }}</pre> -->
+            <!-- <pre>{{ store.networks.bostrom }}</pre> -->
         </div>
     </section>
     </transition>
