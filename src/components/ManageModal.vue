@@ -315,7 +315,7 @@
                                         denom: store.networks.evmos.denom,
                                     }
 
-                                    const msg = createTxMsgDelegate(chain, sender, fee, '', params)
+                                    const msg = createTxMsgDelegate(chain, sender, fee, 'bro.app', params)
 
                                     let sign = await window?.keplr?.signDirect(
                                         store.networks.evmos.chainId,
@@ -372,6 +372,8 @@
                                     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                                 })
                         } catch (error) {
+                            console.log(error)
+
                             // Get error title
                             store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
@@ -419,7 +421,7 @@
                                 gas: Math.round(gasUsed * 1.3).toString()
                             }
 
-                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
+                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
 
                             // Disable loader
                             store.loaderManageModal = !store.loaderManageModal
@@ -434,6 +436,8 @@
                             // Update network
                             setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                         } catch (error) {
+                            console.log(error)
+
                             // Get error code
                             let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
@@ -483,7 +487,7 @@
                                         denom: store.networks.evmos.denom,
                                     }
 
-                                    const msg = createTxMsgBeginRedelegate(chain, sender, fee, '', params)
+                                    const msg = createTxMsgBeginRedelegate(chain, sender, fee, 'bro.app', params)
 
                                     let sign = await window?.keplr?.signDirect(
                                         store.networks.evmos.chainId,
@@ -580,7 +584,7 @@
                                 gas: Math.round(gasUsed * 1.3).toString()
                             }
 
-                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee)
+                            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
 
                             if(result.code != 0){
                                 // Get error title
@@ -609,6 +613,8 @@
                             // Update network
                             setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                         } catch (error) {
+                            console.log(error)
+
                             // Get error code
                             let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 

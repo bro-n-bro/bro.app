@@ -1104,8 +1104,7 @@
                     <div class="shadow" :class="[store.networks.stride.health_color]" :style="{'--speed': store.networks.stride.speed + 's'}"></div>
                 </div>
             </div>
-
-            <!-- <pre>{{ store.wallets }}</pre> -->
+            <!-- <pre>{{ store.networks.bostrom }}</pre> -->
         </div>
     </section>
     </transition>
@@ -1157,7 +1156,7 @@
         height: 324px;
         margin-bottom: 7px;
         margin-left: 7px;
-        padding: 48px 38px 64px;
+        padding: 58px 38px 64px;
 
         pointer-events: none;
     }
