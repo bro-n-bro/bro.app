@@ -372,6 +372,8 @@
                                     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                                 })
                         } catch (error) {
+                            console.log(error)
+
                             // Get error title
                             store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
@@ -434,6 +436,8 @@
                             // Update network
                             setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                         } catch (error) {
+                            console.log(error)
+
                             // Get error code
                             let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
@@ -609,6 +613,8 @@
                             // Update network
                             setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
                         } catch (error) {
+                            console.log(error)
+
                             // Get error code
                             let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
 
