@@ -662,7 +662,7 @@
 
         display: flex;
 
-        width: 953px;
+        width: 1159px;
         max-width: 100%;
         margin-right: auto;
         margin-left: auto;
