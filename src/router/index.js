@@ -1,39 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useGlobalStore } from '@/stores'
 
-import errorLayut from '../layouts/Error.vue'
-import defaultLayut from '../layouts/Default.vue'
+import homeLayout from '../layouts/Home.vue'
+import networkLayout from '../layouts/Network.vue'
 
 const routes = [
 	{
-		path: '/:pathMatch(.*)',
-		name: 'Error',
-		component: () => import('../views/Error404.vue'),
-		meta: {
-			layout: errorLayut
-		}
-	},
-	{
-		path: '/keplr_error',
-		name: 'KeplrError',
-		component: () => import('../views/KeplrError.vue'),
-		meta: {
-			layout: errorLayut
-		}
-	},
-	{
-		path: '/under_construction',
-		name: 'Under construction',
-		component: () => import('../views/UnderConstruction.vue'),
-		meta: {
-			layout: errorLayut
-		}
-	},
-	{
 		path: '/',
-		name: 'Dashboard',
-		component: () => import('../views/Dashboard.vue'),
+		name: 'Home',
+		component: () => import('../views/Home.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: homeLayout
+		}
+	},
+	{
+		path: '/network',
+		name: 'Network',
+		component: () => import('../views/Network.vue'),
+		meta: {
+			layout: networkLayout
 		}
 	},
 ]
@@ -44,15 +29,16 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-	// Keplr
-	!window.keplr && to.name != 'KeplrError'
-		? router.push({ name: 'KeplrError' })
-		: next()
 
-	window.keplr && to.name == 'KeplrError'
-		? router.push({ name: 'Dashboard' })
-		: next()
+router.beforeEach((to, from, next) => {
+	// Set current network
+	if (to.query.network) {
+		const store = useGlobalStore()
+
+		store.currentNetwork = to.query.network
+	}
+
+	next()
 })
 
 
