@@ -1104,6 +1104,8 @@
                     <div class="shadow" :class="[store.networks.stride.health_color]" :style="{'--speed': store.networks.stride.speed + 's'}"></div>
                 </div>
             </div>
+
+
             <!-- <pre>{{ store.networks.bostrom }}</pre> -->
         </div>
     </section>

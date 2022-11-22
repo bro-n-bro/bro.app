@@ -86,10 +86,8 @@ export const useGlobalStore = defineStore('global', {
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
-
             // Is ledger
             this.isLedger = key.isNanoLedger
-
 
             // Pre wallets
             this.$patch({
