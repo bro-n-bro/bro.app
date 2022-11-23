@@ -29,14 +29,14 @@ export default {
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
 
-            'ipfs_active_notice': "Built-in IPFS node is active and resolving the content",
-            'ipfs_not_active_notice': "Built-in IPFS node isn't active and can't resolve the content",
+            'ipfs_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
+            'ipfs_not_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",
 
             'currency_notice': "The currency for the account valuation",
             'username_notice': "Chosen keplr account",
             'avatar_notice': "Your Moon passport avatar",
 
-            'network_notice': "The network health is {health}. That’s why it’s {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network.",
+            'network_notice': "The network health is {health}. That's why it's {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network. The hex is blinking with frequency is depended on network APR.",
             'network_sum_notice': "The sum of your tokens in {network} network",
             'network_staked_tokens_notice': "The amount of staked tokens is {value} {denom}",
             'network_liquid_tokens_notice': "The amount of liquid tokens is {value} {denom}",
@@ -121,6 +121,11 @@ export default {
             'feedback_desc': 'Share it with us',
             'feedback_telegram_link': 'Telegram',
             'feedback_github_link': 'Github',
+
+
+            // Footer
+            'footer_contact': 'Contact',
+            'footer_support': 'Support'
         }
     }
 }

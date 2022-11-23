@@ -47,8 +47,9 @@ export const useGlobalStore = defineStore('global', {
         node: null,
         IPFSStatus: false,
         recalc: true,
+        isLedger: false,
         auth: useLocalStorage('auth', false),
-        currency: useLocalStorage('currency', 'BTC'),
+        currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
         tooltip: '',
         lastTXS: '',
@@ -67,7 +68,6 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         loaderManageModal: false,
-        showCurrencyDropdown: false,
 
         networkManageModal: 'cosmoshub'
     }),
@@ -81,10 +81,12 @@ export const useGlobalStore = defineStore('global', {
             window.keplr.enable(chainId)
 
             // Cosmos singer
-            const offlineSigner = await window.getOfflineSigner(chainId),
+            const offlineSigner = await window.getOfflineSignerAuto(chainId),
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
+            // Is ledger
+            this.isLedger = key.isNanoLedger
 
             // Pre wallets
             this.$patch({
