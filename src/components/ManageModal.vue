@@ -638,562 +638,563 @@
 
 
 <style>
-    #manage_modal .type
-    {
-        display: flex;
+#manage_modal .type
+{
+    display: flex;
 
-        margin-bottom: 22px;
-        margin-left: -8px;
-        padding-right: 60px;
+    margin-bottom: 22px;
+    margin-left: -8px;
+    padding-right: 60px;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
 
-    #manage_modal .type > *
-    {
-        margin-bottom: 8px;
-        margin-left: 8px;
-    }
+#manage_modal .type > *
+{
+    margin-bottom: 8px;
+    margin-left: 8px;
+}
 
 
-    #manage_modal .type label
-    {
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 17px;
+#manage_modal .type label
+{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
 
-        display: block;
+    display: block;
 
-        cursor: pointer;
-    }
+    cursor: pointer;
+}
 
 
-    #manage_modal .type input
-    {
-        display: none;
-    }
+#manage_modal .type input
+{
+    display: none;
+}
 
 
-    #manage_modal .type label div
-    {
-        padding: 13px;
+#manage_modal .type label div
+{
+    padding: 13px;
 
-        transition: .2s linear;
+    transition: .2s linear;
 
-        border: 1px solid;
-        border-radius: 14px;
-        background: #191919;
-    }
+    border: 1px solid;
+    border-radius: 14px;
+    background: #191919;
+}
 
 
-    #manage_modal .type label input:checked + div
-    {
-        color: #000;
+#manage_modal .type label input:checked + div
+{
+    color: #000;
 
-        background: #fff;
-    }
+    background: #fff;
+}
 
 
-    #manage_modal .validator
-    {
-        display: flex;
+#manage_modal .validator
+{
+    display: flex;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
 
-    #manage_modal .validator .logo
-    {
-        display: flex;
+#manage_modal .validator .logo
+{
+    display: flex;
 
-        width: 65px;
-        height: 58px;
+    width: 65px;
+    height: 58px;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    #manage_modal .validator .logo img
-    {
-        display: block;
+#manage_modal .validator .logo img
+{
+    display: block;
 
-        width: 100%;
-        height: 100%;
-    }
+    width: 100%;
+    height: 100%;
+}
 
-    #manage_modal .validator .logo + *
-    {
-        width: calc(100% - 73px);
-    }
+#manage_modal .validator .logo + *
+{
+    width: calc(100% - 73px);
+}
 
 
-    #manage_modal .validator .name
-    {
-        font-size: 30px;
-        font-weight: 700;
-        line-height: 36px;
-    }
+#manage_modal .validator .name
+{
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+}
 
 
-    #manage_modal .validator .commission
-    {
-        color: #8e8e8e;
-        font-size: 12px;
-        line-height: 15px;
+#manage_modal .validator .commission
+{
+    color: #8e8e8e;
+    font-size: 12px;
+    line-height: 15px;
 
-        margin-top: 4px;
-    }
+    margin-top: 4px;
+}
 
-    #manage_modal .validator .commission .sep,
-    #manage_modal .validator .commission .val
-    {
-        color: #fff;
-        font-weight: 600;
+#manage_modal .validator .commission .sep,
+#manage_modal .validator .commission .val
+{
+    color: #fff;
+    font-weight: 600;
 
-        margin-left: 6px;
-    }
+    margin-left: 6px;
+}
 
 
-    #manage_modal .notice
-    {
-        margin-top: 20px;
-        padding: 14px;
+#manage_modal .notice
+{
+    margin-top: 20px;
+    padding: 14px;
 
-        text-align: center;
+    text-align: center;
 
-        border-radius: 17px;
-        background: #191919;
-    }
+    border-radius: 17px;
+    background: #191919;
+}
 
 
-    #manage_modal .notice .title
-    {
-        font-weight: 600;
-        line-height: 19px;
+#manage_modal .notice .title
+{
+    font-weight: 600;
+    line-height: 19px;
 
-        margin-bottom: 6px;
-    }
+    margin-bottom: 6px;
+}
 
 
-    #manage_modal .notice .desc
-    {
-        color: #8e8e8e;
-        font-size: 12px;
-        line-height: 130%;
+#manage_modal .notice .desc
+{
+    color: #8e8e8e;
+    font-size: 12px;
+    line-height: 130%;
 
-        width: 324px;
-        max-width: 100%;
-        margin: 0 auto;
-    }
+    width: 324px;
+    max-width: 100%;
+    margin: 0 auto;
+}
 
 
-    #manage_modal .tokens
-    {
-        margin-top: 26px;
-    }
+#manage_modal .tokens
+{
+    margin-top: 26px;
+}
 
 
-    #manage_modal .tokens > *
-    {
-        display: flex;
+#manage_modal .tokens > *
+{
+    display: flex;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
-    #manage_modal .tokens > * + *
-    {
-        margin-top: 16px;
-    }
+#manage_modal .tokens > * + *
+{
+    margin-top: 16px;
+}
 
 
-    #manage_modal .tokens .label
-    {
-        color: #8e8e8e;
-        font-size: 14px;
-        line-height: 17px;
-    }
+#manage_modal .tokens .label
+{
+    color: #8e8e8e;
+    font-size: 14px;
+    line-height: 17px;
+}
 
 
-    #manage_modal .tokens .val
-    {
-        font-weight: 600;
+#manage_modal .tokens .val
+{
+    font-weight: 600;
 
-        white-space: nowrap;
+    white-space: nowrap;
 
-        font-feature-settings: 'pnum' on, 'lnum' on;
-    }
+    font-feature-settings: 'pnum' on, 'lnum' on;
+}
 
 
-    #manage_modal .amount
-    {
-        margin-top: 30px;
-    }
+#manage_modal .amount
+{
+    margin-top: 30px;
+}
 
 
-    #manage_modal .amount .label
-    {
-        color: #8e8e8e;
-        font-size: 14px;
-        line-height: 17px;
+#manage_modal .amount .label
+{
+    color: #8e8e8e;
+    font-size: 14px;
+    line-height: 17px;
 
-        margin-bottom: 16px;
-    }
+    margin-bottom: 16px;
+}
 
 
-    #manage_modal .amount .field
-    {
-        position: relative;
-    }
+#manage_modal .amount .field
+{
+    position: relative;
+}
 
 
-    #manage_modal .amount .input
-    {
-        color: currentColor;
-        font-family: var(--font_family);
-        font-size: var(--font_size);
-        font-weight: 500;
+#manage_modal .amount .input
+{
+    color: currentColor;
+    font-family: var(--font_family);
+    font-size: var(--font_size);
+    font-weight: 500;
 
-        display: block;
+    display: block;
 
-        width: 100%;
-        height: 55px;
-        padding: 0 154px 2px 9px;
+    width: 100%;
+    height: 55px;
+    padding: 0 154px 2px 9px;
 
-        transition: border-color .2s linear;
+    transition: border-color .2s linear;
 
-        border: 1px solid rgba(255, 255, 255, .05);
-        border-radius: 17px;
-        background: none;
+    border: 1px solid rgba(255, 255, 255, .05);
+    border-radius: 17px;
+    background: none;
 
-        font-feature-settings: 'pnum' on, 'lnum' on;
-    }
+    font-feature-settings: 'pnum' on, 'lnum' on;
+}
 
-    #manage_modal .amount .input:focus
-    {
-        border-color: #950fff;
-    }
+#manage_modal .amount .input:focus
+{
+    border-color: #950fff;
+}
 
 
-    #manage_modal .amount .unit
-    {
-        color: #8e8e8e;
-        line-height: 19px;
+#manage_modal .amount .unit
+{
+    color: #8e8e8e;
+    line-height: 19px;
 
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        right: 80px;
-        bottom: 0;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 80px;
+    bottom: 0;
 
-        height: 19px;
-        margin: auto;
+    height: 19px;
+    margin: auto;
 
-        white-space: nowrap;
-        text-transform: uppercase;
-    }
+    white-space: nowrap;
+    text-transform: uppercase;
+}
 
 
-    #manage_modal .amount .max_btn
-    {
-        line-height: 19px;
+#manage_modal .amount .max_btn
+{
+    line-height: 19px;
 
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        right: 10px;
-        bottom: 0;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 10px;
+    bottom: 0;
 
-        display: block;
+    display: block;
 
-        width: 60px;
-        height: 39px;
-        margin: auto;
+    width: 60px;
+    height: 39px;
+    margin: auto;
 
-        transition: .2s linear;
-        text-transform: uppercase;
+    transition: .2s linear;
+    text-transform: uppercase;
 
-        border: 1px solid #fff;
-        border-radius: 14px;
-    }
+    border: 1px solid #fff;
+    border-radius: 14px;
+}
 
-    #manage_modal .amount .max_btn:hover
-    {
-        color: #000;
+#manage_modal .amount .max_btn:hover
+{
+    color: #000;
 
-        border-color: #fff;
-        background: #fff;
-    }
+    border-color: #fff;
+    background: #fff;
+}
 
 
-    #manage_modal .validate_from
-    {
-        margin-top: 30px;
-    }
+#manage_modal .validate_from
+{
+    margin-top: 30px;
+}
 
 
-    #manage_modal .validate_from .label
-    {
-        color: #8e8e8e;
-        font-size: 14px;
-        line-height: 17px;
+#manage_modal .validate_from .label
+{
+    color: #8e8e8e;
+    font-size: 14px;
+    line-height: 17px;
 
-        margin-bottom: 16px;
-    }
+    margin-bottom: 16px;
+}
 
 
-    #manage_modal .validate_from .field
-    {
-        position: relative;
-    }
+#manage_modal .validate_from .field
+{
+    position: relative;
+}
 
 
-    #manage_modal .validate_from .input
-    {
-        color: currentColor;
-        font-family: var(--font_family);
-        font-size: var(--font_size);
-        font-weight: 500;
+#manage_modal .validate_from .input
+{
+    color: currentColor;
+    font-family: var(--font_family);
+    font-size: var(--font_size);
+    font-weight: 500;
 
-        display: block;
+    display: block;
 
-        width: 100%;
-        height: 55px;
-        padding: 0 77px 3px 9px;
+    width: 100%;
+    height: 55px;
+    padding: 0 77px 3px 9px;
 
-        transition: border-color .2s linear;
+    transition: border-color .2s linear;
 
-        border: 1px solid rgba(255, 255, 255, .05);
-        border-radius: 17px;
-        background: none;
-    }
+    border: 1px solid rgba(255, 255, 255, .05);
+    border-radius: 17px;
+    background: none;
+}
 
-    #manage_modal .validate_from .input:read-only
-    {
-        pointer-events: none;
-    }
+#manage_modal .validate_from .input:read-only
+{
+    pointer-events: none;
+}
 
-    #manage_modal .validate_from .input:focus
-    {
-        border-color: #950fff;
-    }
+#manage_modal .validate_from .input:focus
+{
+    border-color: #950fff;
+}
 
 
-    #manage_modal .validate_from .arr
-    {
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        right: 44px;
-        bottom: 0;
+#manage_modal .validate_from .arr
+{
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 44px;
+    bottom: 0;
 
-        display: flex;
+    display: flex;
 
-        width: 24px;
-        height: 24px;
-        margin: auto;
+    width: 24px;
+    height: 24px;
+    margin: auto;
 
-        pointer-events: none;
+    pointer-events: none;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    #manage_modal .validate_from .arr svg
-    {
-        display: block;
+#manage_modal .validate_from .arr svg
+{
+    display: block;
 
-        width: 20px;
-        height: 20px;
-    }
+    width: 20px;
+    height: 20px;
+}
 
-    #manage_modal .validate_from .input:read-only ~ .arr
-    {
-        display: none;
-    }
+#manage_modal .validate_from .input:read-only ~ .arr
+{
+    display: none;
+}
 
 
-    #manage_modal .validate_from .clear_btn
-    {
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        right: 10px;
-        bottom: 0;
+#manage_modal .validate_from .clear_btn
+{
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 10px;
+    bottom: 0;
 
-        display: flex;
+    display: flex;
 
-        width: 24px;
-        height: 24px;
-        margin: auto;
+    width: 24px;
+    height: 24px;
+    margin: auto;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    #manage_modal .validate_from .clear_btn svg
-    {
-        display: block;
+#manage_modal .validate_from .clear_btn svg
+{
+    display: block;
 
-        width: 24px;
-        height: 24px;
-    }
+    width: 24px;
+    height: 24px;
+}
 
-    #manage_modal .validate_from .input:read-only ~ .clear_btn
-    {
-        display: none;
-    }
+#manage_modal .validate_from .input:read-only ~ .clear_btn
+{
+    display: none;
+}
 
 
-    #manage_modal .validate_from .dropdown
-    {
-        position: absolute;
-        z-index: 5;
-        top: 100%;
-        left: 0;
+#manage_modal .validate_from .dropdown
+{
+    position: absolute;
+    z-index: 5;
+    top: 100%;
+    left: 0;
 
-        display: none;
+    display: none;
 
-        width: 100%;
-        margin-top: 10px;
-        padding: 6px 4px;
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px 4px;
 
-        border-radius: 10px;
-        background: #101010;
-    }
+    border-radius: 10px;
+    background: #101010;
+}
 
-    #manage_modal .validate_from .input.active ~ .dropdown
-    {
-        display: block;
-    }
+#manage_modal .validate_from .input.active ~ .dropdown
+{
+    display: block;
+}
 
 
-    #manage_modal .validate_from .dropdown .scroll
-    {
-        overflow: auto;
+#manage_modal .validate_from .dropdown .scroll
+{
+    overflow: auto;
 
-        max-height: 128px;
-        padding-right: 4px;
-    }
+    max-height: 128px;
+    padding-right: 4px;
+}
 
-    #manage_modal .validate_from .dropdown .scroll::-webkit-scrollbar
-    {
-        width: 4px;
-        height: 4px;
+#manage_modal .validate_from .dropdown .scroll::-webkit-scrollbar
+{
+    width: 4px;
+    height: 4px;
 
-        border-radius: 5px;
-    }
+    border-radius: 5px;
+}
 
-    #manage_modal .validate_from .dropdown .scroll > * + *
-    {
-        margin-top: 4px;
-    }
+#manage_modal .validate_from .dropdown .scroll > * + *
+{
+    margin-top: 4px;
+}
 
 
-    #manage_modal .validate_from .dropdown .btn
-    {
-        font-size: 14px;
-        line-height: 17px;
+#manage_modal .validate_from .dropdown .btn
+{
+    font-size: 14px;
+    line-height: 17px;
 
-        display: block;
+    display: block;
 
-        width: 100%;
-        padding: 6px;
+    width: 100%;
+    padding: 6px;
 
-        transition: background .2s linear;
-        text-align: left;
-        pointer-events: auto;
+    transition: background .2s linear;
+    text-align: left;
+    pointer-events: auto;
 
-        border-radius: 8px;
-    }
+    border-radius: 8px;
+}
 
-    #manage_modal .validate_from .dropdown .btn:hover,
-    #manage_modal .validate_from .dropdown .btn.active
-    {
-        background: #191919;
-    }
+#manage_modal .validate_from .dropdown .btn:hover,
+#manage_modal .validate_from .dropdown .btn.active
+{
+    background: #191919;
+}
 
 
-    #manage_modal .fees
-    {
-        color: #555;
-        font-size: 14px;
-        line-height: 17px;
+#manage_modal .fees
+{
+    color: #555;
+    font-size: 14px;
+    line-height: 17px;
 
-        margin-top: 10px;
+    margin-top: 10px;
 
-        font-feature-settings: 'pnum' on, 'lnum' on;
-    }
+    font-feature-settings: 'pnum' on, 'lnum' on;
+}
 
 
-    #manage_modal .btns
-    {
-        display: flex;
+#manage_modal .btns
+{
+    display: flex;
 
-        margin-top: 30px;
-        margin-bottom: -10px;
-        margin-left: -10px;
+    margin-top: 30px;
+    margin-bottom: -10px;
+    margin-left: -10px;
 
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
 
-    #manage_modal .btns > *
-    {
-        margin-bottom: 10px;
-        margin-left: 10px;
-    }
+#manage_modal .btns > *
+{
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
 
 
-    #manage_modal .btns .btn
-    {
-        color: #fff;
-        font-weight: 500;
-        line-height: 19px;
+#manage_modal .btns .btn
+{
+    color: #fff;
+    font-weight: 500;
+    line-height: 19px;
 
-        display: block;
+    display: block;
 
-        padding: 13px;
+    padding: 13px;
 
-        transition: .2s linear;
+    transition: .2s linear;
 
-        border: 1px solid #353535;
-        border-radius: 16px;
-    }
+    border: 1px solid #353535;
+    border-radius: 16px;
+}
 
 
-    #manage_modal .btns .btn:hover
-    {
-        color: #000;
+#manage_modal .btns .btn:hover
+{
+    color: #000;
 
-        border-color: #fff;
-        background: #fff;
-    }
+    border-color: #fff;
+    background: #fff;
+}
 
 
-    #manage_modal .btns .btn.submit_btn
-    {
-        color: #fff;
+#manage_modal .btns .btn.submit_btn
+{
+    color: #fff;
 
-        border-color: #950fff;
-        background: #950fff;
-    }
+    border-color: #950fff;
+    background: #950fff;
+}
+
 
 </style>

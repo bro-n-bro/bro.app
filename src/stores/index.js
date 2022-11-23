@@ -68,7 +68,6 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         loaderManageModal: false,
-        showCurrencyDropdown: false,
 
         networkManageModal: 'cosmoshub'
     }),

@@ -121,6 +121,11 @@ export default {
             'feedback_desc': 'Share it with us',
             'feedback_telegram_link': 'Telegram',
             'feedback_github_link': 'Github',
+
+
+            // Footer
+            'footer_contact': 'Contact',
+            'footer_support': 'Support'
         }
     }
 }
