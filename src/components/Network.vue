@@ -337,7 +337,7 @@
         flex-wrap: nowrap;
     }
 
-    .network .network:not(.disabled) .visualization
+    .network:not(.disabled) .visualization
     {
         visibility: visible;
 
