@@ -124,7 +124,6 @@ input[type=number]
     --scroll_width: 17px;
     --text_color: #fff;
     --font_size: 16px;
-    --font_size_title: 52px;
     --font_family: 'Inter', 'Arial', sans-serif;
 }
 
@@ -240,8 +239,6 @@ button
     display: flex;
     flex-direction: column;
 
-    padding-top: 264px;
-
     flex: 1 0 auto;
 }
 
@@ -266,408 +263,76 @@ button
 
 
 
-/*-----------
-    Modal
------------*/
-.modal
+/*-------------
+    Animate
+-------------*/
+.animate
 {
-    position: fixed;
-    z-index: 100;
-    top: 0;
-    left: 0;
+    visibility: hidden;
 
-    width: 100%;
-    height: 100%;
-    min-height: -moz-available;
-    min-height: -webkit-fill-available;
-    min-height:         fill-available;
-}
-
-
-.modal .overlay
-{
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, .8);
-}
-
-
-.modal_content
-{
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    left: 0;
-
-    display: flex;
-    overflow: auto;
-
-    width: 100%;
-    height: 100%;
-    padding: 40px;
-
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-
-.modal_content .data
-{
-    position: relative;
-
-    width: 473px;
-    max-width: 100%;
-    margin: auto;
-    padding: 20px;
-
-    cursor: default;
-    pointer-events: auto;
-
-    border-radius: 36px;
-    background: #141414;
-}
-
-
-.modal_content .data > .close_btn
-{
-    position: absolute;
-    z-index: 3;
-    top: 24px;
-    right: 20px;
-
-    display: flex;
-
-    width: 36px;
-    height: 36px;
-
-    transition: color .2s linear;
-
-    align-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-
-.modal_content .data > .close_btn svg
-{
-    display: block;
-
-    width: 36px;
-    height: 36px;
-}
-
-
-.modal_content .data > .close_btn:hover
-{
-    color: #950fff;
-}
-
-
-
-.modal.success .modal_content .data
-{
-    padding: 96px 20px 40px;
-}
-
-
-.modal.success .icon
-{
-    margin-bottom: 40px;
-}
-
-.modal.success .icon img
-{
-    display: block;
-
-    max-width: 75%;
-    margin-right: auto;
-    margin-left: auto;
-}
-
-
-.modal.success .title
-{
-    font-size: 30px;
-    font-weight: 600;
-    line-height: 130%;
-
-    text-align: center;
-}
-
-.modal.success .title a
-{
-    color: #950fff;
-
-    text-decoration: none;
-}
-
-
-.modal.success .desc
-{
-    line-height: 130%;
-
-    margin-top: 16px;
-
-    text-align: center;
-}
-
-
-.modal.success .btns
-{
-    display: flex;
-
-    margin-top: 40px;
-
-    align-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-
-.modal.success .btns .btn
-{
-    font-weight: 500;
-    line-height: 19px;
-
-    padding: 13px 29px;
-
-    transition: .2s linear;
-
-    border: 1px solid rgba(255, 255, 255, .1);
-    border-radius: 34px;
-}
-
-.modal.success .btns .btn:hover
-{
-    color: #000;
-
-    background: #fff;
-}
-
-
-
-/*---------------
-    Animation
----------------*/
-.fade-enter-active
-{
-    animation: .3s linear fade;
-}
-
-.fade-leave-active
-{
-    animation: .3s linear fadeReverse;
-}
-
-
-.fadeUp-enter-active
-{
-    animation: .3s linear fadeUp;
-}
-
-.fadeUp-leave-active
-{
-    animation: .3s linear fadeUpReverse;
-}
-
-
-
-/*---------------
-    Keyframes
----------------*/
-@keyframes fade
-{
-    0%
-    {
-        opacity: 0;
-    }
-}
-
-
-@keyframes fadeReverse
-{
-    100%
-    {
-        opacity: 0;
-    }
-}
-
-
-
-@keyframes fadeUp
-{
-    0%
-    {
-        transform: translateY(25%);
-
-        opacity: 0;
-    }
-}
-
-
-@keyframes fadeUpReverse
-{
-    100%
-    {
-        transform: translateY(25%);
-
-        opacity: 0;
-    }
-}
-
-
-
-/*------------
-    Loader
-------------*/
-.loader_wrap
-{
-    position: absolute;
-    z-index: 11;
-    top: 0;
-    left: 0;
-
-    display: flex;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, .65);
-
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-wrap: wrap;
-}
-
-
-.loader
-{
-    position: relative;
-
-    width: 32px;
-    height: 32px;
-    margin: 0 auto;
-}
-
-
-.loader span
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    display: block;
-
-    width: 100%;
-    height: 100%;
-    margin: auto;
-}
-
-.loader span::before,
-.loader span::after
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    display: block;
-
-    width: 100%;
-    height: 100%;
-    margin: auto;
-
-    content: '';
-    animation: loader-1 1.5s cubic-bezier(.075, .820, .165, 1.000) infinite;
+    transition: .5s linear;
+    transition-property: opacity, visibility, transform;
 
     opacity: 0;
-    border: 2px solid #fff;
-    border-radius: 50%;
 }
 
-.loader span::after
+.animate.animated
 {
-    animation: loader-2 1.5s cubic-bezier(.075, .820, .165, 1.000) .25s infinite;
-}
+    visibility: visible;
 
-
-@-webkit-keyframes loader-1
-{
-    0%
-    {
-        -webkit-transform: translate3d(0, 0, 0) scale(0);
-
-        opacity: 1;
-    }
-
-    100%
-    {
-        -webkit-transform: translate3d(0, 0, 0) scale(1.5);
-
-        opacity: 0;
-    }
-}
-
-@keyframes loader-1
-{
-    0%
-    {
-        transform: translate3d(0, 0, 0) scale(0);
-
-        opacity: 1;
-    }
-
-    100%
-    {
-        transform: translate3d(0, 0, 0) scale(1.5);
-
-        opacity: 0;
-    }
+    opacity: 1;
 }
 
 
-@-webkit-keyframes loader-2
+.animate.delay
 {
-    0%
-    {
-        -webkit-transform: translate3d(0, 0, 0) scale(0);
-
-        opacity: 1;
-    }
-
-    100%
-    {
-        -webkit-transform: translate3d(0, 0, 0) scale(1);
-
-        opacity: 0;
-    }
+    transition-delay: .2s !important;
 }
 
-@keyframes loader-2
+.animate.delay2
 {
-    0%
-    {
-        transform: translate3d(0, 0, 0) scale(0);
+    transition-delay: .4s !important;
+}
 
-        opacity: 1;
-    }
+.animate.delay3
+{
+    transition-delay: .6s !important;
+}
 
-    100%
-    {
-        transform: translate3d(0, 0, 0) scale(1);
+.animate.delay4
+{
+    transition-delay: .8s !important;
+}
 
-        opacity: 0;
-    }
+
+.fadeInUp
+{
+    transform: translateY(50%);
+}
+
+.animated.fadeInUp
+{
+    transform: translateX(0);
+}
+
+
+.fadeInLeft
+{
+    transform: translateX(-50%);
+}
+
+.animated.fadeInLeft
+{
+    transform: translateX(0);
+}
+
+
+.fadeInRight
+{
+    transform: translateX(50%);
+}
+
+.animated.fadeInRight
+{
+    transform: translateX(0);
 }

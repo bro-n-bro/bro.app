@@ -4,6 +4,8 @@ import App from './App.vue'
 import router from './router'
 import i18n from './locale'
 
+import timeago from 'vue-timeago3'
+
 
 // Events
 import mitt from 'mitt'
@@ -18,6 +20,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
+app.use(timeago)
 
 
 // Vue provide
@@ -48,9 +51,29 @@ const clickOutside = {
 }
 
 
+// Animation
+const animate = {
+    beforeMount: (el, binding) => {
+        function scrollTracking(entries) {
+            for (const entry of entries) {
+                if (entry.intersectionRatio >= 0.2 && entry.target.classList.contains('animate')) {
+                    entry.target.classList.add('animated')
+                }
+            }
+        }
+
+        const observer = new IntersectionObserver(scrollTracking, {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        })
+
+        observer.observe(el)
+    }
+}
+
+
 // Directives
 app.directive('clickOut', clickOutside)
+app.directive('animate', animate)
 
-
-// Mount (Timeout for Keplr)
-setTimeout(() => app.mount('#app'), 100)
+// Mount
+app.mount('#app')

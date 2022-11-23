@@ -4,7 +4,7 @@ addStylesheetURL('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;60
 
 document.addEventListener("DOMContentLoaded", function () {
 	// Window width
-	WW = window.innerWidth
+	WW = window.innerWidth || document.clientWidth || document.getElementsByTagName('body')[0].clientWidth
 
 
 	// Is there support for touch events or is it an apple device
@@ -16,35 +16,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// Mob. version
-	// firstResize = false
+	firstResize = false
 
-	// if (window.innerWidth < 375) {
-	// 	document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
+	if (document.body.clientWidth < 375) {
+		document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
 
-	// 	firstResize = true
-	// }
+		firstResize = true
+	}
 })
 
 
 
-// window.addEventListener('resize', () => {
-// 	if (typeof WW !== 'undefined' && WW != window.innerWidth) {
-// 		// Mob. version
-// 		if (!firstResize) {
-// 			document.getElementsByTagName('meta')['viewport'].content = 'width=device-width, initial-scale=1, maximum-scale=1'
+window.addEventListener('resize', function () {
+	let windowW = window.innerWidth || document.clientWidth || document.getElementsByTagName('body')[0].clientWidth
 
-// 			if (window.innerWidth < 375) document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
+	if (typeof WW !== 'undefined' && WW != windowW) {
+		// Моб. версия
+		if (!firstResize) {
+			document.getElementsByTagName('meta')['viewport'].content = 'width=device-width, initial-scale=1, maximum-scale=1'
 
-// 			firstResize = true
-// 		} else {
-// 			firstResize = false
-// 		}
+			if (windowW < 375) document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
+
+			firstResize = true
+		} else {
+			firstResize = false
+		}
 
 
-// 		// Overwrite window width
-// 		WW = window.innerWidth
-// 	}
-// })
+		// Перезапись ширины окна
+		WW = window.innerWidth || document.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+	}
+})
 
 
 

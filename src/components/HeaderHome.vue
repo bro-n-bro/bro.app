@@ -1,37 +1,24 @@
 <template>
-    <header>
+    <header class="absolute">
         <div class="cont row">
-            <a href="https://bronbro.io" class="logo" target="_blank" rel="noopener">
+            <a href="https://bronbro.io" class="logo">
                 <img src="/logo.svg" alt="">
             </a>
-
-            <!-- Notifications -->
-            <Notifications class="animate fadeInUp" v-animate />
-
-            <!-- Choose network -->
-            <ChooseNetwork class="animate fadeInRight" v-animate />
         </div>
     </header>
 </template>
 
 
-<script setup>
-    // Components
-    import ChooseNetwork  from '../components/ChooseNetwork.vue'
-    import Notifications  from '../components/Notifications.vue'
-</script>
-
-
 <style scoped>
     header
     {
-        position: relative;
+        position: absolute;
         z-index: 20;
         top: 0;
         left: 0;
 
         width: 100%;
-        margin-bottom: 20px;
+        margin: 0;
         padding: 20px 0;
     }
 
@@ -66,7 +53,7 @@
 
     header .notifications
     {
-        width: calc(100% - 548px);
+        width: calc(100% - 519px);
         margin-right: auto;
         margin-left: auto;
     }
