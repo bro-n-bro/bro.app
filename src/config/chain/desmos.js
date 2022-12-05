@@ -1,6 +1,6 @@
 const config = {
     chainId: 'desmos-mainnet',
-    chainName: 'desmos',
+    chainName: 'Desmos',
     rpc: 'https://rpc.mainnet.desmos.network',
     rest: 'https://api.mainnet.desmos.network',
     bip44: {
@@ -20,7 +20,14 @@ const config = {
             coinMinimalDenom: 'udsm',
             coinDecimals: 6,
             coinGeckoId: 'cosmos',
+            coinImageUrl: 'https://app.osmosis.zone/tokens/dsm.svg'
         },
+    ],
+    features: [
+        'stargate',
+        'ibc-transfer',
+        'no-legacy-stdTx',
+        'ibc-go'
     ],
     feeCurrencies: [
         {
@@ -29,9 +36,9 @@ const config = {
             coinDecimals: 6,
             coinGeckoId: 'desmos',
             gasPriceStep: {
-                low: 0.001,
+                low: 0.002,
                 average: 0.025,
-                high: 0.04,
+                high: 0.03
             },
         },
     ],
@@ -40,7 +47,8 @@ const config = {
         coinMinimalDenom: 'udsm',
         coinDecimals: 6,
         coinGeckoId: 'desmos',
-    }
+    },
+    beta: true
 }
 
 export default config
