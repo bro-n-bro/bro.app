@@ -30,9 +30,7 @@
     var showDropdown = ref(false)
 
 
-    watchEffect(
-        () => showDropdown.value = false
-    )
+    watchEffect(() => showDropdown.value = false)
 
 
     // Select currency

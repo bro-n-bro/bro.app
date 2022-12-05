@@ -133,11 +133,11 @@
 
     .notifications.stuck .data
     {
-        width: calc(100% - 747px);
+        width: calc(100% - 764px);
         padding-top: 10px;
         padding-bottom: 10px;
 
-        transform: translateX(-152px);
+        transform: translateX(-116px);
     }
 
 </style>
