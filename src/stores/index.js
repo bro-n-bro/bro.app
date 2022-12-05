@@ -69,7 +69,7 @@ export const useGlobalStore = defineStore('global', {
         showManageRejectModal: false,
         loaderManageModal: false,
 
-        networkManageModal: 'cosmoshub'
+        networkManageModal: ''
     }),
 
     actions: {
