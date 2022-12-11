@@ -52,21 +52,35 @@ export default {
             // Manage modal
             'manage_modal_action_delegate': 'Delegate',
             'manage_modal_action_redelegate': 'Redelegate',
+            'manage_modal_action_claim': 'Claim',
+
             'manage_modal_validator_name': 'Bro_n_Bro',
             'manage_modal_commission': 'Commission',
+
             'manage_modal_notice_title': 'Staking will lock up your funds for {unbonding_time} days',
+            'manage_modal_notice_claim_title': 'Your claimed rewards will be added<br> to Available Balance.',
             'manage_modal_notice_desc': 'Once you undelegate your staked {currency}, you will need to wait {unbonding_time} days for your tokens to be liquid',
+
             'manage_modal_my_delegation': 'My delegation',
             'manage_modal_available_balance': 'Available Balance',
+            'manage_modal_rewards_balance': 'Pending Rewards',
+
             'manage_modal_amount': 'Amount to Delegate',
             'manage_modal_amount2': 'Amount to Redelegate',
+
             'manage_modal_max_btn': 'MAX',
+
             'manage_modal_validator_label': 'Validator to Delegate',
             'manage_modal_validator_label2': 'Validator from Redelegate',
-            'manage_modal_fees': '{value} {currency} is reserved for transaction fees',
-            'manage_modal_back_btn': 'Back',
+
+            'manage_modal_validator_placeholder': 'Name Validator',
+
+            'manage_modal_validator_exp': 'Delegating to Bro_n_Bro will open all application features',
+            'manage_modal_amount_exp': '{value} {currency} is reserved for transaction fees',
+
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',
+            'manage_modal_claim_all_btn': 'Claim all',
             'manage_modal_success_back_btn': 'Got it!',
             'manage_modal_again_btn': 'Try again!',
 

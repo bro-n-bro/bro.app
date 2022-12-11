@@ -272,6 +272,16 @@ export const useGlobalStore = defineStore('global', {
                         let result = data.total.find(el => el.denom == this.networks[network].denom)
 
                         this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
+
+                        // Set a rewards from each validator
+                        for (let i in data.rewards) {
+                            let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
+
+                            this.networks[network].rewards_validators.push({
+                                'operator_address': data.rewards[i].validator_address,
+                                'amount': parseFloat(rewards.amount) / this.networks[network].exponent
+                            })
+                        }
                     }
                 })
 

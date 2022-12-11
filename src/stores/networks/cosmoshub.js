@@ -30,6 +30,8 @@ const network = {
     rewards_tokens: 0,
     rewards_percents: 0,
 
+    rewards_validators: [],
+
     rewards_price: 0,
     rewards_price_usdt: 0,
     rewards_price_atom: 0,
