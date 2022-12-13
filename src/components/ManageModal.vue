@@ -27,6 +27,11 @@
                             <input type="radio" value="claim" v-model="form.type">
                             <div>{{ $t('message.manage_modal_action_claim') }}</div>
                         </label>
+
+                        <label @click="clearValidator" v-if="store.networks[store.networkManageModal].restake">
+                            <input type="radio" value="restake" v-model="form.type">
+                            <div>{{ $t('message.manage_modal_action_restake') }}</div>
+                        </label>
                     </div>
 
                     <div class="validator">
@@ -48,23 +53,31 @@
                     </div>
 
                     <div class="notice">
-                        <div class="title" v-if="form.type != 'claim'">
+                        <div class="title" v-if="form.type == 'delegate' || form.type == 'redelegate'">
                             {{ $t('message.manage_modal_notice_title', {
                                 unbonding_time: store.networks[store.networkManageModal].unbonding_time/60/60/24
                             }) }}
                         </div>
 
-                        <div class="title" v-if="form.type == 'claim'" v-html="$t('message.manage_modal_notice_claim_title')"></div>
-
-                        <div class="desc" v-if="form.type != 'claim'">
+                        <div class="desc" v-if="form.type == 'delegate' || form.type == 'redelegate'">
                             {{ $t('message.manage_modal_notice_desc', {
                                 currency: store.networks[store.networkManageModal].token_name,
                                 unbonding_time: store.networks[store.networkManageModal].unbonding_time/60/60/24
                             }) }}
                         </div>
+
+
+                        <div class="title" v-if="form.type == 'claim'" v-html="$t('message.manage_modal_claim_notice_title')"></div>
+
+
+                        <div class="title" v-if="form.type == 'restake'">
+                            {{ $t('message.manage_modal_restake_notice_title') }}
+                        </div>
+
+                        <div class="desc" v-if="form.type == 'restake'" v-html="$t('message.manage_modal_restake_notice_desc')"></div>
                     </div>
 
-                    <div class="tokens">
+                    <div class="tokens" v-if="form.type != 'restake'">
                         <div>
                             <div class="label">
                                 {{ $t('message.manage_modal_my_delegation') }}
@@ -114,7 +127,7 @@
                         </div>
                     </div>
 
-                    <div class="validate_from" v-if="form.type != 'claim'">
+                    <div class="validate_from" v-if="form.type == 'delegate' || form.type == 'redelegate'">
                         <div class="label" v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_validator_label') }}
                         </div>
@@ -153,7 +166,7 @@
                         </div>
                     </div>
 
-                    <div class="amount" v-if="form.type != 'claim'">
+                    <div class="amount" v-if="form.type == 'delegate' || form.type == 'redelegate'">
                         <div class="label">
                             <template v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_amount') }}
@@ -181,8 +194,99 @@
                         </div>
                     </div>
 
+                    <div class="restake_features" v-if="form.type == 'restake'">
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_APR') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $filters.toFixed(store.networks[store.networkManageModal].apr*100, 2) }} %
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_APY') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $filters.toFixed(store.networks[store.networkManageModal].apy*100, 2) }} %
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_delegation') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $filters.toFixed(restake.delegations, 2) }}
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_pending_rewards') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $filters.toFixed(restake.rewards, 2) }}
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_frequency') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $t('message.manage_modal_frequency_val', { frequency: store.networks[store.networkManageModal].restake.run_time }) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">
+                                {{ $t('message.manage_modal_minimum_reward') }}
+                            </div>
+
+                            <div class="val">
+                                {{ $filters.toFixed(store.networks[store.networkManageModal].restake.minimum_reward / store.networks[store.networkManageModal].exponent, 1) }}
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grant_info" v-if="form.type == 'restake'">
+                        <div>
+                            <div class="label">{{ $t('message.manage_modal_grant_label_status') }}</div>
+
+                            <div class="val red" v-if="!Object.keys(restake.grant).length">{{ $t('message.manage_modal_grant_status_inactive') }}</div>
+
+                            <div class="val green" v-else>
+                                <div>{{ $t('message.manage_modal_grant_status_active') }}</div>
+                                <div class="expiration">{{ restake.grant.expiration }}</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label">{{ $t('message.manage_modal_grant_label_remaining') }}</div>
+
+                            <div class="val" v-if="!Object.keys(restake.grant).length">{{ $t('message.manage_modal_grant_remaining') }}</div>
+
+                            <div class="val green" v-else-if="restake.grant.authorization.max_tokens == undefined">{{ $t('message.manage_modal_grant_remaining_unlimited') }}</div>
+
+                            <div class="val green" v-else>
+                                {{ restake.grant.authorization.max_tokens.amount / store.networks[store.networkManageModal].exponent }}
+                                {{ store.networks[store.networkManageModal].token_name }}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="btns">
-                        <button type="submit" class="btn submit_btn">
+                        <button type="submit" class="btn submit_btn" v-if="form.type != 'restake'">
                             <template v-if="form.type == 'delegate'">
                             {{ $t('message.manage_modal_delegate_btn') }}
                             </template>
@@ -194,6 +298,18 @@
                             <template v-if="form.type == 'claim'">
                             {{ $t('message.manage_modal_claim_all_btn') }}
                             </template>
+                        </button>
+
+                        <button type="button" class="btn green" v-if="form.type == 'restake' && !Object.keys(restake.grant).length" @click.prevent="setGrant">
+                            {{ $t('message.manage_modal_enable_restake_btn') }}
+                        </button>
+
+                        <button type="button" class="btn red w50" v-if="form.type == 'restake' && Object.keys(restake.grant).length">
+                            {{ $t('message.manage_modal_disable_restake_btn') }}
+                        </button>
+
+                        <button type="button" class="btn grey w50" v-if="form.type == 'restake' && Object.keys(restake.grant).length">
+                            {{ $t('message.manage_modal_manage_grant_btn') }}
                         </button>
                     </div>
                 </form>
@@ -217,6 +333,9 @@
     import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
     import { createTxMsgDelegate, createTxMsgBeginRedelegate, createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
 
+    import { StakeAuthorization } from "cosmjs-types/cosmos/staking/v1beta1/authz"
+    import { Timestamp } from "cosmjs-types/google/protobuf/timestamp"
+
     const emitter = inject('emitter'),
         store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -230,6 +349,11 @@
                 availabel_tokens: 0,
                 name: i18n.global.t('message.manage_modal_validator_name')
             }
+        }),
+        restake = reactive({
+            grant: {},
+            delegations: store.networks[store.networkManageModal].delegations.find(el => el.operator_address == store.networks[store.networkManageModal].validator).amount,
+            rewards: store.networks[store.networkManageModal].rewards.find(el => el.operator_address == store.networks[store.networkManageModal].validator).amount
         })
 
 
@@ -249,6 +373,11 @@
                         form.validators = result
                     }
                 })
+        }
+
+        // Get grant info
+        if(store.networks[store.networkManageModal].restake) {
+            getGrantInfo()
         }
     })
 
@@ -303,6 +432,124 @@
         form.validator.operator_address
             ? form.amount = form.validator.availabel_tokens - 0.01
             : form.amount = store.networks[store.networkManageModal].availabel_tokens - 0.01
+    }
+
+
+    // Get grant info
+    async function getGrantInfo() {
+        try {
+            await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/authz/v1beta1/grants/granter/${store.wallets[store.networkManageModal]}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.grants.length) {
+                        restake.grant = data.grants.find(grant => grant.grantee == store.networks[store.networkManageModal].restake.address)
+                    }
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    async function setGrant() {
+        // Enable loader
+        store.loaderManageModal = !store.loaderManageModal
+
+        try {
+            // Create request
+            const offlineSigner = await window.getOfflineSigner(store.networks[store.networkManageModal].chainId)
+
+            const expiry = new Date()
+
+            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                msgAny = {
+                    typeUrl: '/cosmos.authz.v1beta1.MsgGrant',
+                    value: {
+                        granter: store.wallets[store.networkManageModal],
+                        grantee: store.networks[store.networkManageModal].restake.address,
+                        grant: {
+                            expiration: expiry.setFullYear(expiry.getFullYear() + 1),
+                            authorization: {
+                                typeUrl: '/cosmos.staking.v1beta1.StakeAuthorization',
+                                value: StakeAuthorization.encode(StakeAuthorization.fromPartial({
+                                    allowList: { address: [store.networks[store.networkManageModal].validator] },
+                                    authorizationType: 1
+                                })).finish()
+                            }
+                        }
+                    }
+                }
+
+            const fee = {
+                amount: [{
+                    denom: store.networks[store.networkManageModal].denom,
+                    amount: '0'
+                }],
+                gas: '250000'
+            }
+
+            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+
+            // Update grant info
+            getGrantInfo()
+
+            // Disable loader
+            store.loaderManageModal = !store.loaderManageModal
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    // Delegate DEFAULT
+    async function delegateDEFAULT() {
+        try {
+            // Create request
+            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
+
+            Object.assign(offlineSigner, {
+                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
+            })
+
+            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+                msgAny = {
+                    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                    value: {
+                        delegatorAddress: store.wallets[store.networkManageModal],
+                        validatorAddress: store.networks[store.networkManageModal].validator,
+                        amount: {
+                            denom: store.networks[store.networkManageModal].denom,
+                            amount: (form.amount * store.networks[store.networkManageModal].exponent).toString()
+                        }
+                    }
+                }
+
+            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+
+            if(store.networkManageModal != 'emoney'){
+                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+            }
+
+            const fee = {
+                amount: [{
+                    denom: store.networks[store.networkManageModal].denom,
+                    amount: '0'
+                }],
+                gas: Math.round(gasUsed * 1.3).toString()
+            }
+
+            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+
+            // Show success modal
+            showSuccessModal(result)
+        } catch (error) {
+            console.log(error)
+
+            // Show error modal
+            showErrorModal(error)
+        }
     }
 
 
@@ -406,8 +653,8 @@
     }
 
 
-    // Delegate DEFAULT
-    async function delegateDEFAULT() {
+    // Rredelegate DEFAULT
+    async function redelegateDEFAULT() {
         try {
             // Create request
             const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
@@ -419,13 +666,14 @@
             const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
                 client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
                 msgAny = {
-                    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                    typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
                     value: {
                         delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorAddress: store.networks[store.networkManageModal].validator,
+                        validatorSrcAddress: form.validator.operator_address,
+                        validatorDstAddress: store.networks[store.networkManageModal].validator,
                         amount: {
                             denom: store.networks[store.networkManageModal].denom,
-                            amount: (form.amount * store.networks[store.networkManageModal].exponent).toString()
+                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
                         }
                     }
                 }
@@ -445,6 +693,20 @@
             }
 
             const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+
+            if(result.code != 0){
+                // Get error title
+                store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)
+
+                // Disable loader
+                store.loaderManageModal = !store.loaderManageModal
+
+                // Open error modal
+                emitter.emit('close_manage_modal')
+                emitter.emit('open_manage_error_modal')
+
+                return false
+            }
 
             // Show success modal
             showSuccessModal(result)
@@ -548,72 +810,6 @@
     }
 
 
-    // Rredelegate DEFAULT
-    async function redelegateDEFAULT() {
-        try {
-            // Create request
-            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
-
-            Object.assign(offlineSigner, {
-                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
-            })
-
-            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                msgAny = {
-                    typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
-                    value: {
-                        delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorSrcAddress: form.validator.operator_address,
-                        validatorDstAddress: store.networks[store.networkManageModal].validator,
-                        amount: {
-                            denom: store.networks[store.networkManageModal].denom,
-                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                        }
-                    }
-                }
-
-            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
-
-            if(store.networkManageModal != 'emoney'){
-                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
-            }
-
-            const fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: Math.round(gasUsed * 1.3).toString()
-            }
-
-            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
-
-            if(result.code != 0){
-                // Get error title
-                store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)
-
-                // Disable loader
-                store.loaderManageModal = !store.loaderManageModal
-
-                // Open error modal
-                emitter.emit('close_manage_modal')
-                emitter.emit('open_manage_error_modal')
-
-                return false
-            }
-
-            // Show success modal
-            showSuccessModal(result)
-        } catch (error) {
-            console.log(error)
-
-            // Show error modal
-            showErrorModal(error)
-        }
-    }
-
-
     // Claim all DEFAILT
     async function claimAllDEFAULT() {
         // Enable loader
@@ -634,7 +830,7 @@
             if(form.validators.length) {
                 // If there is more than one validator
                 form.validators.forEach(validator => {
-                    let validatorRewards = store.networks[store.networkManageModal].rewards_validators.find(el => el.operator_address == validator.operator_address)
+                    let validatorRewards = store.networks[store.networkManageModal].rewards.find(el => el.operator_address == validator.operator_address)
 
                     msgAny.push({
                         typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
@@ -858,7 +1054,16 @@
 </script>
 
 
-<style>
+<style scoped>
+#manage_modal form
+{
+    display: flex;
+    flex-direction: column;
+
+    height: 690px;
+}
+
+
 #manage_modal .type
 {
     display: flex;
@@ -1022,13 +1227,22 @@
 }
 
 
-#manage_modal .tokens
+#manage_modal .tokens,
+#manage_modal .restake_features
 {
     margin-top: 26px;
 }
 
+#manage_modal .restake_features
+{
+    padding-bottom: 10px;
 
-#manage_modal .tokens > *
+    border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+
+
+#manage_modal .tokens > *,
+#manage_modal .restake_features > *
 {
     display: flex;
 
@@ -1038,7 +1252,8 @@
     justify-content: space-between;
 }
 
-#manage_modal .tokens > * + *
+#manage_modal .tokens > * + *,
+#manage_modal .restake_features > * + *
 {
     margin-top: 10px;
     padding-top: 10px;
@@ -1047,7 +1262,8 @@
 }
 
 
-#manage_modal .tokens .label
+#manage_modal .tokens .label,
+#manage_modal .restake_features .label
 {
     color: #8e8e8e;
     font-size: 14px;
@@ -1055,7 +1271,8 @@
 }
 
 
-#manage_modal .tokens .val
+#manage_modal .tokens .val,
+#manage_modal .restake_features .val
 {
     font-weight: 600;
     line-height: 19px;
@@ -1376,9 +1593,78 @@
 }
 
 
+#manage_modal .grant_info
+{
+    display: flex;
+
+    margin-top: 10px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
+}
+
+#manage_modal .grant_info > *
+{
+    width: calc(50% - 10px);
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 10px;
+
+    border-radius: 10px;
+    background: #191919;
+}
+
+
+#manage_modal .grant_info .label
+{
+    color: #8e8e8e;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+
+#manage_modal .grant_info .val
+{
+    color: #8e8e8e;
+    font-weight: 600;
+    line-height: 19px;
+
+    margin-top: 6px;
+}
+
+#manage_modal .grant_info .val.red
+{
+    color: #eb5757;
+}
+
+#manage_modal .grant_info .val.green
+{
+color: #1BC562;
+}
+
+
+#manage_modal .grant_info .expiration{
+    font-weight: 400;
+    font-size: 12px;
+line-height: 15px;
+margin-top: 2px;
+
+color: #8E8E8E;
+}
+
+
 #manage_modal .btns
 {
-    margin-top: 40px;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
 }
 
 
@@ -1399,6 +1685,10 @@
     border-radius: 14px;
 }
 
+#manage_modal .btns .btn.w50{
+    width: calc(50% - 5px);
+}
+
 
 #manage_modal .btns .btn:hover
 {
@@ -1406,122 +1696,21 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#manage_modal .btns .btn.green
+{
+    border-color: #1bc562;
+    background: #1bc562;
+}
+
+#manage_modal .btns .btn.red
+{
+    border-color: #EB5757;
+background: #EB5757;
+}
+
+#manage_modal .btns .btn.grey
+{
+    border-color: #282828;
+background: #282828;
+}
 </style>

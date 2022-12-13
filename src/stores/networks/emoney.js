@@ -30,8 +30,6 @@ const network = {
     rewards_tokens: 0,
     rewards_percents: 0,
 
-    rewards_validators: [],
-
     rewards_price: 0,
     rewards_price_usdt: 0,
     rewards_price_atom: 0,
@@ -40,6 +38,7 @@ const network = {
 
     validators: [],
     delegations: [],
+    rewards: [],
 
     RPDE: 0,
     RPDE_usdt: 0,
@@ -64,6 +63,7 @@ const network = {
     balance_btc: 0,
 
     apr: 0,
+    apy: 0,
     personal_APR: 0,
 
     speed: 0,
@@ -71,7 +71,13 @@ const network = {
     exponent: 1000000,
     tokens_sum: 0,
     unbonding_time: 0,
-    gas: '250000'
+    gas: '250000',
+
+    restake: {
+        address: 'emoney1grfk7t0k42yxpwqhr7kt4te7j73m2a3vdx8ykm',
+        run_time: '19:37',
+        minimum_reward: 100000
+    }
 }
 
 export default network

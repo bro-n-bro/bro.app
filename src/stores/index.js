@@ -256,7 +256,10 @@ export const useGlobalStore = defineStore('global', {
                         data.delegation_responses.forEach(el => {
                             sum += parseFloat(el.balance.amount)
 
-                            this.networks[network].delegations[el.delegation.validator_address] = el.delegation.shares / this.networks[network].exponent
+                            this.networks[network].delegations.push({
+                                'operator_address': el.delegation.validator_address,
+                                'amount': parseFloat(el.delegation.shares) / this.networks[network].exponent
+                            })
                         })
 
                         this.networks[network].delegations_tokens = sum / this.networks[network].exponent
@@ -277,7 +280,7 @@ export const useGlobalStore = defineStore('global', {
                         for (let i in data.rewards) {
                             let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
 
-                            this.networks[network].rewards_validators.push({
+                            this.networks[network].rewards.push({
                                 'operator_address': data.rewards[i].validator_address,
                                 'amount': parseFloat(rewards.amount) / this.networks[network].exponent
                             })
@@ -438,6 +441,7 @@ export const useGlobalStore = defineStore('global', {
                         if (this.networks[el.network]) {
                             this.networks[el.network].health = el.health
                             this.networks[el.network].apr = el.apr
+                            this.networks[el.network].apy = Math.pow(1 + (el.apr.toFixed(2) / 365), 365) - 1
 
                             this.networks[el.network].price = el.price
                             this.networks[el.network].price_usdt = el.price

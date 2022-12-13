@@ -53,17 +53,27 @@ export default {
             'manage_modal_action_delegate': 'Delegate',
             'manage_modal_action_redelegate': 'Redelegate',
             'manage_modal_action_claim': 'Claim',
+            'manage_modal_action_restake': 'Restake',
 
             'manage_modal_validator_name': 'Bro_n_Bro',
             'manage_modal_commission': 'Commission',
 
             'manage_modal_notice_title': 'Staking will lock up your funds for {unbonding_time} days',
-            'manage_modal_notice_claim_title': 'Your claimed rewards will be added<br> to Available Balance.',
+            'manage_modal_claim_notice_title': 'Your claimed rewards will be added<br> to Available Balance.',
+            'manage_modal_restake_notice_title': 'You no longer have to manually claim and restake your staking rewards',
             'manage_modal_notice_desc': 'Once you undelegate your staked {currency}, you will need to wait {unbonding_time} days for your tokens to be liquid',
+            'manage_modal_restake_notice_desc': 'enabling Restake will allow Bro_n_Bro to auto-compound your staking rewards for you.',
 
             'manage_modal_my_delegation': 'My delegation',
             'manage_modal_available_balance': 'Available Balance',
             'manage_modal_rewards_balance': 'Pending Rewards',
+            'manage_modal_APR': 'APR',
+            'manage_modal_APY': 'APY',
+            'manage_modal_delegation': 'Delegation',
+            'manage_modal_pending_rewards': 'Pending Rewards',
+            'manage_modal_frequency': 'Frequency',
+            'manage_modal_frequency_val': 'at {frequency} every day',
+            'manage_modal_minimum_reward': 'Minimum Reward',
 
             'manage_modal_amount': 'Amount to Delegate',
             'manage_modal_amount2': 'Amount to Redelegate',
@@ -78,9 +88,19 @@ export default {
             'manage_modal_validator_exp': 'Delegating to Bro_n_Bro will open all application features',
             'manage_modal_amount_exp': '{value} {currency} is reserved for transaction fees',
 
+            'manage_modal_grant_label_status': 'Grant Status',
+            'manage_modal_grant_label_remaining': 'Grant Remaining',
+            'manage_modal_grant_status_inactive': 'Inactive',
+            'manage_modal_grant_status_active': 'Active',
+            'manage_modal_grant_remaining': 'Unknown',
+            'manage_modal_grant_remaining_unlimited': 'Unlimited',
+
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',
             'manage_modal_claim_all_btn': 'Claim all',
+            'manage_modal_enable_restake_btn': 'Enable Restake',
+            'manage_modal_disable_restake_btn': 'Disable Restake',
+            'manage_modal_manage_grant_btn': 'Manage Grant',
             'manage_modal_success_back_btn': 'Got it!',
             'manage_modal_again_btn': 'Try again!',
 
