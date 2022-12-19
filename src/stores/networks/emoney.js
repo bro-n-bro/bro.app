@@ -73,11 +73,7 @@ const network = {
     unbonding_time: 0,
     gas: '250000',
 
-    restake: {
-        address: 'emoney1grfk7t0k42yxpwqhr7kt4te7j73m2a3vdx8ykm',
-        run_time: '19:37',
-        minimum_reward: 100000
-    }
+    restake: false
 }
 
 export default network

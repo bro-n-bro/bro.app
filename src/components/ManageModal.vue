@@ -1,7 +1,7 @@
 <template>
     <section class="modal" id="manage_modal">
         <transition name="fadeUp" mode="out-in" appear type="animation">
-        <div class="modal_content">
+        <div class="modal_content" @click.self="emitter.emit('close_manage_modal')">
             <div class="data">
                 <div class="loader_wrap" v-if="store.loaderManageModal">
                     <div class="loader"><span></span></div>
@@ -285,6 +285,7 @@
                         </div>
                     </div>
 
+
                     <div class="btns">
                         <button type="submit" class="btn submit_btn" v-if="form.type != 'restake'">
                             <template v-if="form.type == 'delegate'">
@@ -304,7 +305,7 @@
                             {{ $t('message.manage_modal_enable_restake_btn') }}
                         </button>
 
-                        <button type="button" class="btn red w50" v-if="form.type == 'restake' && Object.keys(restake.grant).length">
+                        <button type="button" class="btn red w50" v-if="form.type == 'restake' && Object.keys(restake.grant).length" @click.prevent="removeGrant">
                             {{ $t('message.manage_modal_disable_restake_btn') }}
                         </button>
 
@@ -319,7 +320,7 @@
 
 
         <transition name="fade" mode="out-in" appear type="animation">
-        <div class="overlay" @click.prevent="emitter.emit('close_manage_modal')"></div>
+        <div class="overlay"></div>
         </transition>
     </section>
 </template>
@@ -333,8 +334,7 @@
     import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
     import { createTxMsgDelegate, createTxMsgBeginRedelegate, createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
 
-    import { StakeAuthorization } from "cosmjs-types/cosmos/staking/v1beta1/authz"
-    import { Timestamp } from "cosmjs-types/google/protobuf/timestamp"
+    import { StakeAuthorization } from 'cosmjs-types/cosmos/staking/v1beta1/authz'
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
@@ -451,18 +451,55 @@
     }
 
 
+    // Prepare transaction
+    async function prepareTx(enableFee) {
+        // Create request
+        const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
+
+        Object.assign(offlineSigner, {
+            signAmino: offlineSigner.signAmino ?? offlineSigner.sign
+        })
+
+        const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
+            client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner)
+
+        if(enableFee) {
+            // Simulate gas
+            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+
+            if(store.networkManageModal != 'emoney'){
+                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
+            }
+        }
+
+        const fee = {
+            amount: [{
+                denom: store.networks[store.networkManageModal].denom,
+                amount: '0'
+            }],
+            gas: !enableFee ? '250000' : Math.round(gasUsed * 1.3).toString()
+        }
+
+        const memo = 'bro.app'
+
+        return { client, fee,  memo }
+    }
+
+
+    // Send transaction
+    async function sendTx(client, address, message, fee, memo) {
+        const result = await client.signAndBroadcast(address, message, fee, memo)
+
+        return result
+    }
+
+
     async function setGrant() {
         // Enable loader
         store.loaderManageModal = !store.loaderManageModal
 
         try {
-            // Create request
-            const offlineSigner = await window.getOfflineSigner(store.networks[store.networkManageModal].chainId)
-
-            const expiry = new Date()
-
-            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
+            const expiry = new Date(),
                 msgAny = {
                     typeUrl: '/cosmos.authz.v1beta1.MsgGrant',
                     value: {
@@ -481,21 +518,52 @@
                     }
                 }
 
-            const fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: '250000'
+            // Prepare message
+            const tx = await prepareTx(false)
+
+            // Send transaction
+            const result = await sendTx(tx.client, store.wallets[store.networkManageModal], [msgAny], tx.fee, tx.memo)
+
+            if(result.code == 0){
+                // Update grant info
+                getGrantInfo()
+
+                // Disable loader
+                store.loaderManageModal = !store.loaderManageModal
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    async function removeGrant() {
+        // Enable loader
+        store.loaderManageModal = !store.loaderManageModal
+
+        try {
+            const msgAny = {
+                typeUrl: '/cosmos.authz.v1beta1.MsgRevoke',
+                value: {
+                    granter: store.wallets[store.networkManageModal],
+                    grantee: store.networks[store.networkManageModal].restake.address,
+                    msgTypeUrl: '/cosmos.staking.v1beta1.MsgDelegate'
+                }
             }
 
-            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+            // Prepare message
+            const tx = await prepareTx(false)
 
-            // Update grant info
-            getGrantInfo()
+            // Send transaction
+            const result = await sendTx(tx.client, store.wallets[store.networkManageModal], [msgAny], tx.fee, tx.memo)
 
-            // Disable loader
-            store.loaderManageModal = !store.loaderManageModal
+            if(result.code == 0){
+                // Update grant info
+                restake.grant = {}
+
+                // Disable loader
+                store.loaderManageModal = !store.loaderManageModal
+            }
         } catch (error) {
             console.log(error)
         }
@@ -505,42 +573,23 @@
     // Delegate DEFAULT
     async function delegateDEFAULT() {
         try {
-            // Create request
-            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
-
-            Object.assign(offlineSigner, {
-                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
-            })
-
-            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                msgAny = {
-                    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
-                    value: {
-                        delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorAddress: store.networks[store.networkManageModal].validator,
-                        amount: {
-                            denom: store.networks[store.networkManageModal].denom,
-                            amount: (form.amount * store.networks[store.networkManageModal].exponent).toString()
-                        }
+            const msgAny = {
+                typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+                value: {
+                    delegatorAddress: store.wallets[store.networkManageModal],
+                    validatorAddress: store.networks[store.networkManageModal].validator,
+                    amount: {
+                        denom: store.networks[store.networkManageModal].denom,
+                        amount: (form.amount * store.networks[store.networkManageModal].exponent).toString()
                     }
                 }
-
-            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
-
-            if(store.networkManageModal != 'emoney'){
-                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
             }
 
-            const fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: Math.round(gasUsed * 1.3).toString()
-            }
+            // Prepare message
+            const tx = await prepareTx(false)
 
-            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+            // Send transaction
+            const result = await sendTx(tx.client, store.wallets[store.networkManageModal], [msgAny], tx.fee, tx.memo)
 
             // Show success modal
             showSuccessModal(result)
@@ -656,43 +705,24 @@
     // Rredelegate DEFAULT
     async function redelegateDEFAULT() {
         try {
-            // Create request
-            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
-
-            Object.assign(offlineSigner, {
-                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
-            })
-
-            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                msgAny = {
-                    typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
-                    value: {
-                        delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorSrcAddress: form.validator.operator_address,
-                        validatorDstAddress: store.networks[store.networkManageModal].validator,
-                        amount: {
-                            denom: store.networks[store.networkManageModal].denom,
-                            amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
-                        }
+            const msgAny = {
+                typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
+                value: {
+                    delegatorAddress: store.wallets[store.networkManageModal],
+                    validatorSrcAddress: form.validator.operator_address,
+                    validatorDstAddress: store.networks[store.networkManageModal].validator,
+                    amount: {
+                        denom: store.networks[store.networkManageModal].denom,
+                        amount: `${form.amount * store.networks[store.networkManageModal].exponent}`
                     }
                 }
-
-            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
-
-            if(store.networkManageModal != 'emoney'){
-                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
             }
 
-            const fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: Math.round(gasUsed * 1.3).toString()
-            }
+            // Prepare message
+            const tx = await prepareTx(false)
 
-            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, 'bro.app')
+            // Send transaction
+            const result = await sendTx(tx.client, store.wallets[store.networkManageModal], [msgAny], tx.fee, tx.memo)
 
             if(result.code != 0){
                 // Get error title
@@ -816,16 +846,15 @@
         store.loaderManageModal = !store.loaderManageModal
 
         try {
-            // Create request
-            const offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
-
-            Object.assign(offlineSigner, {
-                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
-            })
-
-            const rpcEndpoint = store.networks[store.networkManageModal].rpc_api,
-                client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner),
-                msgAny = []
+            const msgAny = [
+                {
+                    typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
+                    value: {
+                        delegatorAddress: store.wallets[store.networkManageModal],
+                        validatorAddress: store.networks[store.networkManageModal].validator
+                    }
+                }
+            ]
 
             if(form.validators.length) {
                 // If there is more than one validator
@@ -840,32 +869,13 @@
                         }
                     })
                 })
-            } else {
-                // If there is only one validator
-                msgAny.push({
-                    typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
-                    value: {
-                        delegatorAddress: store.wallets[store.networkManageModal],
-                        validatorAddress: store.networks[store.networkManageModal].validator
-                    }
-                })
             }
 
-            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+            // Prepare message
+            const tx = await prepareTx(false)
 
-            if(store.networkManageModal != 'emoney'){
-                gasUsed = await client.simulate(store.wallets[store.networkManageModal], msgAny)
-            }
-
-            const fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: Math.round(gasUsed * 1.3).toString()
-            }
-
-            const result = await client.signAndBroadcast(store.wallets[store.networkManageModal], msgAny, fee, 'bro.app')
+            // Send transaction
+            const result = await sendTx(tx.client, store.wallets[store.networkManageModal], msgAny, tx.fee, tx.memo)
 
             if(result.code != 0){
                 // Get error title
@@ -1643,24 +1653,27 @@
 
 #manage_modal .grant_info .val.green
 {
-color: #1BC562;
+    color: #1bc562;
 }
 
 
-#manage_modal .grant_info .expiration{
-    font-weight: 400;
+#manage_modal .grant_info .expiration
+{
+    color: #8e8e8e;
     font-size: 12px;
-line-height: 15px;
-margin-top: 2px;
+    font-weight: 400;
+    line-height: 15px;
 
-color: #8E8E8E;
+    margin-top: 2px;
 }
 
 
 #manage_modal .btns
 {
-    margin-top: auto;
     display: flex;
+
+    margin-top: auto;
+
     justify-content: space-between;
     align-items: center;
     align-content: center;
@@ -1685,7 +1698,8 @@ color: #8E8E8E;
     border-radius: 14px;
 }
 
-#manage_modal .btns .btn.w50{
+#manage_modal .btns .btn.w50
+{
     width: calc(50% - 5px);
 }
 
@@ -1704,13 +1718,71 @@ color: #8E8E8E;
 
 #manage_modal .btns .btn.red
 {
-    border-color: #EB5757;
-background: #EB5757;
+    border-color: #eb5757;
+    background: #eb5757;
 }
 
 #manage_modal .btns .btn.grey
 {
     border-color: #282828;
-background: #282828;
+    background: #282828;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>

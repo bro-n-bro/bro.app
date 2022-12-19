@@ -1,7 +1,7 @@
 <template>
     <section class="modal success" id="success_modal">
         <transition name="fadeUp" mode="out-in" appear type="animation">
-        <div class="modal_content">
+        <div class="modal_content" @click.self="emitter.emit('close_manage_error_modal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('close_manage_error_modal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
@@ -25,7 +25,7 @@
         </transition>
 
         <transition name="fade" mode="out-in" appear type="animation">
-        <div class="overlay" @click.prevent="emitter.emit('close_manage_error_modal')"></div>
+        <div class="overlay"></div>
         </transition>
     </section>
 </template>
