@@ -14,6 +14,10 @@
                             <img src="/bro_logo.svg" alt="">
                         </a></div>
 
+                        <div><a href="https://score.bronbro.io/" target="_blank" rel="noopener">
+                            <img src="/bro_score_logo.svg" alt="">
+                        </a></div>
+
                         <div><a href="https://monitor.bronbro.io/" target="_blank" rel="noopener">
                             <img src="/bro_stats_logo.svg" alt="">
                         </a></div>
