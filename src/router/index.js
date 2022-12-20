@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
 
 import errorLayut from '../layouts/Error.vue'
-import defaultLayut from '../layouts/Default.vue'
+import dashboardLayut from '../layouts/Dashboard.vue'
 
 const routes = [
 	{
@@ -34,7 +34,7 @@ const routes = [
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: dashboardLayut
 		}
 	},
 ]

@@ -113,4 +113,10 @@
         color: #950fff;
     }
 
+
+    footer .socials a:active
+    {
+        color: #7700E1;
+    }
+
 </style>

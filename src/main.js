@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import i18n from './locale'
+import moment from 'moment'
 
 
 // Events
@@ -25,10 +26,16 @@ app.provide('i18n', i18n)
 app.provide('emitter', emitter)
 
 
-// Add rounding
+// Filters
 app.config.globalProperties.$filters = {
+    // Add rounding
     toFixed(value, limit) {
         return value.toFixed(limit)
+    },
+
+    // Time age
+    timeAgo(date) {
+        return moment(date).fromNow()
     }
 }
 

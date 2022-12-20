@@ -310,6 +310,14 @@
        background: #950fff;
    }
 
+   .account .details_btn:active
+    {
+        color: #fff;
+
+        border-color: #7700E1;
+        background: #7700E1;
+    }
+
 
    .account .connect_wallet_btn
    {

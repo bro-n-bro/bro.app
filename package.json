@@ -22,12 +22,14 @@
 		"evmosjs": "^0.2.13",
 		"gh-pages": "^4.0.0",
 		"mitt": "^3.0.0",
+		"moment": "^2.29.4",
 		"path": "^0.12.7",
 		"pinia": "^2.0.18",
 		"stream": "^0.0.2",
 		"vue": "^3.2.13",
 		"vue-i18n": "^9.2.2",
-		"vue-router": "^4.1.6"
+		"vue-router": "^4.1.6",
+		"vue3-datepicker": "^0.3.4"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "~5.0.0",

@@ -21,6 +21,7 @@ export default {
             'manage_btn': 'Manage',
             'delegate_btn': 'Delegate to your Bro',
             'back_home_btn': 'Back to home',
+            'update_btn': 'Update',
 
             // Dashboard
             'personal_apr': 'Personal APR',
@@ -84,6 +85,7 @@ export default {
             'manage_modal_validator_label2': 'Validator from Redelegate',
 
             'manage_modal_validator_placeholder': 'Name Validator',
+            'manage_modal_grant_amount_placeholder': 'Unlimited',
 
             'manage_modal_validator_exp': 'Delegating to Bro_n_Bro will open all application features',
             'manage_modal_amount_exp': '{value} {currency} is reserved for transaction fees',
@@ -92,8 +94,20 @@ export default {
             'manage_modal_grant_label_remaining': 'Grant Remaining',
             'manage_modal_grant_status_inactive': 'Inactive',
             'manage_modal_grant_status_active': 'Active',
+            'manage_modal_grant_expiry': 'expires {date}',
             'manage_modal_grant_remaining': 'Unknown',
             'manage_modal_grant_remaining_unlimited': 'Unlimited',
+
+            'manage_modal_grant_text1': 'Bro_n_Bro will be able to carry out the following transactions on your behalf',
+            'manage_modal_grant_text2': '<b>Delegate</b> — allowed to delegate any amount to only their own validator',
+            'manage_modal_grant_text3': 'This grant will expire automatically on {date}',
+            'manage_modal_grant_text4': 'REStake only re-delegates Bro_n_Bro’s accrued rewards and tries not to touch your balance',
+
+            'manage_modal_grant_label_amount': 'Max amount',
+            'manage_modal_grant_label_expiry': 'Expiry date',
+
+            'manage_modal_grant_amount_exp': 'Reduces with every delegation made by the validator. Leave empty for unlimited',
+            'manage_modal_grant_expiry_exp': 'Date the grant will expire. After this date you will need to re-grant',
 
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',

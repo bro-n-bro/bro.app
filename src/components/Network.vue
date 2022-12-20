@@ -505,6 +505,16 @@
         background: #950fff;
     }
 
+    .network .delegate_btn:hover,
+    .network .delegate_btn:active,
+    .network .details_btn:active
+    {
+        color: #fff;
+
+        border-color: #7700E1;
+        background: #7700E1;
+    }
+
     .network.disabled:not(.default) .delegate_btn
     {
         opacity: .65;
