@@ -670,3 +670,42 @@ button
         opacity: 0;
     }
 }
+
+
+
+/*--------------
+    Calendar
+--------------*/
+.v3dp__datepicker
+{
+    --vdp-bg-color: #0d0d0d;
+    --vdp-text-color: #fff;
+    --vdp-box-shadow: none;
+    --vdp-border-radius: 15px;
+    --vdp-heading-size: 2.5em;
+    --vdp-heading-weight: bold;
+    --vdp-heading-hover-color: #141414;
+    --vdp-arrow-color: #950fff;
+    --vdp-elem-color: #950fff;
+    --vdp-disabled-color: #8e8e8e;
+    --vdp-hover-color: #fff;
+    --vdp-hover-bg-color: #950fff;
+    --vdp-selected-color: #fff;
+    --vdp-selected-bg-color: #950fff;
+    --vdp-current-date-outline-color: #8e8e8e;
+    --vdp-current-date-font-weight: bold;
+    --vdp-elem-font-size: .8em;
+    --vdp-elem-border-radius: 3px;
+    --vdp-divider-color: #950fff;
+}
+
+
+.v3dp__popout
+{
+    top: auto !important;
+    bottom: 100% !important;
+
+    width: 100% !important;
+    margin-bottom: 4px !important;
+    padding: 10px !important;
+}
