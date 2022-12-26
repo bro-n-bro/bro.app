@@ -76,13 +76,13 @@ export default {
             'manage_modal_frequency_val': 'at {frequency} every day',
             'manage_modal_minimum_reward': 'Minimum Reward',
 
-            'manage_modal_amount': 'Amount to Delegate',
-            'manage_modal_amount2': 'Amount to Redelegate',
+            'manage_modal_delegate_amount': 'Amount to Delegate',
+            'manage_modal_redelegate_amount': 'Amount to Redelegate',
 
             'manage_modal_max_btn': 'MAX',
 
-            'manage_modal_validator_label': 'Validator to Delegate',
-            'manage_modal_validator_label2': 'Validator from Redelegate',
+            'manage_modal_validator_delegate_label': 'Validator to Delegate',
+            'manage_modal_validator_redelegare_label': 'Validator from Redelegate',
 
             'manage_modal_validator_placeholder': 'Name Validator',
             'manage_modal_grant_amount_placeholder': 'Unlimited',
@@ -99,7 +99,7 @@ export default {
             'manage_modal_grant_remaining_unlimited': 'Unlimited',
 
             'manage_modal_grant_text1': 'Bro_n_Bro will be able to carry out the following transactions on your behalf',
-            'manage_modal_grant_text2': '<b>Delegate</b> — allowed to delegate any amount to only their own validator',
+            'manage_modal_grant_text2': '<b style="color: #fff;">Delegate</b> — allowed to delegate any amount to only their own validator',
             'manage_modal_grant_text3': 'This grant will expire automatically on {date}',
             'manage_modal_grant_text4': 'REStake only re-delegates Bro_n_Bro’s accrued rewards and tries not to touch your balance',
 

@@ -278,12 +278,14 @@ export const useGlobalStore = defineStore('global', {
 
                         // Set a rewards from each validator
                         for (let i in data.rewards) {
-                            let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
+                            if (data.rewards[i].reward.length) {
+                                let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
 
-                            this.networks[network].rewards.push({
-                                'operator_address': data.rewards[i].validator_address,
-                                'amount': parseFloat(rewards.amount) / this.networks[network].exponent
-                            })
+                                this.networks[network].rewards.push({
+                                    'operator_address': data.rewards[i].validator_address,
+                                    'amount': parseFloat(rewards.amount) / this.networks[network].exponent
+                                })
+                            }
                         }
                     }
                 })
@@ -537,6 +539,8 @@ export const useGlobalStore = defineStore('global', {
         // Update network
         async updateNetwork(network) {
             this.networks[network].validators = []
+            this.networks[network].delegations = []
+            this.networks[network].rewards = []
             this.networks[network].total_annual_provision = 0
 
             if (network == 'desmos') {

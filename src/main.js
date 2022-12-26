@@ -60,4 +60,4 @@ app.directive('clickOut', clickOutside)
 
 
 // Mount (Timeout for Keplr)
-setTimeout(() => app.mount('#app'), 100)
+setTimeout(() => app.mount('#app'), 150)

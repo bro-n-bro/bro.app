@@ -58,8 +58,8 @@
 
 <script setup>
     // Components
-    import Network  from '../components/Network.vue'
-    import Account  from '../components/Account.vue'
+    import Network from '../components/Network.vue'
+    import Account from '../components/Account.vue'
 </script>
 
 
@@ -82,6 +82,7 @@
 {
     margin-top: -82px;
 }
+
 
 
 </style>
