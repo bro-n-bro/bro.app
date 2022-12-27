@@ -26,8 +26,8 @@
                 </div>
 
                 <div class="val">
-                    <template v-if="validator.availabel_tokens">
-                    {{ $filters.toFixed(validator.availabel_tokens, 2) }}
+                    <template v-if="data.availabel_tokens">
+                    {{ $filters.toFixed(data.availabel_tokens, 2) }}
                     </template>
 
                     <template v-else>
@@ -44,8 +44,8 @@
                 </div>
 
                 <div class="val">
-                    <template v-if="validator.availabel_tokens">
-                    {{ $filters.toFixed(validator.availabel_tokens, 2) }}
+                    <template v-if="data.availabel_tokens">
+                    {{ $filters.toFixed(data.availabel_tokens, 2) }}
                     </template>
 
                     <template v-else>
@@ -65,11 +65,11 @@
                 </div>
 
                 <div class="field" v-click-out="hideDropdown">
-                    <input type="text" class="input validator_input" v-model="validator.name"
+                    <input type="text" class="input validator_input" v-model="data.name"
                         :placeholder="$t('message.manage_modal_validator_placeholder')"
                         @focus.self="$event.target.classList.add('active')">
 
-                    <button type="button" class="clear_btn" v-if="validator.name.length" @click.prevent="clearValidator">
+                    <button type="button" class="clear_btn" v-if="data.name.length" @click.prevent="clearValidator">
                         <svg><use xlink:href="/sprite.svg#ic_close"></use></svg>
                     </button>
 
@@ -96,13 +96,13 @@
                 </div>
 
                 <div class="field">
-                    <input type="text" class="input" v-model="data.amount" @input="setAmount" placeholder="0" :readonly="!validator.operator_address.length">
+                    <input type="text" class="input" v-model="data.amount" @input="setAmount" placeholder="0" :readonly="!data.operator_address.length">
 
                     <div class="unit">
                         {{ store.networks[store.networkManageModal].token_name }}
                     </div>
 
-                    <button type="button" class="max_btn" :disabled="!validator.operator_address.length" @click.prevent="setMaxAmount">
+                    <button type="button" class="max_btn" :disabled="!data.operator_address.length" @click.prevent="setMaxAmount">
                         {{ $t('message.manage_modal_max_btn') }}
                     </button>
                 </div>
@@ -135,15 +135,17 @@
     // Components
     import ManageModalValidator from './ManageModalValidator.vue'
 
-    const props = defineProps(['validator', 'validators']),
+    const props = defineProps(['validators']),
         i18n = inject('i18n'),
         store = useGlobalStore(),
         emitter = inject('emitter'),
         data = reactive({
-            amount: ''
+            amount: '',
+            operator_address: '',
+            availabel_tokens: 0,
+            name: ''
         }),
-        validator = reactive(props.validator),
-        validators = props.validators
+        validators = reactive(props.validators)
 
 
     // Hide dropdown
@@ -156,25 +158,21 @@
     }
 
 
-    // Clear validator info
+    // Clear data
     function clearValidator() {
-        validator.operator_address = ''
-        validator.name = ''
-        validator.availabel_tokens = 0
-
-        // Clear amount
+        data.operator_address = ''
+        data.name = ''
+        data.availabel_tokens = 0
         data.amount = ''
     }
 
 
-    // Set validator info
+    // Set data
     function setValidator(newValidator) {
-        validator.operator_address = newValidator.operator_address
-        validator.name = newValidator.description.moniker
-        validator.availabel_tokens = store.networks[store.networkManageModal].delegations.find(el => el.operator_address == newValidator.operator_address).amount
-
-        // Set amount
-        data.amount = (validator.availabel_tokens - 0.01).toString()
+        data.operator_address = newValidator.operator_address
+        data.name = newValidator.description.moniker
+        data.availabel_tokens = store.networks[store.networkManageModal].delegations.find(el => el.operator_address == newValidator.operator_address).amount
+        data.amount = (data.availabel_tokens - 0.01).toString()
 
         // Hide dropdown
         hideDropdown()
@@ -191,7 +189,7 @@
 
     // Set max. amount
     function setMaxAmount() {
-        data.amount = (validator.availabel_tokens - 0.01).toString()
+        data.amount = (data.availabel_tokens - 0.01).toString()
     }
 
 
@@ -232,7 +230,7 @@
                 typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
                 value: {
                     delegatorAddress: store.wallets[store.networkManageModal],
-                    validatorSrcAddress: validator.operator_address,
+                    validatorSrcAddress: data.operator_address,
                     validatorDstAddress: store.networks[store.networkManageModal].validator,
                     amount: {
                         denom: store.networks[store.networkManageModal].denom,
@@ -259,6 +257,11 @@
             // MENO
             let memo = 'bro.app'
 
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
             // Send transaction
             let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
@@ -269,9 +272,12 @@
                 // Disable loader
                 store.loaderManageModal = !store.loaderManageModal
 
-                // Open error modal
-                // emitter.emit('close_manage_modal')
-                // emitter.emit('open_manage_error_modal')
+                // Show notification
+                notification.notify({
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: store.manageError,
+                    type: 'error'
+                })
 
                 return false
             }
@@ -310,12 +316,17 @@
                         gas: store.networks.evmos.gas,
                     },
                     params = {
-                        validatorSrcAddress: validator.operator_address,
+                        validatorSrcAddress: data.operator_address,
                         validatorDstAddress: store.networks.evmos.validator,
                         amount: `${parseFloat(data.amount.replace(',', '.')).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks.evmos.exponent}`,
                         denom: store.networks.evmos.denom,
                     },
                     memo = 'bro.app'
+
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
 
                     let msg = createTxMsgBeginRedelegate(chain, sender, fee, memo, params)
 
@@ -342,7 +353,7 @@
                         body: generatePostBodyBroadcast(rawTx),
                     }
 
-                    let broadcastPost = await fetch(`https://lcd.evmos-9001-2.bronbro.io${generateEndpointBroadcast()}`, postOptions)
+                    let broadcastPost = await fetch(`${store.networks.evmos.lcd_api}${generateEndpointBroadcast()}`, postOptions)
 
                     let result = await broadcastPost.json()
 
@@ -353,9 +364,12 @@
                         // Disable loader
                         store.loaderManageModal = !store.loaderManageModal
 
-                        // Open error modal
-                        // emitter.emit('close_manage_modal')
-                        // emitter.emit('open_manage_error_modal')
+                        // Show notification
+                        notification.notify({
+                            title: i18n.global.t('message.notification_failed_title'),
+                            text: store.manageError,
+                            type: 'error'
+                        })
 
                         return false
                     }
@@ -366,12 +380,17 @@
                     // Set TXS
                     store.lastTXS = result.tx_response.txhash
 
-                    // Open success modal
-                    // emitter.emit('close_manage_modal')
-                    // emitter.emit('open_manage_success_modal')
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_successful_title'),
+                        type: 'success'
+                    })
 
                     // Update network
                     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+
+                    // Clear validator data
+                    clearValidator()
                 })
         } catch (error) {
             console.log(error)
@@ -390,12 +409,17 @@
         // Set TXS
         store.lastTXS = result.transactionHash
 
-        // Open success modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_success_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_successful_title'),
+            type: 'success'
+        })
 
         // Update network
         setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+
+        // Clear validator data
+        clearValidator()
     }
 
 
@@ -412,9 +436,12 @@
         // Disable loader
         store.loaderManageModal = !store.loaderManageModal
 
-        // Open error modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_error_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_failed_title'),
+            text: store.manageError,
+            type: 'error'
+        })
     }
 </script>
 

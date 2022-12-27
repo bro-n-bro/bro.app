@@ -673,6 +673,125 @@ button
 
 
 
+/*------------------
+    Notification
+------------------*/
+.vue-notification-group
+{
+    padding: 12px 24px;
+}
+
+.vue-notification-wrapper + .vue-notification-wrapper
+{
+    margin-top: 6px;
+}
+
+
+.notification
+{
+    position: relative;
+
+    display: flex;
+
+    padding: 14px;
+
+    border-radius: 20px;
+    background: #141414;
+
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+
+.notification .close
+{
+    color: #555;
+
+    position: absolute;
+    top: 17px;
+    right: 10px;
+
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.notification .close svg
+{
+    display: block;
+
+    width: 30px;
+    height: 30px;
+}
+
+
+.notification .icon
+{
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+
+    border-radius: 50%;
+    background: #950fff;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.notification .icon.green
+{
+    background: #1bc562;
+}
+
+.notification .icon.red
+{
+    background: #eb5757;
+}
+
+.notification .icon svg
+{
+    display: block;
+
+    width: 20px;
+    height: 20px;
+}
+
+
+.notification .title
+{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 110%;
+
+    width: calc(100% - 80px);
+}
+
+
+.notification .text
+{
+    font-size: 12px;
+    line-height: 150%;
+
+    width: 100%;
+    margin-top: 10px;
+
+    opacity: .4;
+}
+
+
+
 /*--------------
     Calendar
 --------------*/

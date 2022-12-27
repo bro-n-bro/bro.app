@@ -14,19 +14,19 @@
 
 
                 <div class="type">
-                    <button class="btn" :class="{ active: data.type == 'delegate' }" @click="setType('delegate');">
+                    <button class="btn" :class="{ active: data.type == 'delegate' }" @click="data.type = 'delegate'">
                         {{ $t('message.manage_modal_action_delegate') }}
                     </button>
 
-                    <button class="btn" :class="{ active: data.type == 'redelegate' }" v-if="data.validators.length" @click="setType('redelegate')">
+                    <button class="btn" :class="{ active: data.type == 'redelegate' }" v-if="data.validators.length" @click="data.type = 'redelegate'">
                         {{ $t('message.manage_modal_action_redelegate') }}
                     </button>
 
-                    <button class="btn" :class="{ active: data.type == 'claim' }" v-if="store.networks[store.networkManageModal].rewards_tokens > 0.0049" @click="setType('claim')">
+                    <button class="btn" :class="{ active: data.type == 'claim' }" v-if="store.networks[store.networkManageModal].rewards_tokens > 0.0049" @click="data.type = 'claim'">
                         {{ $t('message.manage_modal_action_claim') }}
                     </button>
 
-                    <button class="btn" :class="{ active: data.type == 'restake' }" v-if="store.networks[store.networkManageModal].restake" @click="setType('restake')">
+                    <button class="btn" :class="{ active: data.type == 'restake' }" v-if="store.networks[store.networkManageModal].restake" @click="data.type = 'restake'">
                         {{ $t('message.manage_modal_action_restake') }}
                     </button>
                 </div>
@@ -37,7 +37,7 @@
 
 
                 <!-- Redelegate -->
-                <ManageModalRedelegate v-if="data.type == 'redelegate'" :validator="data.validator" :validators="data.validators" />
+                <ManageModalRedelegate v-if="data.type == 'redelegate'" :validators="data.validators" />
 
 
                 <!-- Claim -->
@@ -72,51 +72,35 @@
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
-        i18n = inject('i18n'),
         data = reactive({
             type: 'delegate',
-            validators: [],
-            validator: {
-                operator_address: '',
-                availabel_tokens: 0,
-                name: i18n.global.t('message.manage_modal_validator_name')
-            }
+            validators: []
         })
 
 
     onMounted(async () => {
         // Get validators for redelegate
         if(store.showManageModal){
-            await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
-                .then(res => res.json())
-                .then(response => {
-                    let result = response.validators.filter(el => {
-                        if(el.operator_address != store.networks[store.networkManageModal].validator) {
-                            return el
-                        }
-                    })
-
-                    if(result.length) {
-                        data.validators = result
-                    }
-                })
+            getValidators()
         }
     })
 
 
-    // Set type
-    function setType(type) {
-        data.type = type
+    // Get validators for redelegate
+    async function getValidators() {
+        await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
+            .then(res => res.json())
+            .then(response => {
+                let result = response.validators.filter(el => {
+                    if(el.operator_address != store.networks[store.networkManageModal].validator) {
+                        return el
+                    }
+                })
 
-        clearValidator()
-    }
-
-
-    // Clear validator info
-    function clearValidator() {
-        data.validator.operator_address = ''
-        data.validator.name = ''
-        data.validator.availabel_tokens = 0
+                if(result.length) {
+                    data.validators = result
+                }
+            })
     }
 
 

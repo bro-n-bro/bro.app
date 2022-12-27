@@ -99,6 +99,7 @@
 <script setup>
     import { reactive, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from "@kyvg/vue3-notification"
 
     import { SigningStargateClient } from '@cosmjs/stargate'
     import { createTxRaw } from '@evmos/proto'
@@ -111,6 +112,7 @@
     const i18n = inject('i18n'),
         store = useGlobalStore(),
         emitter = inject('emitter'),
+        notification = useNotification(),
         data = reactive({
             name: i18n.global.t('message.manage_modal_validator_name'),
             amount: ''
@@ -194,6 +196,11 @@
             // MENO
             let memo = 'bro.app'
 
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
             // Send transaction
             let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
@@ -237,6 +244,11 @@
                     },
                     memo = 'bro.app'
 
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
+
                     let msg = createTxMsgDelegate(chain, sender, fee, memo, params)
 
                     let sign = await window?.keplr?.signDirect(
@@ -276,9 +288,12 @@
                         // Disable loader
                         store.loaderManageModal = !store.loaderManageModal
 
-                        // Open error modal
-                        // emitter.emit('close_manage_modal')
-                        // emitter.emit('open_manage_error_modal')
+                        // Show notification
+                        notification.notify({
+                            title: i18n.global.t('message.notification_failed_title'),
+                            text: store.manageError,
+                            type: 'error'
+                        })
 
                         return false
                     }
@@ -289,9 +304,11 @@
                     // Set TXS
                     store.lastTXS = result.tx_response.txhash
 
-                    // Open success modal
-                    // emitter.emit('close_manage_modal')
-                    // emitter.emit('open_manage_success_modal')
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_successful_title'),
+                        type: 'success'
+                    })
 
                     // Update network
                     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
@@ -305,9 +322,12 @@
             // Disable loader
             store.loaderManageModal = !store.loaderManageModal
 
-            // Open error modal
-            // emitter.emit('close_manage_modal')
-            // emitter.emit('open_manage_error_modal')
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_failed_title'),
+                text: store.manageError,
+                type: 'error'
+            })
         }
     }
 
@@ -320,9 +340,11 @@
         // Set TXS
         store.lastTXS = result.transactionHash
 
-        // Open success modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_success_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_successful_title'),
+            type: 'success'
+        })
 
         // Update network
         setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
@@ -342,8 +364,11 @@
         // Disable loader
         store.loaderManageModal = !store.loaderManageModal
 
-        // Open error modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_error_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_failed_title'),
+            text: store.manageError,
+            type: 'error'
+        })
     }
 </script>

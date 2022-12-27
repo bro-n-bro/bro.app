@@ -14,6 +14,7 @@
 		"@cosmjs/tendermint-rpc": "^0.29.0",
 		"@cybercongress/cyber-js": "^0.3.3",
 		"@evmos/transactions": "^0.2.10",
+		"@kyvg/vue3-notification": "^2.7.0",
 		"@vueuse/core": "^9.1.0",
 		"assert": "^2.0.0",
 		"buffer": "^6.0.3",

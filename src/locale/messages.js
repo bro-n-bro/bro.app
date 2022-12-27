@@ -171,6 +171,12 @@ export default {
             'feedback_github_link': 'Github',
 
 
+            // Notification
+            'notification_progress_title': 'Transaction is in progress',
+            'notification_successful_title': 'Transaction successful',
+            'notification_failed_title': 'Transaction failed',
+
+
             // Footer
             'footer_contact': 'Contact',
             'footer_support': 'Support'

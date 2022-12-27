@@ -56,7 +56,7 @@
 
 
 <script setup>
-    import { inject } from 'vue'
+    import { inject, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     import { SigningStargateClient } from '@cosmjs/stargate'
@@ -70,7 +70,7 @@
     const props = defineProps(['validators']),
         store = useGlobalStore(),
         i18n = inject('i18n'),
-        validators = props.validators
+        validators = reactive(props.validators)
 
 
     // Submit form
@@ -137,6 +137,11 @@
             // MENO
             let memo = 'bro.app'
 
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
             // Send transaction
             let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], msgAny, fee, memo)
 
@@ -147,12 +152,21 @@
                 // Disable loader
                 store.loaderManageModal = !store.loaderManageModal
 
-                // Open error modal
-                // emitter.emit('close_manage_modal')
-                // emitter.emit('open_manage_error_modal')
+                // Show notification
+                notification.notify({
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: store.manageError,
+                    type: 'error'
+                })
 
                 return false
             }
+
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_successful_title'),
+                type: 'success'
+            })
 
             // Update network
             setTimeout(() => {
@@ -197,6 +211,11 @@
                     },
                     memo = 'bro.app'
 
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
+
                     let msg = createTxMsgWithdrawDelegatorReward(chain, sender, fee, memo, params)
 
                     let sign = await window?.keplr?.signDirect(
@@ -233,12 +252,21 @@
                         // Disable loader
                         store.loaderManageModal = !store.loaderManageModal
 
-                        // Open error modal
-                        // emitter.emit('close_manage_modal')
-                        // emitter.emit('open_manage_error_modal')
+                        // Show notification
+                        notification.notify({
+                            title: i18n.global.t('message.notification_failed_title'),
+                            text: store.manageError,
+                            type: 'error'
+                        })
 
                         return false
                     }
+
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_successful_title'),
+                        type: 'success'
+                    })
 
                     // Update network
                     setTimeout(() => {
@@ -270,8 +298,11 @@
         // Disable loader
         store.loaderManageModal = !store.loaderManageModal
 
-        // Open error modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_error_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_failed_title'),
+            text: store.manageError,
+            type: 'error'
+        })
     }
 </script>

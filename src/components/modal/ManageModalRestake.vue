@@ -222,9 +222,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if(data.grants.length) {
-                        restake.grant = data.grants[0]
-                        restake.amount = data.grants[0].authorization.max_tokens ? data.grants[0].authorization.max_tokens.amount / store.networks[store.networkManageModal].exponent : ''
-                        restake.expiry = new Date(getDate(restake.grant.expiration))
+                        let grant = data.grants.find(el => el.authorization['@type'] == '/cosmos.staking.v1beta1.StakeAuthorization')
+
+                        restake.grant = grant
+                        restake.amount = grant.authorization.max_tokens ? grant.authorization.max_tokens.amount / store.networks[store.networkManageModal].exponent : ''
+                        restake.expiry = new Date(getDate(grant.expiration))
                     }
 
                     manageGrant.value = false
@@ -312,10 +314,21 @@
             // MENO
             let memo = 'bro.app'
 
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
             // Send transaction
             let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
             if(result.code == 0){
+                // Show notification
+                notification.notify({
+                    title: i18n.global.t('message.notification_successful_title'),
+                    type: 'success'
+                })
+
                 // Update grant info
                 getGrantInfo()
 
@@ -377,10 +390,21 @@
             // MENO
             let memo = 'bro.app'
 
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
             // Send transaction
             let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
 
             if(result.code == 0){
+                // Show notification
+                notification.notify({
+                    title: i18n.global.t('message.notification_successful_title'),
+                    type: 'success'
+                })
+
                 // Update grant info
                 restake.grant = {}
                 restake.amount = 0 || i18n.global.t('message.manage_modal_grant_amount_placeholder')
@@ -414,9 +438,12 @@
         // Disable loader
         store.loaderManageModal = !store.loaderManageModal
 
-        // Open error modal
-        // emitter.emit('close_manage_modal')
-        // emitter.emit('open_manage_error_modal')
+        // Show notification
+        notification.notify({
+            title: i18n.global.t('message.notification_failed_title'),
+            text: store.manageError,
+            type: 'error'
+        })
     }
 </script>
 
