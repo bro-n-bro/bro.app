@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.evmos-9001-2.bronbro.io',
     rpc_api: 'https://rpc.evmos-9001-2.bronbro.io',
+    websocket_url: 'wss://rpc.evmos_9001-2.bronbro.io:443/websocket',
     validator: 'evmosvaloper1ce4vh0e5kanlgc7z0rhcemvd8erjnfzcyfecl7',
     denom: 'aevmos',
     token_name: 'EVMOS',
@@ -71,7 +72,7 @@ const network = {
     exponent: 1000000000000000000,
     tokens_sum: 0,
     unbonding_time: 0,
-    gas: '250000',
+    gas: '350000',
 
     restake: {
         address: 'evmos1umjyc6jvtrwrr62z5d4afkrjtq7gyg0eq98x5k',

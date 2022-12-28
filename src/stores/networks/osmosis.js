@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.osmosis-1.bronbro.io',
     rpc_api: 'https://rpc.osmosis-1.bronbro.io',
+    websocket_url: 'wss://rpc.osmosis-1.bronbro.io:443/websocket',
     validator: 'osmovaloper13tk45jkxgf7w0nxquup3suwaz2tx483xe832ge',
     denom: 'uosmo',
     token_name: 'OSMO',

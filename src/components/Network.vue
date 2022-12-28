@@ -107,7 +107,6 @@
         display: flex;
         flex-direction: column;
 
-        width: calc(20% - 7px);
         width: 280px;
         height: 324px;
         margin-bottom: 7px;

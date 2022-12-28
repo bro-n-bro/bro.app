@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.crescent-1.bronbro.io',
     rpc_api: 'https://rpc.crescent-1.bronbro.io',
+    websocket_url: 'wss://rpc.crescent-1.bronbro.io:443/websocket',
     validator: 'crevaloper1c96vvme4k42zlvkc56fslmdpa2qj6u80xvqwau',
     denom: 'ucre',
     token_name: 'CRE',

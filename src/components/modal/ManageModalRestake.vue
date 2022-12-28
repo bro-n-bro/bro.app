@@ -181,10 +181,12 @@
 <script setup>
     import { inject, ref, reactive, onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from "@kyvg/vue3-notification"
 
     import { SigningStargateClient } from '@cosmjs/stargate'
     import { StakeAuthorization } from 'cosmjs-types/cosmos/staking/v1beta1/authz'
     import { Timestamp } from "cosmjs-types/google/protobuf/timestamp"
+    import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
 
     import moment from 'moment'
     import Datepicker from 'vue3-datepicker'
@@ -194,6 +196,7 @@
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
+        notification = useNotification(),
         restake = reactive({
             grant: {},
 
@@ -314,13 +317,16 @@
             // MENO
             let memo = 'bro.app'
 
+            // Send transaction
+            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+
             // Show notification
             notification.notify({
                 title: i18n.global.t('message.notification_progress_title')
             })
 
-            // Send transaction
-            let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+            let txBytes = TxRaw.encode(txRaw).finish(),
+                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
             if(result.code == 0){
                 // Show notification
@@ -390,13 +396,16 @@
             // MENO
             let memo = 'bro.app'
 
+            // Send transaction
+            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+
             // Show notification
             notification.notify({
                 title: i18n.global.t('message.notification_progress_title')
             })
 
-            // Send transaction
-            let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+            let txBytes = TxRaw.encode(txRaw).finish(),
+                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
             if(result.code == 0){
                 // Show notification

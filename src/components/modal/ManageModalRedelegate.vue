@@ -126,11 +126,13 @@
 <script setup>
     import { reactive, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from "@kyvg/vue3-notification"
 
     import { SigningStargateClient } from '@cosmjs/stargate'
     import { createTxRaw } from '@evmos/proto'
     import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
     import { createTxMsgBeginRedelegate, createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
+    import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
 
     // Components
     import ManageModalValidator from './ManageModalValidator.vue'
@@ -139,6 +141,7 @@
         i18n = inject('i18n'),
         store = useGlobalStore(),
         emitter = inject('emitter'),
+        notification = useNotification(),
         data = reactive({
             amount: '',
             operator_address: '',
@@ -181,8 +184,8 @@
 
     // Set amount
     function setAmount(event) {
-        if(parseFloat(event.target.value.replace(',', '.')) > store.networks[store.networkManageModal].availabel_tokens - 0.01) {
-            data.amount = (store.networks[store.networkManageModal].availabel_tokens - 0.01).toString()
+        if(parseFloat(event.target.value.replace(',', '.')) > data.availabel_tokens - 0.01) {
+            data.amount = (data.availabel_tokens - 0.01).toString()
         }
     }
 
@@ -257,13 +260,16 @@
             // MENO
             let memo = 'bro.app'
 
+            // Send transaction
+            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+
             // Show notification
             notification.notify({
                 title: i18n.global.t('message.notification_progress_title')
             })
 
-            // Send transaction
-            let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+            let txBytes = TxRaw.encode(txRaw).finish(),
+                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
             if(result.code != 0){
                 // Get error title
@@ -323,11 +329,6 @@
                     },
                     memo = 'bro.app'
 
-                    // Show notification
-                    notification.notify({
-                        title: i18n.global.t('message.notification_progress_title')
-                    })
-
                     let msg = createTxMsgBeginRedelegate(chain, sender, fee, memo, params)
 
                     let sign = await window?.keplr?.signDirect(
@@ -345,6 +346,11 @@
                     let rawTx = createTxRaw(sign.signed.bodyBytes, sign.signed.authInfoBytes, [
                         new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))
                     ])
+
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
 
                     // Broadcast it
                     const postOptions = {

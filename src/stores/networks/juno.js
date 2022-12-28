@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.juno-1.bronbro.io',
     rpc_api: 'https://rpc.juno-1.bronbro.io',
+    websocket_url: 'wss://rpc.juno-1.bronbro.io:443/websocket',
     validator: 'junovaloper1quqxfrxkycr0uzt4yk0d57tcq3zk7srm7sm6r8',
     denom: 'ujuno',
     token_name: 'JUNO',

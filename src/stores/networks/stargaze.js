@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.stargaze-1.bronbro.io',
     rpc_api: 'https://rpc.stargaze-1.bronbro.io',
+    websocket_url: 'wss://rpc.stargaze-1.bronbro.io:443/websocket',
     validator: 'starsvaloper1y58hfnm90r4efhlydx0gavz57lvm7k6uulkg3h',
     denom: 'ustars',
     token_name: 'STARS',

@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.cosmoshub-4.bronbro.io',
     rpc_api: 'https://rpc.cosmoshub-4.bronbro.io/',
+    websocket_url: 'wss://rpc.cosmoshub-4.bronbro.io:443/websocket',
     validator: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
     denom: 'uatom',
     token_name: 'ATOM',

@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.gravity-bridge-3.bronbro.io',
     rpc_api: 'https://rpc.gravity-bridge-3.bronbro.io',
+    websocket_url: 'wss://rpc.gravity-bridge-3.bronbro.io:443/websocket',
     validator: 'gravityvaloper1vyd4k5j636erx5y5kdqghdu3rfjtwc48vdc7r6',
     denom: 'ugraviton',
     token_name: 'GRAV',

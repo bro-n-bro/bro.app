@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.omniflixhub-1.bronbro.io',
     rpc_api: 'https://rpc.omniflixhub-1.bronbro.io',
+    websocket_url: 'wss://rpc.omniflixhub-1.bronbro.io:443/websocket',
     validator: 'omniflixvaloper1e8grpphncncw9hrutyvnlv77n5dejwcne58zk4',
     denom: 'uflix',
     token_name: 'FLIX',

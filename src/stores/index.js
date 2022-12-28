@@ -228,6 +228,12 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
+        // Connect to network websocket
+        connectNetworkWebsocket(network) {
+            this.networks[network].websocket = new WebSocket(this.networks[network].websocket_url)
+        },
+
+
         // Networks status
         async getNetworkStatus(network) {
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)

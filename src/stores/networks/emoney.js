@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.emoney-3.bronbro.io',
     rpc_api: 'https://rpc.emoney-3.bronbro.io',
+    websocket_url: 'wss://rpc.emoney-3.bronbro.io:443/websocket',
     validator: 'emoneyvaloper149vyxd36kxpg46rralaw6eejv4d9daqc3nv642',
     denom: 'ungm',
     token_name: 'NGM',

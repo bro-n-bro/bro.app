@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.desmos-mainnet.bronbro.io',
     rpc_api: 'https://rpc.desmos-mainnet.bronbro.io',
+    websocket_url: 'wss://rpc.websocket.bronbro.io:443/websocket',
     validator: 'desmosvaloper1sykf8q94l8q8mqstf64ptuvp74ueyehxpgcq76',
     denom: 'udsm',
     token_name: 'DSM',

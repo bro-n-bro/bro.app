@@ -48,8 +48,6 @@
                 <!-- Stride -->
                 <Network network="stride" />
             </div>
-
-            <!-- <pre>{{ store.networks }}</pre> -->
         </div>
     </section>
     </transition>
@@ -64,25 +62,22 @@
 
 
 <style>
-.dashboard
-{
-    padding-bottom: 24px;
-}
+    .dashboard
+    {
+        padding-bottom: 24px;
+    }
 
 
-.dashboard .row
-{
-    margin-bottom: -7px;
-    margin-left: -7px;
+    .dashboard .row
+    {
+        margin-bottom: -7px;
+        margin-left: -7px;
 
-    justify-content: center;
-}
+        justify-content: center;
+    }
 
-.dashboard .row + .row
-{
-    margin-top: -82px;
-}
-
-
-
+    .dashboard .row + .row
+    {
+        margin-top: -82px;
+    }
 </style>

@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.bostrom.bronbro.io',
     rpc_api: 'https://rpc.bostrom.bronbro.io',
+    websocket_url: 'wss://rpc.bostrom.bronbro.io:443/websocket',
     validator: 'bostromvaloper1ydc5fy9fjdygvgw36u49yj39fr67pd9m5qexm8',
     denom: 'boot',
     token_name: 'MBOOT',

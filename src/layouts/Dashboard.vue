@@ -12,10 +12,10 @@
     <ManageModal v-if="store.showManageModal" />
 
     <!-- Manage success modal -->
-    <ManageSuccessModal v-if="store.showManageSuccessModal" />
+    <!-- <ManageSuccessModal v-if="store.showManageSuccessModal" /> -->
 
     <!-- Manage error modal -->
-    <ManageErrorModal v-if="store.showManageErrorModal" />
+    <!-- <ManageErrorModal v-if="store.showManageErrorModal" /> -->
 
     <!-- Feedback -->
     <Feedback />
@@ -35,8 +35,8 @@
     import Header from '../components/Header.vue'
     import Notifications from '../components/Notifications.vue'
     import ManageModal from '../components/modal/ManageModal.vue'
-    import ManageSuccessModal from '../components/modal/ManageSuccessModal.vue'
-    import ManageErrorModal from '../components/modal/ManageErrorModal.vue'
+    // import ManageSuccessModal from '../components/modal/ManageSuccessModal.vue'
+    // import ManageErrorModal from '../components/modal/ManageErrorModal.vue'
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'
 
@@ -203,13 +203,19 @@
         // Get status
         store.getNetworkStatus('bostrom')
 
+        // Connect to network websocket
+        // store.connectNetworkWebsocket('bostrom')
+
+        // store.networks.bostrom.websocket.onopen = () => {
+        //     store.networks.bostrom.websocket.send(JSON.stringify({ "jsonrpc": "2.0", "method": "subscribe", "params": ["tm.event = 'Tx'"], "id": 0 }))
+        // }
+
         // Get network tokens
         store.getNetworkTokens('bostrom').then(() => {
             // Calc network tokens sum
             store.calcNetworkTokensSum('bostrom')
 
             if(store.networks.bostrom.status){
-
                 // Get network data
                 let bostromData = store.getNetworkData('bostrom')
 

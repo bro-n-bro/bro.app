@@ -58,11 +58,13 @@
 <script setup>
     import { inject, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from "@kyvg/vue3-notification"
 
     import { SigningStargateClient } from '@cosmjs/stargate'
     import { createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
     import { createTxRaw } from '@evmos/proto'
     import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
+    import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
 
     // Components
     import ManageModalValidator from './ManageModalValidator.vue'
@@ -70,6 +72,7 @@
     const props = defineProps(['validators']),
         store = useGlobalStore(),
         i18n = inject('i18n'),
+        notification = useNotification(),
         validators = reactive(props.validators)
 
 
@@ -143,7 +146,15 @@
             })
 
             // Send transaction
-            let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], msgAny, fee, memo)
+            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+
+            // Show notification
+            notification.notify({
+                title: i18n.global.t('message.notification_progress_title')
+            })
+
+            let txBytes = TxRaw.encode(txRaw).finish(),
+                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
             if(result.code != 0){
                 // Get error title
@@ -211,11 +222,6 @@
                     },
                     memo = 'bro.app'
 
-                    // Show notification
-                    notification.notify({
-                        title: i18n.global.t('message.notification_progress_title')
-                    })
-
                     let msg = createTxMsgWithdrawDelegatorReward(chain, sender, fee, memo, params)
 
                     let sign = await window?.keplr?.signDirect(
@@ -233,6 +239,11 @@
                     let rawTx = createTxRaw(sign.signed.bodyBytes, sign.signed.authInfoBytes, [
                         new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))
                     ])
+
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
 
                     // Broadcast it
                     let postOptions = {

@@ -105,6 +105,7 @@
     import { createTxRaw } from '@evmos/proto'
     import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
     import { createTxMsgDelegate } from '@evmos/transactions'
+    import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
 
     // Components
     import ManageModalValidator from './ManageModalValidator.vue'
@@ -196,13 +197,20 @@
             // MENO
             let memo = 'bro.app'
 
+            // store.networks.[store.networkManageModal].websocket.onmessage = event => {
+            //     console.log(event.data)
+            // }
+
+            // Send transaction
+            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+
             // Show notification
             notification.notify({
                 title: i18n.global.t('message.notification_progress_title')
             })
 
-            // Send transaction
-            let result = await client.signAndBroadcast(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+            let txBytes = TxRaw.encode(txRaw).finish(),
+                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
             // Show success
             showSuccess(result)
@@ -244,11 +252,6 @@
                     },
                     memo = 'bro.app'
 
-                    // Show notification
-                    notification.notify({
-                        title: i18n.global.t('message.notification_progress_title')
-                    })
-
                     let msg = createTxMsgDelegate(chain, sender, fee, memo, params)
 
                     let sign = await window?.keplr?.signDirect(
@@ -267,6 +270,11 @@
                         new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))
                     ])
 
+                    // Show notification
+                    notification.notify({
+                        title: i18n.global.t('message.notification_progress_title')
+                    })
+
                     // Broadcast it
                     let postOptions = {
                         method: 'POST',
@@ -277,9 +285,6 @@
                     let broadcastPost = await fetch(`${store.networks.evmos.lcd_api}${generateEndpointBroadcast()}`, postOptions)
 
                     let result = await broadcastPost.json()
-
-                    console.log(broadcastPost)
-                    console.log(result)
 
                     if(result.tx_response.code != 0){
                         // Get error title
