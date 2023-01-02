@@ -768,6 +768,42 @@ button
     height: 20px;
 }
 
+.notification .icon + *
+{
+    width: calc(100% - 80px);
+}
+
+
+.notification .chain
+{
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 19px;
+}
+
+.notification .chain::first-letter
+{
+    text-transform: uppercase;
+}
+
+.notification .chain:empty
+{
+    display: none;
+}
+
+
+.notification .tx_type
+{
+    color: #8e8e8e;
+    font-size: 12px;
+    line-height: 130%;
+}
+
+.notification .tx_type:empty
+{
+    display: none;
+}
+
 
 .notification .title
 {
@@ -775,7 +811,13 @@ button
     font-weight: 500;
     line-height: 110%;
 
-    width: calc(100% - 80px);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.notification .title:empty
+{
+    display: none;
 }
 
 
@@ -785,9 +827,51 @@ button
     line-height: 150%;
 
     width: 100%;
-    margin-top: 10px;
+    margin-top: 4px;
 
     opacity: .4;
+}
+
+.notification .text:empty
+{
+    display: none;
+}
+
+
+.notification .explorer
+{
+    color: #950fff;
+    font-size: 12px;
+    line-height: 150%;
+
+    display: flex;
+
+    margin-top: 8px;
+}
+
+
+.notification .explorer a
+{
+    color: currentColor;
+
+    display: flex;
+
+    text-decoration: none;
+
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+
+.notification .explorer svg
+{
+    display: block;
+
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
 }
 
 
