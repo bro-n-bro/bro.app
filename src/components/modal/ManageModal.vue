@@ -35,14 +35,11 @@
                 <!-- Delegate -->
                 <ManageModalDelegate v-if="data.type == 'delegate'" />
 
-
                 <!-- Redelegate -->
                 <ManageModalRedelegate v-if="data.type == 'redelegate'" :validators="data.validators" />
 
-
                 <!-- Claim -->
                 <ManageModalClaim v-if="data.type == 'claim'" :validators="data.validators" />
-
 
                 <!-- Restake -->
                 <ManageModalRestake v-if="data.type == 'restake'" />
@@ -102,42 +99,6 @@
                 }
             })
     }
-
-
-    // Show error modal
-    // function showErrorModal(error) {
-    //     // Get error code
-    //     let errorCode = error.message.match(/code (\d+(\.\d)*)/i)
-
-    //     // Get error title
-    //     errorCode
-    //         ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
-    //         : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
-
-    //     // Disable loader
-    //     store.loaderManageModal = !store.loaderManageModal
-
-    //     // Open error modal
-    //     emitter.emit('close_manage_modal')
-    //     emitter.emit('open_manage_error_modal')
-    // }
-
-
-    // Show success modal
-    // function showSuccessModal(result) {
-    //     // Disable loader
-    //     store.loaderManageModal = !store.loaderManageModal
-
-    //     // Set TXS
-    //     store.lastTXS = result.transactionHash
-
-    //     // Open success modal
-    //     emitter.emit('close_manage_modal')
-    //     emitter.emit('open_manage_success_modal')
-
-    //     // Update network
-    //     setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-    // }
 </script>
 
 
@@ -595,6 +556,12 @@
     border-radius: 14px;
 }
 
+#manage_modal .btns .btn:disabled
+{
+    cursor: default;
+    pointer-events: none;
+}
+
 #manage_modal .btns .btn.w50
 {
     width: calc(50% - 5px);
@@ -681,6 +648,10 @@
     border-color: #7700e1;
     background: #7700e1;
 }
+
+
+
+
 
 
 

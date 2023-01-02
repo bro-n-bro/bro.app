@@ -2,6 +2,8 @@ export default {
     // English
     en: {
         message: {
+            'page_title': 'Bro APP',
+
             // IPFS
             'ipfs': "Ipfs node",
 
@@ -175,6 +177,7 @@ export default {
             'notification_progress_title': 'Transaction is in progress',
             'notification_successful_title': 'Transaction successful',
             'notification_failed_title': 'Transaction failed',
+            'notification_explorer_link': 'Explorer',
 
 
             // Footer

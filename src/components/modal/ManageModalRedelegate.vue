@@ -114,7 +114,7 @@
 
 
             <div class="btns">
-                <button type="submit" class="btn submit_btn">
+                <button type="submit" class="btn submit_btn" :disabled="!data.amount">
                     {{ $t('message.manage_modal_redelegate_btn') }}
                 </button>
             </div>
@@ -126,13 +126,8 @@
 <script setup>
     import { reactive, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useNotification } from "@kyvg/vue3-notification"
-
-    import { SigningStargateClient } from '@cosmjs/stargate'
-    import { createTxRaw } from '@evmos/proto'
-    import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
-    import { createTxMsgBeginRedelegate, createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
-    import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
+    import { useNotification } from '@kyvg/vue3-notification'
+    import { prepareTx, sendTx, prepareEVMOSTx, sendEVMOSTx } from '@/utils'
 
     // Components
     import ManageModalValidator from './ManageModalValidator.vue'
@@ -140,7 +135,6 @@
     const props = defineProps(['validators']),
         i18n = inject('i18n'),
         store = useGlobalStore(),
-        emitter = inject('emitter'),
         notification = useNotification(),
         data = reactive({
             amount: '',
@@ -201,9 +195,6 @@
         let amount = parseFloat(data.amount.replace(',', '.'))
 
         if(amount > 0) {
-            // Enable loader
-            store.loaderManageModal = !store.loaderManageModal
-
             // Other processing for EVMOS
             store.networkManageModal == 'evmos'
                 ? redelegateEVMOS()
@@ -215,19 +206,6 @@
     // Rredelegate DEFAULT
     async function redelegateDEFAULT() {
         try {
-            // Create request
-            let offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
-
-            Object.assign(offlineSigner, {
-                signAmino: offlineSigner.signAmino ?? offlineSigner.sign
-            })
-
-            // RPC endpoint
-            let rpcEndpoint = store.networks[store.networkManageModal].rpc_api
-
-            // Client
-            let client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner)
-
             // Message
             let msgAny = {
                 typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
@@ -242,47 +220,37 @@
                 }
             }
 
-            // Simulate gas
-            let gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
-
-            if(store.networkManageModal != 'emoney') {
-                gasUsed = await client.simulate(store.wallets[store.networkManageModal], [msgAny])
-            }
-
-            let fee = {
-                amount: [{
-                    denom: store.networks[store.networkManageModal].denom,
-                    amount: '0'
-                }],
-                gas: Math.round(gasUsed * 1.3).toString()
-            }
-
-            // MENO
-            let memo = 'bro.app'
-
-            // Send transaction
-            let txRaw = await client.sign(store.wallets[store.networkManageModal], [msgAny], fee, memo)
+            // Prepare Tx
+            let prepareResult = await prepareTx([msgAny])
 
             // Show notification
             notification.notify({
-                title: i18n.global.t('message.notification_progress_title')
+                group: store.networks[store.networkManageModal].denom,
+                duration: -100,
+                title: i18n.global.t('message.notification_progress_title'),
+                data: {
+                    chain: store.networkManageModal,
+                    tx_type: i18n.global.t('message.manage_modal_action_redelegate')
+                }
             })
 
-            let txBytes = TxRaw.encode(txRaw).finish(),
-                result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
+            // Send Tx
+            let result = await sendTx(prepareResult)
 
             if(result.code != 0){
                 // Get error title
                 store.manageError = i18n.global.t(`message.manage_modal_error_${result.code}`)
 
-                // Disable loader
-                store.loaderManageModal = !store.loaderManageModal
-
                 // Show notification
                 notification.notify({
+                    group: store.networks[store.networkManageModal].denom,
                     title: i18n.global.t('message.notification_failed_title'),
                     text: store.manageError,
-                    type: 'error'
+                    type: 'error',
+                    data: {
+                        chain: store.networkManageModal,
+                        tx_type: i18n.global.t('message.manage_modal_action_redelegate')
+                    }
                 })
 
                 return false
@@ -306,97 +274,87 @@
             fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
                 .then(res => res.json())
                 .then(async response => {
-                    let chain = {
-                        chainId: 9001,
-                        cosmosChainId: store.networks.evmos.chainId,
-                    },
-                    sender = {
-                        accountAddress: store.wallets.evmos,
-                        sequence: response.account.base_account.sequence,
-                        accountNumber: response.account.base_account.account_number,
-                        pubkey: response.account.base_account.pub_key.key,
-                    },
-                    fee = {
-                        amount: '0',
-                        denom: store.networks.evmos.denom,
-                        gas: store.networks.evmos.gas,
-                    },
-                    params = {
-                        validatorSrcAddress: data.operator_address,
-                        validatorDstAddress: store.networks.evmos.validator,
-                        amount: `${parseFloat(data.amount.replace(',', '.')).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks.evmos.exponent}`,
-                        denom: store.networks.evmos.denom,
-                    },
-                    memo = 'bro.app'
+                    try {
+                        // Params
+                        let params = {
+                            validatorSrcAddress: data.operator_address,
+                            validatorDstAddress: store.networks.evmos.validator,
+                            amount: `${parseFloat(data.amount.replace(',', '.')).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks.evmos.exponent}`,
+                            denom: store.networks.evmos.denom,
+                        }
 
-                    let msg = createTxMsgBeginRedelegate(chain, sender, fee, memo, params)
-
-                    let sign = await window?.keplr?.signDirect(
-                        store.networks.evmos.chainId,
-                        sender.accountAddress,
-                        {
-                            bodyBytes: msg.signDirect.body.serializeBinary(),
-                            authInfoBytes: msg.signDirect.authInfo.serializeBinary(),
-                            chainId: store.networks.evmos.chainId,
-                            accountNumber: sender.accountNumber,
-                        },
-                        { isEthereum: true }
-                    )
-
-                    let rawTx = createTxRaw(sign.signed.bodyBytes, sign.signed.authInfoBytes, [
-                        new Uint8Array(Buffer.from(sign.signature.signature, 'base64'))
-                    ])
-
-                    // Show notification
-                    notification.notify({
-                        title: i18n.global.t('message.notification_progress_title')
-                    })
-
-                    // Broadcast it
-                    const postOptions = {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: generatePostBodyBroadcast(rawTx),
-                    }
-
-                    let broadcastPost = await fetch(`${store.networks.evmos.lcd_api}${generateEndpointBroadcast()}`, postOptions)
-
-                    let result = await broadcastPost.json()
-
-                    if(result.tx_response.code != 0){
-                        // Get error title
-                        store.manageError = i18n.global.t(`message.manage_modal_error_${result.tx_response.code}`)
-
-                        // Disable loader
-                        store.loaderManageModal = !store.loaderManageModal
+                        // Prepare EVMOS Tx
+                        let prepareResult = await prepareEVMOSTx(params, response.account.base_account, 'redelegate')
 
                         // Show notification
                         notification.notify({
-                            title: i18n.global.t('message.notification_failed_title'),
-                            text: store.manageError,
-                            type: 'error'
+                            group: store.networks[store.networkManageModal].denom,
+                            duration: -100,
+                            title: i18n.global.t('message.notification_progress_title'),
+                            data: {
+                                chain: store.networkManageModal,
+                                tx_type: i18n.global.t('message.manage_modal_action_delegate')
+                            }
                         })
 
-                        return false
+                        // Send EVMOS Tx
+                        let result = await sendEVMOSTx(prepareResult)
+
+                        // if(result.tx_response.code != 0){
+                        //     // Get error title
+                        //     store.manageError = i18n.global.t(`message.manage_modal_error_${result.tx_response.code}`)
+
+                        //     // Show notification
+                        //     notification.notify({
+                        //         group: store.networks[store.networkManageModal].denom,
+                        //         clean: true
+                        //     })
+
+                        //     notification.notify({
+                        //         group: store.networks[store.networkManageModal].denom,
+                        //         title: i18n.global.t('message.notification_failed_title'),
+                        //         text: store.manageError,
+                        //         type: 'error',
+                        //         data: {
+                        //             chain: store.networkManageModal,
+                        //             tx_type: i18n.global.t('message.manage_modal_action_redelegate')
+                        //         }
+                        //     })
+
+                        //     return false
+                        // }
+
+                        // Set TXS
+                        store.lastTXS = result.tx_response.txhash
+
+                        // Show notification
+                        notification.notify({
+                            group: store.networks[store.networkManageModal].denom,
+                            clean: true
+                        })
+
+                        notification.notify({
+                            group: store.networks[store.networkManageModal].denom,
+                            title: i18n.global.t('message.notification_successful_title'),
+                            type: 'success',
+                            data: {
+                                chain: store.networkManageModal,
+                                tx_type: i18n.global.t('message.manage_modal_action_redelegate'),
+                                tx_hash: store.lastTXS
+                            }
+                        })
+
+                        // Update network
+                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+
+                        // Clear validator data
+                        clearValidator()
+                    } catch (error) {
+                        console.log(error)
+
+                        // Show error modal
+                        showError(error)
                     }
-
-                    // Disable loader
-                    store.loaderManageModal = !store.loaderManageModal
-
-                    // Set TXS
-                    store.lastTXS = result.tx_response.txhash
-
-                    // Show notification
-                    notification.notify({
-                        title: i18n.global.t('message.notification_successful_title'),
-                        type: 'success'
-                    })
-
-                    // Update network
-                    setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
-
-                    // Clear validator data
-                    clearValidator()
                 })
         } catch (error) {
             console.log(error)
@@ -409,16 +367,24 @@
 
     // Show success modal
     function showSuccess(result) {
-        // Disable loader
-        store.loaderManageModal = !store.loaderManageModal
-
         // Set TXS
         store.lastTXS = result.transactionHash
 
         // Show notification
         notification.notify({
+            group: store.networks[store.networkManageModal].denom,
+            clean: true
+        })
+
+        notification.notify({
+            group: store.networks[store.networkManageModal].denom,
             title: i18n.global.t('message.notification_successful_title'),
-            type: 'success'
+            type: 'success',
+            data: {
+                chain: store.networkManageModal,
+                tx_type: i18n.global.t('message.manage_modal_action_redelegate'),
+                tx_hash: store.lastTXS
+            }
         })
 
         // Update network
@@ -439,14 +405,21 @@
             ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
             : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
-        // Disable loader
-        store.loaderManageModal = !store.loaderManageModal
-
         // Show notification
         notification.notify({
+            group: store.networks[store.networkManageModal].denom,
+            clean: true
+        })
+
+        notification.notify({
+            group: store.networks[store.networkManageModal].denom,
             title: i18n.global.t('message.notification_failed_title'),
             text: store.manageError,
-            type: 'error'
+            type: 'error',
+            data: {
+                chain: store.networkManageModal,
+                tx_type: i18n.global.t('message.manage_modal_action_redelegate')
+            }
         })
     }
 </script>
