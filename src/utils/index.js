@@ -4,7 +4,14 @@ import { useGlobalStore } from '@/stores'
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
 
-import { createTxMsgDelegate, createTxMsgBeginRedelegate, createTxMsgWithdrawDelegatorReward } from '@evmos/transactions'
+import {
+    createTxMsgDelegate,
+    createTxMsgBeginRedelegate,
+    createTxMsgWithdrawDelegatorReward,
+    createTxMsgStakeAuthorization,
+    createTxMsgStakeRevokeAuthorization
+} from '@evmos/transactions'
+
 import { createTxRaw } from '@evmos/proto'
 import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
 
@@ -94,6 +101,14 @@ export const prepareEVMOSTx = async (params, base_account, TxType) => {
 
     if (TxType == 'claim') {
         var msg = createTxMsgWithdrawDelegatorReward(chain, sender, fee, memo, params)
+    }
+
+    if (TxType == 'restake_enable') {
+        var msg = createTxMsgStakeAuthorization(chain, sender, fee, memo, params)
+    }
+
+    if (TxType == 'restake_disable') {
+        var msg = createTxMsgStakeRevokeAuthorization(chain, sender, fee, memo, params)
     }
 
     let sign = await window?.keplr?.signDirect(

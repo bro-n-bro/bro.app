@@ -239,7 +239,26 @@
     }
 
 
-    async function setGrant() {
+    // Set grant
+    function setGrant() {
+        // Other processing for EVMOS
+        store.networkManageModal == 'evmos'
+            ? createGrantEVMOS()
+            : createGrantDEFAULT()
+    }
+
+
+    // Remove grant
+    function removeGrant() {
+        // Other processing for EVMOS
+        store.networkManageModal == 'evmos'
+            ? removeGrantEVMOS()
+            : removeGrantDEFAULT()
+    }
+
+
+    // Create grant DEFAULT
+    async function createGrantDEFAULT() {
         try {
             // Authorizationgranf data
             let authorization = {}
@@ -328,7 +347,91 @@
     }
 
 
-    async function removeGrant() {
+    // Create grant EVMOS
+    async function createGrantEVMOS() {
+        // Create request
+        await fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
+            .then(res => res.json())
+            .then(async response => {
+                try {
+                    // Params
+                    let params = {
+                        bot_address: store.networks[store.networkManageModal].restake.address,
+                        validator_address: store.networks[store.networkManageModal].restake.address,
+                        denom: store.networks.evmos.denom,
+                        maxTokens: `${parseFloat(restake.amount).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks[store.networkManageModal].exponent}`,
+                        duration_in_seconds: moment(restake.expiry).unix()
+                    }
+
+                    // Prepare EVMOS Tx
+                    let prepareResult = await prepareEVMOSTx(params, response.account.base_account, 'restake_enable')
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        duration: -100,
+                        title: i18n.global.t('message.notification_progress_title'),
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_delegate')
+                        }
+                    })
+
+                    // Send EVMOS Tx
+                    let result = await sendEVMOSTx(prepareResult)
+
+                    // Set TXS
+                    store.lastTXS = result.tx_response.txhash
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        title: i18n.global.t('message.notification_successful_title'),
+                        type: 'success',
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_delegate'),
+                            tx_hash: store.lastTXS
+                        }
+                    })
+
+                    // Update grant info
+                    getGrantInfo()
+                } catch (error) {
+                    console.log(error)
+
+                    // Get error title
+                    store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        id: Date.now(),
+                        group: store.networks[store.networkManageModal].denom,
+                        title: i18n.global.t('message.notification_failed_title'),
+                        text: store.manageError,
+                        type: 'error',
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_restake')
+                        }
+                    })
+                }
+            })
+    }
+
+
+    // Remove grant DEFAULT
+    async function removeGrantDEFAULT() {
         try {
             // Message
             let msgAny = {
@@ -382,6 +485,86 @@
         } catch (error) {
             console.log(error)
         }
+    }
+
+
+    // Remove grant EVMOS
+    async function removeGrantEVMOS() {
+        // Create request
+        await fetch(`${store.networks.evmos.lcd_api}/cosmos/auth/v1beta1/accounts/${store.wallets.evmos}`)
+            .then(res => res.json())
+            .then(async response => {
+                try {
+                    // Params
+                    let params = {
+                        bot_address: store.networks[store.networkManageModal].restake.address,
+                        validator_address: store.networks[store.networkManageModal].restake.address
+                    }
+
+                    // Prepare EVMOS Tx
+                    let prepareResult = await prepareEVMOSTx(params, response.account.base_account, 'restake_disable')
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        duration: -100,
+                        title: i18n.global.t('message.notification_progress_title'),
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_delegate')
+                        }
+                    })
+
+                    // Send EVMOS Tx
+                    let result = await sendEVMOSTx(prepareResult)
+
+                    // Set TXS
+                    store.lastTXS = result.tx_response.txhash
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        title: i18n.global.t('message.notification_successful_title'),
+                        type: 'success',
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_delegate'),
+                            tx_hash: store.lastTXS
+                        }
+                    })
+
+                    // Update grant info
+                    getGrantInfo()
+                } catch (error) {
+                    console.log(error)
+
+                    // Get error title
+                    store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+                    // Show notification
+                    notification.notify({
+                        group: store.networks[store.networkManageModal].denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        id: Date.now(),
+                        group: store.networks[store.networkManageModal].denom,
+                        title: i18n.global.t('message.notification_failed_title'),
+                        text: store.manageError,
+                        type: 'error',
+                        data: {
+                            chain: store.networkManageModal,
+                            tx_type: i18n.global.t('message.manage_modal_action_restake')
+                        }
+                    })
+                }
+            })
     }
 
 
