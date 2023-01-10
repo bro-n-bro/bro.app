@@ -262,7 +262,7 @@
                         })
 
                         // Update network
-                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                        store.updateNetwork(store.networkManageModal)
                     } catch (error) {
                         console.log(error)
 
@@ -315,12 +315,12 @@
             data: {
                 chain: store.networkManageModal,
                 tx_type: i18n.global.t('message.manage_modal_action_delegate'),
-                tx_hash: store.lastTXS
+                tx_hash: store.networkManageModal != 'bostrom' ? store.lastTXS : ''
             }
         })
 
         // Update network
-        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+        store.updateNetwork(store.networkManageModal)
     }
 
 

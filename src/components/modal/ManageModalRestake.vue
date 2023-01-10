@@ -212,7 +212,7 @@
     onMounted(async () => {
         // Get grant info
         if(store.networks[store.networkManageModal].restake) {
-            getGrantInfo()
+            await getGrantInfo()
         }
     })
 
@@ -336,7 +336,7 @@
                 })
 
                 // Update grant info
-                getGrantInfo()
+                await getGrantInfo()
             }
         } catch (error) {
             console.log(error)
@@ -359,7 +359,7 @@
                         bot_address: store.networks[store.networkManageModal].restake.address,
                         validator_address: store.networks[store.networkManageModal].restake.address,
                         denom: store.networks.evmos.denom,
-                        maxTokens: `${parseFloat(restake.amount).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks[store.networkManageModal].exponent}`,
+                        maxTokens: restake.amount > 0 ? `${parseFloat(restake.amount).toFixed(store.networks[store.networkManageModal].exponent.toString().length - 1) * store.networks[store.networkManageModal].exponent}` : 0,
                         duration_in_seconds: moment(restake.expiry).unix()
                     }
 
@@ -379,6 +379,7 @@
 
                     // Send EVMOS Tx
                     let result = await sendEVMOSTx(prepareResult)
+
 
                     // Set TXS
                     store.lastTXS = result.tx_response.txhash
@@ -401,7 +402,11 @@
                     })
 
                     // Update grant info
-                    getGrantInfo()
+                    let interval = setInterval(async () => {
+                        !Object.keys(restake.grant).length
+                            ? await getGrantInfo()
+                            : clearInterval(interval)
+                    }, 500)
                 } catch (error) {
                     console.log(error)
 
@@ -534,12 +539,14 @@
                         data: {
                             chain: store.networkManageModal,
                             tx_type: i18n.global.t('message.manage_modal_action_delegate'),
-                            tx_hash: store.lastTXS
+                            tx_hash: store.networkManageModal != 'bostrom' ? store.lastTXS : ''
                         }
                     })
 
                     // Update grant info
-                    getGrantInfo()
+                    restake.grant = {}
+                    restake.amount = 0 || i18n.global.t('message.manage_modal_grant_amount_placeholder')
+                    restake.expiry = new Date(moment().add(1, 'year').format('YYYY-MM-DD'))
                 } catch (error) {
                     console.log(error)
 

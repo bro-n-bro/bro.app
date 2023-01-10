@@ -49,15 +49,16 @@ router.beforeEach((to, from, next) => {
 	const store = useGlobalStore(),
 		modalId = to.query.manage_modal
 
-
 	// Keplr
-	!window.keplr && to.name != 'KeplrError'
-		? router.push({ name: 'KeplrError' })
-		: next()
+	setTimeout(() => {
+		!window.keplr && to.name != 'KeplrError'
+			? router.push({ name: 'KeplrError' })
+			: next()
 
-	window.keplr && to.name == 'KeplrError'
-		? router.push({ name: 'Dashboard' })
-		: next()
+		window.keplr && to.name == 'KeplrError'
+			? router.push({ name: 'Dashboard' })
+			: next()
+	})
 
 
 	// Manage modal from url

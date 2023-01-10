@@ -165,7 +165,7 @@
             })
 
             // Update network
-            setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+            store.updateNetwork(store.networkManageModal)
         } catch (error) {
             console.log(error)
 

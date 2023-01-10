@@ -1,4 +1,3 @@
-import { inject } from 'vue'
 import { useGlobalStore } from '@/stores'
 
 import { SigningStargateClient } from '@cosmjs/stargate'
@@ -19,8 +18,7 @@ import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/pro
 
 // Prepare Tx
 export const prepareTx = async (msg, gasSimulate = true) => {
-    let store = useGlobalStore(),
-        i18n = inject('i18n')
+    let store = useGlobalStore()
 
     // Create request
     let offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
@@ -147,6 +145,8 @@ export const sendTx = async ({ txRaw, client }) => {
 
 // Send EVMOS Tx
 export const sendEVMOSTx = async txRaw => {
+    let store = useGlobalStore()
+
     // Broadcast it
     let postOptions = {
         method: 'POST',

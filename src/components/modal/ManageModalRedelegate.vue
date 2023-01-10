@@ -293,7 +293,7 @@
                             title: i18n.global.t('message.notification_progress_title'),
                             data: {
                                 chain: store.networkManageModal,
-                                tx_type: i18n.global.t('message.manage_modal_action_delegate')
+                                tx_type: i18n.global.t('message.manage_modal_action_redelegate')
                             }
                         })
 
@@ -345,7 +345,7 @@
                         })
 
                         // Update network
-                        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+                        store.updateNetwork(store.networkManageModal)
 
                         // Clear validator data
                         clearValidator()
@@ -383,12 +383,12 @@
             data: {
                 chain: store.networkManageModal,
                 tx_type: i18n.global.t('message.manage_modal_action_redelegate'),
-                tx_hash: store.lastTXS
+                tx_hash: store.networkManageModal != 'bostrom' ? store.lastTXS : ''
             }
         })
 
         // Update network
-        setTimeout(() => store.updateNetwork(store.networkManageModal), 4000)
+        store.updateNetwork(store.networkManageModal)
 
         // Clear validator data
         clearValidator()

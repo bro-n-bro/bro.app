@@ -72,7 +72,7 @@ const network = {
     exponent: 1000000000000000000,
     tokens_sum: 0,
     unbonding_time: 0,
-    gas: '350000',
+    gas: '500000',
 
     restake: {
         address: 'evmos1umjyc6jvtrwrr62z5d4afkrjtq7gyg0eq98x5k',
