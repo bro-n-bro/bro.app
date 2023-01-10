@@ -142,7 +142,6 @@
 
     #manage_modal .type .btn
     {
-        color: #fff;
         font-size: 14px;
         font-weight: 500;
         line-height: 17px;
@@ -153,7 +152,7 @@
 
         transition: .2s linear;
 
-        border: 1px solid;
+        border: 2px solid;
         border-radius: 14px;
         background: #191919;
     }
@@ -164,6 +163,7 @@
         color: #000;
 
         background: #fff;
+        border-color: #fff;
     }
 
 
@@ -358,7 +358,7 @@
         transition: .2s linear;
         text-transform: uppercase;
 
-        border: 1px solid #fff;
+        border: 2px solid;
         border-radius: 14px;
     }
 

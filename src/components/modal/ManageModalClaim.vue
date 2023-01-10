@@ -38,9 +38,7 @@
                 </div>
 
                 <div class="val">
-                    <!-- {{ $filters.toFixed(store.networks[store.networkManageModal].rewards_tokens, 2) }} -->
-                    {{ store.networks[store.networkManageModal].rewards_tokens }}
-                    {{ store.networks[store.networkManageModal].token_name }}
+                    ~ {{ $filters.toFixed(store.networks[store.networkManageModal].rewards_tokens, 6) }} {{ store.networks[store.networkManageModal].token_name }}
                 </div>
             </div>
         </div>
