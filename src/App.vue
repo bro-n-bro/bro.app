@@ -26,10 +26,26 @@
                 <div class="text" v-html="props.item.text"></div>
 
                 <div class="explorer" v-if="props.item.data.tx_hash">
+                    <template v-if="store.networkManageModal == 'cosmoshub'">
+                    <a :href="`https://www.mintscan.io/cosmos/txs/${props.item.data.tx_hash}`" target="_blank" rel="noopener nofollow">
+                        <span>{{ $t('message.notification_explorer_link') }}</span>
+                        <svg><use xlink:href="/sprite.svg#ic_link_arrow"></use></svg>
+                    </a>
+                    </template>
+
+                    <template v-else-if="store.networkManageModal == 'gravity'">
+                    <a :href="`https://www.mintscan.io/gravity-bridge/txs/${props.item.data.tx_hash}`" target="_blank" rel="noopener nofollow">
+                        <span>{{ $t('message.notification_explorer_link') }}</span>
+                        <svg><use xlink:href="/sprite.svg#ic_link_arrow"></use></svg>
+                    </a>
+                    </template>
+
+                    <template v-else>
                     <a :href="`https://www.mintscan.io/${store.networkManageModal}/txs/${props.item.data.tx_hash}`" target="_blank" rel="noopener nofollow">
                         <span>{{ $t('message.notification_explorer_link') }}</span>
                         <svg><use xlink:href="/sprite.svg#ic_link_arrow"></use></svg>
                     </a>
+                    </template>
                 </div>
             </div>
         </template>

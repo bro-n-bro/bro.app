@@ -11,12 +11,6 @@
     <!-- Manage modal -->
     <ManageModal v-if="store.showManageModal" />
 
-    <!-- Manage success modal -->
-    <!-- <ManageSuccessModal v-if="store.showManageSuccessModal" /> -->
-
-    <!-- Manage error modal -->
-    <!-- <ManageErrorModal v-if="store.showManageErrorModal" /> -->
-
     <!-- Feedback -->
     <Feedback />
 
@@ -35,8 +29,6 @@
     import Header from '../components/Header.vue'
     import Notifications from '../components/Notifications.vue'
     import ManageModal from '../components/modal/ManageModal.vue'
-    // import ManageSuccessModal from '../components/modal/ManageSuccessModal.vue'
-    // import ManageErrorModal from '../components/modal/ManageErrorModal.vue'
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'
 

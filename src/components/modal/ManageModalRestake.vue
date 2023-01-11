@@ -153,7 +153,7 @@
         </div>
 
 
-        <div class="btns">
+        <div class="btns" v-if="!store.isLedger">
             <button type="button" class="btn green" v-if="!Object.keys(restake.grant).length && !manageGrant" @click.prevent="manageGrant = true">
                 {{ $t('message.manage_modal_enable_restake_btn') }}
             </button>
@@ -486,9 +486,34 @@
                 restake.grant = {}
                 restake.amount = 0 || i18n.global.t('message.manage_modal_grant_amount_placeholder')
                 restake.expiry = new Date(moment().add(1, 'year').format('YYYY-MM-DD'))
+            } else {
+                // Show error modal
+                console.log(result)
+                showError(result)
             }
         } catch (error) {
             console.log(error)
+
+            // Get error title
+            store.manageError = i18n.global.t('message.manage_modal_error_rejected')
+
+            // Show notification
+            notification.notify({
+                group: store.networks[store.networkManageModal].denom,
+                clean: true
+            })
+
+            notification.notify({
+                id: Date.now(),
+                group: store.networks[store.networkManageModal].denom,
+                title: i18n.global.t('message.notification_failed_title'),
+                text: store.manageError,
+                type: 'error',
+                data: {
+                    chain: store.networkManageModal,
+                    tx_type: i18n.global.t('message.manage_modal_action_delegate')
+                }
+            })
         }
     }
 
@@ -584,8 +609,8 @@
     // Show error modal
     function showError(error) {
         // Get error title
-        errorCode
-            ? store.manageError = i18n.global.t(`message.manage_modal_error_${errorCode[1]}`)
+        error.code
+            ? store.manageError = i18n.global.t(`message.manage_modal_error_${error.code}`)
             : store.manageError = i18n.global.t('message.manage_modal_error_rejected')
 
         // Show notification
