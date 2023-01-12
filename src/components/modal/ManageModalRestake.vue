@@ -174,6 +174,10 @@
                 {{ $t('message.update_btn') }}
             </button>
         </div>
+
+        <div class="authz_exp" v-else>
+            {{ $t('message.manage_modal_restake_authz_exp') }}
+        </div>
     </form>
 </template>
 

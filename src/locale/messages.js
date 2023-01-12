@@ -110,6 +110,7 @@ export default {
 
             'manage_modal_grant_amount_exp': 'Reduces with every delegation made by the validator. Leave empty for unlimited',
             'manage_modal_grant_expiry_exp': 'Date the grant will expire. After this date you will need to re-grant',
+            'manage_modal_restake_authz_exp': 'Ledger is expected in the near future.',
 
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',
