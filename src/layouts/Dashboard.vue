@@ -2,9 +2,6 @@
     <!-- Header -->
     <Header />
 
-    <!-- Notifications -->
-    <Notifications />
-
     <!-- Router view -->
     <RouterView />
 
@@ -27,7 +24,6 @@
 
     // Components
     import Header from '../components/Header.vue'
-    import Notifications from '../components/Notifications.vue'
     import ManageModal from '../components/modal/ManageModal.vue'
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'

@@ -41,10 +41,7 @@ export default {
 
             'network_notice': "The network health is {health}. That's why it's {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network. The hex is blinking with frequency is depended on network APR.",
             'network_sum_notice': "The sum of your tokens in {network} network",
-            'network_staked_tokens_notice': "The amount of staked tokens is {value} {denom}",
-            'network_liquid_tokens_notice': "The amount of liquid tokens is {value} {denom}",
-            'network_rewards_tokens_notice': "The amount of ready-to-claim reward tokens is {value} {denom}",
-            'network_ibc_tokens_notice': "The amount {denom} tokens outside the {network} is {value} {denom}",
+            'network_tokens_notice': "The amount of staked tokens is {delegations_tokens} {denom}. The amount of liquid tokens is {availabel_tokens} {denom}. The amount of ready-to-claim reward tokens is {rewards_tokens} {denom}. The amount {denom} tokens outside the {network} is {ibc_tokens} {denom}",
             'network_personal_APR_notice': "Your personal APR, given validators commissions",
             'network_RPDE_notice': "Rewards Per Day Estimation. The amount of {denom} tokens you're earning per day.",
 

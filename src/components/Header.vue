@@ -24,14 +24,22 @@
                     </div>
                 </div>
 
+                <!-- Notifications -->
+                <transition name="fade" mode="out-in" appear type="animation">
+                <Notifications />
+                </transition>
+
+                <!-- IPFS -->
                 <transition name="fade" mode="out-in" appear type="animation">
                 <IPFS />
                 </transition>
 
+                <!-- Currency -->
                 <transition name="fade" mode="out-in" appear type="animation">
                 <Currency v-if="store.auth" />
                 </transition>
 
+                <!-- User info -->
                 <transition name="fade" mode="out-in" appear type="animation">
                 <User v-if="store.auth" />
                 </transition>
@@ -47,6 +55,8 @@
     import { onMounted, ref, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
 
+    // Components
+    import Notifications from '../components/Notifications.vue'
     import IPFS from '../components/header/IPFS.vue'
     import Currency from '../components/header/Currency.vue'
     import User from '../components/header/User.vue'
@@ -62,7 +72,7 @@
         const header = document.querySelector('header')
 
         header.stickyEvent = () => setTimeout(() => {
-            window.scrollY > 32
+            window.scrollY > 0
                 ? header.classList.add('stuck')
                 : header.classList.remove('stuck')
         })
@@ -82,136 +92,136 @@
 
 
 <style>
-    header
-    {
-        position: fixed;
-        z-index: 90;
-        top: 0;
-        left: 0;
+header
+{
+    position: fixed;
+    z-index: 90;
+    top: 0;
+    left: 0;
 
-        width: 100%;
-        padding: 20px 0;
-    }
+    width: 100%;
+    padding: 20px 0;
 
-    header.stuck
-    {
-        background: var(--bg);
-    }
+    transition: padding .2s linear;
+}
 
 
-    header .cont
-    {
-        max-width: 100%;
-        padding: 0 20px;
-    }
+header .cont
+{
+    max-width: 100%;
+    padding: 0 20px;
+}
 
 
-    header .info
-    {
-        padding: 11px 20px;
+header .info
+{
+    padding: 11px 20px;
 
-        border-radius: 42px;
+    border-radius: 42px;
 
-        align-content: center;
-        align-items: center;
-        justify-content: space-between;
-    }
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
 
 
 
-    header .logo
-    {
-        position: relative;
-        margin-right: auto;
-    }
+header .logo
+{
+    position: relative;
+
+    margin-right: auto;
+}
 
 
-    header .logo .btn
-    {
-        display: flex;
+header .logo .btn
+{
+    display: flex;
 
-        cursor: pointer;
+    cursor: pointer;
 
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-
-    header .logo .btn img
-    {
-                max-width: 100%;
-        height: 70px;
-        display: block;
-    }
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
 
 
-    header .logo .arr
-    {
-        display: block;
+header .logo .btn img
+{
+    display: block;
 
-        width: 24px;
-        height: 24px;
-        margin-left: 14px;
-    }
-
-
-    header .logo .mini_modal
-    {
-        position: absolute;
-        top: 100%;
-        left: 0;
-
-        width: 238px;
-        margin-top: 10px;
-        padding: 6px 4px;
-
-        border-radius: 10px;
-        background: #101010;
-    }
-
-    header .logo .mini_modal > * + *
-    {
-        margin-top: 8px;
-    }
+    max-width: 100%;
+    height: 70px;
+}
 
 
-    header .logo .mini_modal a
-    {
-        color: currentColor;
+header .logo .arr
+{
+    display: block;
 
-        display: block;
-
-        padding: 6px 10px 6px 4px;
-
-        transition: background .2s linear;
-        text-decoration: none;
-
-        border-radius: 8px;
-    }
+    width: 24px;
+    height: 24px;
+    margin-left: 14px;
+}
 
 
-    header .logo .mini_modal img
-    {
-        display: block;
+header .logo .mini_modal
+{
+    position: absolute;
+    top: 100%;
+    left: 0;
 
-        max-width: 100%;
-    }
+    width: 238px;
+    margin-top: 10px;
+    padding: 6px 4px;
+
+    border-radius: 10px;
+    background: #101010;
+}
+
+header .logo .mini_modal > * + *
+{
+    margin-top: 8px;
+}
 
 
-    header .logo .mini_modal a:hover
-    {
-        background: #191919;
-    }
+header .logo .mini_modal a
+{
+    color: currentColor;
+
+    display: block;
+
+    padding: 6px 10px 6px 4px;
+
+    transition: background .2s linear;
+    text-decoration: none;
+
+    border-radius: 8px;
+}
+
+
+header .logo .mini_modal img
+{
+    display: block;
+
+    max-width: 100%;
+}
+
+
+header .logo .mini_modal a:hover
+{
+    background: #191919;
+}
 
 
 
-    header.vue-sticky-element--stuck
-    {
-        padding: 0;
+header.stuck
+{
+    padding: 0;
 
-        transform: translateY(0%) !important;
-    }
+    background: var(--bg);
+}
+
 
 </style>

@@ -36,7 +36,7 @@
 <style scoped>
     footer
     {
-        margin-top: 80px;
+        margin-top: 60px;
         padding: 20px 0 40px;
 
         border-top: 1px solid rgba(255, 255, 255, .1);
@@ -116,7 +116,7 @@
 
     footer .socials a:active
     {
-        color: #7700E1;
+        color: #7700e1;
     }
 
 </style>

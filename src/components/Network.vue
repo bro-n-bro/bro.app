@@ -24,39 +24,31 @@
                 <div class="name">{{ store.networks[props.network].name }}</div>
             </div>
 
-            <div class="tokens" @mouseover="emitter.emit('setNotification', $t('message.network_sum_notice', { network: store.networks[props.network].name }))">
+            <div class="tokens" v-show="store.networks[props.network].status"
+                @mouseover="emitter.emit('setNotification', $t('message.network_sum_notice', { network: store.networks[props.network].name }))
+            ">
                 {{ $filters.toFixed(store.networks[props.network].tokens_sum, 2) }}
                 {{ store.networks[props.network].token_name }}
             </div>
 
-            <div class="visualization">
-                <div class="staked" :style="{'width': $filters.toFixed(store.networks[props.network].delegations_percents, 2) + '%'}" v-show="store.networks[props.network].delegations_tokens"
-                @mouseover="emitter.emit('setNotification', $t('message.network_staked_tokens_notice', {
-                    value: store.networks[props.network].delegations_tokens,
-                    denom: store.networks[props.network].token_name
-                }))"></div>
+            <div class="visualization"  v-show="store.networks[props.network].status" @mouseover="emitter.emit('setNotification', $t('message.network_tokens_notice', {
+                delegations_tokens: $filters.toFixed(store.networks[props.network].delegations_tokens, 6),
+                availabel_tokens: $filters.toFixed(store.networks[props.network].availabel_tokens, 6),
+                rewards_tokens: $filters.toFixed(store.networks[props.network].rewards_tokens, 6),
+                ibc_tokens: $filters.toFixed(store.networks[props.network].ibc_tokens, 6),
+                denom: store.networks[props.network].token_name,
+                network: store.networks[props.network].name
+            }))">
+                <div class="staked" :style="{'width': $filters.toFixed(store.networks[props.network].delegations_percents, 2) + '%'}" v-show="store.networks[props.network].delegations_tokens"></div>
 
-                <div class="liquid" :style="{'width': $filters.toFixed(store.networks[props.network].availabel_percents, 2) + '%'}" v-show="store.networks[props.network].availabel_tokens"
-                @mouseover="emitter.emit('setNotification', $t('message.network_liquid_tokens_notice', {
-                    value: store.networks[props.network].availabel_tokens,
-                    denom: store.networks[props.network].token_name
-                }))"></div>
+                <div class="liquid" :style="{'width': $filters.toFixed(store.networks[props.network].availabel_percents, 2) + '%'}" v-show="store.networks[props.network].availabel_tokens"></div>
 
-                <div class="rewards" :style="{'width': $filters.toFixed(store.networks[props.network].rewards_percents, 2) + '%'}" v-show="store.networks[props.network].rewards_tokens"
-                @mouseover="emitter.emit('setNotification', $t('message.network_rewards_tokens_notice', {
-                    value: store.networks[props.network].rewards_tokens,
-                    denom: store.networks[props.network].token_name
-                }))"></div>
+                <div class="rewards" :style="{'width': $filters.toFixed(store.networks[props.network].rewards_percents, 2) + '%'}" v-show="store.networks[props.network].rewards_tokens"></div>
 
-                <div class="IBC" :style="{'width': $filters.toFixed(store.networks[props.network].ibc_percents, 2) + '%'}" v-show="store.networks[props.network].ibc_tokens"
-                @mouseover="emitter.emit('setNotification', $t('message.network_ibc_tokens_notice', {
-                    value: store.networks[props.network].ibc_tokens,
-                    denom: store.networks[props.network].token_name,
-                    network: store.networks[props.network].name
-                }))"></div>
+                <div class="IBC" :style="{'width': $filters.toFixed(store.networks[props.network].ibc_percents, 2) + '%'}" v-show="store.networks[props.network].ibc_tokens"></div>
             </div>
 
-            <div class="stats">
+            <div class="stats" v-show="store.networks[props.network].status">
                 <div @mouseover="emitter.emit('setNotification', $t('message.network_personal_APR_notice'))">
                     <div class="label">{{ $t('message.personal_apr') }}</div>
 
@@ -68,6 +60,10 @@
 
                     <div class="val">{{ $filters.toFixed(store.networks[props.network].RPDE, 2) }}</div>
                 </div>
+            </div>
+
+            <div class="lock" v-show="!store.networks[props.network].status">
+                <svg><use xlink:href="/sprite.svg#ic_lock"></use></svg>
             </div>
 
             <!-- <a href="/" class="details_btn" v-if="store.networks[props.network].status && store.auth">{{ $t('message.details') }}</a> -->
@@ -320,15 +316,18 @@
     {
         display: flex;
         visibility: hidden;
+        overflow: hidden;
 
         height: 12px;
+        min-height: 12px;
         margin-bottom: 12px;
 
         transition: .2s linear;
-        transition-property: opacity, visibility;
+        transition-property: opacity, visibility, box-shadow;
         pointer-events: none;
 
         opacity: 0;
+        border-radius: 10px;
 
         justify-content: center;
         align-items: center;
@@ -348,17 +347,10 @@
 
     .network .visualization > *
     {
-        min-width: 24px;
+        min-width: 2px;
         height: 12px;
 
-        transition: .2s linear;
-
-        border-radius: 10px;
-    }
-
-    .network .visualization > * + *
-    {
-        margin-left: 6px;
+        transition: width .2s linear;
     }
 
     .network .visualization .staked
@@ -381,24 +373,9 @@
         background: #c5811b;
     }
 
-    .network .visualization .staked:hover
+    .network .visualization:hover
     {
         box-shadow: 2px 5px 15px rgba(149, 15, 255, .65);
-    }
-
-    .network .visualization .liquid:hover
-    {
-        box-shadow: 2px 5px 15px rgba(235, 87, 87, .65);
-    }
-
-    .network .visualization .rewards:hover
-    {
-        box-shadow: 2px 5px 15px rgba(27, 197, 98, .65);
-    }
-
-    .network .visualization .IBC:hover
-    {
-        box-shadow: 2px 5px 15px rgba(197, 129, 27, .65);
     }
 
 
@@ -474,6 +451,22 @@
     }
 
 
+
+    .network .lock
+    {
+        margin-top: 8px;
+    }
+
+    .network .lock svg
+    {
+        display: block;
+
+        width: 68px;
+        height: 68px;
+        margin: auto;
+    }
+
+
     .network .details_btn,
     .network .delegate_btn
     {
@@ -510,8 +503,8 @@
     {
         color: #fff;
 
-        border-color: #7700E1;
-        background: #7700E1;
+        border-color: #7700e1;
+        background: #7700e1;
     }
 
     .network.disabled:not(.default) .delegate_btn
