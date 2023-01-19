@@ -45,6 +45,9 @@ export default {
             'network_personal_APR_notice': "Your personal APR, given validators commissions",
             'network_RPDE_notice': "Rewards Per Day Estimation. The amount of {denom} tokens you're earning per day.",
 
+            'network_lock_notice': "It is greyed out and locked because you don't have tokens in this network. To unlock the network and see the analytics delegate tokens to your Bro.",
+            'network_lock_notice2': "It is highlighted in white because you have tokens in this network but none of them are delegated to Bro_n_Bro, that's why Network is currently locked. To unlock the network and see the analytics delegate tokens to your Bro.",
+
             'account_balance_notice': "Your account valuation in the chosen currency",
             'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
             'account_RPDE_notice': "Rewards Per Day Estimation. The number of tokens in the chosen currency you earn per day from all displayed networks.",

@@ -13,6 +13,20 @@
         </template>
 
         <template v-else>
+            <template v-if="!store.networks[props.network].status">
+            <div class="head" @mouseover="store.networks[props.network].tokens_sum > 0
+                ? emitter.emit('setNotification', $t('message.network_lock_notice2'))
+                : emitter.emit('setNotification', $t('message.network_lock_notice'))"
+            >
+                <div class="logo">
+                    <img :src="`/${props.network}_logo.png`" alt="">
+                </div>
+
+                <div class="name">{{ store.networks[props.network].name }}</div>
+            </div>
+            </template>
+
+            <template v-else>
             <div class="head" @mouseover="emitter.emit('setNotification', $t('message.network_notice', {
                 health: $filters.toFixed(store.networks[props.network].health, 2),
                 color: store.networks[props.network].health_color
@@ -23,6 +37,7 @@
 
                 <div class="name">{{ store.networks[props.network].name }}</div>
             </div>
+            </template>
 
             <div class="tokens" v-show="store.networks[props.network].status"
                 @mouseover="emitter.emit('setNotification', $t('message.network_sum_notice', { network: store.networks[props.network].name }))
@@ -62,7 +77,11 @@
                 </div>
             </div>
 
-            <div class="lock" v-show="!store.networks[props.network].status">
+            <div class="lock" v-show="!store.networks[props.network].status"
+                @mouseover="store.networks[props.network].tokens_sum > 0
+                    ? emitter.emit('setNotification', $t('message.network_lock_notice2'))
+                    : emitter.emit('setNotification', $t('message.network_lock_notice'))"
+            >
                 <svg><use xlink:href="/sprite.svg#ic_lock"></use></svg>
             </div>
 
@@ -204,11 +223,33 @@
 
         width: 100%;
         margin-bottom: 20px;
-
+        pointer-events: auto;
         align-content: center;
         align-items: center;
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+
+    .network:not(.disabled) .head:hover .name
+    {
+        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
+        0   -1px 0   rgba( 149, 15, 255, .6 ),
+        -0    1px 0   rgba( 149, 15, 255, .6 ),
+        0    1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -0   0   rgba( 149, 15, 255, .6 ),
+        1px -0   0   rgba( 149, 15, 255, .6 ),
+        -1px  0   0   rgba( 149, 15, 255, .6 ),
+        1px  0   0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        -1px -1px 0   rgba( 149, 15, 255, .6 ),
+        1px -1px 0   rgba( 149, 15, 255, .6 ),
+        -1px  1px 0   rgba( 149, 15, 255, .6 ),
+        1px  1px 0   rgba( 149, 15, 255, .6 ),
+        2px 5px 15px rgba(149, 15, 255, .45);
     }
 
 
@@ -251,27 +292,6 @@
         margin-left: 10px;
 
         transition: text-shadow .2s linear;
-    }
-
-    .network .name:hover
-    {
-        text-shadow: -0   -1px 0   rgba( 149, 15, 255, .6 ),
-        0   -1px 0   rgba( 149, 15, 255, .6 ),
-        -0    1px 0   rgba( 149, 15, 255, .6 ),
-        0    1px 0   rgba( 149, 15, 255, .6 ),
-        -1px -0   0   rgba( 149, 15, 255, .6 ),
-        1px -0   0   rgba( 149, 15, 255, .6 ),
-        -1px  0   0   rgba( 149, 15, 255, .6 ),
-        1px  0   0   rgba( 149, 15, 255, .6 ),
-        -1px -1px 0   rgba( 149, 15, 255, .6 ),
-        1px -1px 0   rgba( 149, 15, 255, .6 ),
-        -1px  1px 0   rgba( 149, 15, 255, .6 ),
-        1px  1px 0   rgba( 149, 15, 255, .6 ),
-        -1px -1px 0   rgba( 149, 15, 255, .6 ),
-        1px -1px 0   rgba( 149, 15, 255, .6 ),
-        -1px  1px 0   rgba( 149, 15, 255, .6 ),
-        1px  1px 0   rgba( 149, 15, 255, .6 ),
-        2px 5px 15px rgba(149, 15, 255, .45);
     }
 
 
@@ -455,6 +475,7 @@
     .network .lock
     {
         margin-top: 8px;
+        pointer-events: auto;
     }
 
     .network .lock svg
