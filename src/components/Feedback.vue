@@ -64,6 +64,7 @@
 
         border-radius: 32px;
         background: #950fff;
+        transition: background .2s linear;
 
         justify-content: center;
         align-items: center;
@@ -78,6 +79,13 @@
         width: 36px;
         height: 36px;
     }
+
+
+    .feedback .btn:hover
+    {
+        background: #7700E1;
+    }
+
 
     .feedback .btn.active
     {
@@ -221,6 +229,7 @@
         flex-wrap: wrap;
     }
 
+
     .feedback .links .icon
     {
         display: block;
@@ -230,10 +239,12 @@
         margin-right: 6px;
     }
 
+
     .feedback .links span
     {
         width: calc(100% - 44px);
     }
+
 
     .feedback .links .arrow
     {
@@ -244,9 +255,16 @@
         margin-left: auto;
     }
 
+
     .feedback .links a:hover
     {
         background: #950fff;
+    }
+
+
+    .feedback .links a:active
+    {
+        background: #7700E1;
     }
 
 </style>

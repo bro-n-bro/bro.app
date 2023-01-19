@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.bostrom.bronbro.io',
     rpc_api: 'https://rpc.bostrom.bronbro.io',
+    websocket_url: 'wss://rpc.bostrom.bronbro.io:443/websocket',
     validator: 'bostromvaloper1ydc5fy9fjdygvgw36u49yj39fr67pd9m5qexm8',
     denom: 'boot',
     token_name: 'MBOOT',
@@ -38,6 +39,7 @@ const network = {
 
     validators: [],
     delegations: [],
+    rewards: [],
 
     RPDE: 0,
     RPDE_usdt: 0,
@@ -62,13 +64,20 @@ const network = {
     balance_btc: 0,
 
     apr: 0,
+    apy: 0,
     personal_APR: 0,
 
     speed: 0,
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
-    unbonding_time: 0
+    unbonding_time: 0,
+
+    restake: {
+        address: 'bostrom1grfk7t0k42yxpwqhr7kt4te7j73m2a3vpkfrlp',
+        run_time: '19:37',
+        minimum_reward: 100000
+    }
 }
 
 export default network

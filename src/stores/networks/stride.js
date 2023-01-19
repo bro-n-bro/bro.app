@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.stride-1.bronbro.io',
     rpc_api: 'https://rpc.stride-1.bronbro.io',
+    websocket_url: 'wss://rpc.stride-1.bronbro.io:443/websocket',
     validator: 'stridevaloper1hl95uhecs4rwe0g432mknz2tsl84f0ltexpzc3',
     denom: 'ustrd',
     token_name: 'STRD',
@@ -38,6 +39,7 @@ const network = {
 
     validators: [],
     delegations: [],
+    rewards: [],
 
     RPDE: 0,
     RPDE_usdt: 0,
@@ -62,13 +64,16 @@ const network = {
     balance_btc: 0,
 
     apr: 0,
+    apy: 0,
     personal_APR: 0,
 
     speed: 0,
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
-    unbonding_time: 0
+    unbonding_time: 0,
+
+    restake: false
 }
 
 export default network

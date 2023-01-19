@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useGlobalStore } from '@/stores'
 
 import errorLayut from '../layouts/Error.vue'
-import defaultLayut from '../layouts/Default.vue'
+import dashboardLayut from '../layouts/Dashboard.vue'
 
 const routes = [
 	{
@@ -33,7 +34,7 @@ const routes = [
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: dashboardLayut
 		}
 	},
 ]
@@ -45,14 +46,26 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-	// Keplr
-	!window.keplr && to.name != 'KeplrError'
-		? router.push({ name: 'KeplrError' })
-		: next()
+	const store = useGlobalStore(),
+		modalId = to.query.manage_modal
 
-	window.keplr && to.name == 'KeplrError'
-		? router.push({ name: 'Dashboard' })
-		: next()
+	// Keplr
+	setTimeout(() => {
+		!window.keplr && to.name != 'KeplrError'
+			? router.push({ name: 'KeplrError' })
+			: next()
+
+		window.keplr && to.name == 'KeplrError'
+			? router.push({ name: 'Dashboard' })
+			: next()
+	})
+
+
+	// Manage modal from url
+	if (modalId) {
+		store.networkManageModal = modalId
+		store.showManageModal = true
+	}
 })
 
 

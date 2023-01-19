@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.juno-1.bronbro.io',
     rpc_api: 'https://rpc.juno-1.bronbro.io',
+    websocket_url: 'wss://rpc.juno-1.bronbro.io:443/websocket',
     validator: 'junovaloper1quqxfrxkycr0uzt4yk0d57tcq3zk7srm7sm6r8',
     denom: 'ujuno',
     token_name: 'JUNO',
@@ -38,6 +39,7 @@ const network = {
 
     validators: [],
     delegations: [],
+    rewards: [],
 
     RPDE: 0,
     RPDE_usdt: 0,
@@ -62,13 +64,20 @@ const network = {
     balance_btc: 0,
 
     apr: 0,
+    apy: 0,
     personal_APR: 0,
 
     speed: 0,
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
-    unbonding_time: 0
+    unbonding_time: 0,
+
+    restake: {
+        address: 'juno1grfk7t0k42yxpwqhr7kt4te7j73m2a3v5h7tx6',
+        run_time: '19:37',
+        minimum_reward: 100000
+    }
 }
 
 export default network

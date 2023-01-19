@@ -30,7 +30,7 @@
         font-size: 15px;
         font-weight: 500;
         line-height: 18px;
-
+        margin-left: auto;
         position: relative;
 
         padding-left: 21px;

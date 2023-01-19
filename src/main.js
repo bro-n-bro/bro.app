@@ -3,6 +3,8 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import i18n from './locale'
+import moment from 'moment'
+import Notifications from '@kyvg/vue3-notification'
 
 
 // Events
@@ -18,6 +20,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
+app.use(Notifications)
 
 
 // Vue provide
@@ -25,10 +28,22 @@ app.provide('i18n', i18n)
 app.provide('emitter', emitter)
 
 
-// Add rounding
+// Filters
 app.config.globalProperties.$filters = {
+    // Add rounding
     toFixed(value, limit) {
-        return value.toFixed(limit)
+        let newValue
+
+        value != 0
+            ? newValue = value.toFixed(limit)
+            : newValue = value
+
+        return newValue
+    },
+
+    // Time age
+    timeAgo(date) {
+        return moment(date).fromNow()
     }
 }
 
@@ -52,5 +67,5 @@ const clickOutside = {
 app.directive('clickOut', clickOutside)
 
 
-// Mount (Timeout for Keplr)
-setTimeout(() => app.mount('#app'), 100)
+// Mount
+app.mount('#app')

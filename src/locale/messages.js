@@ -2,6 +2,8 @@ export default {
     // English
     en: {
         message: {
+            'page_title': 'Bro APP',
+
             // IPFS
             'ipfs': "Ipfs node",
 
@@ -21,6 +23,7 @@ export default {
             'manage_btn': 'Manage',
             'delegate_btn': 'Delegate to your Bro',
             'back_home_btn': 'Back to home',
+            'update_btn': 'Update',
 
             // Dashboard
             'personal_apr': 'Personal APR',
@@ -29,21 +32,21 @@ export default {
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
 
-            'ipfs_active_notice': "Built-in IPFS node is active and resolving the content",
-            'ipfs_not_active_notice': "Built-in IPFS node isn't active and can't resolve the content",
+            'ipfs_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
+            'ipfs_not_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",
 
             'currency_notice': "The currency for the account valuation",
             'username_notice': "Chosen keplr account",
             'avatar_notice': "Your Moon passport avatar",
 
-            'network_notice': "The network health is {health}. That’s why it’s {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network.",
+            'network_notice': "The network health is {health}. That's why it's {color}. This parameter is calculated as root from the multiplication of the number of validators that can stop the network and the number of validators that can fork the network. The hex is blinking with frequency is depended on network APR.",
             'network_sum_notice': "The sum of your tokens in {network} network",
-            'network_staked_tokens_notice': "The amount of staked tokens is {value} {denom}",
-            'network_liquid_tokens_notice': "The amount of liquid tokens is {value} {denom}",
-            'network_rewards_tokens_notice': "The amount of ready-to-claim reward tokens is {value} {denom}",
-            'network_ibc_tokens_notice': "The amount {denom} tokens outside the {network} is {value} {denom}",
+            'network_tokens_notice': "The amount of staked tokens is {delegations_tokens} {denom}. The amount of liquid tokens is {availabel_tokens} {denom}. The amount of ready-to-claim reward tokens is {rewards_tokens} {denom}. The amount {denom} tokens outside the {network} is {ibc_tokens} {denom}",
             'network_personal_APR_notice': "Your personal APR, given validators commissions",
             'network_RPDE_notice': "Rewards Per Day Estimation. The amount of {denom} tokens you're earning per day.",
+
+            'network_lock_notice': "It is greyed out and locked because you don't have tokens in this network. To unlock the network and see the analytics delegate tokens to your Bro.",
+            'network_lock_notice2': "It is highlighted in white because you have tokens in this network but none of them are delegated to Bro_n_Bro, that's why Network is currently locked. To unlock the network and see the analytics delegate tokens to your Bro.",
 
             'account_balance_notice': "Your account valuation in the chosen currency",
             'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
@@ -52,21 +55,69 @@ export default {
             // Manage modal
             'manage_modal_action_delegate': 'Delegate',
             'manage_modal_action_redelegate': 'Redelegate',
+            'manage_modal_action_claim': 'Claim',
+            'manage_modal_action_restake': 'Restake',
+
             'manage_modal_validator_name': 'Bro_n_Bro',
             'manage_modal_commission': 'Commission',
+
             'manage_modal_notice_title': 'Staking will lock up your funds for {unbonding_time} days',
+            'manage_modal_claim_notice_title': 'Your claimed rewards will be added<br> to Available Balance.',
+            'manage_modal_restake_notice_title': 'You no longer have to manually claim and restake your staking rewards',
             'manage_modal_notice_desc': 'Once you undelegate your staked {currency}, you will need to wait {unbonding_time} days for your tokens to be liquid',
+            'manage_modal_restake_notice_desc': 'enabling Restake will allow Bro_n_Bro to auto-compound your staking rewards for you.',
+
             'manage_modal_my_delegation': 'My delegation',
             'manage_modal_available_balance': 'Available Balance',
-            'manage_modal_amount': 'Amount to Delegate',
-            'manage_modal_amount2': 'Amount to Redelegate',
+            'manage_modal_rewards_balance': 'Pending Rewards',
+            'manage_modal_APR': 'APR',
+            'manage_modal_APY': 'APY',
+            'manage_modal_delegation': 'Delegation',
+            'manage_modal_pending_rewards': 'Pending Rewards',
+            'manage_modal_frequency': 'Frequency',
+            'manage_modal_frequency_val': 'at {frequency} every day',
+            'manage_modal_minimum_reward': 'Minimum Reward',
+
+            'manage_modal_delegate_amount': 'Amount to Delegate',
+            'manage_modal_redelegate_amount': 'Amount to Redelegate',
+
             'manage_modal_max_btn': 'MAX',
-            'manage_modal_validator_label': 'Validator to Delegate',
-            'manage_modal_validator_label2': 'Validator from Redelegate',
-            'manage_modal_fees': '{value} {currency} is reserved for transaction fees',
-            'manage_modal_back_btn': 'Back',
+
+            'manage_modal_validator_delegate_label': 'Validator to Delegate',
+            'manage_modal_validator_redelegare_label': 'Validator from Redelegate',
+
+            'manage_modal_validator_placeholder': 'Name Validator',
+            'manage_modal_grant_amount_placeholder': 'Unlimited',
+
+            'manage_modal_validator_exp': 'Delegating to Bro_n_Bro will open all application features',
+            'manage_modal_amount_exp': '{value} {currency} is reserved for transaction fees',
+
+            'manage_modal_grant_label_status': 'Grant Status',
+            'manage_modal_grant_label_remaining': 'Grant Remaining',
+            'manage_modal_grant_status_inactive': 'Inactive',
+            'manage_modal_grant_status_active': 'Active',
+            'manage_modal_grant_expiry': 'expires {date}',
+            'manage_modal_grant_remaining': 'Unknown',
+            'manage_modal_grant_remaining_unlimited': 'Unlimited',
+
+            'manage_modal_grant_text1': 'Bro_n_Bro will be able to carry out the following transactions on your behalf',
+            'manage_modal_grant_text2': '<b style="color: #fff;">Delegate</b> — allowed to delegate any amount to only their own validator',
+            'manage_modal_grant_text3': 'This grant will expire automatically on {date}',
+            'manage_modal_grant_text4': 'REStake only re-delegates Bro_n_Bro’s accrued rewards and tries not to touch your balance',
+
+            'manage_modal_grant_label_amount': 'Max amount',
+            'manage_modal_grant_label_expiry': 'Expiry date',
+
+            'manage_modal_grant_amount_exp': 'Reduces with every delegation made by the validator. Leave empty for unlimited',
+            'manage_modal_grant_expiry_exp': 'Date the grant will expire. After this date you will need to re-grant',
+            'manage_modal_restake_authz_exp': 'Ledger is expected in the near future.',
+
             'manage_modal_delegate_btn': 'Delegate',
             'manage_modal_redelegate_btn': 'Redelegate',
+            'manage_modal_claim_all_btn': 'Claim all',
+            'manage_modal_enable_restake_btn': 'Enable Restake',
+            'manage_modal_disable_restake_btn': 'Disable Restake',
+            'manage_modal_manage_grant_btn': 'Manage Grant',
             'manage_modal_success_back_btn': 'Got it!',
             'manage_modal_again_btn': 'Try again!',
 
@@ -121,6 +172,18 @@ export default {
             'feedback_desc': 'Share it with us',
             'feedback_telegram_link': 'Telegram',
             'feedback_github_link': 'Github',
+
+
+            // Notification
+            'notification_progress_title': 'Transaction is in progress',
+            'notification_successful_title': 'Transaction successful',
+            'notification_failed_title': 'Transaction failed',
+            'notification_explorer_link': 'Explorer',
+
+
+            // Footer
+            'footer_contact': 'Contact',
+            'footer_support': 'Support'
         }
     }
 }

@@ -47,8 +47,9 @@ export const useGlobalStore = defineStore('global', {
         node: null,
         IPFSStatus: false,
         recalc: true,
+        isLedger: false,
         auth: useLocalStorage('auth', false),
-        currency: useLocalStorage('currency', 'BTC'),
+        currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
         tooltip: '',
         lastTXS: '',
@@ -67,9 +68,8 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         loaderManageModal: false,
-        showCurrencyDropdown: false,
 
-        networkManageModal: 'cosmoshub'
+        networkManageModal: ''
     }),
 
     actions: {
@@ -81,10 +81,12 @@ export const useGlobalStore = defineStore('global', {
             window.keplr.enable(chainId)
 
             // Cosmos singer
-            const offlineSigner = await window.getOfflineSigner(chainId),
+            const offlineSigner = await window.getOfflineSignerAuto(chainId),
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
+            // Is ledger
+            this.isLedger = key.isNanoLedger
 
             // Pre wallets
             this.$patch({
@@ -226,6 +228,12 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
+        // Connect to network websocket
+        connectNetworkWebsocket(network) {
+            this.networks[network].websocket = new WebSocket(this.networks[network].websocket_url)
+        },
+
+
         // Networks status
         async getNetworkStatus(network) {
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)
@@ -242,9 +250,8 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
-        // Networks tokens
-        async getNetworkTokens(network) {
-            // Delegations tokens
+        // Get network delegations tokens
+        async getNetworkDelegationsTokens(network) {
             await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${this.wallets[network]}`)
                 .then(response => response.json())
                 .then(data => {
@@ -254,27 +261,49 @@ export const useGlobalStore = defineStore('global', {
                         data.delegation_responses.forEach(el => {
                             sum += parseFloat(el.balance.amount)
 
-                            this.networks[network].delegations[el.delegation.validator_address] = el.delegation.shares / this.networks[network].exponent
+                            this.networks[network].delegations.push({
+                                'operator_address': el.delegation.validator_address,
+                                'amount': parseFloat(el.delegation.shares) / this.networks[network].exponent
+                            })
                         })
 
                         this.networks[network].delegations_tokens = sum / this.networks[network].exponent
                     }
                 })
+        },
 
 
-            // Rewards tokens
+        // Get network rewards tokens
+        async getNetworkRewardsTokens(network) {
             await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.total.length) {
+                    if (this.networks[network].rewards_tokens && !data.total.length) {
+                        setTimeout(async () => await this.updateNetwork(network), 1000)
+                    } else if (data.total.length) {
                         let result = data.total.find(el => el.denom == this.networks[network].denom)
 
+                        // Set rewards
                         this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
+
+                        // Set a rewards from each validator
+                        for (let i in data.rewards) {
+                            if (data.rewards[i].reward.length) {
+                                let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
+
+                                this.networks[network].rewards.push({
+                                    'operator_address': data.rewards[i].validator_address,
+                                    'amount': parseFloat(rewards.amount) / this.networks[network].exponent
+                                })
+                            }
+                        }
                     }
                 })
+        },
 
 
-            // Availabel/IBC tokens
+        // Get network availabel/IBC tokens
+        async getNetworkAvailabelIBCTokens(network) {
             await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
                 .then(response => response.json())
                 .then(data => {
@@ -290,24 +319,32 @@ export const useGlobalStore = defineStore('global', {
                             fetch(`${this.networks[network].lcd_api}/ibc/apps/transfer/v1/denom_traces/${el.denom.substr(4)}`)
                                 .then(response => response.json())
                                 .then(data => {
-                                    let baseDenom = data.denom_trace.base_denom,
-                                        baseNetwork = ''
-
                                     for (const tempNetwork in this.networks) {
-                                        if (this.networks[tempNetwork].denom == baseDenom) {
-                                            baseNetwork = tempNetwork
+                                        if (this.networks[tempNetwork].denom == data.denom_trace.base_denom) {
+                                            // Add tokens
+                                            this.networks[tempNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[tempNetwork].exponent
+
+                                            // Calc network tokens sum
+                                            this.calcNetworkTokensSum(tempNetwork)
                                         }
                                     }
-
-                                    // Add tokens
-                                    this.networks[baseNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[baseNetwork].exponent
-
-                                    // Calc network tokens sum
-                                    this.calcNetworkTokensSum(baseNetwork)
                                 })
                         })
                     }
                 })
+        },
+
+
+        // Networks tokens
+        async getNetworkTokens(network) {
+            // Get network delegations tokens
+            await this.getNetworkDelegationsTokens(network)
+
+            // Get network rewards tokens
+            await this.getNetworkRewardsTokens(network)
+
+            // Get network availabel/IBC tokens
+            await this.getNetworkAvailabelIBCTokens(network)
         },
 
 
@@ -426,6 +463,7 @@ export const useGlobalStore = defineStore('global', {
                         if (this.networks[el.network]) {
                             this.networks[el.network].health = el.health
                             this.networks[el.network].apr = el.apr
+                            this.networks[el.network].apy = Math.pow(1 + (el.apr.toFixed(2) / 365), 365) - 1
 
                             this.networks[el.network].price = el.price
                             this.networks[el.network].price_usdt = el.price
@@ -521,6 +559,8 @@ export const useGlobalStore = defineStore('global', {
         // Update network
         async updateNetwork(network) {
             this.networks[network].validators = []
+            this.networks[network].delegations = []
+            this.networks[network].rewards = []
             this.networks[network].total_annual_provision = 0
 
             if (network == 'desmos') {

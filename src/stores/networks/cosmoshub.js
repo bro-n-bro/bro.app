@@ -3,6 +3,7 @@ const network = {
     status: false,
     lcd_api: 'https://lcd.cosmoshub-4.bronbro.io',
     rpc_api: 'https://rpc.cosmoshub-4.bronbro.io/',
+    websocket_url: 'wss://rpc.cosmoshub-4.bronbro.io:443/websocket',
     validator: 'cosmosvaloper106yp7zw35wftheyyv9f9pe69t8rteumjrx52jg',
     denom: 'uatom',
     token_name: 'ATOM',
@@ -38,6 +39,7 @@ const network = {
 
     validators: [],
     delegations: [],
+    rewards: [],
 
     RPDE: 0,
     RPDE_usdt: 0,
@@ -62,13 +64,19 @@ const network = {
     balance_btc: 0,
 
     apr: 0,
+    apy: 0,
     personal_APR: 0,
 
     speed: 0,
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
-    unbonding_time: 0
+
+    restake: {
+        address: 'cosmos1grfk7t0k42yxpwqhr7kt4te7j73m2a3vz9aspx',
+        run_time: '19:37',
+        minimum_reward: 100000
+    }
 }
 
 export default network

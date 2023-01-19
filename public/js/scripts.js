@@ -3,56 +3,25 @@ addStylesheetURL('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;60
 
 
 document.addEventListener("DOMContentLoaded", function () {
-	// Window width
-	WW = window.innerWidth
-
-
 	// Is there support for touch events or is it an apple device
-	if (!is_touch_device() || !/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) document.documentElement.classList.add('custom_scroll')
+	if (!is_touch_device() && !navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
+		document.documentElement.classList.add('custom_scroll')
+	}
 
 
 	// Set the width of the scrollbar
 	document.documentElement.style.setProperty('--scroll_width', widthScroll() + 'px')
-
-
-	// Mob. version
-	// firstResize = false
-
-	// if (window.innerWidth < 375) {
-	// 	document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
-
-	// 	firstResize = true
-	// }
 })
-
-
-
-// window.addEventListener('resize', () => {
-// 	if (typeof WW !== 'undefined' && WW != window.innerWidth) {
-// 		// Mob. version
-// 		if (!firstResize) {
-// 			document.getElementsByTagName('meta')['viewport'].content = 'width=device-width, initial-scale=1, maximum-scale=1'
-
-// 			if (window.innerWidth < 375) document.getElementsByTagName('meta')['viewport'].content = 'width=375, user-scalable=no'
-
-// 			firstResize = true
-// 		} else {
-// 			firstResize = false
-// 		}
-
-
-// 		// Overwrite window width
-// 		WW = window.innerWidth
-// 	}
-// })
 
 
 
 // Secondary functions
 function addStylesheetURL(url) {
 	var link = document.createElement('link')
+
 	link.rel = 'stylesheet'
 	link.href = url
+
 	document.getElementsByTagName('head')[0].appendChild(link)
 
 }
