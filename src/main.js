@@ -32,7 +32,13 @@ app.provide('emitter', emitter)
 app.config.globalProperties.$filters = {
     // Add rounding
     toFixed(value, limit) {
-        return value.toFixed(limit)
+        let newValue
+
+        value != 0
+            ? newValue = value.toFixed(limit)
+            : newValue = value
+
+        return newValue
     },
 
     // Time age
