@@ -228,7 +228,7 @@ button
     overflow: hidden;
     flex-direction: column;
 
-    min-width: 375px;
+    min-width: 1520px;
     min-height: 100%;
 
     background: var(--bg);
@@ -240,7 +240,7 @@ button
     display: flex;
     flex-direction: column;
 
-    padding-top: 264px;
+    padding-top: 172px;
 
     flex: 1 0 auto;
 }
@@ -327,7 +327,6 @@ button
     padding: 20px;
 
     cursor: default;
-    pointer-events: auto;
 
     border-radius: 36px;
     background: #141414;
@@ -670,4 +669,246 @@ button
 
         opacity: 0;
     }
+}
+
+
+
+/*------------------
+    Notification
+------------------*/
+.vue-notification-group
+{
+    padding: 12px 24px;
+}
+
+.vue-notification-wrapper + .vue-notification-wrapper
+{
+    margin-top: 6px;
+}
+
+
+.notification
+{
+    position: relative;
+
+    display: flex;
+
+    padding: 14px;
+
+    border-radius: 20px;
+    background: #141414;
+
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+
+.notification .close
+{
+    color: #555;
+
+    position: absolute;
+    top: 17px;
+    right: 10px;
+
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.notification .close svg
+{
+    display: block;
+
+    width: 30px;
+    height: 30px;
+}
+
+
+.notification .icon
+{
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+
+    border-radius: 50%;
+    background: #950fff;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.notification .icon.green
+{
+    background: #1bc562;
+}
+
+.notification .icon.red
+{
+    background: #eb5757;
+}
+
+.notification .icon svg
+{
+    display: block;
+
+    width: 20px;
+    height: 20px;
+}
+
+.notification .icon + *
+{
+    width: calc(100% - 80px);
+}
+
+
+.notification .chain
+{
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 19px;
+}
+
+.notification .chain::first-letter
+{
+    text-transform: uppercase;
+}
+
+.notification .chain:empty
+{
+    display: none;
+}
+
+
+.notification .tx_type
+{
+    color: #8e8e8e;
+    font-size: 12px;
+    line-height: 130%;
+}
+
+.notification .tx_type:empty
+{
+    display: none;
+}
+
+
+.notification .title
+{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 110%;
+
+    width: 100%;
+    margin-top: 10px;
+}
+
+.notification .title:empty
+{
+    display: none;
+}
+
+
+.notification .text
+{
+    font-size: 12px;
+    line-height: 150%;
+
+    width: 100%;
+    margin-top: 4px;
+
+    opacity: .4;
+}
+
+.notification .text:empty
+{
+    display: none;
+}
+
+
+.notification .explorer
+{
+    color: #950fff;
+    font-size: 12px;
+    line-height: 150%;
+
+    display: flex;
+
+    margin-top: 8px;
+}
+
+
+.notification .explorer a
+{
+    color: currentColor;
+
+    display: flex;
+
+    text-decoration: none;
+
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+
+.notification .explorer svg
+{
+    display: block;
+
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+}
+
+
+
+/*--------------
+    Calendar
+--------------*/
+.v3dp__datepicker
+{
+    --vdp-bg-color: #0d0d0d;
+    --vdp-text-color: #fff;
+    --vdp-box-shadow: none;
+    --vdp-border-radius: 15px;
+    --vdp-heading-size: 2.5em;
+    --vdp-heading-weight: bold;
+    --vdp-heading-hover-color: #141414;
+    --vdp-arrow-color: #950fff;
+    --vdp-elem-color: #950fff;
+    --vdp-disabled-color: #8e8e8e;
+    --vdp-hover-color: #fff;
+    --vdp-hover-bg-color: #950fff;
+    --vdp-selected-color: #fff;
+    --vdp-selected-bg-color: #950fff;
+    --vdp-current-date-outline-color: #8e8e8e;
+    --vdp-current-date-font-weight: bold;
+    --vdp-elem-font-size: .8em;
+    --vdp-elem-border-radius: 3px;
+    --vdp-divider-color: #950fff;
+}
+
+
+.v3dp__popout
+{
+    top: auto !important;
+    bottom: 100% !important;
+
+    width: 100% !important;
+    margin-bottom: 4px !important;
+    padding: 10px !important;
 }
