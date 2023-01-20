@@ -55,12 +55,6 @@
         if(store.auth && store.recalc){
             emitter.emit('connectWallet')
         }
-
-
-        // Open manage modal from url
-        if(store.showManageModal){
-            emitter.emit('open_manage_modal')
-        }
     })
 
 
@@ -552,6 +546,12 @@
                 })
             }
         })
+
+
+        // Open manage modal from url
+        if (store.networkManageModal) {
+            emitter.emit('open_manage_modal')
+        }
     })
 
 

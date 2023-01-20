@@ -64,7 +64,6 @@ router.beforeEach((to, from, next) => {
 	// Manage modal from url
 	if (modalId) {
 		store.networkManageModal = modalId
-		store.showManageModal = true
 	}
 })
 
