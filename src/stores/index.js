@@ -69,7 +69,8 @@ export const useGlobalStore = defineStore('global', {
         showManageRejectModal: false,
         loaderManageModal: false,
 
-        networkManageModal: ''
+        networkManageModal: '',
+        ref: ''
     }),
 
     actions: {
