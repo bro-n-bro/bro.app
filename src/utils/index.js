@@ -51,7 +51,7 @@ export const prepareTx = async (msg, gasSimulate = true) => {
     }
 
     // MENO
-    let memo = 'bro.app'
+    let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
 
     // Send transaction
     let txRaw = await client.sign(store.wallets[store.networkManageModal], msg, fee, memo)
@@ -87,7 +87,7 @@ export const prepareEVMOSTx = async (params, base_account, TxType) => {
     }
 
     // Memo
-    let memo = 'bro.app'
+    let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
 
     if (TxType == 'delegate') {
         var msg = createTxMsgDelegate(chain, sender, fee, memo, params)

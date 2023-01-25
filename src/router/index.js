@@ -47,7 +47,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 	const store = useGlobalStore(),
-		modalId = to.query.manage_modal
+		modalId = to.query.manage_modal,
+		ref = to.query.ref
 
 	// Keplr
 	setTimeout(() => {
@@ -62,10 +63,8 @@ router.beforeEach((to, from, next) => {
 
 
 	// Manage modal from url
-	if (modalId) {
-		store.networkManageModal = modalId
-		store.showManageModal = true
-	}
+	if (modalId) { store.networkManageModal = modalId }
+	if (ref) { store.ref = ref }
 })
 
 
