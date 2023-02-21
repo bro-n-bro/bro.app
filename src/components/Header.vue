@@ -31,7 +31,7 @@
 
                 <!-- IPFS -->
                 <transition name="fade" mode="out-in" appear type="animation">
-                <IPFS />
+                <IPFS v-if="route.name != 'KeplrError' && route.name != 'KeplrReload'" />
                 </transition>
 
                 <!-- Currency -->
@@ -44,7 +44,7 @@
                 <User v-if="store.auth" />
                 </transition>
 
-                <ConnectBtn v-if="!store.auth" />
+                <ConnectBtn v-if="!store.auth && route.name != 'KeplrError' && route.name != 'KeplrReload'" />
             </div>
         </div>
     </header>
@@ -54,6 +54,7 @@
 <script setup>
     import { onMounted, ref, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useRoute } from 'vue-router'
 
     // Components
     import Notifications from '../components/Notifications.vue'
@@ -62,7 +63,8 @@
     import User from '../components/header/User.vue'
     import ConnectBtn from '../components/header/ConnectBtn.vue'
 
-    const store = useGlobalStore()
+    const store = useGlobalStore(),
+        route = useRoute()
 
     var showDropdown = ref(false)
 

@@ -1,5 +1,4 @@
 <template>
-    <transition name="fade" mode="out-in" appear type="animation">
     <section class="dashboard">
         <div class="cont">
             <div class="row">
@@ -50,7 +49,6 @@
             </div>
         </div>
     </section>
-    </transition>
 </template>
 
 

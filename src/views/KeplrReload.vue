@@ -1,15 +1,14 @@
 <template>
     <section class="wallet_error">
         <div class="cont">
-            <img src="../assets/images/wallet_error.svg" alt="" class="img">
+            <img src="../assets/images/reload_page.svg" alt="" class="img">
 
-            <div class="title" v-html="$t('message.keplr_error_title')"></div>
+            <div class="title" v-html="$t('message.keplr_reload_title')"></div>
 
             <div class="link">
-                <a href="https://www.keplr.app/download" target="_blank" rel="noopener nofollow" @click="route.push({ name: 'KeplrReload' })">
-                    <img src="../assets/images/keplr_logo.png" alt="" class="icon">
-                    <span>{{ $t('message.keplr_install_btn') }}</span>
-                </a>
+                <button class="btn" @click.prevent="reloadPage">
+                    {{ $t('message.reload_btn') }}
+                </button>
             </div>
         </div>
     </section>
@@ -17,9 +16,9 @@
 
 
 <script setup>
-    import { useRouter } from 'vue-router'
-
-    const route = useRouter()
+    function reloadPage() {
+        window.location.reload()
+    }
 </script>
 
 
@@ -71,41 +70,26 @@
     }
 
 
-    .wallet_error .link a
+    .wallet_error .link .btn
     {
         color: #fff;
         font-weight: 600;
         line-height: 19px;
 
-        display: flex;
+        display: block;
 
-        margin: 0 auto;
         padding: 13px 30px;
 
         transition: box-shadow .2s linear;
-        text-decoration: none;
 
         border-radius: 20px;
         background: #950fff;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
-    .wallet_error .link a .icon
-    {
-        display: block;
-
-        width: 27px;
-        height: 27px;
-        margin-right: 6px;
-    }
-
-    .wallet_error .link a:hover
+    .wallet_error .link .btn:hover
     {
         box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
     }
+
 </style>

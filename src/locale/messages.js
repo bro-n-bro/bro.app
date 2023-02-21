@@ -15,6 +15,7 @@ export default {
 
             // Keplr Error page
             'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
+            'keplr_reload_title': 'Reload page after you<br> installed Kepler',
             'keplr_install_btn': "Install Keplr",
 
             // Buttons
@@ -24,10 +25,36 @@ export default {
             'delegate_btn': 'Delegate to your Bro',
             'back_home_btn': 'Back to home',
             'update_btn': 'Update',
+            'reload_btn': 'Reload',
+            'no_btn': 'No',
+            'yes_btn': 'Yes',
+            'download_png_btn': 'dowloand png',
+            'continue_btn': 'continue journey',
+
+            // Main page
+            'main_page_title': 'Welcome<br> to the Bro App',
+            'main_page_desc': 'Bro will help decompose active',
+
+            // Make a choice
+            'choice_title': 'Are you ready to unlock the full potential of the features available?',
 
             // Dashboard
             'personal_apr': 'Personal APR',
             'RPDE': 'RPDE',
+
+            // Create passport
+            'passport_avatar_label': 'Upload avatar',
+            'passport_avatar_file_size': 'File up to 5 MB',
+            'passport_avatar_mimetype_size': 'Only jpg, png',
+            'passport_constitution_link': 'read constitution',
+            'passport_name_label': 'Nickname',
+            'passport_citizenship_label': 'Citizenship',
+            'passport_citizenship_text': 'Moon confirmed citizen',
+            'passport_name_placeholder': 'Choose name',
+            'passport_address_exp': 'Adress',
+            'passport_name_exp': 'Min 8 characters',
+            'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
+            'passport_i_am_cool': 'я крутой',
 
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
@@ -165,6 +192,10 @@ export default {
             'manage_modal_error_41': "invalid gas limit",
 
             'manage_modal_error_rejected': "The transaction has been rejected",
+
+
+            // Constitution modal
+            'constitution_modal_title': 'Constitution',
 
 
             // Feedback

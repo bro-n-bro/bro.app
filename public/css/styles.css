@@ -126,6 +126,7 @@ input[type=number]
     --font_size: 16px;
     --font_size_title: 52px;
     --font_family: 'Inter', 'Arial', sans-serif;
+    --font_family2: 'IBM Plex Mono', 'Arial', sans-serif;
 }
 
 
@@ -266,6 +267,94 @@ button
 
 
 
+
+
+
+
+/*----------------
+    Typography
+----------------*/
+.text_block
+{
+    color: #f2f2f2;
+    font-size: 12px;
+    line-height: 130%;
+}
+
+
+.text_block > *
+{
+    margin-bottom: 16px;
+}
+
+
+.text_block > :last-child
+{
+    margin-bottom: 0 !important;
+}
+
+.text_block > :first-child
+{
+    margin-top: 0 !important;
+}
+
+
+.text_block h2
+{
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 130%;
+}
+
+
+.text_block * + h2
+{
+    margin-top: 16px;
+}
+
+.text_block h2 + *
+{
+    margin-top: 0 !important;
+}
+
+
+.text_block ul li
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    padding-left: 20px;
+
+    list-style-type: none;
+}
+
+.text_block ul li + li
+{
+    margin-top: 4px;
+}
+
+.text_block ul li:before
+{
+    position: absolute;
+    top: 5px;
+    left: 4px;
+
+    display: block;
+
+    width: 6px;
+    height: 6px;
+
+    content: '';
+
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+
 /*-----------
     Modal
 -----------*/
@@ -314,6 +403,16 @@ button
 
     flex-wrap: wrap;
     justify-content: center;
+}
+
+
+.modal_content .modal_title
+{
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 130%;
+
+    margin-bottom: 12px;
 }
 
 
@@ -449,6 +548,33 @@ button
     color: #000;
 
     background: #fff;
+}
+
+
+
+.modal .text_block
+{
+    overflow: auto;
+
+    max-height: calc(100vh - 320px);
+    padding-right: 20px;
+
+    scrollbar-color: #950fff rgba(255, 255, 255, .1);
+    scrollbar-width: thin;
+}
+
+.modal .text_block::-webkit-scrollbar
+{
+    width: 2px;
+    height: 2px;
+
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.modal .text_block::-webkit-scrollbar-thumb
+{
+    border-radius: 4px;
+    background-color: #950fff;
 }
 
 

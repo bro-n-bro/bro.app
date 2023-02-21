@@ -1,5 +1,5 @@
 // Load font
-addStylesheetURL('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap')
+addStylesheetURL('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap')
 
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -1,5 +1,5 @@
 <template>
-    <section class="notifications">
+    <section class="notifications" v-if="store.tooltip">
         <div class="cont">
             <div class="data">
                 <div class="icon">

@@ -1,64 +1,58 @@
 <template>
     <div class="account">
-        <button class="connect_wallet_btn" @click.prevent="emitter.emit('connectWallet')" v-if="!store.auth">
-            {{ $t('message.connect_wallet_btn') }}
-        </button>
+        <div class="user_name">{{ store.userName }}</div>
 
-        <template v-else>
-            <div class="user_name">{{ store.userName }}</div>
+        <div class="balance" @mouseover="emitter.emit('setNotification', $t('message.account_balance_notice'))">
+            <template v-if="store.currency == 'USDT'">
+            {{ $filters.toFixed(store.account.balance_usdt, 1) }}
+            </template>
 
-            <div class="balance" @mouseover="emitter.emit('setNotification', $t('message.account_balance_notice'))">
-                <template v-if="store.currency == 'USDT'">
-                {{ $filters.toFixed(store.account.balance_usdt, 1) }}
-                </template>
+            <template v-if="store.currency == 'ATOM'">
+            {{ $filters.toFixed(store.account.balance_atom, 2) }}
+            </template>
 
-                <template v-if="store.currency == 'ATOM'">
-                {{ $filters.toFixed(store.account.balance_atom, 2) }}
-                </template>
+            <template v-if="store.currency == 'ETH'">
+            {{ $filters.toFixed(store.account.balance_eth, 4) }}
+            </template>
 
-                <template v-if="store.currency == 'ETH'">
-                {{ $filters.toFixed(store.account.balance_eth, 4) }}
-                </template>
+            <template v-if="store.currency == 'BTC'">
+            {{ $filters.toFixed(store.account.balance_btc, 5) }}
+            </template>
 
-                <template v-if="store.currency == 'BTC'">
-                {{ $filters.toFixed(store.account.balance_btc, 5) }}
-                </template>
+            {{ store.currency }}
+        </div>
 
-                {{ store.currency }}
-            </div>
+        <div class="stats">
+            <div @mouseover="emitter.emit('setNotification', $t('message.account_RPDE_notice'))">
+                <div class="label">{{ $t('message.RPDE') }}</div>
 
-            <div class="stats">
-                <div @mouseover="emitter.emit('setNotification', $t('message.account_RPDE_notice'))">
-                    <div class="label">{{ $t('message.RPDE') }}</div>
+                <div class="val">
+                    <template v-if="store.currency == 'USDT'">
+                    {{ $filters.toFixed(store.account.RPDE_usdt, 3) }}
+                    </template>
 
-                    <div class="val">
-                        <template v-if="store.currency == 'USDT'">
-                        {{ $filters.toFixed(store.account.RPDE_usdt, 3) }}
-                        </template>
+                    <template v-if="store.currency == 'ATOM'">
+                    {{ $filters.toFixed(store.account.RPDE_atom, 3) }}
+                    </template>
 
-                        <template v-if="store.currency == 'ATOM'">
-                        {{ $filters.toFixed(store.account.RPDE_atom, 3) }}
-                        </template>
+                    <template v-if="store.currency == 'ETH'">
+                    {{ $filters.toFixed(store.account.RPDE_eth, 3) }}
+                    </template>
 
-                        <template v-if="store.currency == 'ETH'">
-                        {{ $filters.toFixed(store.account.RPDE_eth, 3) }}
-                        </template>
-
-                        <template v-if="store.currency == 'BTC'">
-                        {{ $filters.toFixed(store.account.RPDE_btc, 3) }}
-                        </template>
-                    </div>
-                </div>
-
-                <div @mouseover="emitter.emit('setNotification', $t('message.account_personal_APR_notice'))">
-                    <div class="label">{{ $t('message.personal_apr') }}</div>
-
-                    <div class="val">{{ $filters.toFixed(store.account.personal_APR, 2) }}%</div>
+                    <template v-if="store.currency == 'BTC'">
+                    {{ $filters.toFixed(store.account.RPDE_btc, 3) }}
+                    </template>
                 </div>
             </div>
 
-            <router-link to="/under_construction" class="details_btn">{{ $t('message.details_btn') }}</router-link>
-        </template>
+            <div @mouseover="emitter.emit('setNotification', $t('message.account_personal_APR_notice'))">
+                <div class="label">{{ $t('message.personal_apr') }}</div>
+
+                <div class="val">{{ $filters.toFixed(store.account.personal_APR, 2) }}%</div>
+            </div>
+        </div>
+
+        <router-link to="/under_construction" class="details_btn">{{ $t('message.details_btn') }}</router-link>
 
         <div class="shadow"></div>
     </div>

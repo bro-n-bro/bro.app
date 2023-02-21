@@ -1,10 +1,6 @@
 <template>
     <button class="connect_btn" @click.prevent="emitter.emit('connectWallet')">
-        <div class="icon">
-            <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
-        </div>
-
-        <span>{{ $t('message.connect_wallet_btn') }}</span>
+        {{ $t('message.connect_wallet_btn') }}
     </button>
 </template>
 
@@ -20,21 +16,21 @@
     .connect_btn
     {
         color: #fff;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 22px;
+        font-size: 14px;
+        line-height: 17px;
 
         display: flex;
 
-        width: 243px;
+        width: 219px;
         max-width: 100%;
         margin-left: 40px;
-        padding: 15px 10px;
+        padding: 26px 59px;
 
+        transition: box-shadow .2s linear;
         text-align: left;
 
         border-radius: 20px;
-        background: #141414;
+        background: #950fff;
 
         align-content: center;
         align-items: center;
@@ -42,35 +38,8 @@
         justify-content: space-between;
     }
 
-
-    .connect_btn .icon
+    .connect_btn:hover
     {
-        display: flex;
-
-        width: 40px;
-        height: 40px;
-
-        border-radius: 50%;
-        background: #950fff;
-
-        align-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
+        box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
     }
-
-    .connect_btn .icon svg
-    {
-        display: block;
-
-        width: 18px;
-        height: 18px;
-    }
-
-
-    .connect_btn span
-    {
-        width: calc(100% - 50px);
-    }
-
 </style>

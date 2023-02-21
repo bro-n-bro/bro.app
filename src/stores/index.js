@@ -46,7 +46,7 @@ export const useGlobalStore = defineStore('global', {
         CONTRACT_ADDRESS_PASSPORT: 'bostrom1xut80d09q0tgtch8p0z4k5f88d3uvt8cvtzm5h3tu3tsy4jk9xlsfzhxel',
         node: null,
         IPFSStatus: false,
-        recalc: true,
+        // recalc: true,
         isLedger: false,
         auth: useLocalStorage('auth', false),
         currency: useLocalStorage('currency', 'USDT'),
@@ -55,6 +55,7 @@ export const useGlobalStore = defineStore('global', {
         lastTXS: '',
         manageError: '',
         jsCyber: null,
+        moonPassport: null,
 
         BTC_price: 0,
         ETH_price: 0,
@@ -68,6 +69,9 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         loaderManageModal: false,
+        showMakeChoice: true,
+        showConstitutionModal: false,
+        constitutionStatus: null,
 
         networkManageModal: '',
         ref: ''
@@ -77,12 +81,12 @@ export const useGlobalStore = defineStore('global', {
         // Pre connect
         async preConnect() {
             // Keplr connect
-            const chainId = 'cosmoshub-4'
+            let chainId = 'cosmoshub-4'
 
-            window.keplr.enable(chainId)
+            await window.keplr.enable(chainId)
 
             // Cosmos singer
-            const offlineSigner = await window.getOfflineSignerAuto(chainId),
+            let offlineSigner = await window.getOfflineSignerAuto(chainId),
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
@@ -97,12 +101,35 @@ export const useGlobalStore = defineStore('global', {
                 }
             })
 
+            // Get moon passport
+            await this.getMoonPassport()
 
             // Set user info
             this.setUserInfo({
                 userName: key.name,
                 auth: true
             })
+        },
+
+
+        // Get moon passport
+        async getMoonPassport() {
+            try {
+                let tendermintClient = await Tendermint34Client.connect('https://rpc.bostrom.cybernode.ai')
+
+                this.jsCyber = new CyberClient(tendermintClient)
+
+                this.moonPassport = await this.jsCyber.queryContractSmart(
+                    this.CONTRACT_ADDRESS_PASSPORT,
+                    {
+                        active_passport: {
+                            address: this.wallets.bostrom
+                        }
+                    }
+                )
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
@@ -164,22 +191,10 @@ export const useGlobalStore = defineStore('global', {
 
         // Avatar
         async getAvatar() {
-            try {
-                const tendermintClient = await Tendermint34Client.connect('https://rpc.bostrom.cybernode.ai'),
-                    content = []
+            if(this.moonPassport){
+                let content = []
 
-                this.jsCyber = new CyberClient(tendermintClient)
-
-                const response = await this.jsCyber.queryContractSmart(
-                    this.CONTRACT_ADDRESS_PASSPORT,
-                    {
-                        active_passport: {
-                            address: this.wallets.bostrom
-                        }
-                    }
-                )
-
-                for await (const file of this.node.get(response.extension.avatar)) {
+                for await (const file of this.node.get(this.moonPassport.extension.avatar)) {
                     if (file.content) {
                         for await (const chunk of file.content) {
                             content.push(chunk)
@@ -187,14 +202,8 @@ export const useGlobalStore = defineStore('global', {
                     }
                 }
 
-                let image = URL.createObjectURL(new Blob(content, {
-                    type: 'image/jpeg'
-                }))
-
-                this.account.avatar = image
-            } catch (error) {
-                console.log(error)
-
+                this.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
+            } else {
                 fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
                     .then(response => response.json())
                     .then(data => {
@@ -225,7 +234,7 @@ export const useGlobalStore = defineStore('global', {
             })
 
             // Update avatar
-            this.getAvatar()
+            // this.getAvatar()
         },
 
 
@@ -237,102 +246,118 @@ export const useGlobalStore = defineStore('global', {
 
         // Networks status
         async getNetworkStatus(network) {
-            await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.validators && data.validators.length) {
-                        data.validators.forEach(el => {
-                            if (el == this.networks[network].validator) {
-                                this.networks[network].status = true
-                            }
-                        })
-                    }
-                })
+            try {
+                await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/validators`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.validators && data.validators.length) {
+                            data.validators.forEach(el => {
+                                if (el == this.networks[network].validator) {
+                                    this.networks[network].status = true
+                                }
+                            })
+                        }
+                    })
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
         // Get network delegations tokens
         async getNetworkDelegationsTokens(network) {
-            await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${this.wallets[network]}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.delegation_responses) {
-                        let sum = 0
+            try {
+                await fetch(`${this.networks[network].lcd_api}/cosmos/staking/v1beta1/delegations/${this.wallets[network]}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.delegation_responses) {
+                            let sum = 0
 
-                        data.delegation_responses.forEach(el => {
-                            sum += parseFloat(el.balance.amount)
+                            data.delegation_responses.forEach(el => {
+                                sum += parseFloat(el.balance.amount)
 
-                            this.networks[network].delegations.push({
-                                'operator_address': el.delegation.validator_address,
-                                'amount': parseFloat(el.delegation.shares) / this.networks[network].exponent
+                                this.networks[network].delegations.push({
+                                    'operator_address': el.delegation.validator_address,
+                                    'amount': parseFloat(el.delegation.shares) / this.networks[network].exponent
+                                })
                             })
-                        })
 
-                        this.networks[network].delegations_tokens = sum / this.networks[network].exponent
-                    }
-                })
+                            this.networks[network].delegations_tokens = sum / this.networks[network].exponent
+                        }
+                    })
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
         // Get network rewards tokens
         async getNetworkRewardsTokens(network) {
-            await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
-                .then(response => response.json())
-                .then(data => {
-                    if (this.networks[network].rewards_tokens && !data.total.length) {
-                        setTimeout(async () => await this.updateNetwork(network), 1000)
-                    } else if (data.total.length) {
-                        let result = data.total.find(el => el.denom == this.networks[network].denom)
+            try {
+                await fetch(`${this.networks[network].lcd_api}/cosmos/distribution/v1beta1/delegators/${this.wallets[network]}/rewards`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (this.networks[network].rewards_tokens && !data.total.length) {
+                            setTimeout(async () => await this.updateNetwork(network), 1000)
+                        } else if (data.total.length) {
+                            let result = data.total.find(el => el.denom == this.networks[network].denom)
 
-                        // Set rewards
-                        this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
+                            // Set rewards
+                            this.networks[network].rewards_tokens = parseFloat(result.amount) / this.networks[network].exponent
 
-                        // Set a rewards from each validator
-                        for (let i in data.rewards) {
-                            if (data.rewards[i].reward.length) {
-                                let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
+                            // Set a rewards from each validator
+                            for (let i in data.rewards) {
+                                if (data.rewards[i].reward.length) {
+                                    let rewards = data.rewards[i].reward.find(el => el.denom == this.networks[network].denom)
 
-                                this.networks[network].rewards.push({
-                                    'operator_address': data.rewards[i].validator_address,
-                                    'amount': parseFloat(rewards.amount) / this.networks[network].exponent
-                                })
+                                    this.networks[network].rewards.push({
+                                        'operator_address': data.rewards[i].validator_address,
+                                        'amount': parseFloat(rewards.amount) / this.networks[network].exponent
+                                    })
+                                }
                             }
                         }
-                    }
-                })
+                    })
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
         // Get network availabel/IBC tokens
         async getNetworkAvailabelIBCTokens(network) {
-            await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
-                .then(response => response.json())
-                .then(data => {
-                    let availabel = data.balances.find(e => e.denom == this.networks[network].denom),
-                        ibc = data.balances.filter(e => e.denom.includes('ibc/'))
+            try {
+                await fetch(`${this.networks[network].lcd_api}/cosmos/bank/v1beta1/balances/${this.wallets[network]}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let availabel = data.balances.find(e => e.denom == this.networks[network].denom),
+                            ibc = data.balances.filter(e => e.denom.includes('ibc/'))
 
-                    if (data.balances && data.balances.length && typeof availabel !== "undefined") {
-                        // Availabel tokens
-                        this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
+                        if (data.balances && data.balances.length && typeof availabel !== "undefined") {
+                            // Availabel tokens
+                            this.networks[network].availabel_tokens = parseFloat(availabel.amount) / this.networks[network].exponent
 
-                        // IBC tokens
-                        ibc.forEach(el => {
-                            fetch(`${this.networks[network].lcd_api}/ibc/apps/transfer/v1/denom_traces/${el.denom.substr(4)}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    for (const tempNetwork in this.networks) {
-                                        if (this.networks[tempNetwork].denom == data.denom_trace.base_denom) {
-                                            // Add tokens
-                                            this.networks[tempNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[tempNetwork].exponent
+                            // IBC tokens
+                            ibc.forEach(el => {
+                                fetch(`${this.networks[network].lcd_api}/ibc/apps/transfer/v1/denom_traces/${el.denom.substr(4)}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        for (const tempNetwork in this.networks) {
+                                            if (this.networks[tempNetwork].denom == data.denom_trace.base_denom) {
+                                                // Add tokens
+                                                this.networks[tempNetwork].ibc_tokens += parseFloat(el.amount) / this.networks[tempNetwork].exponent
 
-                                            // Calc network tokens sum
-                                            this.calcNetworkTokensSum(tempNetwork)
+                                                // Calc network tokens sum
+                                                this.calcNetworkTokensSum(tempNetwork)
+                                            }
                                         }
-                                    }
-                                })
-                        })
-                    }
-                })
+                                    })
+                            })
+                        }
+                    })
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
@@ -553,7 +578,7 @@ export const useGlobalStore = defineStore('global', {
                 this.account.personal_APR = this.account.RPDE_usdt * 365.3 / this.account.delegations_price * 100
             }
 
-            this.recalc = false
+            // this.recalc = false
         },
 
 
