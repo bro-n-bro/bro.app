@@ -52,12 +52,15 @@
 
         // Load/Refresh page
         emitter.emit('preConnectWallet')
-        emitter.emit('connectWallet')
     })
 
 
     // Event "pre connect wallet"
-    emitter.on('preConnectWallet', async () => await preConnectWallet())
+    emitter.on('preConnectWallet', async () => {
+        await preConnectWallet()
+
+        emitter.emit('connectWallet')
+    })
 
 
     // Event "connect wallet"
