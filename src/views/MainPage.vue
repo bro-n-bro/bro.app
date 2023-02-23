@@ -23,23 +23,18 @@
     import { inject, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
-    import { connectWallet } from '@/utils'
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
         route = useRouter()
 
 
-    // watchEffect(() => {
-    //     // Monitor the connection of the kepler
-    //     if(store.auth) {
-    //         route.push({ name: 'Dashboard' })
-    //     }
-    // })
-
-
-    // Event "connect wallet"
-    emitter.on('connectWallet', async () => await connectWallet())
+    watchEffect(() => {
+        // Monitor the connection of the kepler
+        if(store.auth) {
+            route.push({ name: 'Dashboard' })
+        }
+    })
 </script>
 
 

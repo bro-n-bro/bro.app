@@ -11,12 +11,12 @@
                 <div class="btns">
                     <button class="btn blue" @click.prevent="close">
                         <span>{{ $t('message.no_btn') }}</span>
-                        <img src="../assets/images/pill_blue.png" alt="">
+                        <img src="../../assets/images/pill_blue.png" alt="">
                     </button>
 
                     <router-link to="/create_passport" class="btn red">
                         <span>{{ $t('message.yes_btn') }}</span>
-                        <img src="../assets/images/pill_red.png" alt="">
+                        <img src="../../assets/images/pill_red.png" alt="">
                     </router-link>
                 </div>
             </div>

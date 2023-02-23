@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
 
 import errorLayut from '../layouts/Error.vue'
-import dashboardLayut from '../layouts/Dashboard.vue'
-import mainLayut from '../layouts/Main.vue'
+import defaultLayut from '../layouts/Default.vue'
 
 const routes = [
 	{
@@ -43,7 +42,7 @@ const routes = [
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
-			layout: dashboardLayut
+			layout: defaultLayut
 		}
 	},
 	{
@@ -51,7 +50,15 @@ const routes = [
 		name: 'CreatePassport',
 		component: () => import('../views/CreatePassport.vue'),
 		meta: {
-			layout: mainLayut
+			layout: defaultLayut
+		}
+	},
+	{
+		path: '/wallets',
+		name: 'Wallets',
+		component: () => import('../views/Wallets.vue'),
+		meta: {
+			layout: defaultLayut
 		}
 	},
 	{
@@ -59,7 +66,7 @@ const routes = [
 		name: 'MainPage',
 		component: () => import('../views/MainPage.vue'),
 		meta: {
-			layout: mainLayut
+			layout: defaultLayut
 		}
 	}
 ]
@@ -94,6 +101,11 @@ router.beforeEach((to, from, next) => {
 		// If Keplr is installed and the wallet is connected
 		if(window.keplr && store.auth && to.name == 'MainPage') {
 			router.push({ name: 'Dashboard' })
+		}
+
+		// If has passport
+		if(store.account.moonPassport && to.name == 'CreatePassport') {
+			router.push({ name: 'Wallets' })
 		}
 
 		// If all OK

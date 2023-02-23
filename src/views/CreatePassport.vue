@@ -6,13 +6,13 @@
                     <div class="avatar">
                         <input type="file" id="avatar" ref="avatar" accept="image/png, image/jpeg" @change="avatarUpload">
                         <label for="avatar" class="box">
-                            <div class="icon"></div>
+                            <div class="icon" v-if="!avatarPreview.status"></div>
 
-                            <div class="label">
+                            <div class="label" v-if="!avatarPreview.status">
                                 {{ $t('message.passport_avatar_label') }}
                             </div>
 
-                            <div class="exp">
+                            <div class="exp" v-if="!avatarPreview.status">
                                 {{ $t('message.passport_avatar_file_size') }}<br>
                                 {{ $t('message.passport_avatar_mimetype_size') }}
                             </div>
@@ -44,9 +44,9 @@
                             </div>
                         </div>
 
-                        <div class="line">
+                        <div class="line" :class="{'error': data.nickNameError}">
                             <div class="field">
-                                <input type="text" v-model="data.nickName" class="input" :placeholder="$t('message.passport_name_placeholder')">
+                                <input type="text" v-model="data.nickName" @input="validateName" class="input" :placeholder="$t('message.passport_name_placeholder')">
 
                                 <div class="exp">
                                     {{ $t('message.passport_name_exp') }}
@@ -73,11 +73,12 @@
 
                         <div class="line i_am_cool">
                             <div class="field">
-                                <label :class="{'disable': !store.constitutionStatus}">
-                                    <input type="checkbox" name="i_am_cool">
+                                <label :class="{'disable': !store.constitutionStatus}" @click="iAmCoolHandler">
+                                    <input type="radio" name="i_am_cool">
 
                                     <div class="check">
-                                        <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                        <svg v-if="!data.iAmCoolProcess"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                        <Loader v-else />
                                     </div>
 
                                     <div>{{ $t('message.passport_i_am_cool') }}</div>
@@ -90,11 +91,7 @@
                                 {{ $t('message.no_btn') }}
                             </router-link>
 
-                            <!-- <button type="submit" class="btn create disable">
-                                {{ $t('message.yes_btn') }}
-                            </button> -->
-
-                            <button type="submit" class="btn create">
+                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || !data.iAmCoolProcess}">
                                 {{ $t('message.yes_btn') }}
                             </button>
                         </div>
@@ -114,7 +111,7 @@
                 </div>
 
 
-                <div class="data_hide" :class="{'show': data.status}">
+                <div class="data_hide" :class="{'show': data.status}" id="completed_passport">
                     <div class="data active">
                         <div class="avatar">
                             <div class="box">
@@ -182,16 +179,16 @@
                         <div class="bg_right"></div>
                         <div class="bg_bottom"></div>
 
-                        <div class="gradient"></div>
+                        <div class="gradient" :style="{ 'background': data.bgGradient }"></div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="bottom_btns">
-                <button class="btn download_btn">
+            <div class="bottom_btns" v-if="data.showBottomBtns">
+                <a :href="data.passportImage" download="my_passport.png" class="btn download_btn">
                     {{ $t('message.download_png_btn') }}
-                </button>
+                </a>
 
                 <router-link to="/wallets" class="btn continue_btn">
                     {{ $t('message.continue_btn') }}
@@ -206,20 +203,36 @@
 
 
 <script setup>
-    import { ref, reactive, computed } from 'vue'
+    import { ref, reactive, computed, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from '@kyvg/vue3-notification'
+    import * as htmlToImage from 'html-to-image'
+    import { toJpeg } from 'html-to-image'
+    import gradient from 'random-gradient'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
+    import Loader from '../components/Loader.vue'
 
-    const store = useGlobalStore()
+
+    const store = useGlobalStore(),
+        i18n = inject('i18n'),
+        notification = useNotification()
 
     var avatar = ref(null),
-        avatarPreview = reactive({ src: '' }),
+        avatarPreview = reactive({
+            src: '',
+            status: false
+        }),
         data = reactive({
             moonAddress: computed(() => store.wallets.bostrom ? store.wallets.bostrom : ''),
             nickName: '',
-            status: false
+            nickNameError: false,
+            iAmCoolProcess: false,
+            passportImage: '',
+            status: false,
+            showBottomBtns: false,
+            bgGradient: ''
         })
 
 
@@ -245,16 +258,66 @@
 
             reader.onload = () => {
                 avatarPreview.src = reader.result
+                avatarPreview.status = true
+
                 setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
             }
 
             reader.readAsDataURL(avatar.value.files[0])
+        } else {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                durartion: 5000,
+                title: i18n.global.t('message.notification_error_file_size_title'),
+                text: i18n.global.t('message.notification_error_file_size_text', {'size': '5mb'}),
+                type: 'error'
+            })
+        }
+    }
+
+
+    // Validate name
+    function validateName(event) {
+        event.target.value.length < 8
+            ? data.nickNameError = true
+            : data.nickNameError = false
+    }
+
+
+    // I Am Cool handler
+    function iAmCoolHandler(event) {
+        if (event.target.nodeName == 'LABEL') {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                title: i18n.global.t('message.notification_passport_activation')
+            })
+
+            // Set activation status
+            data.iAmCoolProcess = true
         }
     }
 
 
     // Create passport
     function createPassport() {
+        // Generate gradient
+        data.bgGradient = gradient(data.nickName)
+
+
+        // Create passport image
+        setTimeout(() => {
+            htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
+                .then(dataUrl => data.passportImage = dataUrl)
+                .catch(error => console.error(error))
+
+            // Show bottom buttons
+            data.showBottomBtns = true
+        }, 1050)
+
+
+        // Set passport status
         data.status = true
     }
 </script>
@@ -296,10 +359,11 @@
         overflow: hidden;
 
         width: 0;
-        height: 100%;
+        height: calc(100% + 4px);
 
         transition: width 1s linear;
 
+        border-radius: 15px;
         background: var(--bg);
     }
 
@@ -338,18 +402,19 @@
     {
         position: absolute;
         z-index: 1;
-        top: 0;
-        left: 0;
+        top: -50%;
+        left: -50%;
 
-        width: 100%;
-        height: 100%;
+        width: 200%;
+        height: 200%;
 
+        -webkit-animation: spin 10s linear infinite;
+           -moz-animation: spin 10s linear infinite;
+                animation: spin 10s linear infinite;
         pointer-events: none;
 
         opacity: .8;
         border-radius: inherit;
-        background: conic-gradient(from 148.71deg at 19.71% 48.59%, #000 -24.66deg, #fff .25deg, #000 50.63deg, #000 51.97deg, #fff 88.12deg, #000 142.5deg, #fff 196.87deg, #000 256.87deg, #fff 300deg, #000 335.2deg, #000 335.34deg, #fff 360.25deg), conic-gradient(from 148.72deg at 19.56% 48.32%, #000 -24.66deg, #fff .25deg, #000 50.63deg, #000 51.97deg, #fff 88.12deg, #000 142.5deg, #fff 196.87deg, #000 256.87deg, #fff 300deg, #000 335.2deg, #000 335.34deg, #fff 360.25deg), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #2ad0ca 0%, #e1f664 22.92%, #feb0fe 46.88%, #abb3fc 68.23%, #5df7a4 87.5%, #58c4f6 100%);
-        box-shadow: 0 4px 0 #1f1c1c, 0 4px 0 #3c3c3c, inset 0 1px 0 #fff;
 
         background-blend-mode: overlay, screen, difference, normal;
     }
@@ -739,19 +804,17 @@
     {
         position: absolute;
         top: 100%;
-        right: 0;
-        left: 0;
+        left: 50%;
 
         display: flex;
 
         width: 160px;
         height: 138px;
-        margin: auto;
         margin-top: 26px;
 
-        border-radius: 60.9524px;
-        background: #252525;
-        box-shadow: 0 4px 0 #1f1c1c, inset 0 1px 0 rgba(91, 91, 91, .13);
+        transform: translateX(-50%);
+
+        border-radius: 60px;
 
         justify-content: center;
         align-items: center;
@@ -759,15 +822,35 @@
         flex-wrap: wrap;
     }
 
-    .create_passport .active .avatar .logo
+    .create_passport .avatar .logo:before
+    {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+        transition: background .2s linear;
+
+        border-radius: 60px;
+        background: #252525;
+        box-shadow: 0 4px 0 #1f1c1c, inset 0 1px 0 rgba(91, 91, 91, .13);
+    }
+
+    .create_passport .active .avatar .logo:before
     {
         background: #fff;
     }
 
-    .create_passport .avatar .logo:before
+    .create_passport .avatar .logo:after
     {
         position: absolute;
-        z-index: -1;
+        z-index: 1;
         top: -11px;
         left: -11px;
 
@@ -785,6 +868,9 @@
 
     .create_passport .avatar .logo img
     {
+        position: relative;
+        z-index: 3;
+
         display: block;
 
         max-width: 100%;
@@ -903,10 +989,15 @@
 
         border-radius: 16px;
         background: #1b1b1b;
-        box-shadow: 0 4px 0 #110f0f;
+        box-shadow: inset 0 0 0 2px #1b1b1b, 0 4px 0 #110f0f;
     }
 
-    .create_passport .info .line
+    .create_passport .info .line.error
+    {
+        box-shadow: inset 0 0 0 2px #eb5757, 0 4px 0 #110f0f;
+    }
+
+    .create_passport .active .info .line
     {
         background: rgba(0, 0, 0, .23);
         box-shadow: 0 4px 0 rgba(1, 1, 1, .3);
@@ -1085,6 +1176,11 @@
         pointer-events: none;
     }
 
+    .create_passport .info .i_am_cool label > *
+    {
+        pointer-events: none;
+    }
+
 
     .create_passport .info .i_am_cool label .check
     {
@@ -1212,7 +1308,7 @@
 
     .create_passport .bottom_btns
     {
-        display: none;
+        display: flex;
 
         height: 72px;
         margin-top: 40px;
@@ -1255,6 +1351,33 @@
         color: #fff;
 
         background: #950fff;
+    }
+
+
+
+    @-moz-keyframes spin
+    {
+        100%
+        {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes spin
+    {
+        100%
+        {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin
+    {
+        100%
+        {
+            -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+        }
     }
 
 </style>

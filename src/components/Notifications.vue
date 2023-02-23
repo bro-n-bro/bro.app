@@ -14,7 +14,6 @@
 
 
 <script setup>
-    // import { onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore()
@@ -22,75 +21,74 @@
 
 
 <style>
-.notifications
-{
-    width: calc(100% - 720px);
-}
+    .notifications
+    {
+        width: calc(100% - 720px);
+    }
 
 
-.notifications .data
-{
-    font-size: 14px;
-    line-height: 150%;
+    .notifications .data
+    {
+        font-size: 14px;
+        line-height: 150%;
 
-    display: flex;
+        display: flex;
 
-    min-height: 70px;
-    padding: 10px 20px 10px 10px;
+        min-height: 70px;
+        padding: 10px 20px 10px 10px;
 
-    transition: .2s linear;
+        transition: .2s linear;
 
-    border-radius: 20px;
-    background: #141414;
+        border-radius: 20px;
+        background: #141414;
 
-    align-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-}
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+    }
 
 
-.notifications .icon
-{
-    display: flex;
+    .notifications .icon
+    {
+        display: flex;
 
-    width: 52px;
-    height: 52px;
+        width: 52px;
+        height: 52px;
 
-    border: 1px solid rgba(217, 217, 217, .1);
-    border-radius: 50%;
+        border: 1px solid rgba(217, 217, 217, .1);
+        border-radius: 50%;
 
-    align-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-.notifications .icon svg
-{
-    display: block;
+    .notifications .icon svg
+    {
+        display: block;
 
-    width: 30px;
-    height: 30px;
-}
+        width: 30px;
+        height: 30px;
+    }
 
-.notifications .icon + *
-{
-    width: calc(100% - 67px);
-    margin-left: auto;
-}
+    .notifications .icon + *
+    {
+        width: calc(100% - 67px);
+        margin-left: auto;
+    }
 
-.notifications span
-{
-    display: -webkit-box;
-    overflow: hidden;
+    .notifications span
+    {
+        display: -webkit-box;
+        overflow: hidden;
 
-    text-overflow: ellipsis;
+        text-overflow: ellipsis;
 
-    align-self: center;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-}
-
+        align-self: center;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
 </style>

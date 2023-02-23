@@ -46,8 +46,8 @@ export const useGlobalStore = defineStore('global', {
         CONTRACT_ADDRESS_PASSPORT: 'bostrom1xut80d09q0tgtch8p0z4k5f88d3uvt8cvtzm5h3tu3tsy4jk9xlsfzhxel',
         node: null,
         IPFSStatus: false,
-        // recalc: true,
-        isLedger: false,
+        recalc: true,
+        connected: false,
         auth: useLocalStorage('auth', false),
         currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
@@ -55,7 +55,6 @@ export const useGlobalStore = defineStore('global', {
         lastTXS: '',
         manageError: '',
         jsCyber: null,
-        moonPassport: null,
 
         BTC_price: 0,
         ETH_price: 0,
@@ -69,7 +68,7 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         loaderManageModal: false,
-        showMakeChoice: true,
+        showMakeChoice: false,
         showConstitutionModal: false,
         constitutionStatus: null,
 
@@ -78,8 +77,8 @@ export const useGlobalStore = defineStore('global', {
     }),
 
     actions: {
-        // Pre connect
-        async preConnect() {
+        // Connect wallet
+        async connectWallet() {
             // Keplr connect
             let chainId = 'cosmoshub-4'
 
@@ -90,9 +89,6 @@ export const useGlobalStore = defineStore('global', {
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
-            // Is ledger
-            this.isLedger = key.isNanoLedger
-
             // Pre wallets
             this.$patch({
                 wallets: {
@@ -101,11 +97,14 @@ export const useGlobalStore = defineStore('global', {
                 }
             })
 
+            // Set connected status
+            this.connected = true
+
             // Get moon passport
             await this.getMoonPassport()
 
             // Set user info
-            this.setUserInfo({
+            await this.setUserInfo({
                 userName: key.name,
                 auth: true
             })
@@ -119,7 +118,7 @@ export const useGlobalStore = defineStore('global', {
 
                 this.jsCyber = new CyberClient(tendermintClient)
 
-                this.moonPassport = await this.jsCyber.queryContractSmart(
+                this.account.moonPassport = await this.jsCyber.queryContractSmart(
                     this.CONTRACT_ADDRESS_PASSPORT,
                     {
                         active_passport: {
@@ -129,6 +128,8 @@ export const useGlobalStore = defineStore('global', {
                 )
             } catch (error) {
                 console.log(error)
+
+                this.showMakeChoice = true
             }
         },
 
@@ -191,10 +192,10 @@ export const useGlobalStore = defineStore('global', {
 
         // Avatar
         async getAvatar() {
-            if(this.moonPassport){
+            if(this.account.moonPassport){
                 let content = []
 
-                for await (const file of this.node.get(this.moonPassport.extension.avatar)) {
+                for await (const file of this.node.get(this.account.moonPassport.extension.avatar)) {
                     if (file.content) {
                         for await (const chunk of file.content) {
                             content.push(chunk)
@@ -222,10 +223,20 @@ export const useGlobalStore = defineStore('global', {
 
 
         // Reset state
-        reset() {
+        async reset () {
             // Load from localstorage
             let defaultAccount = JSON.parse(window.localStorage.getItem('account')),
                 defaultNetworks = JSON.parse(window.localStorage.getItem('networks'))
+
+            this.connected = false
+            this.showManageModal = false
+            this.showManageSuccessModal = false
+            this.showManageErrorModal = false
+            this.showManageRejectModal = false
+            this.loaderManageModal = false
+            this.showMakeChoice = false
+            this.showConstitutionModal = false
+            this.constitutionStatus = null
 
             // Clear state
             Object.assign(this, {
@@ -233,8 +244,8 @@ export const useGlobalStore = defineStore('global', {
                 networks: defaultNetworks
             })
 
-            // Update avatar
-            // this.getAvatar()
+            // Reconnect wallet
+            await this.connectWallet()
         },
 
 
@@ -578,7 +589,7 @@ export const useGlobalStore = defineStore('global', {
                 this.account.personal_APR = this.account.RPDE_usdt * 365.3 / this.account.delegations_price * 100
             }
 
-            // this.recalc = false
+            this.recalc = false
         },
 
 

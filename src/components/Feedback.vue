@@ -1,5 +1,5 @@
 <template>
-    <div class="feedback">
+    <section class="feedback">
         <button class="btn" @click.prevent="isActive = !isActive" :class="{ active: isActive }">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_bug"></use></svg>
         </button>
@@ -33,7 +33,7 @@
                 </a></div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 

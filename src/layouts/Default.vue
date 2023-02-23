@@ -5,37 +5,33 @@
     <!-- Router view -->
     <RouterView />
 
+    <!-- Manage modal -->
+    <ManageModal v-if="store.showManageModal" />
+
     <!-- Feedback -->
     <Feedback />
+
+    <!-- Footer -->
+    <Footer />
 </template>
 
 
 <script setup>
     import { inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { preConnectWallet } from '@/utils'
 
     // Components
     import Header from '../components/Header.vue'
+    import ManageModal from '../components/modal/ManageModal.vue'
     import Feedback from '../components/Feedback.vue'
+    import Footer from '../components/Footer.vue'
 
     const i18n = inject('i18n'),
-        store = useGlobalStore(),
-        emitter = inject('emitter')
+        store = useGlobalStore()
 
 
     onBeforeMount(async () => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default')
-
-
-        // Load/Refresh page
-        await preConnectWallet()
-    })
-
-
-    // Event "set notification"
-    emitter.on('setNotification', notice => {
-        store.$patch({ tooltip: notice })
     })
 </script>

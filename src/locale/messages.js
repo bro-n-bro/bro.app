@@ -210,6 +210,9 @@ export default {
             'notification_successful_title': 'Transaction successful',
             'notification_failed_title': 'Transaction failed',
             'notification_explorer_link': 'Explorer',
+            'notification_error_file_size_title': 'Error',
+            'notification_error_file_size_text': 'Selected image is too large. Please select new < {size}',
+            'notification_passport_activation': 'Account activation...',
 
 
             // Footer

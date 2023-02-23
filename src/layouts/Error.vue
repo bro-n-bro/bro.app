@@ -11,9 +11,6 @@
 
 
 <script setup>
-    import { useGlobalStore } from '@/stores'
-    import { RouterView } from 'vue-router'
-
     // Components
     import Header  from '../components/Header.vue'
     import Feedback  from '../components/Feedback.vue'

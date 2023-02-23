@@ -180,7 +180,7 @@
         width: calc(50% - 8px);
         height: 47px;
 
-        transition: .2s linear;
+        transition: background .2s linear;
 
         border-radius: 14px;
     }
@@ -193,6 +193,17 @@
     #constitution_modal .btns .btn.yes_btn
     {
         background: #950fff;
+    }
+
+
+    #constitution_modal .btns .btn.no_btn:hover
+    {
+        background: #282828;
+    }
+
+    #constitution_modal .btns .btn.yes_btn:hover
+    {
+        background: #7700e1;
     }
 
 </style>

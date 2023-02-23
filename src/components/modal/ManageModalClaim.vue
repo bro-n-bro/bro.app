@@ -201,31 +201,7 @@
                         })
 
                         // Send EVMOS Tx
-                        let result = await sendEVMOSTx(prepareResult)
-
-                        // if(result.tx_response.code != 0){
-                        //     // Get error title
-                        //     store.manageError = i18n.global.t(`message.manage_modal_error_${result.tx_response.code}`)
-
-                        //     // Show notification
-                        //     notification.notify({
-                        //         group: store.networks[store.networkManageModal].denom,
-                        //         clean: true
-                        //     })
-
-                        //     notification.notify({
-                        //         group: store.networks[store.networkManageModal].denom,
-                        //         title: i18n.global.t('message.notification_failed_title'),
-                        //         text: store.manageError,
-                        //         type: 'error',
-                        //         data: {
-                        //             chain: store.networkManageModal,
-                        //             tx_type: i18n.global.t('message.manage_modal_action_claim')
-                        //         }
-                        //     })
-
-                        //     return false
-                        // }
+                        await sendEVMOSTx(prepareResult)
 
                         // Show notification
                         notification.notify({
