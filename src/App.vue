@@ -91,15 +91,6 @@
     onMounted(() => {
         // Set title
         document.title = i18n.global.t('message.page_title')
-
-        // Change Keplr account
-        window.addEventListener('keplr_keystorechange', async () => {
-            // Reset store
-            await store.reset()
-        })
-
-        // Connect wallet
-        window.onload = async () => await emitter.emit('connectWallet')
     })
 
 

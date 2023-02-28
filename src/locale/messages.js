@@ -54,7 +54,7 @@ export default {
             'passport_address_exp': 'Adress',
             'passport_name_exp': 'Min 8 characters',
             'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
-            'passport_i_am_cool': 'я крутой',
+            'passport_activation_label': 'я крутой',
 
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
@@ -212,7 +212,17 @@ export default {
             'notification_explorer_link': 'Explorer',
             'notification_error_file_size_title': 'Error',
             'notification_error_file_size_text': 'Selected image is too large. Please select new < {size}',
-            'notification_passport_activation': 'Account activation...',
+            'notification_error_nickName_title': 'Nickname error',
+            'notification_error_nickName_desc': 'There is already a passport for this name, come up with a new one',
+            'notification_passport_signature': 'Constitution successfully signed',
+            'notification_passport_activation_process': 'Account activation...',
+            'notification_passport_activation_success': 'Account successfully activated',
+            'notification_passport_activation_error': 'Account activation error',
+            'notification_passport_activation_error_desc': 'Try again',
+            'notification_action_create_passport': 'Create passport',
+            'notification_passport_create_process': 'Passport creation...',
+            'notification_success_create_passport_title': 'Passport created successfully',
+            'notification_error_create_passport_title': 'Passport issue error',
 
 
             // Footer

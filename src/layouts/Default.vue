@@ -1,15 +1,17 @@
 <template>
-    <!-- Header -->
-    <Header />
+    <div class="main">
+        <!-- Header -->
+        <Header />
 
-    <!-- Router view -->
-    <RouterView />
+        <!-- Router view -->
+        <RouterView v-if="store.connected" />
 
-    <!-- Manage modal -->
-    <ManageModal v-if="store.showManageModal" />
+        <!-- Manage modal -->
+        <ManageModal v-if="store.showManageModal" />
 
-    <!-- Feedback -->
-    <Feedback />
+        <!-- Feedback -->
+        <Feedback />
+    </div>
 
     <!-- Footer -->
     <Footer />

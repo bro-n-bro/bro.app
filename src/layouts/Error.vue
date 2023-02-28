@@ -1,9 +1,11 @@
 <template>
-    <!-- Header -->
-    <Header />
+    <div class="main">
+        <!-- Header -->
+        <Header />
 
-    <!-- Router view -->
-    <RouterView />
+        <!-- Router view -->
+        <RouterView />
+    </div>
 
     <!-- Feedback -->
     <Feedback />

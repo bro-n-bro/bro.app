@@ -115,9 +115,15 @@
 
 
 <script setup>
+    import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from '@kyvg/vue3-notification'
+    import { toAscii, toBase64 } from '@cosmjs/encoding'
 
-    const store = useGlobalStore()
+    const store = useGlobalStore(),
+        i18n = inject('i18n'),
+        notification = useNotification()
+
 
     // Close constitution modal
     function closeConstitutionModal() {
@@ -125,10 +131,37 @@
     }
 
 
-    // Close constitution modal
-    function acceptConstitution() {
-        store.constitutionStatus = true
-        store.showConstitutionModal = false
+    // Accept constitution
+    async function acceptConstitution () {
+        try {
+            await window.keplr.enable(store.networks.bostrom.chainId)
+
+            let res = await window.keplr.signArbitrary(
+                store.networks.bostrom.chainId,
+                store.wallets.bostrom,
+                `${store.wallets.bostrom}:${store.CONSTITUTION_HASH}`
+            )
+
+            store.account.signature = toBase64(toAscii(JSON.stringify({
+                pub_key: res.pub_key.value,
+                signature: res.signature
+            })))
+
+            // Show notification
+            notification.notify({
+                group: 'default',
+                title: i18n.global.t('message.notification_passport_signature'),
+                type: 'success'
+            })
+
+            // Set constitution status
+            store.constitutionStatus = true
+
+            // Close modal
+            store.showConstitutionModal = false
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 

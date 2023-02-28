@@ -800,12 +800,12 @@ button
 ------------------*/
 .vue-notification-group
 {
-    padding: 12px 24px;
+    padding: 24px;
 }
 
 .vue-notification-wrapper + .vue-notification-wrapper
 {
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 
@@ -930,7 +930,7 @@ button
 
 .notification .title
 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     line-height: 110%;
 

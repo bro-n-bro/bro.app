@@ -5,8 +5,9 @@
         </div>
 
         <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
-            {{ store.account.userName }}
-            </div>
+            <span v-if="store.account.moonPassport">{{ store.account.moonPassport.extension.nickname }}</span>
+            <span v-else>{{ store.account.userName }}</span>
+        </div>
 
         <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-show="store.account.avatar">

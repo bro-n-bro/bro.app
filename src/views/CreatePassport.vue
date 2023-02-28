@@ -71,17 +71,19 @@
                             </div>
                         </div>
 
-                        <div class="line i_am_cool">
+                        <div class="line activation">
                             <div class="field">
-                                <label :class="{'disable': !store.constitutionStatus}" @click="iAmCoolHandler">
-                                    <input type="radio" name="i_am_cool">
-
+                                <label @click.prevent="activationHandler" :class="{
+                                    'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8,
+                                    'process': data.activationProcess == 'process',
+                                    'active': data.activationProcess === true
+                                }">
                                     <div class="check">
-                                        <svg v-if="!data.iAmCoolProcess"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                        <svg v-if="data.activationProcess != 'process'"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                                         <Loader v-else />
                                     </div>
 
-                                    <div>{{ $t('message.passport_i_am_cool') }}</div>
+                                    <div>{{ $t('message.passport_activation_label') }}</div>
                                 </label>
                             </div>
                         </div>
@@ -91,7 +93,7 @@
                                 {{ $t('message.no_btn') }}
                             </router-link>
 
-                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || !data.iAmCoolProcess}">
+                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || data.activationProcess != true}">
                                 {{ $t('message.yes_btn') }}
                             </button>
                         </div>
@@ -209,6 +211,7 @@
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
+    import { SigningCyberClient } from '@cybercongress/cyber-js'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
@@ -222,13 +225,14 @@
     var avatar = ref(null),
         avatarPreview = reactive({
             src: '',
+            buffer: '',
             status: false
         }),
         data = reactive({
             moonAddress: computed(() => store.wallets.bostrom ? store.wallets.bostrom : ''),
             nickName: '',
             nickNameError: false,
-            iAmCoolProcess: false,
+            activationProcess: true,
             passportImage: '',
             status: false,
             showBottomBtns: false,
@@ -256,7 +260,8 @@
             // Get preview
             let reader = new FileReader()
 
-            reader.onload = () => {
+            reader.onload = async () => {
+                avatarPreview.buffer = Buffer(reader.result)
                 avatarPreview.src = reader.result
                 avatarPreview.status = true
 
@@ -285,40 +290,197 @@
     }
 
 
-    // I Am Cool handler
-    function iAmCoolHandler(event) {
+    // Activation handler
+    async function activationHandler(event) {
         if (event.target.nodeName == 'LABEL') {
             // Show notification
             notification.notify({
                 group: 'default',
-                title: i18n.global.t('message.notification_passport_activation')
+                duration: -100,
+                title: i18n.global.t('message.notification_passport_activation_process')
             })
 
             // Set activation status
-            data.iAmCoolProcess = true
+            data.activationProcess = 'process'
+
+            await fetch('https://titan.cybernode.ai/credit', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    denom: 'boot',
+                    address: store.wallets.bostrom
+                })
+            })
+                .then(result => {
+                    if(result.status == 200) {
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
+
+                        notification.notify({
+                            group: 'default',
+                            title: i18n.global.t('message.notification_passport_activation_success'),
+                            type: 'success'
+                        })
+
+                        // Set activation status
+                        data.activationProcess = true
+                    } else {
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
+
+                        notification.notify({
+                            group: 'default',
+                            title: i18n.global.t('message.notification_passport_activation_error'),
+                            text: i18n.global.t('message.notification_passport_activation_error_desc'),
+                            type: 'error'
+                        })
+
+                        // Set activation status
+                        data.activationProcess = false
+                    }
+                })
+        }
+    }
+
+
+    // Check nickname
+    async function checkNickname() {
+        try {
+            let response = await store.jsCyber.queryContractSmart(
+                store.CONTRACT_ADDRESS_PASSPORT,
+                {
+                    passport_by_nickname: {
+                        nickname: data.nickName
+                    }
+                }
+            )
+
+            return response
+        } catch (error) {
+            console.log(error)
+
+            return null
         }
     }
 
 
     // Create passport
-    function createPassport() {
-        // Generate gradient
-        data.bgGradient = gradient(data.nickName)
+    async function createPassport() {
+        if(await checkNickname() === null) {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                duration: -100,
+                title: i18n.global.t('message.notification_passport_create_process')
+            })
 
+            try{
+                // Send avatar to IPFS
+                let avatarIpfs = await store.node.add(avatarPreview.buffer)
 
-        // Create passport image
-        setTimeout(() => {
-            htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
-                .then(dataUrl => data.passportImage = dataUrl)
-                .catch(error => console.error(error))
+                // JsCyber singer
+                let signingJsCyber = await SigningCyberClient.connectWithSigner(store.networks.bostrom.rpc_api, await window.getOfflineSignerAuto(store.networks.bostrom.chainId))
 
-            // Show bottom buttons
-            data.showBottomBtns = true
-        }, 1050)
+                // Send Tx
+                let result = await signingJsCyber.execute(
+                    store.wallets.bostrom,
+                    store.CONTRACT_ADDRESS_PASSPORT,
+                    {
+                        create_passport: {
+                            avatar: avatarIpfs.path,
+                            nickname: data.nickName,
+                            signature: store.account.signature
+                        },
+                    },
+                    {
+                        amount: [{
+                            denom: store.networks.bostrom.denom,
+                            amount: '0'
+                        }],
+                        gas: '500000'
+                    },
+                    store.ref ? `bro.${store.ref}` : 'bro.app'
+                )
 
+                if (result.code === 0) {
+                    // Set TXS
+                    store.lastTXS = result.transactionHash
 
-        // Set passport status
-        data.status = true
+                    // Show notification
+                    notification.notify({
+                        group: store.networks.bostrom.denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: store.networks.bostrom.denom,
+                        title: i18n.global.t('message.notification_success_create_passport_title'),
+                        type: 'success',
+                        data: {
+                            chain: 'bostrom',
+                            tx_type: i18n.global.t('message.notification_action_create_passport'),
+                            tx_hash: store.lastTXS
+                        }
+                    })
+
+                    // Generate gradient
+                    data.bgGradient = gradient(data.nickName)
+
+                    // Set passport status
+                    data.status = true
+
+                    // Create passport image
+                    setTimeout(() => {
+                        htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
+                            .then(dataUrl => data.passportImage = dataUrl)
+                            .catch(error => console.error(error))
+
+                        // Show bottom buttons
+                        data.showBottomBtns = true
+                    }, 1050)
+                }
+
+                if (result.code) {
+                    // Show notification
+                    notification.notify({
+                        group: store.networks.bostrom.denom,
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: store.networks.bostrom.denom,
+                        title: i18n.global.t('message.notification_failed_title'),
+                        text: result?.rawLog.toString(),
+                        type: 'error',
+                        data: {
+                            chain: 'bostrom',
+                            tx_type: i18n.global.t('message.notification_action_create_passport')
+                        }
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                durartion: 5000,
+                title: i18n.global.t('message.notification_error_nickName_title'),
+                text: i18n.global.t('message.notification_error_nickName_desc'),
+                type: 'error'
+            })
+
+            data.nickNameError = true
+        }
     }
 </script>
 
@@ -1014,9 +1176,7 @@
         display: block;
 
         width: 100%;
-        height: 24px;
-
-        text-transform: uppercase;
+        height: 28px;
 
         border: none;
         background: none;
@@ -1140,13 +1300,7 @@
     }
 
 
-    .create_passport .info .i_am_cool input
-    {
-        display: none;
-    }
-
-
-    .create_passport .info .i_am_cool label
+    .create_passport .info .activation label
     {
         color: #fff;
         font-family: var(--font_family2);
@@ -1170,19 +1324,19 @@
         flex-wrap: wrap;
     }
 
-    .create_passport .info .i_am_cool label.disable
+    .create_passport .info .activation label.disable
     {
         cursor: default;
         pointer-events: none;
     }
 
-    .create_passport .info .i_am_cool label > *
+    .create_passport .info .activation label > *
     {
         pointer-events: none;
     }
 
 
-    .create_passport .info .i_am_cool label .check
+    .create_passport .info .activation label .check
     {
         position: absolute;
         top: 0;
@@ -1204,7 +1358,7 @@
         flex-wrap: wrap;
     }
 
-    .create_passport .info .i_am_cool label .check svg
+    .create_passport .info .activation label .check svg
     {
         color: #555;
 
@@ -1217,12 +1371,20 @@
     }
 
 
-    .create_passport .info .i_am_cool input:checked + .check
+    .create_passport .info .activation label.active,
+    .create_passport .info .activation label.process
+    {
+        pointer-events: none;
+    }
+
+    .create_passport .info .activation label.active .check,
+    .create_passport .info .activation label.process .check
     {
         background: #950fff;
     }
 
-    .create_passport .info .i_am_cool input:checked + .check svg
+    .create_passport .info .activation label.active .check svg,
+    .create_passport .info .activation label.process .check svg
     {
         color: #fff;
     }
@@ -1243,7 +1405,7 @@
         color: #464646;
         line-height: 130%;
 
-        margin-top: 14px;
+        margin-top: 11px;
     }
 
 

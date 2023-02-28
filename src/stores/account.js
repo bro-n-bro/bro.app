@@ -4,6 +4,7 @@ const account = {
     userName: useLocalStorage('userName', ''),
     avatar: '',
     moonPassport: null,
+    signature: '',
 
     balance_usdt: 0,
     balance_atom: 0,

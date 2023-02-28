@@ -3,6 +3,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { CyberClient } from '@cybercongress/cyber-js'
 import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 import { fromBech32, toBech32 } from '@cosmjs/encoding'
+import * as IPFS from 'ipfs-core'
 
 // Account
 import account from '@/stores/account'
@@ -44,7 +45,8 @@ window.localStorage.setItem('networks', JSON.stringify(networks))
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         CONTRACT_ADDRESS_PASSPORT: 'bostrom1xut80d09q0tgtch8p0z4k5f88d3uvt8cvtzm5h3tu3tsy4jk9xlsfzhxel',
-        node: null,
+        CONSTITUTION_HASH: 'QmcHB9GKHAKCLQhmSj71qNJhENJJg8Gymd1PvvsCQBhG7M',
+        node: false,
         IPFSStatus: false,
         recalc: true,
         connected: false,
@@ -114,7 +116,7 @@ export const useGlobalStore = defineStore('global', {
         // Get moon passport
         async getMoonPassport() {
             try {
-                let tendermintClient = await Tendermint34Client.connect('https://rpc.bostrom.cybernode.ai')
+                let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
 
                 this.jsCyber = new CyberClient(tendermintClient)
 
@@ -153,7 +155,7 @@ export const useGlobalStore = defineStore('global', {
 
         // IPFS
         async startIPFS() {
-            this.node = await Ipfs.create({
+            this.node = await IPFS.create({
                 // repo: 'ipfs-repo-cyber',
                 init: true,
                 start: true,
@@ -184,9 +186,7 @@ export const useGlobalStore = defineStore('global', {
                 },
             })
 
-            if (this.node !== null) {
-                this.IPFSStatus = true
-            }
+            this.IPFSStatus = true
         },
 
 
@@ -195,15 +195,19 @@ export const useGlobalStore = defineStore('global', {
             if(this.account.moonPassport){
                 let content = []
 
-                for await (const file of this.node.get(this.account.moonPassport.extension.avatar)) {
-                    if (file.content) {
-                        for await (const chunk of file.content) {
-                            content.push(chunk)
-                        }
-                    }
+                // for await (const file of this.node.get(this.account.moonPassport.extension.avatar)) {
+                //     if (file.content) {
+                //         for await (const chunk of file.content) {
+                //             content.push(chunk)
+                //         }
+                //     }
+                // }
+
+                for await (const file of this.node.cat(this.account.moonPassport.extension.avatar)) {
+                    content.push(file)
                 }
 
-                this.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
+                this.account.avatar = URL.createObjectURL(new Blob([content[1]], {type: 'image/jpeg'}))
             } else {
                 fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
                     .then(response => response.json())

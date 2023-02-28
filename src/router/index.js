@@ -78,39 +78,52 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-	const store = useGlobalStore(),
-		modalId = to.query.manage_modal,
+	const modalId = to.query.manage_modal,
 		ref = to.query.ref
 
 	// Manage modal from url
 	if (modalId) { store.networkManageModal = modalId }
 	if (ref) { store.ref = ref }
 
-	// Keplr
-	setTimeout(() => {
+	next()
+})
+
+
+router.afterEach((to, from, next) => {
+	window.onload = async () =>{
+		const store = useGlobalStore()
+
 		// If Keplr does not exist
 		if(!window.keplr && (to.name != 'KeplrError' && to.name != 'KeplrReload')) {
-			router.push({ name: 'KeplrError' })
+			router.replace({ name: 'KeplrError' })
 		}
 
 		// If Keplr is installed
 		if(window.keplr && (to.name == 'KeplrError' || to.name == 'KeplrReload')) {
-			router.push({ name: 'MainPage' })
+			router.replace({ name: 'MainPage' })
 		}
 
 		// If Keplr is installed and the wallet is connected
 		if(window.keplr && store.auth && to.name == 'MainPage') {
-			router.push({ name: 'Dashboard' })
+			router.replace({ name: 'Dashboard' })
+		}
+
+		// Connect wallet
+		if(!store.connected) {
+			await store.connectWallet()
 		}
 
 		// If has passport
 		if(store.account.moonPassport && to.name == 'CreatePassport') {
-			router.push({ name: 'Wallets' })
+			router.replace({ name: 'Wallets' })
 		}
 
-		// If all OK
-		next()
-	})
+		// Change Keplr account
+		window.addEventListener('keplr_keystorechange', async () => {
+			// Reset store
+			await store.reset()
+		})
+	}
 })
 
 
