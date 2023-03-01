@@ -114,9 +114,9 @@ router.afterEach((to, from, next) => {
 		}
 
 		// If has passport
-		if(store.account.moonPassport && to.name == 'CreatePassport') {
-			router.replace({ name: 'Wallets' })
-		}
+		// if(store.account.moonPassport && to.name == 'CreatePassport') {
+		// 	router.replace({ name: 'Wallets' })
+		// }
 
 		// Change Keplr account
 		window.addEventListener('keplr_keystorechange', async () => {

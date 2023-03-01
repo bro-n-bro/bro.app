@@ -211,7 +211,7 @@
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
-    import { SigningCyberClient } from '@cybercongress/cyber-js'
+    import { prepareCreatePassportTx, sendCreatePassportTx } from '@/utils'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
@@ -232,7 +232,7 @@
             moonAddress: computed(() => store.wallets.bostrom ? store.wallets.bostrom : ''),
             nickName: '',
             nickNameError: false,
-            activationProcess: true,
+            activationProcess: false,
             passportImage: '',
             status: false,
             showBottomBtns: false,
@@ -264,6 +264,16 @@
                 avatarPreview.buffer = Buffer(reader.result)
                 avatarPreview.src = reader.result
                 avatarPreview.status = true
+
+                let avatarIpfs = await store.node.add(avatar.value.files[0])
+
+                let content = []
+                console.log(avatarIpfs.path)
+                for await (let file of store.node.cat(avatarIpfs.path)) {
+                    content.push(file)
+                }
+
+                store.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
 
                 setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
             }
@@ -384,31 +394,21 @@
 
             try{
                 // Send avatar to IPFS
-                let avatarIpfs = await store.node.add(avatarPreview.buffer)
+                let avatarIpfs = await store.node.add(avatar.value.files[0])
 
-                // JsCyber singer
-                let signingJsCyber = await SigningCyberClient.connectWithSigner(store.networks.bostrom.rpc_api, await window.getOfflineSignerAuto(store.networks.bostrom.chainId))
+                // Prepare Tx
+                let prepareResult = await prepareCreatePassportTx({
+                    create_passport: {
+                        avatar: avatarIpfs.path,
+                        nickname: data.nickName,
+                        signature: store.account.signature
+                    }
+                })
 
                 // Send Tx
-                let result = await signingJsCyber.execute(
-                    store.wallets.bostrom,
-                    store.CONTRACT_ADDRESS_PASSPORT,
-                    {
-                        create_passport: {
-                            avatar: avatarIpfs.path,
-                            nickname: data.nickName,
-                            signature: store.account.signature
-                        },
-                    },
-                    {
-                        amount: [{
-                            denom: store.networks.bostrom.denom,
-                            amount: '0'
-                        }],
-                        gas: '500000'
-                    },
-                    store.ref ? `bro.${store.ref}` : 'bro.app'
-                )
+                let result = await sendCreatePassportTx(prepareResult)
+
+                console.log(result)
 
                 if (result.code === 0) {
                     // Set TXS
@@ -416,7 +416,7 @@
 
                     // Show notification
                     notification.notify({
-                        group: store.networks.bostrom.denom,
+                        group: 'default',
                         clean: true
                     })
 
@@ -426,8 +426,7 @@
                         type: 'success',
                         data: {
                             chain: 'bostrom',
-                            tx_type: i18n.global.t('message.notification_action_create_passport'),
-                            tx_hash: store.lastTXS
+                            tx_type: i18n.global.t('message.notification_action_create_passport')
                         }
                     })
 
@@ -451,7 +450,7 @@
                 if (result.code) {
                     // Show notification
                     notification.notify({
-                        group: store.networks.bostrom.denom,
+                        group: 'default',
                         clean: true
                     })
 
@@ -468,6 +467,23 @@
                 }
             } catch (error) {
                 console.log(error)
+
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    type: 'error',
+                    data: {
+                        chain: 'bostrom',
+                        tx_type: i18n.global.t('message.notification_action_create_passport')
+                    }
+                })
             }
         } else {
             // Show notification
@@ -603,7 +619,6 @@
 
         width: 9px;
         height: 9px;
-        /* background: var(--bg); */
 
         background: url(../assets/images/corner_big.svg) 100% 0/9px 9px no-repeat;
     }
@@ -1177,6 +1192,8 @@
 
         width: 100%;
         height: 28px;
+
+        text-transform: lowercase;
 
         border: none;
         background: none;

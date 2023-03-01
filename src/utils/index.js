@@ -1,7 +1,10 @@
 import { useGlobalStore } from '@/stores'
 
+import { Registry } from '@cosmjs/proto-signing'
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
+import { toUtf8 } from '@cosmjs/encoding'
 
 import {
     createTxMsgDelegate,
@@ -52,7 +55,7 @@ export const prepareTx = async (msg, gasSimulate = true) => {
     // MENO
     let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
 
-    // Send transaction
+    // Sign transaction
     let txRaw = await client.sign(store.wallets[store.networkManageModal], msg, fee, memo)
 
     return { txRaw, client }
@@ -156,6 +159,73 @@ export const sendEVMOSTx = async txRaw => {
     let broadcastPost = await fetch(`${store.networks.evmos.lcd_api}${generateEndpointBroadcast()}`, postOptions)
 
     let result = await broadcastPost.json()
+
+    return result
+}
+
+
+
+// Prepare create passport Tx
+export const prepareCreatePassportTx = async params => {
+    let store = useGlobalStore()
+
+    // Register type
+    let typeRegistry = new Registry([
+        ['/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract],
+    ])
+
+    // Create request
+    let offlineSigner = await window.getOfflineSignerAuto(store.networks.bostrom.chainId)
+
+    // RPC endpoint
+    let rpcEndpoint = store.networks.bostrom.rpc_api
+
+    // Client
+    let client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner, {
+        registry: typeRegistry
+    })
+
+    // Fee
+    let fee = {
+        amount: [{
+            denom: store.networks.bostrom.denom,
+            amount: '0'
+        }],
+        gas: '1000000'
+    }
+
+    // MENO
+    let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
+
+    // Funds
+    let funds = []
+
+    // Params
+    let msg = {
+        typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+        value: MsgExecuteContract.fromPartial({
+            sender: store.wallets.bostrom,
+            contract: store.CONTRACT_ADDRESS_PASSPORT,
+            msg: toUtf8(JSON.stringify(params)),
+            funds
+        })
+    }
+
+    // Sign transaction
+    let txRaw = await client.sign(store.wallets.bostrom, [msg], fee, memo)
+
+    return { txRaw, client }
+}
+
+
+
+// Send create passport Tx
+export const sendCreatePassportTx = async ({ txRaw, client }) => {
+    // Encode TxRaw
+    let txBytes = TxRaw.encode(txRaw).finish()
+
+    // Broadcast Tx
+    let result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
 
     return result
 }
