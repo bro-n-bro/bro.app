@@ -103,20 +103,24 @@ router.afterEach((to, from, next) => {
 			router.replace({ name: 'MainPage' })
 		}
 
-		// If Keplr is installed and the wallet is connected
-		if(window.keplr && store.auth && to.name == 'MainPage') {
-			router.replace({ name: 'Dashboard' })
-		}
-
 		// Connect wallet
 		if(!store.connected) {
 			await store.connectWallet()
-		}
 
-		// If has passport
-		// if(store.account.moonPassport && to.name == 'CreatePassport') {
-		// 	router.replace({ name: 'Wallets' })
-		// }
+			// If Keplr is installed and the wallet is connected
+			if(window.keplr && store.auth && to.name == 'MainPage' && store.account.moonPassport) {
+				router.replace({ name: 'Wallets' })
+			}
+
+			if(window.keplr && store.auth && to.name == 'MainPage' && !store.account.moonPassport) {
+				router.replace({ name: 'Dashboard' })
+			}
+
+			// If has passport
+			if(store.account.moonPassport && to.name == 'CreatePassport') {
+				router.replace({ name: 'Wallets' })
+			}
+		}
 
 		// Change Keplr account
 		window.addEventListener('keplr_keystorechange', async () => {
