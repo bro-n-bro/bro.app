@@ -216,16 +216,3 @@ export const prepareCreatePassportTx = async params => {
 
     return { txRaw, client }
 }
-
-
-
-// Send create passport Tx
-export const sendCreatePassportTx = async ({ txRaw, client }) => {
-    // Encode TxRaw
-    let txBytes = TxRaw.encode(txRaw).finish()
-
-    // Broadcast Tx
-    let result = await client.broadcastTx(txBytes, client.broadcastTimeoutMs, client.broadcastPollIntervalMs)
-
-    return result
-}

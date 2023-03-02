@@ -211,7 +211,7 @@
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
-    import { prepareCreatePassportTx, sendCreatePassportTx } from '@/utils'
+    import { prepareCreatePassportTx, sendTx } from '@/utils'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
@@ -406,7 +406,7 @@
                 })
 
                 // Send Tx
-                let result = await sendCreatePassportTx(prepareResult)
+                let result = await sendTx(prepareResult)
 
                 console.log(result)
 
