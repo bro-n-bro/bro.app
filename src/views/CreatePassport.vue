@@ -73,7 +73,7 @@
 
                         <div class="line activation">
                             <div class="field">
-                                <label @click.prevent="activationHandler" :class="{
+                                <button type="button" class="btn" @click.prevent="activationHandler" :class="{
                                     'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8,
                                     'process': data.activationProcess == 'process',
                                     'active': data.activationProcess === true
@@ -84,7 +84,7 @@
                                     </div>
 
                                     <div>{{ $t('message.passport_activation_label') }}</div>
-                                </label>
+                                </button>
                             </div>
                         </div>
 
@@ -1317,7 +1317,7 @@
     }
 
 
-    .create_passport .info .activation label
+    .create_passport .info .activation .btn
     {
         color: #fff;
         font-family: var(--font_family2);
@@ -1341,19 +1341,19 @@
         flex-wrap: wrap;
     }
 
-    .create_passport .info .activation label.disable
+    .create_passport .info .activation .btn.disable
     {
         cursor: default;
         pointer-events: none;
     }
 
-    .create_passport .info .activation label > *
+    .create_passport .info .activation .btn > *
     {
         pointer-events: none;
     }
 
 
-    .create_passport .info .activation label .check
+    .create_passport .info .activation .btn .check
     {
         position: absolute;
         top: 0;
@@ -1375,7 +1375,7 @@
         flex-wrap: wrap;
     }
 
-    .create_passport .info .activation label .check svg
+    .create_passport .info .activation .btn .check svg
     {
         color: #555;
 
@@ -1388,20 +1388,20 @@
     }
 
 
-    .create_passport .info .activation label.active,
-    .create_passport .info .activation label.process
+    .create_passport .info .activation .btn.active,
+    .create_passport .info .activation .btn.process
     {
         pointer-events: none;
     }
 
-    .create_passport .info .activation label.active .check,
-    .create_passport .info .activation label.process .check
+    .create_passport .info .activation .btn.active .check,
+    .create_passport .info .activation .btn.process .check
     {
         background: #950fff;
     }
 
-    .create_passport .info .activation label.active .check svg,
-    .create_passport .info .activation label.process .check svg
+    .create_passport .info .activation .btn.active .check svg,
+    .create_passport .info .activation .btn.process .check svg
     {
         color: #fff;
     }

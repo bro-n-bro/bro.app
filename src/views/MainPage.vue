@@ -1,5 +1,5 @@
 <template>
-    <section class="main_page">
+    <section class="main_page" v-if="!store.auth">
         <div class="cont">
             <div class="title" v-html="$t('message.main_page_title')"></div>
 
@@ -31,8 +31,10 @@
 
     watchEffect(() => {
         // Monitor the connection of the kepler
-        if(store.auth) {
-            route.push({ name: 'Dashboard' })
+        if(store.auth && store.appLoaded) {
+            store.account.moonPassport
+                ? route.push({ name: 'Wallets' })
+                : route.push({ name: 'Dashboard' })
         }
     })
 </script>

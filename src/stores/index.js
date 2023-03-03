@@ -46,11 +46,12 @@ export const useGlobalStore = defineStore('global', {
     state: () => ({
         CONTRACT_ADDRESS_PASSPORT: 'bostrom1xut80d09q0tgtch8p0z4k5f88d3uvt8cvtzm5h3tu3tsy4jk9xlsfzhxel',
         CONSTITUTION_HASH: 'QmcHB9GKHAKCLQhmSj71qNJhENJJg8Gymd1PvvsCQBhG7M',
+        appLoaded: false,
         node: false,
         IPFSStatus: false,
         recalc: true,
         connected: false,
-        auth: useLocalStorage('auth', false),
+        auth: false,
         currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
         tooltip: '',
@@ -69,7 +70,6 @@ export const useGlobalStore = defineStore('global', {
         showManageSuccessModal: false,
         showManageErrorModal: false,
         showManageRejectModal: false,
-        loaderManageModal: false,
         showMakeChoice: false,
         showConstitutionModal: false,
         constitutionStatus: null,
@@ -201,14 +201,6 @@ export const useGlobalStore = defineStore('global', {
         async getAvatar() {
             if(this.account.moonPassport){
                 let content = []
-
-                // for await (const file of this.node.get(this.account.moonPassport.extension.avatar)) {
-                //     if (file.content) {
-                //         for await (const chunk of file.content) {
-                //             content.push(chunk)
-                //         }
-                //     }
-                // }
 
                 for await (let file of this.node.cat(this.account.moonPassport.extension.avatar)) {
                     content.push(file)

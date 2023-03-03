@@ -95,12 +95,12 @@ router.afterEach((to, from, next) => {
 
 		// If Keplr does not exist
 		if(!window.keplr && (to.name != 'KeplrError' && to.name != 'KeplrReload')) {
-			router.replace({ name: 'KeplrError' })
+			router.push({ name: 'KeplrError' })
 		}
 
 		// If Keplr is installed
 		if(window.keplr && (to.name == 'KeplrError' || to.name == 'KeplrReload')) {
-			router.replace({ name: 'MainPage' })
+			router.push({ name: 'MainPage' })
 		}
 
 		// Connect wallet
@@ -109,17 +109,25 @@ router.afterEach((to, from, next) => {
 
 			// If Keplr is installed and the wallet is connected
 			if(window.keplr && store.auth && to.name == 'MainPage' && store.account.moonPassport) {
-				router.replace({ name: 'Wallets' })
+				router.push({ name: 'Wallets' })
 			}
 
 			if(window.keplr && store.auth && to.name == 'MainPage' && !store.account.moonPassport) {
-				router.replace({ name: 'Dashboard' })
+				router.push({ name: 'Dashboard' })
 			}
 
 			// If has passport
 			if(store.account.moonPassport && to.name == 'CreatePassport') {
-				router.replace({ name: 'Wallets' })
+				router.push({ name: 'Wallets' })
 			}
+
+			// If hasn't passport
+			if(!store.account.moonPassport && to.name == 'Wallets') {
+				router.push({ name: 'Dashboard' })
+			}
+
+			// App full loaded
+			store.appLoaded = true
 		}
 
 		// Change Keplr account

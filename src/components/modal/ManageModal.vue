@@ -3,11 +3,6 @@
         <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content" @click.self="emitter.emit('close_manage_modal')">
             <div class="data">
-                <div class="loader_wrap" v-if="store.loaderManageModal">
-                    <div class="loader"><span></span></div>
-                </div>
-
-
                 <button class="close_btn" @click.prevent="emitter.emit('close_manage_modal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>

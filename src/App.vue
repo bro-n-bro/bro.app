@@ -1,5 +1,9 @@
 <template>
-    <component :is="layout" />
+    <div class="loader_wrap" v-if="!store.appLoaded || !store.auth || !store.connected">
+        <div class="loader"><span></span></div>
+    </div>
+
+    <component :is="layout" v-else />
 
     <notifications width="276px" v-for="(network, index) in store.networks" :key="index" :group="network.denom">
         <template #body="props">

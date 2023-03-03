@@ -4,7 +4,7 @@
         <Header />
 
         <!-- Router view -->
-        <RouterView v-if="store.connected" />
+        <RouterView />
 
         <!-- Manage modal -->
         <ManageModal v-if="store.showManageModal" />
