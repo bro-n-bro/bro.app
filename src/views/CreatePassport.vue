@@ -445,6 +445,12 @@
                         // Show bottom buttons
                         data.showBottomBtns = true
                     }, 1050)
+
+                    // Get moon passport
+                    await store.getMoonPassport()
+
+                    // Get avatar
+                    await store.getAvatar()
                 }
 
                 if (result.code) {
