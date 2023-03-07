@@ -316,48 +316,48 @@
 
         if (!response && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
             await fetch('https://titan.cybernode.ai/credit', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                denom: 'boot',
-                address: store.wallets.bostrom
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    denom: 'boot',
+                    address: store.wallets.bostrom
+                })
             })
-        })
-            .then(result => {
-                if(result.status == 200) {
-                    // Show notification
-                    notification.notify({
-                        group: 'default',
-                        clean: true
-                    })
+                .then(result => {
+                    if(result.status == 200) {
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
 
-                    notification.notify({
-                        group: 'default',
-                        title: i18n.global.t('message.notification_passport_activation_success'),
-                        type: 'success'
-                    })
+                        notification.notify({
+                            group: 'default',
+                            title: i18n.global.t('message.notification_passport_activation_success'),
+                            type: 'success'
+                        })
 
-                    // Set activation status
-                    data.activationProcess = true
-                } else {
-                    // Show notification
-                    notification.notify({
-                        group: 'default',
-                        clean: true
-                    })
+                        // Set activation status
+                        data.activationProcess = true
+                    } else {
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
 
-                    notification.notify({
-                        group: 'default',
-                        title: i18n.global.t('message.notification_passport_activation_error'),
-                        text: i18n.global.t('message.notification_passport_activation_error_desc'),
-                        type: 'error'
-                    })
+                        notification.notify({
+                            group: 'default',
+                            title: i18n.global.t('message.notification_passport_activation_error'),
+                            text: i18n.global.t('message.notification_passport_activation_error_desc'),
+                            type: 'error'
+                        })
 
-                    // Set activation status
-                    data.activationProcess = false
-                }
+                        // Set activation status
+                        data.activationProcess = false
+                    }
             })
         } else {
             // Show notification
