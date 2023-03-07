@@ -301,7 +301,9 @@
 
 
     // Activation handler
-    async function activationHandler(event) {
+    async function activationHandler() {
+        let response = await store.jsCyber.getAccount(store.wallets.bostrom)
+
         // Show notification
         notification.notify({
             group: 'default',
@@ -312,7 +314,8 @@
         // Set activation status
         data.activationProcess = 'process'
 
-        await fetch('https://titan.cybernode.ai/credit', {
+        if (!response && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
+            await fetch('https://titan.cybernode.ai/credit', {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -356,6 +359,22 @@
                     data.activationProcess = false
                 }
             })
+        } else {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                clean: true
+            })
+
+            notification.notify({
+                group: 'default',
+                title: i18n.global.t('message.notification_passport_activation_success'),
+                type: 'success'
+            })
+
+            // Set activation status
+            data.activationProcess = true
+        }
     }
 
 
