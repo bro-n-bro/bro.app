@@ -268,7 +268,7 @@
                 let avatarIpfs = await store.node.add(avatar.value.files[0])
 
                 let content = []
-                console.log(avatarIpfs.path)
+
                 for await (let file of store.node.cat(avatarIpfs.path)) {
                     content.push(file)
                 }
@@ -302,62 +302,60 @@
 
     // Activation handler
     async function activationHandler(event) {
-        if (event.target.nodeName == 'LABEL') {
-            // Show notification
-            notification.notify({
-                group: 'default',
-                duration: -100,
-                title: i18n.global.t('message.notification_passport_activation_process')
+        // Show notification
+        notification.notify({
+            group: 'default',
+            duration: -100,
+            title: i18n.global.t('message.notification_passport_activation_process')
+        })
+
+        // Set activation status
+        data.activationProcess = 'process'
+
+        await fetch('https://titan.cybernode.ai/credit', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                denom: 'boot',
+                address: store.wallets.bostrom
             })
+        })
+            .then(result => {
+                if(result.status == 200) {
+                    // Show notification
+                    notification.notify({
+                        group: 'default',
+                        clean: true
+                    })
 
-            // Set activation status
-            data.activationProcess = 'process'
+                    notification.notify({
+                        group: 'default',
+                        title: i18n.global.t('message.notification_passport_activation_success'),
+                        type: 'success'
+                    })
 
-            await fetch('https://titan.cybernode.ai/credit', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    denom: 'boot',
-                    address: store.wallets.bostrom
-                })
+                    // Set activation status
+                    data.activationProcess = true
+                } else {
+                    // Show notification
+                    notification.notify({
+                        group: 'default',
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: 'default',
+                        title: i18n.global.t('message.notification_passport_activation_error'),
+                        text: i18n.global.t('message.notification_passport_activation_error_desc'),
+                        type: 'error'
+                    })
+
+                    // Set activation status
+                    data.activationProcess = false
+                }
             })
-                .then(result => {
-                    if(result.status == 200) {
-                        // Show notification
-                        notification.notify({
-                            group: 'default',
-                            clean: true
-                        })
-
-                        notification.notify({
-                            group: 'default',
-                            title: i18n.global.t('message.notification_passport_activation_success'),
-                            type: 'success'
-                        })
-
-                        // Set activation status
-                        data.activationProcess = true
-                    } else {
-                        // Show notification
-                        notification.notify({
-                            group: 'default',
-                            clean: true
-                        })
-
-                        notification.notify({
-                            group: 'default',
-                            title: i18n.global.t('message.notification_passport_activation_error'),
-                            text: i18n.global.t('message.notification_passport_activation_error_desc'),
-                            type: 'error'
-                        })
-
-                        // Set activation status
-                        data.activationProcess = false
-                    }
-                })
-        }
     }
 
 
@@ -408,8 +406,6 @@
                 // Send Tx
                 let result = await sendTx(prepareResult)
 
-                console.log(result)
-
                 if (result.code === 0) {
                     // Set TXS
                     store.lastTXS = result.transactionHash
@@ -449,8 +445,9 @@
                     // Get moon passport
                     await store.getMoonPassport()
 
-                    // Get avatar
-                    await store.getAvatar()
+                    // Set avatar
+                    this.account.avatar = avatarPreview.src
+                    this.account.userName = data.nickName
                 }
 
                 if (result.code) {
