@@ -54,6 +54,14 @@ const routes = [
 		}
 	},
 	{
+		path: '/account',
+		name: 'Account',
+		component: () => import('../views/Account.vue'),
+		meta: {
+			layout: defaultLayut
+		}
+	},
+	{
 		path: '/wallets',
 		name: 'Wallets',
 		component: () => import('../views/Wallets.vue'),

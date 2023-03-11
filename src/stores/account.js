@@ -1,7 +1,5 @@
-import { useLocalStorage } from '@vueuse/core'
-
 const account = {
-    userName: useLocalStorage('userName', ''),
+    userName: '',
     avatar: '',
     moonPassport: null,
     signature: '',

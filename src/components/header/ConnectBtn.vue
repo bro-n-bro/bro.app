@@ -23,7 +23,7 @@
 
         width: 219px;
         max-width: 100%;
-        margin-left: 40px;
+        margin-left: 32px;
         padding: 26px 59px;
 
         transition: box-shadow .2s linear;
@@ -42,4 +42,5 @@
     {
         box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
     }
+
 </style>

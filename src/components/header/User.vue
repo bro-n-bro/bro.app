@@ -1,13 +1,15 @@
 <template>
     <div class="user">
-        <div class="icon">
-            <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
-        </div>
+        <router-link to="/account" class="account_link">
+            <div class="icon">
+                <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
+            </div>
 
-        <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
-            <span v-if="store.account.moonPassport">{{ store.account.moonPassport.extension.nickname }}</span>
-            <span v-else>{{ store.account.userName }}</span>
-        </div>
+            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
+                <span v-if="store.account.moonPassport">{{ store.account.moonPassport.extension.nickname }}</span>
+                <span v-else>{{ store.account.userName }}</span>
+            </div>
+        </router-link>
 
         <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-show="store.account.avatar">
@@ -34,7 +36,7 @@
 
         display: flex;
 
-        margin-left: 40px;
+        margin-left: 32px;
         padding: 15px 10px;
 
         text-align: left;
@@ -42,10 +44,25 @@
         border-radius: 20px;
         background: #141414;
 
-        align-content: center;
+        justify-content: flex-start;
         align-items: center;
+        align-content: center;
         flex-wrap: wrap;
-        justify-content: space-between;
+    }
+
+
+    .user .account_link
+    {
+        color: currentColor;
+
+        display: flex;
+
+        text-decoration: none;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 
@@ -72,6 +89,17 @@
 
         width: 20px;
         height: 20px;
+    }
+
+
+    .user .name
+    {
+        overflow: hidden;
+
+        max-width: 100px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
 
@@ -109,5 +137,4 @@
 
         object-fit: cover;
     }
-
 </style>
