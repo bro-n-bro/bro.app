@@ -30,6 +30,8 @@ export default {
             'yes_btn': 'Yes',
             'download_png_btn': 'dowloand png',
             'continue_btn': 'continue journey',
+            'add_address_btn': 'Add address',
+            'create_btn': 'Create',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
@@ -196,6 +198,39 @@ export default {
 
             // Constitution modal
             'constitution_modal_title': 'Constitution',
+
+
+            // Account
+            'account_networks_title': 'Networks',
+            'account_contract_address_title': 'Contract address',
+            'account_abilities_title': 'Abilities',
+            'account_validators_title': 'Validators',
+            'account_proposals_title': 'Proposals ⟶',
+            'account_connected_addresses_title': 'Connected addresses',
+
+            'account_charts_staked_label': 'Staked',
+            'account_charts_outside_label': 'Outside',
+            'account_charts_liquid_tokens_label': 'Liquid tokens',
+            'account_charts_not_staked_label': 'Not staked',
+            'account_charts_rewards_label': 'Rewards',
+
+            'account_validators_col_network': 'Network',
+            'account_validators_col_validator': 'Validator',
+            'account_validators_col_percent': 'Percent',
+
+            'account_proposals_col_network': 'Network',
+            'account_proposals_col_name': 'Name',
+            'account_proposals_col_type': 'Type',
+            'account_proposals_col_status': 'Status',
+
+            'account_proposals_status_deposite': 'Deposit period',
+            'account_proposals_status_voting': 'Voting period',
+            'account_proposals_status_passed': 'Passed',
+            'account_proposals_status_rejected': 'Rejected',
+
+            'account_RPDE': 'RPDE',
+            'account_APR': 'APR',
+            'account_voting_power': 'Voting power',
 
 
             // Feedback

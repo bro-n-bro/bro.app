@@ -10,7 +10,8 @@ const routes = [
 		name: 'Error',
 		component: () => import('../views/Error404.vue'),
 		meta: {
-			layout: errorLayut
+			layout: errorLayut,
+			accessDenied: ['without_keplr']
 		}
 	},
 	{
@@ -18,7 +19,8 @@ const routes = [
 		name: 'KeplrError',
 		component: () => import('../views/KeplrError.vue'),
 		meta: {
-			layout: errorLayut
+			layout: errorLayut,
+			accessDenied: ['with_keplr']
 		}
 	},
 	{
@@ -26,7 +28,8 @@ const routes = [
 		name: 'KeplrReload',
 		component: () => import('../views/KeplrReload.vue'),
 		meta: {
-			layout: errorLayut
+			layout: errorLayut,
+			accessDenied: ['with_keplr']
 		}
 	},
 	{
@@ -34,7 +37,8 @@ const routes = [
 		name: 'Under construction',
 		component: () => import('../views/UnderConstruction.vue'),
 		meta: {
-			layout: errorLayut
+			layout: errorLayut,
+			accessDenied: ['without_keplr']
 		}
 	},
 	{
@@ -42,7 +46,8 @@ const routes = [
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected']
 		}
 	},
 	{
@@ -50,7 +55,8 @@ const routes = [
 		name: 'CreatePassport',
 		component: () => import('../views/CreatePassport.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
 		}
 	},
 	{
@@ -58,7 +64,8 @@ const routes = [
 		name: 'Account',
 		component: () => import('../views/Account.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
 	{
@@ -66,7 +73,8 @@ const routes = [
 		name: 'Wallets',
 		component: () => import('../views/Wallets.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
 	{
@@ -74,7 +82,8 @@ const routes = [
 		name: 'MainPage',
 		component: () => import('../views/MainPage.vue'),
 		meta: {
-			layout: defaultLayut
+			layout: defaultLayut,
+			accessDenied: ['without_keplr']
 		}
 	}
 ]
@@ -98,45 +107,76 @@ router.beforeEach((to, from, next) => {
 
 
 router.afterEach((to, from, next) => {
+	const store = useGlobalStore()
+
 	window.onload = async () =>{
-		const store = useGlobalStore()
+		// // If Keplr does not exist
+		// if(!window.keplr && (to.name != 'KeplrError' && to.name != 'KeplrReload')) {
+		// 	router.push({ name: 'KeplrError' })
+		// }
 
-		// If Keplr does not exist
-		if(!window.keplr && (to.name != 'KeplrError' && to.name != 'KeplrReload')) {
-			router.push({ name: 'KeplrError' })
-		}
-
-		// If Keplr is installed
-		if(window.keplr && (to.name == 'KeplrError' || to.name == 'KeplrReload')) {
-			router.push({ name: 'MainPage' })
-		}
+		// // If Keplr is installed
+		// if(window.keplr && (to.name == 'KeplrError' || to.name == 'KeplrReload')) {
+		// 	router.push({ name: 'MainPage' })
+		// }
 
 		// Connect wallet
-		if(!store.connected) {
-			await store.connectWallet()
+		await store.connectWallet()
 
-			// If Keplr is installed and the wallet is connected
-			if(window.keplr && store.auth && to.name == 'MainPage' && store.account.moonPassport) {
-				router.push({ name: 'Wallets' })
+		// Check page access
+		to.matched.some(record => {
+			// Array with prohibitions
+			let access = record.meta.accessDenied
+
+			if (access) {
+				// Forbidden without keplr
+				if (access.includes('without_keplr') && !window.keplr) {
+					router.push({ name: 'KeplrError' })
+				}
+
+				// Forbidden with keplr
+				if (access.includes('with_keplr') && window.keplr) {
+					router.push({ name: 'MainPage' })
+				}
+
+				// Wallet not connected
+				if (access.includes('not_connected') && !store.connected) {
+					router.push({ name: 'MainPage' })
+				}
+
+				// Forbidden with a passport
+				if (access.includes('with_passport') && store.account.moonPassport) {
+					router.push({ name: 'Wallets' })
+				}
+
+				// Forbidden without a passport
+				if (access.includes('without_passport') && !store.account.moonPassport) {
+					router.push({ name: 'Dashboard' })
+				}
 			}
+		})
 
-			if(window.keplr && store.auth && to.name == 'MainPage' && !store.account.moonPassport) {
-				router.push({ name: 'Dashboard' })
-			}
+		// // If Keplr is installed and the wallet is connected
+		// if(window.keplr && store.auth && to.name == 'MainPage' && store.account.moonPassport) {
+		// 	router.push({ name: 'Wallets' })
+		// }
 
-			// If has passport
-			if(store.account.moonPassport && to.name == 'CreatePassport') {
-				router.push({ name: 'Wallets' })
-			}
+		// if(window.keplr && store.auth && to.name == 'MainPage' && !store.account.moonPassport) {
+		// 	router.push({ name: 'Dashboard' })
+		// }
 
-			// If hasn't passport
-			if(!store.account.moonPassport && to.name == 'Wallets') {
-				router.push({ name: 'Dashboard' })
-			}
+		// // If has passport
+		// if(store.account.moonPassport && to.name == 'CreatePassport') {
+		// 	router.push({ name: 'Wallets' })
+		// }
 
-			// App full loaded
-			store.appLoaded = true
-		}
+		// // If hasn't passport
+		// if(!store.account.moonPassport && to.name == 'Wallets') {
+		// 	router.push({ name: 'Dashboard' })
+		// }
+
+		// App full loaded
+		store.appLoaded = true
 
 		// Change Keplr account
 		window.addEventListener('keplr_keystorechange', async () => {

@@ -1,5 +1,6 @@
 <template>
     <div class="user">
+        <template v-if="store.account.moonPassport">
         <router-link to="/account" class="account_link">
             <div class="icon">
                 <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
@@ -10,6 +11,20 @@
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </router-link>
+        </template>
+
+        <template v-else>
+        <div>
+            <div class="icon">
+                <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
+            </div>
+
+            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
+                <span v-if="store.account.moonPassport">{{ store.account.moonPassport.extension.nickname }}</span>
+                <span v-else>{{ store.account.userName }}</span>
+            </div>
+        </div>
+        </template>
 
         <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-show="store.account.avatar">
