@@ -19,7 +19,9 @@
         </div>
 
         <div class="items">
-            <div class="item">
+            <!-- <pre>{{ data.validators }}</pre> -->
+
+            <div v-for="(validator, index) in data.validators" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
                 <div class="col_network">
                     <div class="logo">
                         <img src="/cosmoshub_logo.png" alt="">
@@ -29,50 +31,43 @@
 
                 <div class="col_validator">
                     <div class="number"></div>
-                    <div class="name">Bro_n_Bro</div>
+                    <div class="name">{{ validator.moniker }}</div>
                 </div>
 
-                <div class="col_percent">15%</div>
-            </div>
-
-            <div class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_validator">
-                    <div class="number"></div>
-                    <div class="name">Bro_n_Bro</div>
-                </div>
-
-                <div class="col_percent">15%</div>
-            </div>
-
-            <div class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_validator">
-                    <div class="number"></div>
-                    <div class="name">Bro_n_Bro</div>
-                </div>
-
-                <div class="col_percent">15%</div>
+                <div class="col_percent">{{ $filters.toFixed(data.totalTokens / validator.coin.amount * 100, 2) }}%</div>
             </div>
         </div>
 
-        <button class="spoler_btn">
+        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="data.validators.length > 5">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>
 </template>
+
+
+<script setup>
+    import { onMounted, reactive } from 'vue'
+    import { useGlobalStore } from '@/stores'
+
+    const store = useGlobalStore(),
+        data = reactive({
+            validators: [],
+            totalTokens: 0,
+            showAll: false
+        })
+
+
+    onMounted(async () => {
+        await fetch(`https://rpc.bronbro.io/account/validators/${store.wallets.cosmoshub}`)
+            .then(res => res.json())
+            .then(response => {
+                data.validators = response
+
+                // Math total tokens
+                data.validators.forEach(el => data.totalTokens += el.coin.amount)
+            })
+    })
+</script>
 
 
 <style scoped>

@@ -1,23 +1,44 @@
 <template>
     <section class="stats">
+        <!-- <pre>{{ data.info }}</pre> -->
+
         <div class="row">
             <div class="item">
                 <div class="label">{{ $t('message.account_APR') }}</div>
-                <div class="val">1111</div>
+                <div class="val">{{ data.info.apr * 100 }}%</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_voting_power') }}</div>
-                <div class="val">1111</div>
+                <div class="val">{{ data.info.rpde / 1000000 }}</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
-                <div class="val">1111</div>
+                <div class="val">{{ data.info.voting_power * 100 }}</div>
             </div>
         </div>
     </section>
 </template>
+
+
+<script setup>
+    import { onMounted, reactive } from 'vue'
+    import { useGlobalStore } from '@/stores'
+
+    const store = useGlobalStore(),
+        data = reactive({
+            info: {},
+            showAll: false
+        })
+
+
+    onMounted(async () => {
+        await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
+            .then(res => res.json())
+            .then(response => data.info = response)
+    })
+</script>
 
 
 <style scoped>

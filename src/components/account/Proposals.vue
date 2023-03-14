@@ -31,7 +31,9 @@
         </div>
 
         <div class="items">
-            <a href="/" class="item">
+            <!-- <pre>{{ data.proposals }}</pre> -->
+
+            <div v-for="(proposal, index) in data.proposals" :key="index" class="item" :class="{'hide': index >= 5 && !data.showAll}">
                 <div class="col_network">
                     <div class="logo">
                         <img src="/cosmoshub_logo.png" alt="">
@@ -40,118 +42,45 @@
                 </div>
 
                 <div class="col_name">
-                    <div class="name">Interchain Info Funding</div>
+                    <div class="name">{{ proposal.title }}</div>
                 </div>
 
-                <div class="col_number">№343</div>
+                <div class="col_number">№{{ proposal.id }}</div>
 
                 <div class="col_type">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_CommunityPoolSpend"></use></svg>
+                    <svg class="icon"><use :xlink:href="`/sprite.svg#ic_proposal_${proposal.proposal_type}`"></use></svg>
                 </div>
 
                 <div class="col_status">
-                    {{ $t('message.account_proposals_status_deposite') }}
+                    <span v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ $t('message.account_proposals_status_deposite') }}</span>
                 </div>
-            </a>
-
-            <a href="/" class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_name">
-                    <div class="name">v9-Lambda</div>
-                </div>
-
-                <div class="col_number">№343</div>
-
-                <div class="col_type">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_ParameterChange"></use></svg>
-                </div>
-
-                <div class="col_status blue">
-                    {{ $t('message.account_proposals_status_voting') }}
-                </div>
-            </a>
-
-            <a href="/" class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_name">
-                    <div class="name">Spacebox - Tool for chain Indexation and Storage in the Cosmos Hub</div>
-                </div>
-
-                <div class="col_number">№343</div>
-
-                <div class="col_type">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_UpdateSmartContract"></use></svg>
-                </div>
-
-                <div class="col_status green">
-                    {{ $t('message.account_proposals_status_passed') }}
-                </div>
-            </a>
-
-            <a href="/" class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_name">
-                    <div class="name">Fund notional to work on the Cosmos Hub</div>
-                </div>
-
-                <div class="col_number">№343</div>
-
-                <div class="col_type">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_SoftwareUpgrade"></use></svg>
-                </div>
-
-                <div class="col_status red">
-                    {{ $t('message.account_proposals_status_rejected') }}
-                </div>
-            </a>
-
-            <a href="/" class="item">
-                <div class="col_network">
-                    <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
-                    </div>
-                    <div>Cosmos Hub</div>
-                </div>
-
-                <div class="col_name">
-                    <div class="name">Fund notional to work on the Cosmos Hub</div>
-                </div>
-
-                <div class="col_number">№343</div>
-
-                <div class="col_type">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_Text"></use></svg>
-                </div>
-
-                <div class="col_status white">
-                    {{ $t('message.account_proposals_status_voting') }}
-                </div>
-            </a>
+            </div>
         </div>
 
-        <button class="spoler_btn">
+        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>
 </template>
+
+
+<script setup>
+    import { onMounted, reactive } from 'vue'
+    import { useGlobalStore } from '@/stores'
+
+    const store = useGlobalStore(),
+        data = reactive({
+            proposals: [],
+            showAll: false
+        })
+
+
+    onMounted(async () => {
+        await fetch('https://rpc.bronbro.io/gov/proposals')
+            .then(res => res.json())
+            .then(response => data.proposals = response)
+    })
+</script>
 
 
 <style scoped>
@@ -323,6 +252,11 @@
         flex-wrap: nowrap;
     }
 
+    .proposals .item.hide
+    {
+        display: none;
+    }
+
     .proposals .item > *
     {
         display: flex;
@@ -403,29 +337,31 @@
     }
 
 
-    .proposals .item .col_status
+    .proposals .item .col_status > *
     {
         color: #464646;
+
+        transition: color .2s linear;
     }
 
-    .proposals .item .col_status.blue
+    .proposals .item .col_status .blue
     {
         color: #0343e8;
     }
 
-    .proposals .item .col_status.green
+    .proposals .item .col_status .green
     {
         color: #1bc562;
     }
 
-    .proposals .item .col_status.red
+    .proposals .item .col_status .red
     {
         color: #eb5757;
     }
 
-    .proposals .item .col_status.white
+    .proposals .item:hover .col_status > *
     {
-        color: #fff;
+        color: #fff !important;
     }
 
 
@@ -459,19 +395,24 @@
         flex-wrap: wrap;
     }
 
-
     .proposals .spoler_btn .icon
     {
         display: block;
 
         width: 20px;
         height: 20px;
-    }
 
+        transition: transform .2s linear;
+    }
 
     .proposals .spoler_btn:hover
     {
         background: #950fff;
+    }
+
+    .proposals .spoler_btn.active .icon
+    {
+        transform: rotate(180deg);
     }
 
 

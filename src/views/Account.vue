@@ -18,6 +18,10 @@
                                 <div class="avatar">
                                     <img :src="store.account.avatar" alt="">
                                 </div>
+
+                                <PieChart class="chartFirst" :chartData="chartDataFirst" :options="chartOptions" v-if="chartDone" />
+
+                                <PieChart class="chartSecond" :chartData="chartDataSecond" :options="chartOptions" v-if="chartDone" />
                             </div>
 
                             <!-- Abilities -->
@@ -58,7 +62,10 @@
 
 
 <script setup>
+    import { onMounted, reactive, ref, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { PieChart } from 'vue-chart-3'
+    import { Chart, registerables } from 'chart.js'
 
     // Components
     import Networks from '../components/account/Networks.vue'
@@ -69,7 +76,72 @@
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
 
-    const store = useGlobalStore()
+    Chart.register(...registerables)
+
+    const store = useGlobalStore(),
+        i18n = inject('i18n')
+
+    var chartOptions = reactive({
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        }),
+        chartDatasetsFirst = reactive([]),
+        chartDatasetsSecond = reactive([]),
+        chartDone = ref(false),
+        chartDataFirst = computed(() => ({
+            labels: [
+                i18n.global.t('message.account_charts_staked_label'),
+                i18n.global.t('message.account_charts_outside_label')
+            ],
+            datasets: [{
+                data: chartDatasetsFirst,
+                backgroundColor: ['#950fff', '#c5811b'],
+                borderColor: 'transparent',
+                hoverOffset: 0
+            }]
+        })),
+        chartDataSecond = computed(() => ({
+            labels: [
+                i18n.global.t('message.account_charts_staked_label'),
+                i18n.global.t('message.account_charts_outside_label'),
+                i18n.global.t('message.account_charts_liquid_tokens_label'),
+                i18n.global.t('message.account_charts_not_staked_label'),
+                i18n.global.t('message.account_charts_rewards_label')
+            ],
+            datasets: [{
+                data: chartDatasetsSecond,
+                backgroundColor: ['#950fff', '#c5811b', '#eb5757', '#c5811b', '#1bc562'],
+                borderColor: 'transparent',
+                hoverOffset: 0
+            }]
+        }))
+
+
+    onMounted(async () => {
+        await fetch(`https://rpc.bronbro.io/account/account_balance/${store.wallets.cosmoshub}`)
+            .then(res => res.json())
+            .then(response => {
+                // Set data for first chart
+                chartDatasetsFirst.push(response.staked.uatom)
+                chartDatasetsFirst.push(response.outside.uatom)
+
+                // Set data for second chart
+                chartDatasetsSecond.push(response.staked.uatom)
+                chartDatasetsSecond.push(response.outside.uatom)
+                chartDatasetsSecond.push(response.liquid.uatom)
+                chartDatasetsSecond.push(response.unbonding.uatom)
+                chartDatasetsSecond.push(response.rewards.uatom)
+
+                chartDone.value = true
+            })
+    })
 </script>
 
 
@@ -116,6 +188,32 @@
         width: 291px;
         max-width: 100%;
         height: 291px;
+    }
+
+
+    .account_info .chartFirst
+    {
+        position: absolute !important;
+        z-index: 1;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .account_info .chartSecond
+    {
+        position: absolute !important;
+        z-index: 3;
+        top: 0;
+        left: 0;
+
+        width: calc(100% - 36px);
+        height: calc(100% - 36px);
+        margin: auto;
+
+        inset: 0;
     }
 
 
@@ -221,4 +319,5 @@
     {
         background: #1bc562;
     }
+
 </style>

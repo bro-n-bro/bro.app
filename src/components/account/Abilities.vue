@@ -68,7 +68,7 @@
 <style scoped>
     .abilities
     {
-        width: calc(100% - 307px);
+        width: calc(100% - 324px);
         margin-left: auto;
     }
 
