@@ -5,40 +5,18 @@
         </div>
 
         <div class="list">
-            <div class="item">
-                <div class="health orange"></div>
-
-                <div class="name">Ivan Zhigalo</div>
-
-                <button class="remove_btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
-                </button>
-            </div>
-
-            <div class="item">
-                <div class="health red"></div>
-
-                <div class="name">Valentin Prikolistov</div>
-
-                <button class="remove_btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
-                </button>
-            </div>
+            <!-- <pre>{{ store.account.moonPassport }}</pre> -->
 
             <div class="item">
                 <div class="health green"></div>
 
-                <div class="name">Artem Aferistov</div>
-
-                <button class="remove_btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
-                </button>
+                <div class="name">{{ store.wallets.bostrom }}</div>
             </div>
 
-            <div class="item">
-                <div class="health green"></div>
+            <div v-for="(address, index) in store.account.moonPassport.approvals" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
+                <div class="health"></div>
 
-                <div class="name">Masha Kozlova</div>
+                <div class="name">{{ address }}</div>
 
                 <button class="remove_btn">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
@@ -51,7 +29,7 @@
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
 
-        <button class="spoler_btn">
+        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="store.account.moonPassport.approvals.length > 3">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>
@@ -59,9 +37,13 @@
 
 
 <script setup>
+    import { reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
 
-    const store = useGlobalStore()
+    const store = useGlobalStore(),
+        data = reactive({
+            showAll: false
+        })
 </script>
 
 
@@ -102,15 +84,23 @@
         border-radius: 14px;
         background: #141414;
 
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
     }
 
+    .connected_addresses .item.hide
+    {
+        display: none;
+    }
+
 
     .connected_addresses .health
     {
+        position: relative;
+        top: 1px;
+
         width: 14px;
         height: 16px;
         margin-right: 9px;
@@ -141,9 +131,13 @@
         font-size: 14px;
         line-height: 20px;
 
+        overflow: hidden;
+
         width: calc(100% - 48px);
 
+        white-space: nowrap;
         text-decoration: underline;
+        text-overflow: ellipsis;
     }
 
 
@@ -240,7 +234,6 @@
         flex-wrap: wrap;
     }
 
-
     .connected_addresses .spoler_btn .icon
     {
         display: block;
@@ -249,10 +242,20 @@
         height: 20px;
     }
 
-
     .connected_addresses .spoler_btn:hover
     {
         background: #950fff;
+    }
+
+
+
+    @media print, (max-width: 1899px)
+    {
+        .connected_addresses .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
     }
 
 </style>

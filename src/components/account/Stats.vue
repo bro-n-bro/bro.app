@@ -34,9 +34,13 @@
 
 
     onMounted(async () => {
-        await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
-            .then(res => res.json())
-            .then(response => data.info = response)
+        try {
+            await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
+                .then(res => res.json())
+                .then(response => data.info = response)
+        } catch (error) {
+            console.log(error)
+        }
     })
 </script>
 
@@ -90,7 +94,7 @@
 
     .stats .val
     {
-        font-size: 36px;
+        font-size: 34px;
         font-weight: 700;
         line-height: 100%;
 

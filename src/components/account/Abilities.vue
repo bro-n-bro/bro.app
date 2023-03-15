@@ -140,6 +140,12 @@
 
     @media print, (max-width: 1899px)
     {
+        .abilities
+        {
+            width: calc(100% - 296px);
+        }
+
+
         .abilities .items > *
         {
             width: calc(33.333% - 8px);

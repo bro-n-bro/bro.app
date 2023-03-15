@@ -214,9 +214,11 @@ export default {
             'account_charts_not_staked_label': 'Not staked',
             'account_charts_rewards_label': 'Rewards',
 
+            'account_validators_col_account_name': 'Account name',
             'account_validators_col_network': 'Network',
             'account_validators_col_validator': 'Validator',
-            'account_validators_col_percent': 'Percent',
+            'account_validators_col_account_percent': 'Account %',
+            'account_validators_col_passport_percent': 'Passport %',
 
             'account_proposals_col_network': 'Network',
             'account_proposals_col_name': 'Name',
@@ -231,6 +233,14 @@ export default {
             'account_RPDE': 'RPDE',
             'account_APR': 'APR',
             'account_voting_power': 'Voting power',
+
+
+            // Add proposal modal
+            'add_proposal_modal_title': 'Create Proposal',
+            'add_proposal_label_title': 'Title',
+            'add_proposal_label_descriptin': 'Description',
+            'add_proposal_label_deposit': 'Deposit',
+            'add_proposal_submit_btn': 'Create Governance',
 
 
             // Feedback

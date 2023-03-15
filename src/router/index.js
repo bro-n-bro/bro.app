@@ -69,15 +69,6 @@ const routes = [
 		}
 	},
 	{
-		path: '/wallets',
-		name: 'Wallets',
-		component: () => import('../views/Wallets.vue'),
-		meta: {
-			layout: defaultLayut,
-			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
-		}
-	},
-	{
 		path: '/',
 		name: 'MainPage',
 		component: () => import('../views/MainPage.vue'),
@@ -110,16 +101,6 @@ router.afterEach((to, from, next) => {
 	const store = useGlobalStore()
 
 	window.onload = async () =>{
-		// // If Keplr does not exist
-		// if(!window.keplr && (to.name != 'KeplrError' && to.name != 'KeplrReload')) {
-		// 	router.push({ name: 'KeplrError' })
-		// }
-
-		// // If Keplr is installed
-		// if(window.keplr && (to.name == 'KeplrError' || to.name == 'KeplrReload')) {
-		// 	router.push({ name: 'MainPage' })
-		// }
-
 		// Connect wallet
 		await store.connectWallet()
 
@@ -146,7 +127,7 @@ router.afterEach((to, from, next) => {
 
 				// Forbidden with a passport
 				if (access.includes('with_passport') && store.account.moonPassport) {
-					router.push({ name: 'Wallets' })
+					router.push({ name: 'Account' })
 				}
 
 				// Forbidden without a passport
@@ -156,32 +137,16 @@ router.afterEach((to, from, next) => {
 			}
 		})
 
-		// // If Keplr is installed and the wallet is connected
-		// if(window.keplr && store.auth && to.name == 'MainPage' && store.account.moonPassport) {
-		// 	router.push({ name: 'Wallets' })
-		// }
-
-		// if(window.keplr && store.auth && to.name == 'MainPage' && !store.account.moonPassport) {
-		// 	router.push({ name: 'Dashboard' })
-		// }
-
-		// // If has passport
-		// if(store.account.moonPassport && to.name == 'CreatePassport') {
-		// 	router.push({ name: 'Wallets' })
-		// }
-
-		// // If hasn't passport
-		// if(!store.account.moonPassport && to.name == 'Wallets') {
-		// 	router.push({ name: 'Dashboard' })
-		// }
-
 		// App full loaded
 		store.appLoaded = true
 
 		// Change Keplr account
 		window.addEventListener('keplr_keystorechange', async () => {
 			// Reset store
-			await store.reset()
+			// await store.reset()
+
+			// Reload page
+			window.location.reload()
 		})
 	}
 })

@@ -136,4 +136,15 @@
         background: #141414;
     }
 
+
+
+    @media print, (max-width: 1899px)
+    {
+        .networks .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
+    }
+
 </style>

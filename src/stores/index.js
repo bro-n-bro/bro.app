@@ -73,6 +73,7 @@ export const useGlobalStore = defineStore('global', {
         showMakeChoice: false,
         showConstitutionModal: false,
         constitutionStatus: null,
+        showAddProposalModal: false,
 
         networkManageModal: '',
         ref: ''
@@ -246,9 +247,6 @@ export const useGlobalStore = defineStore('global', {
                 account: defaultAccount,
                 networks: defaultNetworks
             })
-
-            // Reconnect wallet
-            await this.connectWallet()
         },
 
 

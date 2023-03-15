@@ -5,6 +5,10 @@
         </div>
 
         <div class="titles">
+            <div class="col_account_name">
+                {{ $t('message.account_validators_col_account_name') }}
+            </div>
+
             <div class="col_network">
                 {{ $t('message.account_validators_col_network') }}
             </div>
@@ -14,7 +18,11 @@
             </div>
 
             <div class="col_percent">
-                {{ $t('message.account_validators_col_percent') }}
+                {{ $t('message.account_validators_col_account_percent') }}
+            </div>
+
+            <div class="col_percent">
+                {{ $t('message.account_validators_col_passport_percent') }}
             </div>
         </div>
 
@@ -22,19 +30,27 @@
             <!-- <pre>{{ data.validators }}</pre> -->
 
             <div v-for="(validator, index) in data.validators" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
+                <div class="col_account_name">
+                    <template v-if="index < 1">
+                    {{ validator.delegator_address.slice(0, 8) + '...' + validator.delegator_address.slice(-5) }}
+                    </template>
+                </div>
+
                 <div class="col_network">
+                    <template v-if="index < 1">
                     <div class="logo">
                         <img src="/cosmoshub_logo.png" alt="">
                     </div>
                     <div>Cosmos Hub</div>
+                    </template>
                 </div>
 
                 <div class="col_validator">
-                    <div class="number"></div>
                     <div class="name">{{ validator.moniker }}</div>
                 </div>
 
-                <div class="col_percent">{{ $filters.toFixed(data.totalTokens / validator.coin.amount * 100, 2) }}%</div>
+                <div class="col_percent">{{ $filters.toFixed(validator.coin.amount / data.totalTokens * 100, 2) }} %</div>
+                <div class="col_percent">{{ $filters.toFixed(validator.coin.amount / data.totalTokens * 100, 2) }} %</div>
             </div>
         </div>
 
@@ -58,14 +74,18 @@
 
 
     onMounted(async () => {
-        await fetch(`https://rpc.bronbro.io/account/validators/${store.wallets.cosmoshub}`)
-            .then(res => res.json())
-            .then(response => {
-                data.validators = response
+        try {
+            await fetch(`https://rpc.bronbro.io/account/validators/${store.wallets.cosmoshub}`)
+                .then(res => res.json())
+                .then(response => {
+                    data.validators = response
 
-                // Math total tokens
-                data.validators.forEach(el => data.totalTokens += el.coin.amount)
-            })
+                    // Math total tokens
+                    data.validators.forEach(el => data.totalTokens += el.coin.amount)
+                })
+        } catch (error) {
+            console.log(error)
+        }
     })
 </script>
 
@@ -92,7 +112,18 @@
     }
 
 
-    .validators .col_network,
+    .validators .col_account_name
+    {
+        width: 168px;
+        min-width: 168px;
+    }
+
+    .validators .col_network
+    {
+        width: 168px;
+        min-width: 168px;
+    }
+
     .validators .col_validator
     {
         width: 100%;
@@ -100,8 +131,8 @@
 
     .validators .col_percent
     {
-        width: 72px;
-        min-width: 72px;
+        width: 100px;
+        min-width: 100px;
     }
 
 
@@ -128,11 +159,6 @@
         padding: 8px 10px;
     }
 
-
-    .validators .items
-    {
-        counter-reset: number;
-    }
 
     .validators .items > * + *
     {
@@ -186,6 +212,22 @@
     }
 
 
+    .validators .item > *.col_account_name
+    {
+        overflow: hidden;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .validators .item > *.col_percent
+    {
+        text-align: right;
+
+        justify-content: flex-end;
+    }
+
+
     .validators .item .logo
     {
         position: relative;
@@ -218,25 +260,6 @@
     .validators .item .logo + *
     {
         width: calc(100% - 32px);
-    }
-
-
-    .validators .item .number
-    {
-        color: #484747;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 15px;
-
-        margin-right: 8px;
-
-        white-space: nowrap;
-    }
-
-    .validators .item .number:before
-    {
-        content: counter(number) '.';
-        counter-increment: number;
     }
 
 
@@ -289,4 +312,17 @@
     {
         background: #950fff;
     }
+
+
+
+    @media print, (max-width: 1899px)
+    {
+        .validators .col_account_name,
+        .validators .col_network
+        {
+            width: 148px;
+            min-width: 148px;
+        }
+    }
+
 </style>

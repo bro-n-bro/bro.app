@@ -29,8 +29,8 @@
 
                             <div class="charts_exp">
                                 <div class="item color1">{{ $t('message.account_charts_staked_label') }}</div>
-                                <div class="item color2">{{ $t('message.account_charts_outside_label') }}</div>
                                 <div class="item color3">{{ $t('message.account_charts_liquid_tokens_label') }}</div>
+                                <div class="item color2">{{ $t('message.account_charts_outside_label') }}</div>
                                 <div class="item color4">{{ $t('message.account_charts_not_staked_label') }}</div>
                                 <div class="item color5">{{ $t('message.account_charts_rewards_label') }}</div>
                             </div>
@@ -57,6 +57,10 @@
                 </section>
             </div>
         </div>
+
+
+        <!-- Add proposal modal -->
+        <AddProposalModal v-if="store.showAddProposalModal" />
     </section>
 </template>
 
@@ -75,11 +79,13 @@
     import Validators from '../components/account/Validators.vue'
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
+    import AddProposalModal from '../components/modal/AddProposalModal.vue'
 
     Chart.register(...registerables)
 
     const store = useGlobalStore(),
-        i18n = inject('i18n')
+        i18n = inject('i18n'),
+        emitter = inject('emitter')
 
     var chartOptions = reactive({
             responsive: true,
@@ -102,22 +108,20 @@
             ],
             datasets: [{
                 data: chartDatasetsFirst,
-                backgroundColor: ['#950fff', '#c5811b'],
+                backgroundColor: ['#950fff', '#eb5757'],
                 borderColor: 'transparent',
                 hoverOffset: 0
             }]
         })),
         chartDataSecond = computed(() => ({
             labels: [
-                i18n.global.t('message.account_charts_staked_label'),
                 i18n.global.t('message.account_charts_outside_label'),
-                i18n.global.t('message.account_charts_liquid_tokens_label'),
                 i18n.global.t('message.account_charts_not_staked_label'),
                 i18n.global.t('message.account_charts_rewards_label')
             ],
             datasets: [{
                 data: chartDatasetsSecond,
-                backgroundColor: ['#950fff', '#c5811b', '#eb5757', '#c5811b', '#1bc562'],
+                backgroundColor: ['#c5811b', '#c5811b', '#1bc562'],
                 borderColor: 'transparent',
                 hoverOffset: 0
             }]
@@ -125,22 +129,36 @@
 
 
     onMounted(async () => {
-        await fetch(`https://rpc.bronbro.io/account/account_balance/${store.wallets.cosmoshub}`)
-            .then(res => res.json())
-            .then(response => {
-                // Set data for first chart
-                chartDatasetsFirst.push(response.staked.uatom)
-                chartDatasetsFirst.push(response.outside.uatom)
+        try {
+            await fetch(`https://rpc.bronbro.io/account/account_balance/${store.wallets.cosmoshub}`)
+                .then(res => res.json())
+                .then(response => {
+                    // Set data for first chart
+                    chartDatasetsFirst.push(response.staked.uatom)
+                    chartDatasetsFirst.push(response.liquid.uatom)
 
-                // Set data for second chart
-                chartDatasetsSecond.push(response.staked.uatom)
-                chartDatasetsSecond.push(response.outside.uatom)
-                chartDatasetsSecond.push(response.liquid.uatom)
-                chartDatasetsSecond.push(response.unbonding.uatom)
-                chartDatasetsSecond.push(response.rewards.uatom)
+                    // Set data for second chart
+                    chartDatasetsSecond.push(response.outside.uatom)
+                    chartDatasetsSecond.push(response.unbonding.uatom)
+                    chartDatasetsSecond.push(response.rewards.uatom)
 
-                chartDone.value = true
-            })
+                    chartDone.value = true
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+
+    // Event "open add proposal modal"
+    emitter.on('openAddProposalModal', () => {
+        store.showAddProposalModal = true
+    })
+
+
+    // Event "close add proposal modal"
+    emitter.on('closeAddProposalModal', () => {
+        store.showAddProposalModal = false
     })
 </script>
 
@@ -209,8 +227,8 @@
         top: 0;
         left: 0;
 
-        width: calc(100% - 36px);
-        height: calc(100% - 36px);
+        width: calc(100% - 42px);
+        height: calc(100% - 42px);
         margin: auto;
 
         inset: 0;
@@ -318,6 +336,34 @@
     .account_info .charts_exp .item.color5:before
     {
         background: #1bc562;
+    }
+
+
+
+    @media print, (max-width: 1899px)
+    {
+        .account_info .col
+        {
+            width: 324px;
+        }
+
+        .account_info .col_main
+        {
+            width: calc(100% - 696px);
+        }
+
+
+        .account_info .charts
+        {
+            width: 272px;
+            height: 272px;
+        }
+
+        .account_info .chartSecond
+        {
+            width: calc(100% - 34px);
+            height: calc(100% - 34px);
+        }
     }
 
 </style>

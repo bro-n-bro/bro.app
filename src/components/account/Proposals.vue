@@ -5,7 +5,7 @@
                 <a href="/">{{ $t('message.account_proposals_title') }}</a>
             </div>
 
-            <button class="create_btn">
+            <button class="create_btn" @click.prevent="emitter.emit('openAddProposalModal')">
                 {{ $t('message.create_btn') }}
             </button>
         </div>
@@ -35,10 +35,12 @@
 
             <div v-for="(proposal, index) in data.proposals" :key="index" class="item" :class="{'hide': index >= 5 && !data.showAll}">
                 <div class="col_network">
+                    <template v-if="index < 1">
                     <div class="logo">
                         <img src="/cosmoshub_logo.png" alt="">
                     </div>
                     <div>Cosmos Hub</div>
+                    </template>
                 </div>
 
                 <div class="col_name">
@@ -53,6 +55,9 @@
 
                 <div class="col_status">
                     <span v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ $t('message.account_proposals_status_deposite') }}</span>
+                    <span v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="blue">{{ $t('message.account_proposals_status_voting') }}</span>
+                    <span v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'" class="green">{{ $t('message.account_proposals_status_passed') }}</span>
+                    <span v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">{{ $t('message.account_proposals_status_rejected') }}</span>
                 </div>
             </div>
         </div>
@@ -65,10 +70,11 @@
 
 
 <script setup>
-    import { onMounted, reactive } from 'vue'
+    import { onMounted, reactive, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
+        emitter = inject('emitter'),
         data = reactive({
             proposals: [],
             showAll: false
@@ -76,9 +82,13 @@
 
 
     onMounted(async () => {
-        await fetch('https://rpc.bronbro.io/gov/proposals')
-            .then(res => res.json())
-            .then(response => data.proposals = response)
+        try {
+            await fetch('https://rpc.bronbro.io/gov/proposals')
+                .then(res => res.json())
+                .then(response => data.proposals = response)
+        } catch (error) {
+            console.log(error)
+        }
     })
 </script>
 

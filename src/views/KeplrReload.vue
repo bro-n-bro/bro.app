@@ -16,6 +16,7 @@
 
 
 <script setup>
+    // Reload page
     function reloadPage() {
         window.location.reload()
     }

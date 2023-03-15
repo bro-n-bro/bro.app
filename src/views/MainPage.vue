@@ -33,7 +33,7 @@
         // Monitor the connection of the kepler
         if(store.auth && store.appLoaded) {
             store.account.moonPassport
-                ? route.push({ name: 'Wallets' })
+                ? route.push({ name: 'Account' })
                 : route.push({ name: 'Dashboard' })
         }
     })
