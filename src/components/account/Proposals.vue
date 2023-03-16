@@ -2,7 +2,7 @@
     <section class="proposals">
         <div class="head">
             <div class="title">
-                <a href="/">{{ $t('message.account_proposals_title') }}</a>
+                <router-link to="/proposals">{{ $t('message.account_proposals_title') }}</router-link>
             </div>
 
             <button class="create_btn" @click.prevent="emitter.emit('openAddProposalModal')">
@@ -30,16 +30,20 @@
             </div>
         </div>
 
-        <div class="items">
+        <div class="loader_wrap" v-if="!loading">
+            <div class="loader"><span></span></div>
+        </div>
+
+        <div class="items" v-else>
             <!-- <pre>{{ data.proposals }}</pre> -->
 
-            <div v-for="(proposal, index) in data.proposals" :key="index" class="item" :class="{'hide': index >= 5 && !data.showAll}">
+            <router-link :to="`/proposal/${proposal.id}`" v-for="(proposal, index) in data.proposals" :key="index" class="item" :class="{'hide': index >= 5 && !data.showAll}">
                 <div class="col_network">
                     <template v-if="index < 1">
                     <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
+                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
                     </div>
-                    <div>Cosmos Hub</div>
+                    <div>{{ store.networks[store.currentNetwork].name }}</div>
                     </template>
                 </div>
 
@@ -59,7 +63,7 @@
                     <span v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'" class="green">{{ $t('message.account_proposals_status_passed') }}</span>
                     <span v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">{{ $t('message.account_proposals_status_rejected') }}</span>
                 </div>
-            </div>
+            </router-link>
         </div>
 
         <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
@@ -70,11 +74,12 @@
 
 
 <script setup>
-    import { onMounted, reactive, inject } from 'vue'
+    import { onMounted, reactive, inject, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
+        loading = ref(false),
         data = reactive({
             proposals: [],
             showAll: false
@@ -82,10 +87,16 @@
 
 
     onMounted(async () => {
+        // Get proposals
         try {
             await fetch('https://rpc.bronbro.io/gov/proposals')
                 .then(res => res.json())
-                .then(response => data.proposals = response)
+                .then(response => {
+                    data.proposals = response
+
+                    // Hide loader
+                    loading.value = true
+                })
         } catch (error) {
             console.log(error)
         }
@@ -107,8 +118,8 @@
 
     .proposals .col_network
     {
-        width: 168px;
-        min-width: 168px;
+        width: 148px;
+        min-width: 148px;
     }
 
     .proposals .col_name
@@ -118,20 +129,20 @@
 
     .proposals .col_number
     {
-        width: 68px;
-        min-width: 68px;
+        width: 56px;
+        min-width: 56px;
     }
 
     .proposals .col_type
     {
-        width: 60px;
-        min-width: 60px;
+        width: 52px;
+        min-width: 52px;
     }
 
     .proposals .col_status
     {
-        width: 140px;
-        min-width: 140px;
+        width: 124px;
+        min-width: 124px;
     }
 
 
@@ -214,6 +225,17 @@
     .proposals .titles > *
     {
         padding: 8px 10px;
+    }
+
+
+    .proposals .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        padding: 20px 0 0;
+
+        background: none;
     }
 
 
@@ -423,35 +445,6 @@
     .proposals .spoler_btn.active .icon
     {
         transform: rotate(180deg);
-    }
-
-
-
-    @media print, (max-width: 1899px)
-    {
-        .proposals .col_network
-        {
-            width: 148px;
-            min-width: 148px;
-        }
-
-        .proposals .col_number
-        {
-            width: 56px;
-            min-width: 56px;
-        }
-
-        .proposals .col_type
-        {
-            width: 52px;
-            min-width: 52px;
-        }
-
-        .proposals .col_status
-        {
-            width: 124px;
-            min-width: 124px;
-        }
     }
 
 </style>

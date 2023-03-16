@@ -94,7 +94,7 @@
 
     .stats .val
     {
-        font-size: 34px;
+        font-size: 32px;
         font-weight: 700;
         line-height: 100%;
 

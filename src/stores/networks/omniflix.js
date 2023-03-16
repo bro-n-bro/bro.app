@@ -9,6 +9,7 @@ const network = {
     token_name: 'FLIX',
     chainId: 'omniflixhub-1',
     coingecko_api: 'omniflix-network',
+    mintscanAlias: 'omniflix',
 
     health: 0,
     health_color: 'grey',

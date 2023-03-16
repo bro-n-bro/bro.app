@@ -9,6 +9,7 @@ const network = {
     token_name: 'STARS',
     chainId: 'stargaze-1',
     coingecko_api: 'stargaze',
+    mintscanAlias: 'stargaze',
 
     health: 0,
     health_color: 'grey',

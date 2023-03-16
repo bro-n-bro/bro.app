@@ -60,7 +60,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/account',
+		path: '/account/:network',
 		name: 'Account',
 		component: () => import('../views/Account.vue'),
 		meta: {
@@ -86,12 +86,21 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-	const modalId = to.query.manage_modal,
+	const store = useGlobalStore(),
+		modalId = to.query.manage_modal,
 		ref = to.query.ref
 
 	// Manage modal from url
-	if (modalId) { store.networkManageModal = modalId }
+	if (modalId) {
+		store.networkManageModal = modalId
+	}
+
 	if (ref) { store.ref = ref }
+
+	// Network
+	to.params.network
+		? store.currentNetwork = to.params.network
+		: store.currentNetwork = ''
 
 	next()
 })
@@ -127,7 +136,7 @@ router.afterEach((to, from, next) => {
 
 				// Forbidden with a passport
 				if (access.includes('with_passport') && store.account.moonPassport) {
-					router.push({ name: 'Account' })
+					router.push('/account/cosmoshub')
 				}
 
 				// Forbidden without a passport

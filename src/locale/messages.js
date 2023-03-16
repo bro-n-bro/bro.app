@@ -211,7 +211,7 @@ export default {
             'account_charts_staked_label': 'Staked',
             'account_charts_outside_label': 'Outside',
             'account_charts_liquid_tokens_label': 'Liquid tokens',
-            'account_charts_not_staked_label': 'Not staked',
+            'account_charts_unbonding_label': 'Unbondend',
             'account_charts_rewards_label': 'Rewards',
 
             'account_validators_col_account_name': 'Account name',
@@ -241,6 +241,25 @@ export default {
             'add_proposal_label_descriptin': 'Description',
             'add_proposal_label_deposit': 'Deposit',
             'add_proposal_submit_btn': 'Create Governance',
+
+
+            // Validator modal
+            'validator_modal_title': 'Validator details',
+
+            'validator_modal_website_btn': 'Website',
+            'validator_modal_mintscan_btn': 'Mintscan',
+
+            'validator_modal_active_set': 'Active',
+            'validator_modal_inactive_set': 'Inactive',
+
+            'validator_modal_operator_address_label': 'Operator Address',
+            'validator_modal_details_label': 'Details',
+
+            'validator_modal_commission_label': 'Commission',
+            'validator_modal_ownership_label': 'Self Bonded/<br>Ownership',
+            'validator_modal_total_delegated_label': 'Total delegated amount',
+            'validator_modal_voted_label': 'Props voted',
+            'validator_modal_blurring_label': 'Tokens blurring',
 
 
             // Feedback

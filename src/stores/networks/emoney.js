@@ -9,6 +9,7 @@ const network = {
     token_name: 'NGM',
     chainId: 'emoney-3',
     coingecko_api: 'e-money',
+    mintscanAlias: 'emoney',
 
     health: 0,
     health_color: 'grey',

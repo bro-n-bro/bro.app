@@ -9,6 +9,7 @@ const network = {
     token_name: 'EVMOS',
     chainId: 'evmos_9001-2',
     coingecko_api: 'evmos',
+    mintscanAlias: 'evmos',
 
     health: 0,
     health_color: 'grey',

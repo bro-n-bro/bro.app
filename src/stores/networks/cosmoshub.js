@@ -9,6 +9,7 @@ const network = {
     token_name: 'ATOM',
     chainId: 'cosmoshub-4',
     coingecko_api: 'cosmos',
+    mintscanAlias: 'cosmos',
 
     health: 0,
     health_color: 'grey',

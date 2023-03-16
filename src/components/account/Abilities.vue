@@ -68,7 +68,7 @@
 <style scoped>
     .abilities
     {
-        width: calc(100% - 324px);
+        width: calc(100% - 308px);
         margin-left: auto;
     }
 
@@ -98,7 +98,7 @@
 
     .abilities .items > *
     {
-        width: calc(25% - 8px);
+        width: calc(33.333% - 8px);
         margin-bottom: 8px;
         margin-left: 8px;
     }
@@ -107,7 +107,7 @@
     .abilities .item
     {
         color: #555;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 100%;
 
         padding: 10px;
@@ -135,21 +135,6 @@
         height: 46px;
         max-height: 100%;
         margin-bottom: 8px;
-    }
-
-
-    @media print, (max-width: 1899px)
-    {
-        .abilities
-        {
-            width: calc(100% - 296px);
-        }
-
-
-        .abilities .items > *
-        {
-            width: calc(33.333% - 8px);
-        }
     }
 
 </style>

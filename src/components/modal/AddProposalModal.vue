@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="line">
-                        <div class="label">{{ $t('message.add_proposal_label_deposit') }}, BOOT</div>
+                        <div class="label">{{ $t('message.add_proposal_label_deposit') }}, {{ store.networks[store.currentNetwork].token_name }}</div>
 
                         <div class="field">
                             <input type="number" class="input">
@@ -60,8 +60,10 @@
 
 <script setup>
     import { inject } from 'vue'
+    import { useGlobalStore } from '@/stores'
 
-    const emitter = inject('emitter')
+    const emitter = inject('emitter'),
+        store = useGlobalStore()
 
 
     function submitHandler() {

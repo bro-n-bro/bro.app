@@ -9,6 +9,7 @@ const network = {
     token_name: 'OSMO',
     chainId: 'osmosis-1',
     coingecko_api: 'osmosis',
+    mintscanAlias: 'osmosis',
 
     health: 0,
     health_color: 'grey',

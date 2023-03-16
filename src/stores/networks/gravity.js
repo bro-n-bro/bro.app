@@ -9,6 +9,7 @@ const network = {
     token_name: 'GRAV',
     chainId: 'gravity-bridge-3',
     coingecko_api: 'graviton',
+    mintscanAlias: 'gravity-bridge',
 
     health: 0,
     health_color: 'grey',

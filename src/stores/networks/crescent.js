@@ -9,6 +9,7 @@ const network = {
     token_name: 'CRE',
     chainId: 'crescent-1',
     coingecko_api: 'crescent-network',
+    mintscanAlias: 'crescent',
 
     health: 0,
     health_color: 'grey',

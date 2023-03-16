@@ -1,6 +1,6 @@
 <template>
     <section class="account_info">
-        <div class="cont">
+        <div class="cont middle">
             <div class="grid row">
                 <section class="col">
                     <!-- Networks -->
@@ -19,19 +19,19 @@
                                     <img :src="store.account.avatar" alt="">
                                 </div>
 
-                                <PieChart class="chartFirst" :chartData="chartDataFirst" :options="chartOptions" v-if="chartDone" />
+                                <Pie ref="chartFirst" class="chartFirst" :data="chartDataFirst" :options="chartOptions" v-if="chartDone" />
 
-                                <PieChart class="chartSecond" :chartData="chartDataSecond" :options="chartOptions" v-if="chartDone" />
+                                <Pie ref="chartSecond" class="chartSecond" :data="chartDataSecond" :options="chartOptions" v-if="chartDone" />
                             </div>
 
                             <!-- Abilities -->
                             <Abilities />
 
-                            <div class="charts_exp">
+                            <div class="charts_exp" id="legends">
                                 <div class="item color1">{{ $t('message.account_charts_staked_label') }}</div>
-                                <div class="item color3">{{ $t('message.account_charts_liquid_tokens_label') }}</div>
-                                <div class="item color2">{{ $t('message.account_charts_outside_label') }}</div>
-                                <div class="item color4">{{ $t('message.account_charts_not_staked_label') }}</div>
+                                <div class="item color2">{{ $t('message.account_charts_liquid_tokens_label') }}</div>
+                                <div class="item color3">{{ $t('message.account_charts_outside_label') }}</div>
+                                <div class="item color4">{{ $t('message.account_charts_unbonding_label') }}</div>
                                 <div class="item color5">{{ $t('message.account_charts_rewards_label') }}</div>
                             </div>
                         </div>
@@ -61,6 +61,9 @@
 
         <!-- Add proposal modal -->
         <AddProposalModal v-if="store.showAddProposalModal" />
+
+        <!-- Validator modal -->
+        <ValidatorModal v-if="showValidatorModal" :validator="validatorInfo" />
     </section>
 </template>
 
@@ -68,8 +71,9 @@
 <script setup>
     import { onMounted, reactive, ref, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { PieChart } from 'vue-chart-3'
-    import { Chart, registerables } from 'chart.js'
+
+    import { Chart as ChartJS, ArcElement } from 'chart.js'
+    import { Pie } from 'vue-chartjs'
 
     // Components
     import Networks from '../components/account/Networks.vue'
@@ -79,23 +83,25 @@
     import Validators from '../components/account/Validators.vue'
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
-    import AddProposalModal from '../components/modal/AddProposalModal.vue'
 
-    Chart.register(...registerables)
+    import AddProposalModal from '../components/modal/AddProposalModal.vue'
+    import ValidatorModal from '../components/modal/ValidatorModal.vue'
+
+    ChartJS.register(ArcElement)
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
-        emitter = inject('emitter')
+        emitter = inject('emitter'),
+        showValidatorModal = ref(null)
 
-    var chartOptions = reactive({
+    var validatorInfo = ref({}),
+        chartFirst = ref(null),
+        chartSecond = ref(null),
+        chartOptions = reactive({
             responsive: true,
             plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    enabled: false
-                }
+                legend: false,
+                tooltip: false
             }
         }),
         chartDatasetsFirst = reactive([]),
@@ -104,11 +110,11 @@
         chartDataFirst = computed(() => ({
             labels: [
                 i18n.global.t('message.account_charts_staked_label'),
-                i18n.global.t('message.account_charts_outside_label')
+                i18n.global.t('message.account_charts_liquid_tokens_label')
             ],
             datasets: [{
                 data: chartDatasetsFirst,
-                backgroundColor: ['#950fff', '#eb5757'],
+                backgroundColor: ['#950FFF', '#0343E8'],
                 borderColor: 'transparent',
                 hoverOffset: 0
             }]
@@ -116,16 +122,27 @@
         chartDataSecond = computed(() => ({
             labels: [
                 i18n.global.t('message.account_charts_outside_label'),
-                i18n.global.t('message.account_charts_not_staked_label'),
+                i18n.global.t('message.account_charts_unbonding_label'),
                 i18n.global.t('message.account_charts_rewards_label')
             ],
             datasets: [{
                 data: chartDatasetsSecond,
-                backgroundColor: ['#c5811b', '#c5811b', '#1bc562'],
+                backgroundColor: ['#C5811B', '#EB5757', '#1bc562'],
                 borderColor: 'transparent',
                 hoverOffset: 0
             }]
         }))
+
+
+    // function triggerHover() {
+    //     const chartInstance = chartFirst.value.chart
+
+    //     chartInstance.setActiveElements([
+    //         {datasetIndex: 0, index: 0},
+    //     ])
+
+    //     chartInstance.update()
+    // }
 
 
     onMounted(async () => {
@@ -159,6 +176,19 @@
     // Event "close add proposal modal"
     emitter.on('closeAddProposalModal', () => {
         store.showAddProposalModal = false
+    })
+
+
+    // Event "show validator modal"
+    emitter.on('openValidatorModal', validator => {
+        validatorInfo.value = validator
+        showValidatorModal.value = true
+    })
+
+
+    // Event "close validator modal"
+    emitter.on('closeValidatorModal', () => {
+        showValidatorModal.value = false
     })
 </script>
 
@@ -227,8 +257,8 @@
         top: 0;
         left: 0;
 
-        width: calc(100% - 42px);
-        height: calc(100% - 42px);
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
         margin: auto;
 
         inset: 0;
@@ -257,6 +287,8 @@
         height: 100%;
 
         border-radius: inherit;
+
+        object-fit: cover;
     }
 
 
@@ -320,50 +352,22 @@
 
     .account_info .charts_exp .item.color2:before
     {
-        background: #c5811b;
+        background: #0343e8;
     }
 
     .account_info .charts_exp .item.color3:before
     {
-        background: #eb5757;
+        background: #c5811b;
     }
 
     .account_info .charts_exp .item.color4:before
     {
-        background: #c5811b;
+        background: #eb5757;
     }
 
     .account_info .charts_exp .item.color5:before
     {
         background: #1bc562;
-    }
-
-
-
-    @media print, (max-width: 1899px)
-    {
-        .account_info .col
-        {
-            width: 324px;
-        }
-
-        .account_info .col_main
-        {
-            width: calc(100% - 696px);
-        }
-
-
-        .account_info .charts
-        {
-            width: 272px;
-            height: 272px;
-        }
-
-        .account_info .chartSecond
-        {
-            width: calc(100% - 34px);
-            height: calc(100% - 34px);
-        }
     }
 
 </style>

@@ -128,7 +128,7 @@
     emitter.on('close_manage_modal', function() {
         store.$patch({ showManageModal: false })
 
-        document.body.classList.remove('lock')
+        // document.body.classList.remove('lock')
     })
 
 
@@ -136,7 +136,7 @@
     emitter.on('open_manage_success_modal', async function() {
         store.$patch({ showManageSuccessModal: true })
 
-        document.body.classList.add('lock')
+        // document.body.classList.add('lock')
     })
 
 
@@ -144,7 +144,7 @@
     emitter.on('close_manage_success_modal', function() {
         store.$patch({ showManageSuccessModal: false })
 
-        document.body.classList.remove('lock')
+        // document.body.classList.remove('lock')
     })
 
 
@@ -152,7 +152,7 @@
     emitter.on('open_manage_error_modal', async function() {
         store.$patch({ showManageErrorModal: true })
 
-        document.body.classList.add('lock')
+        // document.body.classList.add('lock')
     })
 
 
@@ -160,6 +160,6 @@
     emitter.on('close_manage_error_modal', function() {
         store.$patch({ showManageErrorModal: false })
 
-        document.body.classList.remove('lock')
+        // document.body.classList.remove('lock')
     })
 </script>

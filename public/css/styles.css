@@ -254,6 +254,11 @@ button
     padding: 0 40px;
 }
 
+.cont.middle
+{
+    max-width: 1552px;
+}
+
 
 .row
 {

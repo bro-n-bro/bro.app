@@ -9,6 +9,7 @@ const network = {
     token_name: 'STRD',
     chainId: 'stride-1',
     coingecko_api: 'stride',
+    mintscanAlias: 'stride',
 
     health: 0,
     health_color: 'grey',

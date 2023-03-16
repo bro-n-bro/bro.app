@@ -9,6 +9,7 @@ const network = {
     token_name: 'DSM',
     chainId: 'desmos-mainnet',
     coingecko_api: 'desmos',
+    mintscanAlias: 'desmos',
 
     health: 0,
     health_color: 'grey',

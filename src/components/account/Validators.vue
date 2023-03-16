@@ -26,7 +26,11 @@
             </div>
         </div>
 
-        <div class="items">
+        <div class="loader_wrap" v-if="!loading">
+            <div class="loader"><span></span></div>
+        </div>
+
+        <div class="items" v-else>
             <!-- <pre>{{ data.validators }}</pre> -->
 
             <div v-for="(validator, index) in data.validators" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
@@ -39,14 +43,16 @@
                 <div class="col_network">
                     <template v-if="index < 1">
                     <div class="logo">
-                        <img src="/cosmoshub_logo.png" alt="">
+                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
                     </div>
-                    <div>Cosmos Hub</div>
+                    <div>{{ store.networks[store.currentNetwork].name }}</div>
                     </template>
                 </div>
 
                 <div class="col_validator">
-                    <div class="name">{{ validator.moniker }}</div>
+                    <div class="name" @click.prevent="emitter.emit('openValidatorModal', validator)">
+                        {{ validator.moniker }}
+                    </div>
                 </div>
 
                 <div class="col_percent">{{ $filters.toFixed(validator.coin.amount / data.totalTokens * 100, 2) }} %</div>
@@ -62,10 +68,12 @@
 
 
 <script setup>
-    import { onMounted, reactive } from 'vue'
+    import { onMounted, reactive, ref, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
+        emitter = inject('emitter'),
+        loading = ref(false),
         data = reactive({
             validators: [],
             totalTokens: 0,
@@ -74,6 +82,7 @@
 
 
     onMounted(async () => {
+        // Get validators
         try {
             await fetch(`https://rpc.bronbro.io/account/validators/${store.wallets.cosmoshub}`)
                 .then(res => res.json())
@@ -82,6 +91,9 @@
 
                     // Math total tokens
                     data.validators.forEach(el => data.totalTokens += el.coin.amount)
+
+                    // Hide loader
+                    loading.value = true
                 })
         } catch (error) {
             console.log(error)
@@ -112,16 +124,11 @@
     }
 
 
-    .validators .col_account_name
-    {
-        width: 168px;
-        min-width: 168px;
-    }
-
+    .validators .col_account_name,
     .validators .col_network
     {
-        width: 168px;
-        min-width: 168px;
+        width: 148px;
+        min-width: 148px;
     }
 
     .validators .col_validator
@@ -133,6 +140,8 @@
     {
         width: 100px;
         min-width: 100px;
+
+        text-align: right;
     }
 
 
@@ -157,6 +166,17 @@
     .validators .titles > *
     {
         padding: 8px 10px;
+    }
+
+
+    .validators .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        padding: 20px 0 0;
+
+        background: none;
     }
 
 
@@ -222,8 +242,6 @@
 
     .validators .item > *.col_percent
     {
-        text-align: right;
-
         justify-content: flex-end;
     }
 
@@ -269,8 +287,15 @@
 
         width: 100%;
 
+        cursor: pointer;
+        transition: color .2s linear;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .validators .item .name:hover
+    {
+        color: #950fff;
     }
 
 
@@ -311,18 +336,6 @@
     .validators .spoler_btn:hover
     {
         background: #950fff;
-    }
-
-
-
-    @media print, (max-width: 1899px)
-    {
-        .validators .col_account_name,
-        .validators .col_network
-        {
-            width: 148px;
-            min-width: 148px;
-        }
     }
 
 </style>
