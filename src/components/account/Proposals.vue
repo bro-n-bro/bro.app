@@ -2,7 +2,9 @@
     <section class="proposals">
         <div class="head">
             <div class="title">
-                <router-link to="/proposals">{{ $t('message.account_proposals_title') }}</router-link>
+                <router-link :to="`/proposals/${store.currentNetwork}`">
+                    {{ $t('message.account_proposals_title') }}
+                </router-link>
             </div>
 
             <button class="create_btn" @click.prevent="emitter.emit('openAddProposalModal')">
@@ -173,12 +175,18 @@
 
         display: flex;
 
+        transition: color .2s linear;
         text-decoration: none;
 
         justify-content: flex-start;
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
+    }
+
+    .proposals .title a:hover
+    {
+        color: #950fff;
     }
 
 

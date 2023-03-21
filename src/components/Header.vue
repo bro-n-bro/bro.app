@@ -104,7 +104,12 @@ header
     width: 100%;
     padding: 20px 0;
 
-    transition: padding .2s linear;
+    transition: padding-top .2s linear, padding-bottom .2s linear;
+}
+
+.lock header
+{
+    padding-right: var(--scroll_width);
 }
 
 

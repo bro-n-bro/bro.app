@@ -87,7 +87,12 @@
             await fetch(`https://rpc.bronbro.io/account/validators/${store.wallets.cosmoshub}`)
                 .then(res => res.json())
                 .then(response => {
-                    data.validators = response
+                    // Sort
+                    data.validators = response.sort((a, b) => {
+                        if (a.coin.amount > b.coin.amount) { return -1 }
+                        if (a.coin.amount < b.coin.amount) { return 1 }
+                        return 0
+                    })
 
                     // Math total tokens
                     data.validators.forEach(el => data.totalTokens += el.coin.amount)

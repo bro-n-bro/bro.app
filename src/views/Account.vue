@@ -17,6 +17,13 @@
                             <div class="charts">
                                 <div class="avatar">
                                     <img :src="store.account.avatar" alt="">
+
+                                    <router-link to="/account/passport" class="edit_link">
+                                        <div class="btn">
+                                            <svg class="icon"><use xlink:href="/sprite.svg#ic_settings"></use></svg>
+                                            <span>{{ $t('message.settings_btn') }}</span>
+                                        </div>
+                                    </router-link>
                                 </div>
 
                                 <Pie ref="chartFirst" class="chartFirst" :data="chartDataFirst" :options="chartOptions" v-if="chartDone" />
@@ -25,7 +32,9 @@
                             </div>
 
                             <!-- Abilities -->
+                            <Suspense>
                             <Abilities />
+                            </Suspense>
 
                             <div class="charts_exp" id="legends">
                                 <div class="item color1">{{ $t('message.account_charts_staked_label') }}</div>
@@ -39,7 +48,9 @@
 
 
                     <!-- Stats -->
+                    <Suspense>
                     <Stats />
+                    </Suspense>
 
 
                     <!-- Validators -->
@@ -63,13 +74,15 @@
         <AddProposalModal v-if="store.showAddProposalModal" />
 
         <!-- Validator modal -->
+        <Suspense>
         <ValidatorModal v-if="showValidatorModal" :validator="validatorInfo" />
+        </Suspense>
     </section>
 </template>
 
 
 <script setup>
-    import { onMounted, reactive, ref, inject, computed } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
@@ -145,7 +158,7 @@
     // }
 
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         try {
             await fetch(`https://rpc.bronbro.io/account/account_balance/${store.wallets.cosmoshub}`)
                 .then(res => res.json())
@@ -170,12 +183,16 @@
     // Event "open add proposal modal"
     emitter.on('openAddProposalModal', () => {
         store.showAddProposalModal = true
+
+        document.body.classList.add('lock')
     })
 
 
     // Event "close add proposal modal"
     emitter.on('closeAddProposalModal', () => {
         store.showAddProposalModal = false
+
+        document.body.classList.remove('lock')
     })
 
 
@@ -183,12 +200,16 @@
     emitter.on('openValidatorModal', validator => {
         validatorInfo.value = validator
         showValidatorModal.value = true
+
+        document.body.classList.add('lock')
     })
 
 
     // Event "close validator modal"
     emitter.on('closeValidatorModal', () => {
         showValidatorModal.value = false
+
+        document.body.classList.remove('lock')
     })
 </script>
 
@@ -279,8 +300,12 @@
         inset: 0;
     }
 
+
     .account_info .avatar img
     {
+        position: relative;
+        z-index: 10;
+
         display: block;
 
         width: 100%;
@@ -289,6 +314,65 @@
         border-radius: inherit;
 
         object-fit: cover;
+    }
+
+
+    .account_info .avatar .edit_link
+    {
+        color: currentColor;
+        font-size: 14px;
+        line-height: 120%;
+
+        position: absolute;
+        z-index: 20;
+        top: 0;
+        left: 0;
+
+        display: flex;
+
+        width: 100%;
+        height: 100%;
+
+        transition: opacity .2s linear;
+        text-decoration: none;
+
+        opacity: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, .6);
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .account_info .avatar .edit_link .btn
+    {
+        display: flex;
+
+        padding: 8px;
+
+        border-radius: 10px;
+        background: #950fff;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .account_info .avatar .edit_link .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+    }
+
+    .account_info .avatar .edit_link:hover
+    {
+        opacity: 1;
     }
 
 

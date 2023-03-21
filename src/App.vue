@@ -81,7 +81,7 @@
 
 
 <script setup>
-    import { computed, onMounted, inject } from 'vue'
+    import { computed, onBeforeMount, inject } from 'vue'
     import { useRoute } from 'vue-router'
     import { useGlobalStore } from '@/stores'
 
@@ -92,7 +92,7 @@
         emitter = inject('emitter')
 
 
-    onMounted(() => {
+    onBeforeMount(() => {
         // Set title
         document.title = i18n.global.t('message.page_title')
     })
@@ -109,7 +109,7 @@
 
 
     // Event "open manage modal"
-    emitter.on('open_manage_modal', async function(modal_data = { network: store.networkManageModal }) {
+    emitter.on('openManageModal', async function(modal_data = { network: store.networkManageModal }) {
         await fetch(`${store.networks[modal_data.network].lcd_api}/cosmos/staking/v1beta1/params`)
             .then(response => response.json())
             .then(data => {
@@ -125,41 +125,41 @@
 
 
     // Event "close manage modal"
-    emitter.on('close_manage_modal', function() {
+    emitter.on('closeManageModal', function() {
         store.$patch({ showManageModal: false })
 
-        // document.body.classList.remove('lock')
+        document.body.classList.remove('lock')
     })
 
 
     // Event "open manage success modal"
-    emitter.on('open_manage_success_modal', async function() {
+    emitter.on('openManageSuccessModal', async function() {
         store.$patch({ showManageSuccessModal: true })
 
-        // document.body.classList.add('lock')
+        document.body.classList.add('lock')
     })
 
 
     // Event "close manage success modal"
-    emitter.on('close_manage_success_modal', function() {
+    emitter.on('closeManageSuccessModal', function() {
         store.$patch({ showManageSuccessModal: false })
 
-        // document.body.classList.remove('lock')
+        document.body.classList.remove('lock')
     })
 
 
     // Event "open manage error modal"
-    emitter.on('open_manage_error_modal', async function() {
+    emitter.on('openManageErrorModal', async function() {
         store.$patch({ showManageErrorModal: true })
 
-        // document.body.classList.add('lock')
+        document.body.classList.add('lock')
     })
 
 
     // Event "close manage error modal"
-    emitter.on('close_manage_error_modal', function() {
+    emitter.on('closeManageErrorModal', function() {
         store.$patch({ showManageErrorModal: false })
 
-        // document.body.classList.remove('lock')
+        document.body.classList.remove('lock')
     })
 </script>

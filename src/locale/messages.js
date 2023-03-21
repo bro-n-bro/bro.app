@@ -32,6 +32,9 @@ export default {
             'continue_btn': 'continue journey',
             'add_address_btn': 'Add address',
             'create_btn': 'Create',
+            'settings_btn': 'Setting',
+            'change_image_btn': 'Change image',
+            'update_btn': 'Aprove with tx',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
@@ -80,6 +83,7 @@ export default {
             'account_balance_notice': "Your account valuation in the chosen currency",
             'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
             'account_RPDE_notice': "Rewards Per Day Estimation. The number of tokens in the chosen currency you earn per day from all displayed networks.",
+
 
             // Manage modal
             'manage_modal_action_delegate': 'Delegate',
@@ -237,10 +241,17 @@ export default {
 
             // Add proposal modal
             'add_proposal_modal_title': 'Create Proposal',
+            'add_proposal_label_type': 'Choose type',
             'add_proposal_label_title': 'Title',
             'add_proposal_label_descriptin': 'Description',
             'add_proposal_label_deposit': 'Deposit',
             'add_proposal_submit_btn': 'Create Governance',
+
+            'add_proposal_type_Text': 'Text Proposal',
+            'add_proposal_type_ParameterChange': 'Parameter Change',
+            'add_proposal_type_CommunityPoolSpend': 'Community Pool Spend',
+            'add_proposal_type_UpdateSmartContract': 'Update Smart Contract',
+            'add_proposal_type_SoftwareUpgrade': 'Software Upgrade',
 
 
             // Validator modal
@@ -260,6 +271,13 @@ export default {
             'validator_modal_total_delegated_label': 'Total delegated amount',
             'validator_modal_voted_label': 'Props voted',
             'validator_modal_blurring_label': 'Tokens blurring',
+
+            'validator_modal_col_greed_notice': "The percentage of validator's commision.",
+            'validator_modal_col_self_bonded_notice': 'The number of tokens delegated to yourself.',
+            'validator_modal_col_ownership_notice': 'The ratio of the number of tokens delegated to yourself to the total number of delegations.',
+            'validator_modal_col_voted_notice': 'This criterion is about the number of votes ({voted}) for the last 5 ended proposals.',
+            'validator_modal_col_total_delegated_notice': 'Total amount of tokens delegated to the validator',
+            'validator_modal_col_blurring_notice': 'This criterion shows how many tokens were lost by the validator on the slashing in fractions.',
 
 
             // Feedback
@@ -283,10 +301,16 @@ export default {
             'notification_passport_activation_success': 'Account successfully activated',
             'notification_passport_activation_error': 'Account activation error',
             'notification_passport_activation_error_desc': 'Try again',
+
             'notification_action_create_passport': 'Create passport',
             'notification_passport_create_process': 'Passport creation...',
             'notification_success_create_passport_title': 'Passport created successfully',
             'notification_error_create_passport_title': 'Passport issue error',
+
+            'notification_action_update_passport': 'Update passport',
+            'notification_passport_update_process': 'Passport updation...',
+            'notification_success_update_passport_title': 'Passport updated successfully',
+            'notification_error_update_passport_title': 'Passport issue error',
 
 
             // Footer

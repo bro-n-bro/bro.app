@@ -265,16 +265,6 @@
                 avatarPreview.src = reader.result
                 avatarPreview.status = true
 
-                let avatarIpfs = await store.node.add(avatar.value.files[0])
-
-                let content = []
-
-                for await (let file of store.node.cat(avatarIpfs.path)) {
-                    content.push(file)
-                }
-
-                store.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
-
                 setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
             }
 
@@ -465,8 +455,8 @@
                     await store.getMoonPassport()
 
                     // Set avatar
-                    this.account.avatar = avatarPreview.src
-                    this.account.userName = data.nickName
+                    store.account.avatar = avatarPreview.src
+                    store.account.userName = data.nickName
                 }
 
                 if (result.code) {
@@ -528,7 +518,7 @@
     {
         display: flex;
 
-        padding-bottom: 100px;
+        padding-bottom: 40px;
 
         justify-content: center;
         align-items: center;
@@ -1072,7 +1062,9 @@
 
         display: block;
 
+        width: 126px;
         max-width: 100%;
+        height: 117px;
         max-height: 100%;
     }
 
@@ -1252,7 +1244,9 @@
 
         display: block;
 
+        width: 212px;
         max-width: 100%;
+        height: 256px;
         max-height: calc(100% - 19px);
 
         pointer-events: none;

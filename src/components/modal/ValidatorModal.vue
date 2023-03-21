@@ -1,6 +1,5 @@
 <template>
     <section class="modal" id="validator_modal">
-        <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content" @click.self="emitter.emit('closeValidatorModal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeValidatorModal')">
@@ -14,11 +13,11 @@
                 <div class="row">
                     <div class="logo">
                         <div class="power">
-                            <!-- {{ Math.floor(props.validator.validator_rank' }} -->
+                            {{ store.validatorInfo.result[0][getValidatorInfo('validator_rank')] }}
                             <svg><use xlink:href="/sprite.svg#bg_rank"></use></svg>
                         </div>
 
-                        <img :src="props.validator.avatar_url" alt="" @error="imageLoadError">
+                        <img :src="store.validatorInfo.result[0][getValidatorInfo('logo_path')]" alt="" @error="imageLoadError">
                         <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
                     </div>
 
@@ -34,8 +33,8 @@
                         </div>
                     </div>
 
-                    <!-- <div class="active_set" :class="{ green: props.validator.is_active_set }">
-                        <template v-if="props.validator.is_active_set">
+                    <div class="active_set" :class="{ green: store.validatorInfo.result[0][getValidatorInfo('is_active_set')] }">
+                        <template v-if="store.validatorInfo.result[0][getValidatorInfo('is_active_set')]">
                         <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         <span>{{ $t('message.validator_modal_active_set') }}</span>
                         </template>
@@ -44,7 +43,7 @@
                         <svg class="icon"><use xlink:href="/sprite.svg#ic_notice"></use></svg>
                         <span>{{ $t('message.validator_modal_inactive_set') }}</span>
                         </template>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="btns">
@@ -72,61 +71,58 @@
                         <div class="feature">
                             <div class="label">{{ $t('message.validator_modal_commission_label') }}</div>
 
-                            <!-- <div class="val" @mouseover="emitter.emit('setNotification', $t('message.notice_col_greed'))">
-                                {{ $filters.toFixed(props.validator.greed * 100, 2) }}%
-                            </div> -->
+                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_greed_notice'))">
+                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('greed')] * 100, 2) }}%
+                            </div>
                         </div>
 
                         <div class="feature">
                             <div class="label" v-html="$t('message.validator_modal_ownership_label')"></div>
 
-                            <!-- <div class="val">
-                                <span @mouseover="emitter.emit('setNotification', $t('message.notice_col_self_bonded'))">
-                                    {{ new Number($filters.toFixed(props.validator.ownership * props.validator.staked / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
+                            <div class="val">
+                                <span @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_self_bonded_notice'))">
+                                    {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
                                 </span>
                                 /
-                                <span @mouseover="emitter.emit('setNotification', $t('message.notice_col_ownership'))">
-                                    {{ $filters.toFixed(props.validator.ownership * 100, 2) }}%
+                                <span @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_ownership_notice'))">
+                                    {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * 100, 2) }}%
                                 </span>
-                            </div> -->
+                            </div>
                         </div>
 
                         <div class="feature">
                             <div class="label">{{ $t('message.validator_modal_total_delegated_label') }}</div>
 
-                            <!-- <div class="val" @mouseover="emitter.emit('setNotification', $t('message.notice_col_total_delegated'))">
-                                {{ new Number($filters.toFixed(props.validator.staked / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
-                            </div> -->
+                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_total_delegated_notice'))">
+                                {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
+                            </div>
                         </div>
 
                         <div class="feature">
                             <div class="label">{{ $t('message.validator_modal_voted_label') }}</div>
 
-                            <!-- <div class="val" @mouseover="emitter.emit('setNotification', $t('message.notice_col_voted', { voted: $filters.toFixed(props.validator.voted, 2) }))">
-                                {{ $filters.toFixed(props.validator.voted, 0) }}
-                            </div> -->
+                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 2) }))">
+                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 0) }}
+                            </div>
                         </div>
 
                         <div class="feature">
                             <div class="label">{{ $t('message.validator_modal_blurring_label') }}</div>
 
-                            <!-- <div class="val" @mouseover="emitter.emit('setNotification', $t('message.notice_col_blurring'))">
-                                {{ $filters.toFixed(props.validator.blurring * 100, 2) }}%
-                            </div> -->
+                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_blurring_notice'))">
+                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('blurring')] * 100, 2) }}%
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <button class="manage_btn" @click.prevent="emitter.emit('open_manage_modal', { network: store.currentNetwork })">
+                <button class="manage_btn" @click.prevent="opanManageModal">
                     {{ $t('message.manage_btn') }}
                 </button>
             </div>
         </div>
-        </transition>
 
-        <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay"></div>
-        </transition>
     </section>
 </template>
 
@@ -139,12 +135,38 @@
         emitter = inject('emitter'),
         props = defineProps(['validator'])
 
+    await fetch(`https://rpc.bronbro.io/bro_score/?network=${store.currentNetwork}&validator=${props.validator.operator_address}`)
+        .then(res => res.json())
+        .then(response => {
+            store.validatorInfo = response
+
+            // Add blurring
+            store.validatorInfo.schema.push('blurring')
+
+            store.validatorInfo.result.forEach(el => {
+                el.push(el[store.validatorInfo.schema.indexOf('staked')] / el[store.validatorInfo.schema.indexOf('delegator_shares')])
+            })
+        })
+
 
     // Replacement of the logo if it is not present
     function imageLoadError(event) {
         event.target.classList.add('hide')
 
         event.target.closest('.logo').style.backgroundColor = store.colors[Math.floor((Math.random()*store.colors.length))]
+    }
+
+
+    // Get validator data from shema
+    function getValidatorInfo(columnName) {
+        return store.validatorInfo.schema.indexOf(columnName)
+    }
+
+
+    // Open manage modal
+    function opanManageModal() {
+        emitter.emit('closeValidatorModal')
+        emitter.emit('openManageModal', { network: store.currentNetwork })
     }
 </script>
 

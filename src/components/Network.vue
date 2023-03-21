@@ -86,11 +86,11 @@
             </div>
 
             <!-- <a href="/" class="details_btn" v-if="store.networks[props.network].status && store.auth">{{ $t('message.details') }}</a> -->
-            <button class="details_btn" v-if="store.networks[props.network].status && store.auth" @click.prevent="emitter.emit('open_manage_modal', { network: props.network })">
+            <button class="details_btn" v-if="store.networks[props.network].status && store.auth" @click.prevent="emitter.emit('openManageModal', { network: props.network })">
                 {{ $t('message.manage_btn') }}
             </button>
 
-            <button class="delegate_btn" v-else @click.prevent="emitter.emit('open_manage_modal', { network: props.network })">
+            <button class="delegate_btn" v-else @click.prevent="emitter.emit('openManageModal', { network: props.network })">
                 {{ $t('message.delegate_btn') }}
             </button>
         </template>
@@ -108,7 +108,6 @@
         store = useGlobalStore(),
         emitter = inject('emitter')
 </script>
-
 
 
 <style scoped>

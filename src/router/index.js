@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
+import { getNetworksData } from '@/utils'
 
 import errorLayut from '../layouts/Error.vue'
 import defaultLayut from '../layouts/Default.vue'
@@ -56,13 +57,31 @@ const routes = [
 		component: () => import('../views/CreatePassport.vue'),
 		meta: {
 			layout: defaultLayut,
-			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
+			accessDenied: ['without_keplr', 'not_connected']
 		}
 	},
 	{
 		path: '/account/:network',
 		name: 'Account',
 		component: () => import('../views/Account.vue'),
+		meta: {
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
+		}
+	},
+	{
+		path: '/account/passport',
+		name: 'Passport',
+		component: () => import('../views/Passport.vue'),
+		meta: {
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
+		}
+	},
+	{
+		path: '/proposals/:network',
+		name: 'Proposals',
+		component: () => import('../views/Proposals.vue'),
 		meta: {
 			layout: defaultLayut,
 			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
@@ -112,6 +131,9 @@ router.afterEach((to, from, next) => {
 	window.onload = async () =>{
 		// Connect wallet
 		await store.connectWallet()
+
+		// Get networks data
+		await getNetworksData()
 
 		// Check page access
 		to.matched.some(record => {

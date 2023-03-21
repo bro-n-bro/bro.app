@@ -1,6 +1,5 @@
 <template>
     <section class="modal" id="constitution_modal">
-        <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content" @click.self="closeConstitutionModal">
             <div class="data">
                 <button class="close_btn" @click.prevent="closeConstitutionModal">
@@ -104,12 +103,8 @@
                 </div>
             </div>
         </div>
-        </transition>
 
-
-        <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay"></div>
-        </transition>
     </section>
 </template>
 

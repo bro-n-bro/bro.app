@@ -5,17 +5,17 @@
         <div class="row">
             <div class="item">
                 <div class="label">{{ $t('message.account_APR') }}</div>
-                <div class="val">{{ data.info.apr * 100 }}%</div>
+                <div class="val">{{ $filters.toFixed(data.info.apr * 100, 2) }}%</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_voting_power') }}</div>
-                <div class="val">{{ data.info.rpde / 1000000 }}</div>
+                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 2) }}</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
-                <div class="val">{{ data.info.voting_power * 100 }}</div>
+                <div class="val">{{ $filters.toFixed(data.info.voting_power * 100, 8) }}</div>
             </div>
         </div>
     </section>
@@ -23,7 +23,7 @@
 
 
 <script setup>
-    import { onMounted, reactive } from 'vue'
+    import { reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
@@ -33,15 +33,13 @@
         })
 
 
-    onMounted(async () => {
-        try {
-            await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
-                .then(res => res.json())
-                .then(response => data.info = response)
-        } catch (error) {
-            console.log(error)
-        }
-    })
+    try {
+        await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
+            .then(res => res.json())
+            .then(response => data.info = response)
+    } catch (error) {
+        console.log(error)
+    }
 </script>
 
 

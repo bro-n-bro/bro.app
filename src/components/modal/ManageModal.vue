@@ -1,9 +1,8 @@
 <template>
     <section class="modal" id="manage_modal">
-        <transition name="fadeUp" mode="out-in" appear type="animation">
-        <div class="modal_content" @click.self="emitter.emit('close_manage_modal')">
+        <div class="modal_content" @click.self="emitter.emit('closeManageModal')">
             <div class="data">
-                <button class="close_btn" @click.prevent="emitter.emit('close_manage_modal')">
+                <button class="close_btn" @click.prevent="emitter.emit('closeManageModal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
 
@@ -40,12 +39,8 @@
                 <ManageModalRestake v-if="data.type == 'restake'" />
             </div>
         </div>
-        </transition>
 
-
-        <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay"></div>
-        </transition>
     </section>
 </template>
 
@@ -68,24 +63,22 @@
         })
 
 
-    onMounted(async () => {
-        // Get validators for redelegate
-        if(store.showManageModal){
-            await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
-                .then(res => res.json())
-                .then(response => {
-                    let result = response.validators.filter(el => {
-                        if(el.operator_address != store.networks[store.networkManageModal].validator) {
-                            return el
-                        }
-                    })
-
-                    if(result.length) {
-                        data.validators = result
+    // Get validators for redelegate
+    if(store.showManageModal){
+        await fetch(`${store.networks[store.networkManageModal].lcd_api}/cosmos/staking/v1beta1/delegators/${store.wallets[store.networkManageModal]}/validators`)
+            .then(res => res.json())
+            .then(response => {
+                let result = response.validators.filter(el => {
+                    if(el.operator_address != store.networks[store.networkManageModal].validator) {
+                        return el
                     }
                 })
-        }
-    })
+
+                if(result.length) {
+                    data.validators = result
+                }
+            })
+    }
 </script>
 
 

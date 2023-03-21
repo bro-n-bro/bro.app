@@ -7,7 +7,9 @@
         <RouterView />
 
         <!-- Manage modal -->
+        <Suspense>
         <ManageModal v-if="store.showManageModal" />
+        </Suspense>
 
         <!-- Feedback -->
         <Feedback />

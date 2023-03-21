@@ -1,6 +1,5 @@
 <template>
     <section class="modal" id="add_proposal_modal">
-        <transition name="fadeUp" mode="out-in" appear type="animation">
         <div class="modal_content" @click.self="emitter.emit('closeAddProposalModal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeAddProposalModal')">
@@ -12,6 +11,19 @@
                 </div>
 
                 <form class="form" @submit.prevent="submitHandler">
+                    <div class="line type">
+                        <div class="label">
+                            {{ $t('message.add_proposal_label_type') }}
+                        </div>
+
+                        <div class="field">
+                            <div class="current">
+                                <svg class="icon"><use xlink:href="/sprite.svg#ic_proposal_Text"></use></svg>
+                                <span>{{ $t('message.add_proposal_type_Text') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="line">
                         <div class="label">
                             {{ $t('message.add_proposal_label_title') }}
@@ -48,12 +60,8 @@
                 </form>
             </div>
         </div>
-        </transition>
 
-
-        <transition name="fade" mode="out-in" appear type="animation">
         <div class="overlay"></div>
-        </transition>
     </section>
 </template>
 
@@ -79,7 +87,7 @@
         font-weight: 600;
         line-height: 24px;
 
-        margin-bottom: 32px;
+        margin-bottom: 30px;
         padding: 6px 52px 6px 0;
     }
 
@@ -109,6 +117,37 @@
     .form .field
     {
         position: relative;
+    }
+
+
+    .form .type .current
+    {
+        display: flex;
+
+        height: 55px;
+        padding: 0 9px 2px;
+
+        border: 1px solid transparent;
+        border-radius: 17px;
+        background: #191919;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .form .type .current .icon
+    {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+    }
+
+    .form .type .current span
+    {
+        width: calc(100% - 32px);
     }
 
 
@@ -180,7 +219,7 @@
         display: block;
 
         width: 100%;
-        padding: 14px;
+        padding: 16px;
 
         transition: background .2s linear;
 
