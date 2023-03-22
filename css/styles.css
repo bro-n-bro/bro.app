@@ -188,17 +188,12 @@ body
 
 body.lock
 {
-    position: fixed;
+    /* position: fixed;
     top: 0;
-    left: 0;
-
+    left: 0; */
     overflow: hidden;
 
-    width: calc(100% - var(--scroll_width));
-    height: 100%;
-    min-height: -moz-available;
-    min-height: -webkit-fill-available;
-    min-height:         fill-available;
+    padding-right: var(--scroll_width);
 }
 
 
