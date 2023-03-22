@@ -112,7 +112,7 @@ export const useGlobalStore = defineStore('global', {
             await this.getMoonPassport()
 
             // Set user info
-            await this.setUserInfo({
+            this.setUserInfo({
                 userName: key.name,
                 auth: true
             })
@@ -147,6 +147,9 @@ export const useGlobalStore = defineStore('global', {
             this.account.userName = user.userName
             this.auth = user.auth
 
+            // Set robohash avatar
+            this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
+
             // Start IPFS
             if (!this.node) {
                 await this.startIPFS()
@@ -154,7 +157,7 @@ export const useGlobalStore = defineStore('global', {
 
             // Get avatar
             if (this.node.isOnline()) {
-                await this.getAvatar()
+                this.getAvatar()
             }
         },
 
@@ -163,38 +166,38 @@ export const useGlobalStore = defineStore('global', {
         async startIPFS() {
             this.node = await IPFS.create({
                 // repo: 'ipfs-repo-cyber',
-                init: true,
-                start: true,
-                relay: {
-                    enabled: true,
-                    hop: {
-                        enabled: true,
-                    },
-                },
-                EXPERIMENTAL: {
-                    pubsub: true,
-                },
-                config: {
-                    Addresses: {
-                        Swarm: [
-                            '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
-                            '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-                            '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-                        ],
-                    },
-                    Bootstrap: [
-                        '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
-                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
-                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-                        '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
-                        '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
-                        '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
-                        '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN',
-                    ]
-                },
+                // init: true,
+                // start: true,
+                // relay: {
+                //     enabled: true,
+                //     hop: {
+                //         enabled: true,
+                //     },
+                // },
+                // EXPERIMENTAL: {
+                //     pubsub: true,
+                // },
+                // config: {
+                //     Addresses: {
+                //         Swarm: [
+                //             '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
+                //             '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+                //             '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+                //         ],
+                //     },
+                //     Bootstrap: [
+                //         '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
+                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+                //         '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
+                //         '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
+                //         '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
+                //         '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN',
+                //     ]
+                // }
             })
 
             if (this.node.isOnline()) {
@@ -217,9 +220,9 @@ export const useGlobalStore = defineStore('global', {
                 fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
                     .then(response => response.json())
                     .then(data => {
-                        data.txs
-                            ? this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
-                            : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
+                        if(data.txs) {
+                            this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
+                        }
                     })
             }
         },

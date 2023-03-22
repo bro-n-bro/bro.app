@@ -1,13 +1,20 @@
 <template>
     <section class="create_passport">
         <div class="cont">
+            <div class="back_btn">
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/all'" class="btn">
+                    <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
+                    <span>{{ $t('message.account_btn') }}</span>
+                </router-link>
+            </div>
+
             <div class="data_wrap">
                 <div class="data_hide" id="completed_passport">
                     <div class="data active">
                         <div class="avatar">
                             <input type="file" id="avatar" ref="avatar" accept="image/png, image/jpeg" @change="avatarUpload">
                             <label for="avatar" class="box hide">
-                                <div class="icon" v-if="!avatarPreview.status"></div>
+                                <!-- <div class="icon" v-if="!avatarPreview.status"></div>
 
                                 <div class="label" v-if="!avatarPreview.status">
                                     {{ $t('message.passport_avatar_label') }}
@@ -16,9 +23,13 @@
                                 <div class="exp" v-if="!avatarPreview.status">
                                     {{ $t('message.passport_avatar_file_size') }}<br>
                                     {{ $t('message.passport_avatar_mimetype_size') }}
+                                </div> -->
+
+                                <div class="loader_wrap" v-if="!avatarPreview.status">
+                                    <div class="loader"><span></span></div>
                                 </div>
 
-                                <div class="image" :class="{'show': avatarPreview.src, 'animated': avatarPreview.src}"><div>
+                                <div class="image" v-else><div>
                                     <img :src="avatarPreview.src" alt="">
                                 </div></div>
                             </label>
@@ -87,7 +98,7 @@
             </div>
 
 
-            <div class="bottom_btns">
+            <div class="bottom_btns" v-if="data.showDownloadBtn">
                 <label for="avatar" class="btn change_image_btn" v-if="!avatarPreview.buffer.length || data.status">
                     {{ $t('message.change_image_btn') }}
                 </label>
@@ -106,8 +117,9 @@
 
 
 <script setup>
-    import { ref, reactive, computed, inject, onMounted } from 'vue'
+    import { ref, reactive, inject, onMounted, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useRouter } from 'vue-router'
     import { useNotification } from '@kyvg/vue3-notification'
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
@@ -116,7 +128,8 @@
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
-        notification = useNotification()
+        notification = useNotification(),
+        router = useRouter()
 
     var avatar = ref(null),
         avatarPreview = reactive({
@@ -125,41 +138,41 @@
             status: false
         }),
         data = reactive({
-            moonAddress: computed(() => store.wallets.bostrom ? store.wallets.bostrom : ''),
+            moonAddress: store.wallets.bostrom,
             nickName: '',
             passportImage: '',
             status: false,
             bgGradient: '',
-            changeImage: false,
+            showDownloadBtn: false
         })
 
 
     onMounted(() => {
         // Set data from passport
         data.nickName = store.account.moonPassport.extension.nickname
-        avatarPreview.src = store.account.avatar
-        avatarPreview.status = true
-
-        setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
 
         // Generate gradient
         data.bgGradient = gradient(data.nickName)
-
-        // Create passport image
-        htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
-            .then(dataUrl => data.passportImage = dataUrl)
-            .catch(error => console.error(error))
     })
 
 
-    // // Enable change image
-    // function changeImage() {
-    //     avatarPreview.src = ''
-    //     avatarPreview.buffer =''
-    //     avatarPreview.status = false
+    watchEffect(() => {
+        // Monitor the IPFSStatus
+        if(store.IPFSStatus) {
+            setTimeout(() => {
+                avatarPreview.src = store.account.avatar
+                avatarPreview.status = true
 
-    //     data.changeImage = true
-    // }
+                // Create passport image
+                htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
+                    .then(dataUrl => {
+                        data.passportImage = dataUrl
+                        data.showDownloadBtn = true
+                    })
+                    .catch(error => console.error(error))
+            }, 100)
+        }
+    })
 
 
     // Avatar upload
@@ -167,7 +180,7 @@
         let formData = new FormData()
 
         // Reset preview
-        avatarPreview.src = ''
+        avatarPreview.status = false
 
         // File size valdate
         if(avatar.value.files[0].size / 1024 / 1024 <= 5){
@@ -180,8 +193,6 @@
                 avatarPreview.buffer = Buffer(reader.result)
                 avatarPreview.src = reader.result
                 avatarPreview.status = true
-
-                setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
             }
 
             reader.readAsDataURL(avatar.value.files[0])
@@ -253,7 +264,7 @@
                     .catch(error => console.error(error))
 
                 // Get moon passport
-                await store.getMoonPassport()
+                store.getMoonPassport()
 
                 // Set avatar
                 store.account.avatar = avatarPreview.src
@@ -298,6 +309,8 @@
                 }
             })
         }
+
+        data.status = false
     }
 </script>
 
@@ -314,6 +327,44 @@
         align-content: center;
         flex-wrap: wrap;
         flex: 1 0 auto;
+    }
+
+
+
+    .create_passport .back_btn
+    {
+        color: #f2f2f2;
+        font-size: 12px;
+        line-height: 15px;
+
+        display: flex;
+
+        margin-bottom: 48px;
+    }
+
+
+    .create_passport .back_btn .btn
+    {
+        color: currentColor;
+
+        display: flex;
+
+        text-decoration: none;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .create_passport .back_btn .icon
+    {
+        display: block;
+
+        width: 14px;
+        height: 14px;
+        margin-right: 10px;
     }
 
 
@@ -335,7 +386,8 @@
 
         display: flex;
 
-        padding: 40px 48px 46px 92px;
+        height: 579px;
+        padding: 40px 48px 45px 92px;
 
         border-radius: 15px;
         background: #151515;
@@ -620,62 +672,62 @@
     }
 
 
-    .create_passport .avatar .icon
-    {
-        position: relative;
+    /* .create_passport .avatar .icon
+                {
+                    position: relative;
 
-        width: 18px;
-        height: 18px;
-        margin: 0 auto 8px;
-    }
+                    width: 18px;
+                    height: 18px;
+                    margin: 0 auto 8px;
+                }
 
-    .create_passport .avatar .icon:before,
-    .create_passport .avatar .icon:after
-    {
-        position: absolute;
+                .create_passport .avatar .icon:before,
+                .create_passport .avatar .icon:after
+                {
+                    position: absolute;
 
-        display: block;
+                    display: block;
 
-        width: 100%;
-        height: 2px;
-        margin: auto;
+                    width: 100%;
+                    height: 2px;
+                    margin: auto;
 
-        content: '';
+                    content: '';
 
-        background: #950fff;
+                    background: #950fff;
 
-        inset: 0;
-    }
+                    inset: 0;
+                }
 
-    .create_passport .avatar .icon:after
-    {
-        width: 2px;
-        height: 100%;
-    }
-
-
-    .create_passport .avatar .label
-    {
-        color: #950fff;
-        font-family: var(--font_family2);
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 100%;
-
-        width: 100%;
-
-        text-transform: uppercase;
-    }
+                .create_passport .avatar .icon:after
+                {
+                    width: 2px;
+                    height: 100%;
+                }
 
 
-    .create_passport .avatar .exp
-    {
-        color: #4d4d4d;
-        line-height: 130%;
+                .create_passport .avatar .label
+                {
+                    color: #950fff;
+                    font-family: var(--font_family2);
+                    font-size: 24px;
+                    font-weight: 500;
+                    line-height: 100%;
 
-        width: 100%;
-        margin-top: 8px;
-    }
+                    width: 100%;
+
+                    text-transform: uppercase;
+                }
+
+
+                .create_passport .avatar .exp
+                {
+                    color: #4d4d4d;
+                    line-height: 130%;
+
+                    width: 100%;
+                    margin-top: 8px;
+                } */
 
 
     .create_passport .avatar .image
@@ -702,44 +754,7 @@
         overflow: hidden;
 
         width: 100%;
-        height: 0;
-    }
-
-    .create_passport .avatar .image div.full_h
-    {
         height: 100%;
-    }
-
-    .create_passport .avatar .image div:after
-    {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-
-        display: block;
-
-        width: 100%;
-        height: 4px;
-
-        content: '';
-        transition: opacity .2s linear;
-
-        opacity: 0;
-        border-radius: 33px;
-        background: #950fff;
-    }
-
-    .create_passport .avatar .image.animated div:after
-    {
-        opacity: 1;
-    }
-
-
-    .create_passport .avatar .image.show div
-    {
-        height: 342px;
-
-        transition: height 1s linear;
     }
 
 

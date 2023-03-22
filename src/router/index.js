@@ -130,10 +130,12 @@ router.afterEach((to, from, next) => {
 
 	window.onload = async () =>{
 		// Connect wallet
-		await store.connectWallet()
+		if(!store.connected && window.keplr) {
+			await store.connectWallet()
+		}
 
 		// Get networks data
-		await getNetworksData()
+		getNetworksData()
 
 		// Check page access
 		to.matched.some(record => {
@@ -168,17 +170,17 @@ router.afterEach((to, from, next) => {
 			}
 		})
 
-		// App full loaded
-		store.appLoaded = true
-
 		// Change Keplr account
-		window.addEventListener('keplr_keystorechange', async () => {
+		window.addEventListener('keplr_keystorechange', () => {
 			// Reset store
 			// await store.reset()
 
 			// Reload page
 			window.location.reload()
 		})
+
+		// App full loaded
+		store.appLoaded = true
 	}
 })
 

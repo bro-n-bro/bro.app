@@ -116,7 +116,7 @@
                     </div>
                 </div>
 
-                <button class="manage_btn" @click.prevent="opanManageModal">
+                <button class="manage_btn" @click.prevent="emitter.emit('openManageModal', { network: store.currentNetwork })">
                     {{ $t('message.manage_btn') }}
                 </button>
             </div>
@@ -160,13 +160,6 @@
     // Get validator data from shema
     function getValidatorInfo(columnName) {
         return store.validatorInfo.schema.indexOf(columnName)
-    }
-
-
-    // Open manage modal
-    function opanManageModal() {
-        emitter.emit('closeValidatorModal')
-        emitter.emit('openManageModal', { network: store.currentNetwork })
     }
 </script>
 

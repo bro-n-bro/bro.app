@@ -35,6 +35,7 @@ export default {
             'settings_btn': 'Setting',
             'change_image_btn': 'Change image',
             'update_btn': 'Aprove with tx',
+            'account_btn': 'Account',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',

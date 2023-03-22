@@ -112,6 +112,11 @@ header
     padding-right: var(--scroll_width);
 }
 
+.lock header.stuck
+{
+    width: calc(100% - var(--scroll_width));
+}
+
 
 header .cont
 {
@@ -229,6 +234,7 @@ header.stuck
 
     background: var(--bg);
 }
+
 
 
 </style>

@@ -7,21 +7,21 @@
         <div class="list">
             <!-- <pre>{{ store.account.moonPassport }}</pre> -->
 
-            <div class="item">
+            <router-link to="/dashboard" class="item">
                 <div class="health green"></div>
 
                 <div class="name">{{ store.wallets.bostrom }}</div>
-            </div>
+            </router-link>
 
-            <div v-for="(address, index) in store.account.moonPassport.approvals" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
-                <div class="health"></div>
+            <router-link to="/dashboard" v-for="(item, index) in store.account.moonPassport.extension.addresses" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
+                <div class="health green"></div>
 
-                <div class="name">{{ address }}</div>
+                <div class="name">{{ item.address }}</div>
 
-                <button class="remove_btn">
+                <button class="remove_btn" @click.prevent="">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
-            </div>
+            </router-link>
         </div>
 
         <button class="add_btn">
@@ -77,9 +77,13 @@
 
     .connected_addresses .item
     {
+        color: rgba(255,255,255,.7);
+
         display: flex;
 
         padding: 10px;
+
+        transition: .2s linear;
 
         border-radius: 14px;
         background: #141414;
@@ -127,7 +131,6 @@
 
     .connected_addresses .name
     {
-        color: rgba(255,255,255,.7);
         font-size: 14px;
         line-height: 20px;
 
@@ -136,7 +139,6 @@
         width: calc(100% - 48px);
 
         white-space: nowrap;
-        text-decoration: underline;
         text-overflow: ellipsis;
     }
 
@@ -170,6 +172,14 @@
     .connected_addresses .remove_btn:hover
     {
         color: #950fff;
+    }
+
+
+    .connected_addresses .item:hover
+    {
+        color: #fff;
+
+        background: #353535;
     }
 
 

@@ -10,12 +10,12 @@
 
             <div class="item">
                 <div class="label">{{ $t('message.account_voting_power') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 2) }}</div>
+                <div class="val">{{ $filters.toFixed(data.info.voting_power * 100, 2) }}</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.voting_power * 100, 8) }}</div>
+                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 8) }}</div>
             </div>
         </div>
     </section>
