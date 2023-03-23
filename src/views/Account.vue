@@ -26,9 +26,13 @@
                                     </router-link>
                                 </div>
 
-                                <Pie ref="chartFirst" class="chartFirst" :data="chartDataFirst" :options="chartOptions" v-if="chartDone" />
+                                <div class="chartFirst">
+                                    <Pie ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" v-if="chartDone" />
+                                </div>
 
-                                <Pie ref="chartSecond" class="chartSecond" :data="chartDataSecond" :options="chartOptions" v-if="chartDone" />
+                                <div class="chartSecond">
+                                    <Pie ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" v-if="chartDone" />
+                                </div>
                             </div>
 
                             <!-- Abilities -->
@@ -36,12 +40,41 @@
                             <Abilities />
                             </Suspense>
 
-                            <div class="charts_exp" id="legends">
-                                <div class="item color1">{{ $t('message.account_charts_staked_label') }}</div>
-                                <div class="item color2">{{ $t('message.account_charts_liquid_tokens_label') }}</div>
-                                <div class="item color3">{{ $t('message.account_charts_outside_label') }}</div>
-                                <div class="item color4">{{ $t('message.account_charts_unbonding_label') }}</div>
-                                <div class="item color5">{{ $t('message.account_charts_rewards_label') }}</div>
+                            <div class="charts_legends">
+                                <div class="item color1" :class="{'hover': activeLegend == 1}"
+                                    @mouseenter="mouseenterСhart(1, 0)"
+                                    @mouseleave="mouseleaveСhart(1, 0)"
+                                >
+                                    {{ $t('message.account_charts_staked_label') }}
+                                </div>
+
+                                <div class="item color2" :class="{'hover': activeLegend == 2}"
+                                    @mouseenter="mouseenterСhart(1, 1)"
+                                    @mouseleave="mouseleaveСhart(1, 1)"
+                                >
+                                    {{ $t('message.account_charts_liquid_tokens_label') }}
+                                </div>
+
+                                <div class="item color3" :class="{'hover': activeLegend == 3}"
+                                    @mouseenter="mouseenterСhart(2, 0)"
+                                    @mouseleave="mouseleaveСhart(2, 0)"
+                                >
+                                    {{ $t('message.account_charts_outside_label') }}
+                                </div>
+
+                                <div class="item color4" :class="{'hover': activeLegend == 4}"
+                                    @mouseenter="mouseenterСhart(2, 1)"
+                                    @mouseleave="mouseleaveСhart(2, 1)"
+                                >
+                                    {{ $t('message.account_charts_unbonding_label') }}
+                                </div>
+
+                                <div class="item color5" :class="{'hover': activeLegend == 5}"
+                                    @mouseenter="mouseenterСhart(2, 2)"
+                                    @mouseleave="mouseleaveСhart(2, 2)"
+                                >
+                                    {{ $t('message.account_charts_rewards_label') }}
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -110,11 +143,29 @@
     var validatorInfo = ref({}),
         chartFirst = ref(null),
         chartSecond = ref(null),
-        chartOptions = reactive({
+        activeLegend = ref(null),
+        chartOptionsFirst = reactive({
             responsive: true,
             plugins: {
                 legend: false,
                 tooltip: false
+            },
+            onHover: (e, item) => {
+                item.length
+                    ? activeLegend.value = item[0].index + 1
+                    : activeLegend.value = null
+            }
+        }),
+        chartOptionsSecond = reactive({
+            responsive: true,
+            plugins: {
+                legend: false,
+                tooltip: false
+            },
+            onHover: (e, item) => {
+                item.length
+                    ? activeLegend.value = item[0].index + 3
+                    : activeLegend.value = null
             }
         }),
         chartDatasetsFirst = reactive([]),
@@ -129,7 +180,8 @@
                 data: chartDatasetsFirst,
                 backgroundColor: ['#950FFF', '#0343E8'],
                 borderColor: 'transparent',
-                hoverOffset: 0
+                hoverOffset: 0,
+                hoverBackgroundColor: ['#7700E1', '#3400D1']
             }]
         })),
         chartDataSecond = computed(() => ({
@@ -142,20 +194,40 @@
                 data: chartDatasetsSecond,
                 backgroundColor: ['#C5811B', '#EB5757', '#1bc562'],
                 borderColor: 'transparent',
-                hoverOffset: 0
+                hoverOffset: 0,
+                hoverBackgroundColor: ['#D17D00', '#D74343', '#07B14E']
             }]
         }))
 
 
-    // function triggerHover() {
-    //     const chartInstance = chartFirst.value.chart
+    // Mouse enter on legend for first chart
+    function mouseenterСhart(chartIndex, dataIndex) {
+        let chartInstance = {}
 
-    //     chartInstance.setActiveElements([
-    //         {datasetIndex: 0, index: 0},
-    //     ])
+        chartIndex == 1
+            ? chartInstance = chartFirst.value.chart
+            : chartInstance = chartSecond.value.chart
 
-    //     chartInstance.update()
-    // }
+        chartInstance.setActiveElements([{
+            datasetIndex: 0,
+            index: dataIndex
+        }])
+
+        chartInstance.update()
+    }
+
+
+    // Mouse leave from legend for first chart
+    function mouseleaveСhart(chartIndex, dataIndex) {
+        let chartInstance = {}
+
+        chartIndex == 1
+            ? chartInstance = chartFirst.value.chart
+            : chartInstance = chartSecond.value.chart
+
+        chartInstance.setActiveElements([])
+        chartInstance.update()
+    }
 
 
     onBeforeMount(async () => {
@@ -269,6 +341,10 @@
 
         width: 100%;
         height: 100%;
+
+        border-radius: 50%;
+
+        clip-path: circle(50% at 50% 50%);
     }
 
     .account_info .chartSecond
@@ -282,6 +358,9 @@
         height: calc(100% - 40px);
         margin: auto;
 
+        border-radius: 50%;
+
+        clip-path: circle(50% at 50% 50%);
         inset: 0;
     }
 
@@ -378,7 +457,7 @@
 
 
 
-    .account_info .charts_exp
+    .account_info .charts_legends
     {
         display: flex;
 
@@ -392,14 +471,14 @@
         flex-wrap: wrap;
     }
 
-    .account_info .charts_exp > *
+    .account_info .charts_legends > *
     {
         margin-bottom: 8px;
         margin-left: 8px;
     }
 
 
-    .account_info .charts_exp .item
+    .account_info .charts_legends .item
     {
         font-size: 12px;
         line-height: 100%;
@@ -408,11 +487,13 @@
 
         padding: 8px 8px 8px 26px;
 
+        transition: background .2s linear;
+
         border-radius: 10px;
         background: #141414;
     }
 
-    .account_info .charts_exp .item:before
+    .account_info .charts_legends .item:before
     {
         position: absolute;
         top: 0;
@@ -430,29 +511,35 @@
         border-radius: 50%;
     }
 
-    .account_info .charts_exp .item.color1:before
+    .account_info .charts_legends .item.color1:before
     {
         background: #950fff;
     }
 
-    .account_info .charts_exp .item.color2:before
+    .account_info .charts_legends .item.color2:before
     {
         background: #0343e8;
     }
 
-    .account_info .charts_exp .item.color3:before
+    .account_info .charts_legends .item.color3:before
     {
         background: #c5811b;
     }
 
-    .account_info .charts_exp .item.color4:before
+    .account_info .charts_legends .item.color4:before
     {
         background: #eb5757;
     }
 
-    .account_info .charts_exp .item.color5:before
+    .account_info .charts_legends .item.color5:before
     {
         background: #1bc562;
+    }
+
+    .account_info .charts_legends .item:hover,
+    .account_info .charts_legends .item.hover
+    {
+        background: #353535;
     }
 
 </style>
