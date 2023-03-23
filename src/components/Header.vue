@@ -25,24 +25,16 @@
                 </div>
 
                 <!-- Notifications -->
-                <transition name="fade" mode="out-in" appear type="animation">
-                <Notifications />
-                </transition>
+                <Notifications v-if="route.name != 'KeplrError' && route.name != 'KeplrReload'" />
 
                 <!-- IPFS -->
-                <transition name="fade" mode="out-in" appear type="animation">
                 <IPFS v-if="route.name != 'KeplrError' && route.name != 'KeplrReload'" />
-                </transition>
 
                 <!-- Currency -->
-                <transition name="fade" mode="out-in" appear type="animation">
                 <Currency v-if="store.auth" />
-                </transition>
 
                 <!-- User info -->
-                <transition name="fade" mode="out-in" appear type="animation">
                 <User v-if="store.auth" />
-                </transition>
 
                 <ConnectBtn v-if="!store.auth && route.name != 'KeplrError' && route.name != 'KeplrReload'" />
             </div>
@@ -73,13 +65,15 @@
         // Sticky header
         const header = document.querySelector('header')
 
-        header.stickyEvent = () => setTimeout(() => {
-            window.scrollY > 0
-                ? header.classList.add('stuck')
-                : header.classList.remove('stuck')
-        })
+        if(header) {
+            header.stickyEvent = () => setTimeout(() => {
+                window.scrollY > 0
+                    ? header.classList.add('stuck')
+                    : header.classList.remove('stuck')
+            })
 
-        document.addEventListener('scroll', header.stickyEvent)
+            document.addEventListener('scroll', header.stickyEvent)
+        }
     })
 
 

@@ -7,13 +7,14 @@
         <div class="list">
             <!-- <pre>{{ store.account.moonPassport }}</pre> -->
 
-            <router-link to="/dashboard" class="item">
+            <router-link :to="`/dashboard/${store.wallets.cosmoshub}`" class="item">
                 <div class="health green"></div>
 
                 <div class="name">{{ store.wallets.bostrom }}</div>
             </router-link>
 
-            <router-link to="/dashboard" v-for="(item, index) in store.account.moonPassport.extension.addresses" :key="index" class="item" :class="{'hide': index >= 3 && !data.showAll}">
+            <template v-for="(item, index) in store.account.moonPassport.extension.addresses" :key="index">
+            <router-link :to="`/dashboard/${store.wallets.cosmoshub}`" class="item" :class="{'hide': index >= 3 && !data.showAll}" v-if="item.address.substring(0, 2) != '0x'">
                 <div class="health green"></div>
 
                 <div class="name">{{ item.address }}</div>
@@ -22,6 +23,7 @@
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
             </router-link>
+            </template>
         </div>
 
         <button class="add_btn">

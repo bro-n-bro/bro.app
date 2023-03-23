@@ -1,5 +1,5 @@
 <template>
-    <div class="loader_wrap" v-if="!store.appLoaded || !store.auth || !store.connected">
+    <div class="loader_wrap" v-if="!store.appLoaded">
         <div class="loader"><span></span></div>
     </div>
 

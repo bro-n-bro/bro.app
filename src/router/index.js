@@ -114,28 +114,24 @@ router.beforeEach((to, from, next) => {
 		store.networkManageModal = modalId
 	}
 
-	if (ref) { store.ref = ref }
+	if (ref) {
+		store.ref = ref
+	}
 
-	// Network
+	// Current network
 	to.params.network
 		? store.currentNetwork = to.params.network
 		: store.currentNetwork = ''
 
-	next()
-})
 
-
-router.afterEach((to, from, next) => {
-	const store = useGlobalStore()
-
-	window.onload = async () =>{
-		// Connect wallet
-		if(!store.connected && window.keplr) {
+	// Connect wallet
+	setTimeout(async () => {
+		if(!store.connected && typeof window.keplr != 'undefined') {
 			await store.connectWallet()
-		}
 
-		// Get networks data
-		getNetworksData()
+			// Get networks data
+			getNetworksData()
+		}
 
 		// Check page access
 		to.matched.some(record => {
@@ -144,28 +140,33 @@ router.afterEach((to, from, next) => {
 
 			if (access) {
 				// Forbidden without keplr
-				if (access.includes('without_keplr') && !window.keplr) {
-					router.push({ name: 'KeplrError' })
+				if (access.includes('without_keplr') && typeof window.keplr == 'undefined') {
+					next({ path: '/keplr_error' })
+					return false
 				}
 
 				// Forbidden with keplr
-				if (access.includes('with_keplr') && window.keplr) {
-					router.push({ name: 'MainPage' })
+				if (access.includes('with_keplr') && typeof window.keplr != 'undefined') {
+					next({ name: 'MainPage' })
+					return false
 				}
 
 				// Wallet not connected
 				if (access.includes('not_connected') && !store.connected) {
-					router.push({ name: 'MainPage' })
+					next({ name: 'MainPage' })
+					return false
 				}
 
 				// Forbidden with a passport
 				if (access.includes('with_passport') && store.account.moonPassport) {
-					router.push('/account/cosmoshub')
+					next('/account/cosmoshub')
+					return false
 				}
 
 				// Forbidden without a passport
 				if (access.includes('without_passport') && !store.account.moonPassport) {
-					router.push({ name: 'Dashboard' })
+					next({ name: 'Dashboard' })
+					return false
 				}
 			}
 		})
@@ -181,7 +182,9 @@ router.afterEach((to, from, next) => {
 
 		// App full loaded
 		store.appLoaded = true
-	}
+
+		next()
+	})
 })
 
 
