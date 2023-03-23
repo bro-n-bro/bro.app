@@ -43,7 +43,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/dashboard',
+		path: '/dashboard/:address',
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
@@ -57,7 +57,7 @@ const routes = [
 		component: () => import('../views/CreatePassport.vue'),
 		meta: {
 			layout: defaultLayut,
-			accessDenied: ['without_keplr', 'not_connected']
+			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
 		}
 	},
 	{

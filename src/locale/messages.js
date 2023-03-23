@@ -309,9 +309,13 @@ export default {
             'notification_error_create_passport_title': 'Passport issue error',
 
             'notification_action_update_passport': 'Update passport',
-            'notification_passport_update_process': 'Passport updation...',
+            'notification_passport_update_process': 'Passport updating...',
             'notification_success_update_passport_title': 'Passport updated successfully',
             'notification_error_update_passport_title': 'Passport issue error',
+
+            'notification_action_address_delete': 'Address delete',
+            'notification_address_deleting_process': 'Address deleting...',
+            'notification_success_address_delete_title': 'Address deleted successfully',
 
 
             // Footer

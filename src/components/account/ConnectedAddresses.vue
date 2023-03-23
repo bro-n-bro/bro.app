@@ -19,7 +19,7 @@
 
                 <div class="name">{{ item.address }}</div>
 
-                <button class="remove_btn" @click.prevent="">
+                <button class="remove_btn" @click.prevent="deleteAddress(item.address)">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
             </router-link>
@@ -39,13 +39,104 @@
 
 
 <script setup>
-    import { reactive } from 'vue'
+    import { reactive, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { useNotification } from '@kyvg/vue3-notification'
+    import { preparePassportTx, sendTx } from '@/utils'
 
     const store = useGlobalStore(),
+        i18n = inject('i18n'),
+        notification = useNotification(),
         data = reactive({
             showAll: false
         })
+
+
+    // Delete address
+    async function deleteAddress(address) {
+        // Show notification
+        notification.notify({
+            group: 'default',
+            duration: -100,
+            title: i18n.global.t('message.notification_address_deleting_process')
+        })
+
+        try{
+            // Prepare Tx
+            let prepareResult = await preparePassportTx({
+                remove_address: {
+                    address,
+                    nickname: store.account.moonPassport.extension.nickname
+                }
+            })
+
+            // Send Tx
+            let result = await sendTx(prepareResult)
+
+            if (result.code === 0) {
+                // Set TXS
+                store.lastTXS = result.transactionHash
+
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_success_address_delete_title'),
+                    type: 'success',
+                    data: {
+                        chain: 'bostrom',
+                        tx_type: i18n.global.t('message.notification_action_address_delete')
+                    }
+                })
+
+                // Get moon passport
+                store.getMoonPassport()
+            }
+
+            if (result.code) {
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    duration: -100,
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: result?.rawLog.toString(),
+                    type: 'error',
+                    data: {
+                        chain: 'bostrom',
+                        tx_type: i18n.global.t('message.notification_action_address_delete')
+                    }
+                })
+            }
+        } catch (error) {
+            console.log(error)
+
+            // Show notification
+            notification.notify({
+                group: 'default',
+                clean: true
+            })
+
+            notification.notify({
+                group: store.networks.bostrom.denom,
+                title: i18n.global.t('message.notification_failed_title'),
+                text: i18n.global.t('message.manage_modal_error_rejected'),
+                type: 'error',
+                data: {
+                    chain: 'bostrom',
+                    tx_type: i18n.global.t('message.notification_action_address_delete')
+                }
+            })
+        }
+    }
 </script>
 
 

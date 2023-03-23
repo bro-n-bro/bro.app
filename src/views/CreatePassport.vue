@@ -211,7 +211,7 @@
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
-    import { prepareCreatePassportTx, sendTx } from '@/utils'
+    import { preparePassportTx, sendTx } from '@/utils'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
@@ -304,7 +304,7 @@
         // Set activation status
         data.activationProcess = 'process'
 
-        if (!response && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
+        if (typeof response == 'undefined' && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
             await fetch('https://titan.cybernode.ai/credit', {
                 headers: {
                     'Content-Type': 'application/json'
@@ -404,7 +404,7 @@
                 let avatarIpfs = await store.node.add(avatar.value.files[0])
 
                 // Prepare Tx
-                let prepareResult = await prepareCreatePassportTx({
+                let prepareResult = await preparePassportTx({
                     create_passport: {
                         avatar: avatarIpfs.path,
                         nickname: data.nickName,

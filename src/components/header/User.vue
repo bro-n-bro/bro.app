@@ -62,7 +62,7 @@
         justify-content: flex-start;
         align-items: center;
         align-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
 

@@ -667,7 +667,7 @@ export const sendEVMOSTx = async txRaw => {
 
 
 // Prepare create passport Tx
-export const prepareCreatePassportTx = async params => {
+export const preparePassportTx = async params => {
     let store = useGlobalStore()
 
     // Register type

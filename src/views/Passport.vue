@@ -124,7 +124,7 @@
     import * as htmlToImage from 'html-to-image'
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
-    import { prepareCreatePassportTx, sendTx } from '@/utils'
+    import { preparePassportTx, sendTx } from '@/utils'
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -225,7 +225,7 @@
             let avatarIpfs = await store.node.add(avatar.value.files[0])
 
             // Prepare Tx
-            let prepareResult = await prepareCreatePassportTx({
+            let prepareResult = await preparePassportTx({
                 update_avatar: {
                     new_avatar: avatarIpfs.path,
                     nickname: data.nickName
