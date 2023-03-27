@@ -3,7 +3,7 @@
         <div class="head">
             <div class="title">
                 <router-link :to="`/proposals/${store.currentNetwork}`">
-                    {{ $t('message.account_proposals_title') }}
+                    {{ $t('message.account_proposals_title') }} &rarr;
                 </router-link>
             </div>
 

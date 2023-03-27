@@ -36,6 +36,8 @@ export default {
             'change_image_btn': 'Change image',
             'update_btn': 'Aprove with tx',
             'account_btn': 'Account',
+            'back_btn': 'Back',
+            'load_more_btn': 'Load more',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
@@ -210,7 +212,7 @@ export default {
             'account_contract_address_title': 'Contract address',
             'account_abilities_title': 'Abilities',
             'account_validators_title': 'Validators',
-            'account_proposals_title': 'Proposals ⟶',
+            'account_proposals_title': 'Proposals',
             'account_connected_addresses_title': 'Connected addresses',
 
             'account_charts_staked_label': 'Staked',
@@ -230,6 +232,7 @@ export default {
             'account_proposals_col_type': 'Type',
             'account_proposals_col_status': 'Status',
 
+            'account_proposals_status_all': 'All proposals',
             'account_proposals_status_deposite': 'Deposit period',
             'account_proposals_status_voting': 'Voting period',
             'account_proposals_status_passed': 'Passed',
@@ -279,6 +282,10 @@ export default {
             'validator_modal_col_voted_notice': 'This criterion is about the number of votes ({voted}) for the last 5 ended proposals.',
             'validator_modal_col_total_delegated_notice': 'Total amount of tokens delegated to the validator',
             'validator_modal_col_blurring_notice': 'This criterion shows how many tokens were lost by the validator on the slashing in fractions.',
+
+
+            // Filter
+            'filter_title': 'Filter',
 
 
             // Feedback

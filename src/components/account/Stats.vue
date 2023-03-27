@@ -17,6 +17,11 @@
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
                 <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
             </div>
+
+            <div class="item">
+                <div class="label">{{ $t('message.account_RPDE') }}</div>
+                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
+            </div>
         </div>
     </section>
 </template>
@@ -55,7 +60,7 @@
 
     .stats .row > *
     {
-        width: calc(33.333% - 20px);
+        width: calc(25% - 20px);
         margin-bottom: 20px;
         margin-left: 20px;
     }
@@ -63,19 +68,12 @@
 
     .stats .item
     {
-        display: flex;
-
-        padding: 16px;
+        padding: 16px 8px;
 
         text-align: center;
 
         border-radius: 20px;
         background: #0d0d0d;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -92,11 +90,18 @@
 
     .stats .val
     {
-        font-size: 32px;
+        font-size: 23px;
         font-weight: 700;
         line-height: 100%;
 
         white-space: nowrap;
+
+        background: linear-gradient(94.32deg, #950fff 33.33%, #330284 67.72%);
+        -webkit-background-clip: text;
+                background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+                text-fill-color: transparent;
     }
 
 </style>

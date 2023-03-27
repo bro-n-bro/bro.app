@@ -228,8 +228,4 @@ header.stuck
 
     background: var(--bg);
 }
-
-
-
-
 </style>
