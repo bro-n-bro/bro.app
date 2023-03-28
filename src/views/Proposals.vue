@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="proposals" v-else>
-                        <div class="proposal" v-for="(proposal, index) in data.proposals" :key="index">
+                        <router-link :to="`/proposal/${proposal.id}`" class="proposal" v-for="(proposal, index) in data.proposals" :key="index">
                             <!-- <pre>{{ proposal }}</pre> -->
 
                             <div class="network_logo">
@@ -60,12 +60,22 @@
                                 </div>
                             </div>
 
-                            <div class="date">
-                                <div>2023-02-23 12:46:26</div>
-                                <div>2023-03-09 12:46:26</div>
+                            <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                                <div>{{ $t('message.proposal_date_label_deposite') }}</div>
+                                <!-- <div><timeago :datetime="new Date(proposal.deposite_end_time)" autoUpdate /></div> -->
                             </div>
 
-                            <div class="name">{{ proposal.title }}</div>
+                            <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                                <div>{{ $t('message.proposal_date_label_voting') }}</div>
+                                <!-- <div><timeago :datetime="new Date(proposal.deposite_end_time)" autoUpdate /></div> -->
+                            </div>
+
+                            <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED' || proposal.status == 'PROPOSAL_STATUS_REJECTED'">
+                                <div>{{ $t('message.proposal_date_label_default') }}</div>
+                                <div><timeago :datetime="new Date(proposal.voting_end_time)" autoUpdate /></div>
+                            </div>
+
+                            <div class="name">#{{ proposal.id }} {{ proposal.title }}</div>
 
                             <div class="desc">{{ proposal.description }}</div>
 
@@ -80,13 +90,7 @@
                                     <span>False 1200</span>
                                 </button>
                             </div>
-
-                            <div class="link">
-                                <router-link :to="`/proposal/${proposal.id}`">
-                                    <span>See more &rarr;</span>
-                                </router-link>
-                            </div>
-                        </div>
+                        </router-link>
                     </div>
 
 
@@ -336,9 +340,13 @@
 
     .proposals .proposal
     {
+        color: currentColor;
+
         display: flex;
 
         padding: 10px;
+
+        text-decoration: none;
 
         border-radius: 14px;
         background: #0d0d0d;
@@ -441,10 +449,20 @@
         font-size: 12px;
         line-height: 130%;
 
+        display: flex;
+
         margin-bottom: 16px;
         margin-left: auto;
 
-        text-align: right;
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .proposals .proposal .date > * + *
+    {
+        margin-left: 4px;
     }
 
 
@@ -545,39 +563,6 @@
     .proposals .proposal .likes .btn.active span
     {
         display: block;
-    }
-
-
-    .proposals .proposal .link
-    {
-        width: 100%;
-        margin-top: 16px;
-    }
-
-
-    .proposals .proposal .link a
-    {
-        color: #950fff;
-        font-size: 14px;
-        line-height: 100%;
-
-        display: block;
-
-        padding: 15px;
-
-        transition: .2s linear;
-        text-align: center;
-        text-decoration: none;
-
-        border: 1px solid #950fff;
-        border-radius: 10px;
-    }
-
-    .proposals .proposal .link a:hover
-    {
-        color: #fff;
-
-        background: #950fff;
     }
 
 
