@@ -6,6 +6,7 @@ import i18n from './locale'
 import moment from 'moment'
 import Notifications from '@kyvg/vue3-notification'
 import timeago from 'vue-timeago3'
+import VueCountdown from '@chenfengyuan/vue-countdown'
 
 
 // Events
@@ -67,6 +68,10 @@ const clickOutside = {
 
 // Directives
 app.directive('clickOut', clickOutside)
+
+
+// VueCountdown
+app.component(VueCountdown.name, VueCountdown)
 
 
 // Mount

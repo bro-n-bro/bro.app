@@ -11,7 +11,7 @@
             <div class="grid row">
                 <section class="col">
                     <!-- Networks -->
-                    <Networks />
+                    <Networks class="sticky" />
                 </section>
 
 
@@ -26,14 +26,14 @@
                         </router-link>
                     </div>
 
+                    <!-- <pre>{{ data.proposals }}</pre> -->
+
                     <div class="loader_wrap" v-if="!loading">
                         <div class="loader"><span></span></div>
                     </div>
 
                     <div class="proposals" v-else>
                         <router-link :to="`/proposal/${proposal.id}`" class="proposal" v-for="(proposal, index) in data.proposals" :key="index">
-                            <!-- <pre>{{ proposal }}</pre> -->
-
                             <div class="network_logo">
                                 <img :src="`/${store.currentNetwork}_logo.png`" alt="">
                             </div>
@@ -61,25 +61,27 @@
                             </div>
 
                             <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-                                <div>{{ $t('message.proposal_date_label_deposite') }}</div>
-                                <!-- <div><timeago :datetime="new Date(proposal.deposite_end_time)" autoUpdate /></div> -->
+                                <vue-countdown :time="dateCalc(proposal.deposit_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
+                                    {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
+                                </vue-countdown>
                             </div>
 
                             <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-                                <div>{{ $t('message.proposal_date_label_voting') }}</div>
-                                <!-- <div><timeago :datetime="new Date(proposal.deposite_end_time)" autoUpdate /></div> -->
+                                <vue-countdown :time="dateCalc(proposal.voting_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
+                                    {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
+                                </vue-countdown>
                             </div>
 
                             <div class="date" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED' || proposal.status == 'PROPOSAL_STATUS_REJECTED'">
                                 <div>{{ $t('message.proposal_date_label_default') }}</div>
-                                <div><timeago :datetime="new Date(proposal.voting_end_time)" autoUpdate /></div>
+                                <div><timeago :datetime="dateCalc(proposal.voting_end_time)" autoUpdate /></div>
                             </div>
 
                             <div class="name">#{{ proposal.id }} {{ proposal.title }}</div>
 
                             <div class="desc">{{ proposal.description }}</div>
 
-                            <div class="likes">
+                            <!-- <div class="likes">
                                 <button class="like btn">
                                     <svg class="icon"><use xlink:href="/sprite.svg#ic_like"></use></svg>
                                     <span>True 1598</span>
@@ -89,7 +91,7 @@
                                     <svg class="icon"><use xlink:href="/sprite.svg#ic_dislike"></use></svg>
                                     <span>False 1200</span>
                                 </button>
-                            </div>
+                            </div> -->
                         </router-link>
                     </div>
 
@@ -99,16 +101,18 @@
                         <div class="loader"><span></span></div>
                     </div>
 
-                    <button class="load_more_btn" @click.prevent="loadMoreProposals" v-else>
+                    <!-- <button class="load_more_btn" @click.prevent="loadMoreProposals" v-else>
                         {{ $t('message.load_more_btn') }}
-                    </button>
+                    </button> -->
+
+                    <div class="load_more_area"></div>
                     </template>
                 </section>
 
 
                 <section class="col">
                     <!-- Filter -->
-                    <div class="filter">
+                    <div class="filter sticky">
                         <div class="title">
                             {{ $t('message.filter_title') }}
                         </div>
@@ -152,6 +156,8 @@
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
 
+    import hcSticky from 'hc-sticky'
+
     // Components
     import Networks from '../components/account/Networks.vue'
 
@@ -162,6 +168,8 @@
             limit: 10,
             offset: 0,
             loading: false,
+            allReceived: false,
+            userTimeZone: new Date().getTimezoneOffset() / 60 * -1,
             proposals: []
         })
 
@@ -180,6 +188,28 @@
         } catch (error) {
             console.log(error)
         }
+
+
+        // Load more proposals
+        function scrollTracking(entries) {
+            for (const entry of entries) {
+                if (entry.intersectionRatio >= 1 && !data.loading && !data.allReceived) {
+                    loadMoreProposals()
+                }
+            }
+        }
+
+        let observer = new IntersectionObserver(scrollTracking, {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        })
+
+        observer.observe(document.querySelector('.load_more_area'))
+
+
+        // Sticky element
+        let stickyElements = document.querySelectorAll('.sticky')
+
+        stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
     })
 
 
@@ -192,9 +222,20 @@
         await fetch(`https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`)
             .then(res => res.json())
             .then(response => {
-                data.proposals = data.proposals.concat(response)
                 data.loading = false
+
+                response.length
+                    ? data.proposals = data.proposals.concat(response)
+                    : data.allReceived = true
             })
+    }
+
+
+    // Date calc
+    function dateCalc(date) {
+        let currentDate = new Date(date)
+
+        return new Date(currentDate.setHours(currentDate.getHours() + data.userTimeZone))
     }
 </script>
 
@@ -445,7 +486,6 @@
 
     .proposals .proposal .date
     {
-        color: #464646;
         font-size: 12px;
         line-height: 130%;
 
@@ -523,6 +563,8 @@
 
         padding: 8px;
 
+        transition: .2s linear;
+
         border-radius: 14px;
         background: #191919;
 
@@ -566,6 +608,22 @@
     }
 
 
+    .proposals .proposal .likes .btn.like:hover
+    {
+        color: #fff;
+
+        background: #950fff;
+    }
+
+
+    .proposals .proposal .likes .btn.dislike:hover
+    {
+        color: #fff;
+
+        background: #eb5757;
+    }
+
+
 
     .load_more_btn
     {
@@ -590,6 +648,14 @@
     .load_more_btn:hover
     {
         background: #7700e1;
+    }
+
+
+
+    .load_more_area
+    {
+        width: 100%;
+        height: 1px;
     }
 
 

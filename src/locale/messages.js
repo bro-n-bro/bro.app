@@ -65,8 +65,6 @@ export default {
             'passport_activation_label': 'я крутой',
 
             // Proposals
-            'proposal_date_label_deposite':'Deposit period:',
-            'proposal_date_label_voting':'Voting period:',
             'proposal_date_label_default': 'Voting ended:',
 
             // Notofications

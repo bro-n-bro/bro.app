@@ -95,13 +95,6 @@
         line-height: 100%;
 
         white-space: nowrap;
-
-        background: linear-gradient(94.32deg, #950fff 33.33%, #330284 67.72%);
-        -webkit-background-clip: text;
-                background-clip: text;
-
-        -webkit-text-fill-color: transparent;
-                text-fill-color: transparent;
     }
 
 </style>
