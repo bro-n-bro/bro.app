@@ -83,17 +83,17 @@
             <div class="exp">
                 <div class="yes green">
                     <div class="label">{{ $t('message.proposal_voting_label_yes') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.yes']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal['tally.yes']) }}%</div>
                 </div>
 
                 <div class="no orange">
                     <div class="label">{{ $t('message.proposal_voting_label_no') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.no']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal['tally.no']) }}%</div>
                 </div>
 
                 <div class="nwv red">
                     <div class="label">{{ $t('message.proposal_voting_label_nwv') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.no_with_veto']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal['tally.no_with_veto']) }}%</div>
                 </div>
             </div>
         </div>
