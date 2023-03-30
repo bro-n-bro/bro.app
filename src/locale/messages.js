@@ -63,6 +63,7 @@ export default {
             'passport_name_exp': 'Min 8 characters',
             'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
             'passport_activation_label': 'я крутой',
+            'passport_activation_label2': 'я крутой',
 
             // Proposals
             'proposal_date_label_default': 'Voting ended:',
