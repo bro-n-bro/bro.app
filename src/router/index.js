@@ -130,7 +130,7 @@ router.beforeEach((to, from, next) => {
 			await store.connectWallet()
 
 			// Get networks data
-			getNetworksData()
+			// getNetworksData()
 		}
 
 		// Check page access

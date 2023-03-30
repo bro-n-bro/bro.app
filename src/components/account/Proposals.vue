@@ -362,6 +362,7 @@
         font-weight: 500;
         line-height: 15px;
 
+        transition: color .2s linear;
         white-space: nowrap;
     }
 
@@ -374,12 +375,14 @@
 
         width: 20px;
         height: 20px;
+
+        transition: color .2s linear;
     }
 
 
     .proposals .item .col_status > *
     {
-        color: #464646;
+        color: #950fff;
 
         transition: color .2s linear;
     }
@@ -399,15 +402,17 @@
         color: #eb5757;
     }
 
-    .proposals .item:hover .col_status > *
-    {
-        color: #fff !important;
-    }
-
 
     .proposals .item:hover
     {
         background: #191919;
+    }
+
+    .proposals .item:hover .col_number,
+    .proposals .item:hover .col_type .icon,
+    .proposals .item:hover .col_status > *
+    {
+        color: #fff !important;
     }
 
 

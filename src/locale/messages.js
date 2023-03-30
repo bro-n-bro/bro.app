@@ -63,10 +63,15 @@ export default {
             'passport_name_exp': 'Min 8 characters',
             'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
             'passport_activation_label': 'я крутой',
-            'passport_activation_label2': 'я крутой',
 
             // Proposals
             'proposal_date_label_default': 'Voting ended:',
+            'proposal_deposite_label_collected': 'Collected funds:',
+            'proposal_deposite_label_necessary': 'Necessary funds:',
+            'proposal_voting_label_yes': 'Yes',
+            'proposal_voting_label_no': 'No',
+            'proposal_voting_label_nwv': 'NWV',
+            'proposal_voting_label_abstain': 'Abstain',
 
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',

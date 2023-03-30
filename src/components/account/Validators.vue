@@ -158,6 +158,7 @@
 
         display: flex;
 
+        margin-bottom: 8px;
         padding-bottom: 7px;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
@@ -217,6 +218,10 @@
         position: relative;
 
         display: flex;
+
+        transition: background .2s linear;
+
+        border-radius: 8px;
 
         justify-content: space-between;
         align-items: center;
@@ -301,6 +306,12 @@
     .validators .item .name:hover
     {
         color: #950fff;
+    }
+
+
+    .validators .item:hover
+    {
+        background: #191919;
     }
 
 
