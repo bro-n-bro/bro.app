@@ -5,17 +5,16 @@
 
             <div class="title">{{ $t('message.under_construction_title') }}</div>
 
-            <router-link to="/" class="back_btn">{{ $t('message.back_home_btn') }}</router-link>
+            <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/'" class="back_btn">
+                {{ $t('message.back_home_btn') }}
+            </router-link>
         </div>
     </section>
 </template>
 
 
 <script setup>
-    import { useGlobalStore } from '@/stores'
+    import { useRouter } from 'vue-router'
 
-    const store = useGlobalStore()
-
-    // Pre connect
-    store.preConnect()
+    const router = useRouter()
 </script>

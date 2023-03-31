@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
-import { getNetworksData } from '@/utils'
 
 import errorLayut from '../layouts/Error.vue'
 import defaultLayut from '../layouts/Default.vue'
@@ -128,9 +127,6 @@ router.beforeEach((to, from, next) => {
 	setTimeout(async () => {
 		if(!store.connected && typeof window.keplr != 'undefined') {
 			await store.connectWallet()
-
-			// Get networks data
-			// getNetworksData()
 		}
 
 		// Check page access

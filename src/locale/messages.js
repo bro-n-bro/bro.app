@@ -13,6 +13,10 @@ export default {
             // Under construction page
             'under_construction_title': "This part of site is under construction",
 
+            // Mobile plug
+            'mobile_plug_title': '',
+            'mobile_plug_desc': '',
+
             // Keplr Error page
             'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
             'keplr_reload_title': 'Reload page after you<br> installed Kepler',

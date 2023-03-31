@@ -5,9 +5,16 @@
 
             <div class="title" v-html="$t('message.error_title_404')"></div>
 
-            <router-link to="/" class="back_btn">
+            <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/'" class="back_btn">
                 {{ $t('message.back_home_btn') }}
             </router-link>
         </div>
     </section>
 </template>
+
+
+<script setup>
+    import { useRouter } from 'vue-router'
+
+    const router = useRouter()
+</script>

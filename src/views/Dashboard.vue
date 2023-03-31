@@ -57,8 +57,9 @@
 
 
 <script setup>
-    // import { watchEffect } from 'vue'
+    import { onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { getNetworksData } from '@/utils'
 
     // Components
     import Network from '../components/Network.vue'
@@ -68,19 +69,10 @@
     const store = useGlobalStore()
 
 
-    // watchEffect(async () => {
-    //     // Get data
-    //     if(store.connected && store.recalc) {
-    //         await getData()
-    //     }
-    // })
-
-
-    // Change Keplr account
-    // window.addEventListener('keplr_keystorechange', () => {
-    //     // Get data
-    //     setTimeout(async () => await getData(), 300)
-    // })
+    onBeforeMount(() => {
+        // Get networks data
+        getNetworksData()
+    })
 </script>
 
 

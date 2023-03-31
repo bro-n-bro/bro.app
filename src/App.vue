@@ -1,4 +1,7 @@
 <template>
+    <MobilePlug v-if="WW < 1280" />
+
+    <template v-else>
     <div class="loader_wrap" v-if="!store.appLoaded">
         <div class="loader"><span></span></div>
     </div>
@@ -77,13 +80,17 @@
             </div>
         </template>
     </notifications>
+    </template>
 </template>
 
 
 <script setup>
-    import { computed, onBeforeMount, inject } from 'vue'
+    import { computed, onBeforeMount, inject, ref } from 'vue'
     import { useRoute } from 'vue-router'
     import { useGlobalStore } from '@/stores'
+
+    // Components
+    import MobilePlug from '@/components/MobilePlug.vue'
 
     const route = useRoute(),
         layout = computed(() => route.meta.layout || 'default-layout'),
@@ -91,10 +98,15 @@
         i18n = inject('i18n'),
         emitter = inject('emitter')
 
+    let WW = ref(window.innerWidth)
+
 
     onBeforeMount(() => {
         // Set title
         document.title = i18n.global.t('message.page_title')
+
+        // Window resize
+        window.addEventListener('resize', () => WW.value = window.innerWidth)
     })
 
 
