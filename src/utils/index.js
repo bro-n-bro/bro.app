@@ -28,6 +28,11 @@ import omniflixConfig from '@/config/chain/omniflix'
 export const getNetworksData = async () => {
     let store = useGlobalStore()
 
+    // Set current cosmos hub wallet
+    if(store.currentAddress) {
+        store.wallets.cosmoshub = toBech32('cosmos', fromBech32(store.currentAddress).data)
+    }
+
     // Get currencies price
     let promiseCurrencies = await store.getCurrenciesPrice()
 
@@ -146,6 +151,9 @@ export const getNetworksData = async () => {
 
 
     //======== Bostrom
+    // Set wallet address
+    store.setWallet('bostrom', toBech32('bostrom', fromBech32(store.wallets.cosmoshub).data))
+
     // Get status
     store.getNetworkStatus('bostrom')
 

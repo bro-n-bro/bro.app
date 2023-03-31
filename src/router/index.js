@@ -42,7 +42,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/dashboard/:address',
+		path: '/dashboard/:address?',
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
@@ -106,15 +106,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const store = useGlobalStore(),
 		modalId = to.query.manage_modal,
-		ref = to.query.ref
+		ref = to.query.ref,
+		address = to.params.address
 
-	// Manage modal from url
 	if (modalId) {
 		store.networkManageModal = modalId
 	}
 
 	if (ref) {
 		store.ref = ref
+	}
+
+	if (address) {
+		store.currentAddress = address
 	}
 
 	// Current network

@@ -78,6 +78,7 @@ export const useGlobalStore = defineStore('global', {
         networkManageModal: '',
         ref: '',
         currentNetwork: '',
+        currentAddress: '',
 
         colors: ['#950FFF', '#1BC562', '#EB5757', '#0343E8', '#F79400', '#DB11D3'],
 
