@@ -49,7 +49,7 @@
 
         <div class="progress" v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <div class="bar">
-                <div class="violet" style="width: 60%;"></div>
+                <div class="violet" :style="`width: ${$filters.toFixed(props.proposal.deposit / store.networks[store.currentNetwork].exponent / store.networks[store.currentNetwork].proposal_need * 100, 2)}%;`"></div>
             </div>
 
             <div class="funds">
@@ -57,7 +57,7 @@
                     <div class="label">{{ $t('message.proposal_deposite_label_collected') }}</div>
 
                     <div class="val">
-                        <!-- {{ $filters.toFixed(props.proposal.deposit / store.networks[store.currentNetwork].exponent, 2) }} -->
+                        {{ $filters.toFixed(props.proposal.deposit / store.networks[store.currentNetwork].exponent, 0) }}
                         {{ store.networks[store.currentNetwork].token_name }}
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="label">{{ $t('message.proposal_deposite_label_necessary') }}</div>
 
                     <div class="val">
-                        {{ $filters.toFixed(props.proposal.deposit / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ store.networks[store.currentNetwork].proposal_need }}
                         {{ store.networks[store.currentNetwork].token_name }}
                     </div>
                 </div>

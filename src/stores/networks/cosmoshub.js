@@ -72,6 +72,7 @@ const network = {
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
+    proposal_need: 250,
 
     restake: {
         address: 'cosmos1grfk7t0k42yxpwqhr7kt4te7j73m2a3vz9aspx',
