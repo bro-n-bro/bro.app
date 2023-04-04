@@ -6,10 +6,6 @@
                     {{ $t('message.account_proposals_title') }} &rarr;
                 </router-link>
             </div>
-
-            <button class="create_btn" @click.prevent="emitter.emit('openAddProposalModal')">
-                {{ $t('message.create_btn') }}
-            </button>
         </div>
 
         <div class="titles">
@@ -187,27 +183,6 @@
     .proposals .title a:hover
     {
         color: #950fff;
-    }
-
-
-    .proposals .create_btn
-    {
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 19px;
-
-        margin-left: auto;
-        padding: 14px 20px;
-
-        transition: background .2s linear;
-
-        border-radius: 16px;
-        background: #950fff;
-    }
-
-    .proposals .create_btn:hover
-    {
-        background: #7700e1;
     }
 
 

@@ -103,9 +103,6 @@
         </div>
 
 
-        <!-- Add proposal modal -->
-        <AddProposalModal v-if="store.showAddProposalModal" />
-
         <!-- Validator modal -->
         <Suspense>
         <ValidatorModal v-if="showValidatorModal" :validator="validatorInfo" />
@@ -129,8 +126,6 @@
     import Validators from '../components/account/Validators.vue'
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
-
-    import AddProposalModal from '../components/modal/AddProposalModal.vue'
     import ValidatorModal from '../components/modal/ValidatorModal.vue'
 
     ChartJS.register(ArcElement)

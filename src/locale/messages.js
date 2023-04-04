@@ -35,7 +35,6 @@ export default {
             'download_png_btn': 'dowloand png',
             'continue_btn': 'continue journey',
             'add_address_btn': 'Add address',
-            'create_btn': 'Create',
             'settings_btn': 'Setting',
             'change_image_btn': 'Change image',
             'update_btn': 'Aprove with tx',
@@ -254,6 +253,7 @@ export default {
             'account_RPDE': 'RPDE',
             'account_APR': 'APR',
             'account_voting_power': 'Voting power',
+            'account_passport_value': 'Passport Value',
 
 
             // Add proposal modal

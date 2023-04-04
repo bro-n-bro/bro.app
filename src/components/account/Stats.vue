@@ -14,8 +14,8 @@
             </div>
 
             <div class="item">
-                <div class="label">{{ $t('message.account_RPDE') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
+                <div class="label">{{ $t('message.account_passport_value') }}</div>
+                <!-- <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div> -->
             </div>
 
             <div class="item">

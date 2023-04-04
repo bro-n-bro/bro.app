@@ -20,10 +20,6 @@
                         <div class="title">
                             {{ $t('message.account_proposals_title') }}
                         </div>
-
-                        <router-link to="/proposals/create" class="create_link">
-                            {{ $t('message.create_btn') }}
-                        </router-link>
                     </div>
 
                     <!-- <pre>{{ data.proposals }}</pre> -->
