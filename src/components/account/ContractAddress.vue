@@ -5,7 +5,7 @@
         </div>
 
         <div class="address">
-            {{ store.account.moonPassport.owner }}
+            {{ store.account.moonPassportOwner }}
         </div>
     </section>
 </template>

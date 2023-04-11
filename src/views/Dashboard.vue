@@ -52,7 +52,7 @@
 
 
     <!-- Make choice modal -->
-    <MakeChoice v-if="store.showMakeChoice" />
+    <MakeChoice />
 </template>
 
 

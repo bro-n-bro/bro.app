@@ -25,12 +25,11 @@
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
-        emitter = inject('emitter')
+        emitter = inject('emitter'),
+        showDropdown = ref(false)
 
-    var showDropdown = ref(false)
 
-
-    watchEffect(() => showDropdown.value = false)
+    // watchEffect(() => showDropdown.value = false)
 
 
     // Select currency

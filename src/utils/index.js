@@ -24,6 +24,12 @@ import crescentConfig from '@/config/chain/crescent'
 import omniflixConfig from '@/config/chain/omniflix'
 
 
+// Generate wallet
+export const generateAddress = (prefix, address) => {
+    return toBech32(prefix, fromBech32(address).data)
+}
+
+
 // Get networks data
 export const getNetworksData = async () => {
     let store = useGlobalStore()

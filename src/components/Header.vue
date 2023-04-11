@@ -56,9 +56,8 @@
     import ConnectBtn from '../components/header/ConnectBtn.vue'
 
     const store = useGlobalStore(),
-        route = useRoute()
-
-    var showDropdown = ref(false)
+        route = useRoute(),
+        showDropdown = ref(false)
 
 
     onMounted(() => {
@@ -77,7 +76,7 @@
     })
 
 
-    watchEffect(() => showDropdown.value = false)
+    // watchEffect(() => showDropdown.value = false)
 
 
     // Сlick element outside
@@ -91,7 +90,7 @@
 header
 {
     position: fixed;
-    z-index: 90;
+    z-index: 101;
     top: 0;
     left: 0;
 

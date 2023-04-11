@@ -8,7 +8,7 @@
 
     <component :is="layout" v-else />
 
-    <notifications width="276px" v-for="(network, index) in store.networks" :key="index" :group="network.denom">
+    <notifications width="280px" v-for="(network, index) in store.networks" :key="index" :group="network.denom">
         <template #body="props">
             <div class="notification">
                 <div class="icon green" v-if="props.item.type == 'success'">
@@ -59,7 +59,7 @@
     </notifications>
 
 
-    <notifications width="276px" group="default">
+    <notifications width="280px" group="default">
         <template #body="props">
             <div class="notification">
                 <div class="icon green" v-if="props.item.type == 'success'">

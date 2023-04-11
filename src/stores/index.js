@@ -52,6 +52,7 @@ export const useGlobalStore = defineStore('global', {
         recalc: true,
         connected: false,
         auth: false,
+        needReload: false,
         currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
         tooltip: '',
@@ -70,10 +71,10 @@ export const useGlobalStore = defineStore('global', {
         showManageSuccessModal: false,
         showManageErrorModal: false,
         showManageRejectModal: false,
-        showMakeChoice: false,
         showConstitutionModal: false,
         constitutionStatus: null,
         showAddProposalModal: false,
+        showAddAddressModal: false,
 
         networkManageModal: '',
         ref: '',
@@ -110,6 +111,7 @@ export const useGlobalStore = defineStore('global', {
             this.connected = true
 
             // Get moon passport
+            this.getOwnerMoonPassport()
             await this.getMoonPassport()
 
             // Set user info
@@ -117,6 +119,27 @@ export const useGlobalStore = defineStore('global', {
                 userName: key.name,
                 auth: true
             })
+        },
+
+
+        // Get owner moon passport
+        async getOwnerMoonPassport() {
+            try {
+                let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
+
+                this.jsCyber = new CyberClient(tendermintClient)
+
+                this.account.owner.moonPassport = await this.jsCyber.queryContractSmart(
+                    this.CONTRACT_ADDRESS_PASSPORT,
+                    {
+                        active_passport: {
+                            address: this.account.moonPassportOwner
+                        }
+                    }
+                )
+            } catch (error) {
+                console.log(error)
+            }
         },
 
 
@@ -135,10 +158,14 @@ export const useGlobalStore = defineStore('global', {
                         }
                     }
                 )
+
+                // Set owner to localStorage
+                window.localStorage.setItem('moonPassportOwner', this.account.moonPassport.owner)
+
+                // Set current wallet
+                window.localStorage.setItem('currentWallet', this.account.moonPassportOwner)
             } catch (error) {
                 console.log(error)
-
-                this.showMakeChoice = true
             }
         },
 
@@ -210,9 +237,14 @@ export const useGlobalStore = defineStore('global', {
         // Avatar
         async getAvatar() {
             if(this.account.moonPassport){
-                let content = []
+                let content = [],
+                    avatarHash = ''
 
-                for await (let file of this.node.cat(this.account.moonPassport.extension.avatar)) {
+                this.account.moonPassportOwner.length
+                    ? avatarHash = this.account.owner.moonPassport.extension.avatar
+                    : avatarHash = this.account.moonPassport.extension.avatar
+
+                for await (let file of this.node.cat(avatarHash)) {
                     content.push(file)
                 }
 
@@ -247,7 +279,6 @@ export const useGlobalStore = defineStore('global', {
             this.showManageErrorModal = false
             this.showManageRejectModal = false
             this.loaderManageModal = false
-            this.showMakeChoice = false
             this.showConstitutionModal = false
             this.constitutionStatus = null
 

@@ -41,6 +41,10 @@ export default {
             'account_btn': 'Account',
             'back_btn': 'Back',
             'load_more_btn': 'Load more',
+            'next_btn': 'Next',
+            'sign_btn': 'Sign',
+            'sing_broadcast_btn': 'Sing and broadcast',
+            'done_btn': 'Done',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
@@ -229,8 +233,9 @@ export default {
 
             'account_charts_staked_label': 'Staked',
             'account_charts_outside_label': 'Outside',
-            'account_charts_liquid_tokens_label': 'Liquid tokens',
+            'account_charts_liquid_tokens_label': 'Liquid',
             'account_charts_unbonding_label': 'Unbondend',
+            'account_charts_ibc_label': 'IBC Tokens',
             'account_charts_rewards_label': 'Rewards',
 
             'account_validators_col_account_name': 'Account name',
@@ -254,6 +259,8 @@ export default {
             'account_APR': 'APR',
             'account_voting_power': 'Voting power',
             'account_passport_value': 'Passport Value',
+
+            'account_duplicate_ext': 'Duplicate Address',
 
 
             // Add proposal modal
@@ -297,6 +304,30 @@ export default {
             'validator_modal_col_blurring_notice': 'This criterion shows how many tokens were lost by the validator on the slashing in fractions.',
 
 
+            // Add address modal
+            'add_address_modal_title': 'Add adress',
+            'add_address_modal_error_desc': 'To add a new address — select a different Keplr account',
+
+            'add_address_modal_step1_name': 'Prove address',
+            'add_address_modal_step2_name': 'Create Signature',
+            'add_address_modal_step3_name': 'Back to Passport',
+            'add_address_modal_step4_name': 'Bundle Wallet',
+
+            'add_address_modal_step1_title': 'Would you like to bundle this wallet to your account',
+
+            'add_address_modal_step2_title': 'Create signature in Kepler',
+            'add_address_modal_step2_desc': 'small explanation',
+
+            'add_address_modal_step3_title': 'Switch to your passport account in Keplr',
+            'add_address_modal_step3_desc': 'small explanation',
+
+            'add_address_modal_step4_title': 'Bundled Wallet',
+            'add_address_modal_step4_desc': 'small explanation',
+
+            'add_address_modal_step5_title': 'Bravo rebyata',
+            'add_address_modal_step5_desc': 'small explanation',
+
+
             // Filter
             'filter_title': 'Filter',
 
@@ -336,6 +367,8 @@ export default {
             'notification_action_address_delete': 'Address delete',
             'notification_address_deleting_process': 'Address deleting...',
             'notification_success_address_delete_title': 'Address deleted successfully',
+
+            'notification_address_adding_process': 'Address adding to passport...',
 
 
             // Footer

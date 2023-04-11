@@ -42,12 +42,12 @@ const routes = [
 		}
 	},
 	{
-		path: '/dashboard/:address?',
+		path: '/dashboard/',
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
 			layout: defaultLayut,
-			accessDenied: ['without_keplr', 'not_connected']
+			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
 		}
 	},
 	{
@@ -164,8 +164,14 @@ router.beforeEach((to, from, next) => {
 				}
 
 				// Forbidden without a passport
-				if (access.includes('without_passport') && !store.account.moonPassport) {
+				if (access.includes('without_passport') && !store.account.moonPassport && !store.account.moonPassportOwner) {
 					next({ name: 'Dashboard' })
+					return false
+				}
+
+				// Forbidden with a global passport
+				if (access.includes('with_global_passport') && store.account.moonPassportOwner && !store.account.moonPassport) {
+					next('/account/cosmoshub')
 					return false
 				}
 			}
@@ -177,7 +183,9 @@ router.beforeEach((to, from, next) => {
 			// await store.reset()
 
 			// Reload page
-			window.location.reload()
+			if(!store.showAddAddressModal) {
+				window.location.reload()
+			}
 		})
 
 		// App full loaded
