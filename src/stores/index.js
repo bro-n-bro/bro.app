@@ -111,8 +111,15 @@ export const useGlobalStore = defineStore('global', {
             this.connected = true
 
             // Get moon passport
-            this.getOwnerMoonPassport()
             await this.getMoonPassport()
+
+            console.log(this.account.moonPassportOwner)
+            if(this.account.moonPassportOwner) {
+                await this.getOwnerMoonPassport()
+            }
+
+            // Set current wallet
+            window.localStorage.setItem('currentWallet', toBech32('bostrom', fromBech32(accounts[0].address).data))
 
             // Set user info
             this.setUserInfo({
@@ -160,10 +167,12 @@ export const useGlobalStore = defineStore('global', {
                 )
 
                 // Set owner to localStorage
-                window.localStorage.setItem('moonPassportOwner', this.account.moonPassport.owner)
+                this.account.moonPassportOwner = this.account.moonPassport.owner
+                // window.localStorage.setItem('moonPassportOwner', this.account.moonPassport.owner)
 
                 // Set current wallet
-                window.localStorage.setItem('currentWallet', this.account.moonPassportOwner)
+                this.account.currentWallet = this.account.moonPassportOwner
+                // window.localStorage.setItem('currentWallet', this.account.moonPassportOwner)
             } catch (error) {
                 console.log(error)
             }

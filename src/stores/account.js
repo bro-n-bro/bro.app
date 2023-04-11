@@ -4,11 +4,11 @@ const account = {
     userName: '',
     avatar: '',
     moonPassport: null,
-    moonPassportOwner: useLocalStorage('moonPassportOwner', ''),
+    moonPassportOwner: useLocalStorage('moonPassportOwner'),
     signature: '',
 
     owner: {},
-    currentWallet: useLocalStorage('currentWallet', ''),
+    currentWallet: useLocalStorage('currentWallet'),
 
     balance_usdt: 0,
     balance_atom: 0,
