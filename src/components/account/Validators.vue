@@ -47,10 +47,10 @@
                 </div>
 
                 <div class="col_validator" @click.prevent="toggleActiveClass">
-                    <div class="logo" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
+                    <!-- <div class="logo" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
                         <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                        <!-- <img :src="validator.logo_path" alt=""> -->
-                    </div>
+                        <img :src="validator.logo_path" alt="">
+                    </div> -->
 
                     <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
 
