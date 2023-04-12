@@ -89,7 +89,7 @@ export const useGlobalStore = defineStore('global', {
 
     actions: {
         // Connect wallet
-        async connectWallet() {
+        async connectWallet(updateOwnerMoonPassport = true, updateAvatar = true) {
             // Keplr connect
             let chainId = 'cosmoshub-4'
 
@@ -114,15 +114,17 @@ export const useGlobalStore = defineStore('global', {
             // Get moon passport
             await this.getMoonPassport()
 
-            if(this.account.moonPassportOwner) {
+            if(updateOwnerMoonPassport && this.account.moonPassportOwner) {
                 await this.getOwnerMoonPassport()
             }
 
             // Set user info
-            this.setUserInfo({
-                userName: key.name,
-                auth: true
-            })
+            if(updateAvatar){
+                this.setUserInfo({
+                    userName: key.name,
+                    auth: true
+                })
+            }
         },
 
 
@@ -141,8 +143,6 @@ export const useGlobalStore = defineStore('global', {
                         }
                     }
                 )
-
-                console.log(this.account.moonPassport)
 
                 // Set owner to localStorage
                 this.account.moonPassportOwner = this.account.moonPassport.owner

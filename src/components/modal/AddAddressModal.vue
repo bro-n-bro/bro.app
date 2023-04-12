@@ -370,7 +370,7 @@
             loading.value = true
 
             // Check passport
-            await store.connectWallet()
+            await store.connectWallet(false, false)
 
             if(store.account.moonPassport) {
                 // Hide loader
