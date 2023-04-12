@@ -14,7 +14,7 @@
         </template>
 
         <template v-else>
-        <div>
+        <div class="account_link">
             <div class="icon">
                 <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
             </div>
@@ -51,6 +51,7 @@
 
         display: flex;
 
+        width: 216px;
         margin-left: 32px;
         padding: 15px 10px;
 
@@ -59,7 +60,7 @@
         border-radius: 20px;
         background: #141414;
 
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         align-content: center;
         flex-wrap: nowrap;
@@ -71,6 +72,8 @@
         color: currentColor;
 
         display: flex;
+
+        width: calc(100% - 50px);
 
         text-decoration: none;
 
@@ -111,7 +114,7 @@
     {
         overflow: hidden;
 
-        max-width: 100px;
+        width: calc(100% - 50px);
 
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -129,7 +132,7 @@
 
         width: 40px;
         height: 40px;
-        margin-left: 26px;
+        margin-left: 10px;
 
         text-decoration: none;
 

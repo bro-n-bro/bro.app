@@ -59,6 +59,7 @@ export const useGlobalStore = defineStore('global', {
         lastTXS: '',
         manageError: '',
         jsCyber: null,
+        constitutionStatus: null,
 
         BTC_price: 0,
         ETH_price: 0,
@@ -72,8 +73,8 @@ export const useGlobalStore = defineStore('global', {
         showManageErrorModal: false,
         showManageRejectModal: false,
         showConstitutionModal: false,
-        constitutionStatus: null,
         showAddProposalModal: false,
+        showMakeChoice: true,
         showAddAddressModal: false,
 
         networkManageModal: '',
@@ -113,40 +114,15 @@ export const useGlobalStore = defineStore('global', {
             // Get moon passport
             await this.getMoonPassport()
 
-            console.log(this.account.moonPassportOwner)
             if(this.account.moonPassportOwner) {
                 await this.getOwnerMoonPassport()
             }
-
-            // Set current wallet
-            window.localStorage.setItem('currentWallet', toBech32('bostrom', fromBech32(accounts[0].address).data))
 
             // Set user info
             this.setUserInfo({
                 userName: key.name,
                 auth: true
             })
-        },
-
-
-        // Get owner moon passport
-        async getOwnerMoonPassport() {
-            try {
-                let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
-
-                this.jsCyber = new CyberClient(tendermintClient)
-
-                this.account.owner.moonPassport = await this.jsCyber.queryContractSmart(
-                    this.CONTRACT_ADDRESS_PASSPORT,
-                    {
-                        active_passport: {
-                            address: this.account.moonPassportOwner
-                        }
-                    }
-                )
-            } catch (error) {
-                console.log(error)
-            }
         },
 
 
@@ -166,13 +142,37 @@ export const useGlobalStore = defineStore('global', {
                     }
                 )
 
+                console.log(this.account.moonPassport)
+
                 // Set owner to localStorage
                 this.account.moonPassportOwner = this.account.moonPassport.owner
-                // window.localStorage.setItem('moonPassportOwner', this.account.moonPassport.owner)
 
                 // Set current wallet
                 this.account.currentWallet = this.account.moonPassportOwner
-                // window.localStorage.setItem('currentWallet', this.account.moonPassportOwner)
+            } catch (error) {
+                console.log(error)
+
+                // Clear passport
+                this.account.moonPassport = null
+            }
+        },
+
+
+        // Get owner moon passport
+        async getOwnerMoonPassport() {
+            try {
+                let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
+
+                this.jsCyber = new CyberClient(tendermintClient)
+
+                this.account.owner.moonPassport = await this.jsCyber.queryContractSmart(
+                    this.CONTRACT_ADDRESS_PASSPORT,
+                    {
+                        active_passport: {
+                            address: this.account.moonPassportOwner
+                        }
+                    }
+                )
             } catch (error) {
                 console.log(error)
             }
@@ -245,21 +245,16 @@ export const useGlobalStore = defineStore('global', {
 
         // Avatar
         async getAvatar() {
-            if(this.account.moonPassport){
-                let content = [],
-                    avatarHash = ''
+            if(this.account.owner.moonPassport) {
+                let content = []
 
-                this.account.moonPassportOwner.length
-                    ? avatarHash = this.account.owner.moonPassport.extension.avatar
-                    : avatarHash = this.account.moonPassport.extension.avatar
-
-                for await (let file of this.node.cat(avatarHash)) {
+                for await (let file of this.node.cat(this.account.owner.moonPassport.extension.avatar)) {
                     content.push(file)
                 }
 
                 this.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
             } else {
-                fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.wallets.bostrom}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
+                fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.account.moonPassportOwner}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
                     .then(response => response.json())
                     .then(data => {
                         if(data.txs) {

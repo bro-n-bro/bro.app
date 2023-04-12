@@ -50,61 +50,70 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legend">
+                <div class="legend" v-if="accountBalance.staked">
                     <div class="name">
                         <div class="color" style="background-color: #950FFF;"></div>
                         <span>{{ $t('message.account_charts_staked_label') }}</span>
                     </div>
 
-                    <div class="amount">437 {{ store.networks[store.currentNetwork].token_name }}</div>
+                    <div class="amount">
+                        {{ accountBalance.staked / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                    </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(70)"></div></div>
-                        <div class="percents">70%</div>
+                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked'))"></div></div>
+                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('staked'), 2) }}%</div>
                     </div>
                 </div>
 
-                <div class="legend">
+                <div class="legend" v-if="accountBalance.liquid">
                     <div class="name">
                         <div class="color" style="background-color: #0343E8;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
-                    <div class="amount">256 {{ store.networks[store.currentNetwork].token_name }}</div>
+                    <div class="amount">
+                        {{ accountBalance.liquid / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                    </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(30)"></div></div>
-                        <div class="percents">30%</div>
+                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid'))"></div></div>
+                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('liquid'), 2) }}%</div>
                     </div>
                 </div>
 
-                <div class="legend">
+                <div class="legend" v-if="accountBalance.unbonding">
                     <div class="name">
                         <div class="color" style="background-color: #EB5757;"></div>
                         <span>{{ $t('message.account_charts_unbonding_label') }}</span>
                     </div>
 
-                    <div class="amount">300 {{ store.networks[store.currentNetwork].token_name }}</div>
+                    <div class="amount">
+                        {{ accountBalance.unbonding / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                    </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(10)"></div></div>
-                        <div class="percents">0%</div>
+                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding'))"></div></div>
+                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('unbonding'), 2) }}%</div>
                     </div>
                 </div>
             </div>
 
 
             <div class="legends" v-if="chartActive == 2">
-                <div class="legend inline">
+                <div class="legend inline" v-if="accountBalance.liquid">
                     <div class="name">
                         <div class="color" style="background-color: #7879F1;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
-                    <div class="amount">300 {{ store.networks[store.currentNetwork].token_name }}</div>
+                    <div class="amount">
+                        {{ accountBalance.liquid / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                    </div>
                 </div>
 
-                <div class="legend">
+                <!-- <div class="legend" v-if="accountBalance.outside"> -->
+                    <div class="legend" v-if="accountBalance.outside">
                     <div class="name spoler_btn" @click.prevent="toggleActiveClass">
                         <div class="color" style="background-color: #C5811B;"></div>
                         <span>{{ $t('message.account_charts_outside_label') }}</span>
@@ -113,7 +122,9 @@
                     </div>
 
                     <div class="dropdown">
-                        <div class="amount">660 {{ store.networks[store.currentNetwork].token_name }}</div>
+                        <div class="amount">
+                            {{ accountBalance.outside / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        </div>
 
                         <div class="progress">
                             <div class="bar"><div style="background-color: #C5811B;" :style="setWidth(6)"></div></div>
@@ -257,13 +268,15 @@
                     </div>
                 </div>
 
-                <div class="legend inline">
+                <div class="legend inline" v-if="accountBalance.rewards">
                     <div class="name">
                         <div class="color" style="background-color: #1BC562;"></div>
                         <span>{{ $t('message.account_charts_rewards_label') }}</span>
                     </div>
 
-                    <div class="amount">0.030 {{ store.networks[store.currentNetwork].token_name }}</div>
+                    <div class="amount">
+                        {{ accountBalance.rewards / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                    </div>
                 </div>
             </div>
 
@@ -382,12 +395,12 @@
 <script setup>
     import { onBeforeMount, reactive, ref, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { generateAddress } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Pie, Doughnut } from 'vue-chartjs'
 
     ChartJS.register(ArcElement)
-
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -475,12 +488,21 @@
                 cutout: '86%'
                 // hoverBackgroundColor: ['#D17D00', '#D74343', '#07B14E']
             }]
-        }))
+        })),
+        accountBalance = reactive({
+            staked: 0,
+            liquid: 0,
+            unbonding: 0,
+            outside: 0,
+            rewards: 0,
+            totalChartFirst: 0,
+            totalChartSecond: 0
+        })
 
 
     onBeforeMount(async () => {
         try {
-            await fetch(`https://rpc.bronbro.io/account/account_balance/${store.wallets.cosmoshub}`)
+            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].mintscanAlias, store.account.moonPassportOwner)}`)
                 .then(res => res.json())
                 .then(response => {
                     // Set data for first chart
@@ -503,6 +525,17 @@
                     chartDatasetsThird.push(10)
                     chartDatasetsThird.push(10)
 
+                    // Set data
+                    accountBalance.staked = response.staked.uatom
+                    accountBalance.liquid = response.liquid.uatom
+                    accountBalance.unbonding = response.unbonding.uatom
+                    accountBalance.outside = response.outside.uatom
+                    accountBalance.rewards = response.rewards.uatom
+
+                    // Calc totals
+                    accountBalance.totalChartFirst = response.staked.uatom + response.liquid.uatom + response.unbonding.uatom
+
+                    // Set charts status
                     chartDone.value = true
                 })
         } catch (error) {
@@ -546,6 +579,18 @@
 
         chartInstance.setActiveElements([])
         chartInstance.update()
+    }
+
+
+    // Calc percents
+    function calcPercentsChart1(type) {
+        let result = 0
+
+        if(accountBalance.totalChartFirst) {
+            result = accountBalance[type] / accountBalance.totalChartFirst * 100
+        }
+
+        return result
     }
 </script>
 
@@ -835,7 +880,7 @@
 
     .legends .legend .bar
     {
-        width: calc(100% - 41px);
+        width: calc(100% - 60px);
         height: 8px;
 
         border-radius: 4px;
@@ -847,6 +892,8 @@
         width: 0;
         height: 8px;
 
+        transition: width .4s linear;
+
         border-radius: 4px;
     }
 
@@ -857,7 +904,7 @@
         font-weight: 500;
         line-height: 100%;
 
-        width: 37px;
+        width: 52px;
         margin-left: auto;
 
         text-align: right;

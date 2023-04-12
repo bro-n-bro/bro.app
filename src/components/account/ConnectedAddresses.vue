@@ -5,7 +5,8 @@
         </div>
 
         <div class="list">
-            <!-- <pre>{{ store.account.moonPassport }}</pre> -->
+            <!-- <pre>{{ store.account.moonPassport }}</pre>
+            <pre>{{ store.account.owner.moonPassport }}</pre> -->
 
             <div class="item" :class="{'active': store.account.currentWallet == store.account.moonPassportOwner}"
                 @click.prevent="selectWallet(store.account.moonPassportOwner)"
@@ -45,7 +46,7 @@
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
 
-        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="store.account.moonPassport.approvals.length > 3">
+        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="store.account.owner.moonPassport.approvals.length > 3">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
@@ -88,7 +89,7 @@
 
     // Select wallet
     function selectWallet(address) {
-        window.localStorage.setItem('currentWallet', address)
+        store.account.currentWallet = address
     }
 
 
@@ -242,6 +243,7 @@
 
         display: flex;
 
+        min-height: 42px;
         padding: 10px;
 
         cursor: pointer;

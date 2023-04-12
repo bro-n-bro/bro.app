@@ -6,7 +6,7 @@
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
 
-                <template v-if="!store.account.moonPassport">
+                <template v-if="store.account.moonPassport">
                 <div class="error">
                     <div class="title">
                         {{ $t('message.add_address_modal_title') }}
@@ -16,6 +16,10 @@
 
                     <div class="desc">
                         {{ $t('message.add_address_modal_error_desc') }}
+                    </div>
+
+                    <div class="loader_wrap" v-if="loading">
+                        <div class="loader"><span></span></div>
                     </div>
                 </div>
                 </template>
@@ -356,6 +360,24 @@
             store.needReload = true
         }, 2000)
     }
+
+
+    // Change Keplr account
+    window.addEventListener('keplr_keystorechange', async () => {
+        // Check account
+        if(store.showAddAddressModal) {
+            // Show loader
+            loading.value = true
+
+            // Check passport
+            await store.connectWallet()
+
+            if(store.account.moonPassport) {
+                // Hide loader
+                loading.value = false
+            }
+        }
+    })
 </script>
 
 
@@ -363,6 +385,12 @@
     .modal_content .data
     {
         width: 424px;
+    }
+
+
+    .loader_wrap
+    {
+        border-radius: 36px;
     }
 
 

@@ -265,6 +265,7 @@
 
                 // Get moon passport
                 store.getMoonPassport()
+                store.getOwnerMoonPassport()
 
                 // Set avatar
                 store.account.avatar = avatarPreview.src

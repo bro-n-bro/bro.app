@@ -162,8 +162,8 @@
         }
 
         // Get validators other wallets
-        if(store.account.moonPassport.extension.addresses) {
-            store.account.moonPassport.extension.addresses.forEach(async address => {
+        if(store.account.owner.moonPassport.extension.addresses) {
+            store.account.owner.moonPassport.extension.addresses.forEach(async address => {
                 let generatedAddress = generateAddress(store.networks[store.currentNetwork].mintscanAlias, address.address)
 
                 if(generatedAddress != store.account.moonPassportOwner && !wallets[generatedAddress]) {

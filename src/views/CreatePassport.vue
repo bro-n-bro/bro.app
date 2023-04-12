@@ -453,6 +453,7 @@
 
                     // Get moon passport
                     await store.getMoonPassport()
+                    await store.getOwnerMoonPassport()
 
                     // Set avatar
                     store.account.avatar = avatarPreview.src

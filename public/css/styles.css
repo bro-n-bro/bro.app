@@ -802,6 +802,8 @@ button
 .vue-notification-group
 {
     padding: 120px 24px 24px;
+
+    pointer-events: none;
 }
 
 .vue-notification-wrapper + .vue-notification-wrapper
@@ -817,6 +819,8 @@ button
     display: flex;
 
     padding: 14px;
+
+    pointer-events: auto;
 
     border-radius: 20px;
     background: #141414;
