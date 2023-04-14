@@ -45,6 +45,7 @@ export default {
             'sign_btn': 'Sign',
             'sing_broadcast_btn': 'Sing and broadcast',
             'done_btn': 'Done',
+            'see_more_btn': 'See more',
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
@@ -368,7 +369,9 @@ export default {
             'notification_address_deleting_process': 'Address deleting...',
             'notification_success_address_delete_title': 'Address deleted successfully',
 
+            'notification_action_address_add': 'Address add',
             'notification_address_adding_process': 'Address adding to passport...',
+            'notification_success_address_added_title': 'Address added successfully',
 
 
             // Footer

@@ -10,6 +10,7 @@ const network = {
     chainId: 'gravity-bridge-3',
     coingecko_api: 'graviton',
     mintscanAlias: 'gravity-bridge',
+    prefix: 'gravity',
 
     health: 0,
     health_color: 'grey',

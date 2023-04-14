@@ -8,45 +8,62 @@
             <!-- <pre>{{ store.account.moonPassport }}</pre>
             <pre>{{ store.account.owner.moonPassport }}</pre> -->
 
-            <div class="item" :class="{'active': store.account.currentWallet == store.account.moonPassportOwner}"
+            <div class="item"
+                :class="{'active': store.account.moonPassportOwner == generateAddress('bostrom', store.account.currentWallet)}"
                 @click.prevent="selectWallet(store.account.moonPassportOwner)"
             >
-                <div class="health green"></div>
-
-                <div class="name">{{ store.account.moonPassportOwner }}</div>
+                <div class="name">
+                    {{ store.account.moonPassportOwner }}
+                </div>
 
                 <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
             </div>
 
             <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index">
-            <div v-if="item.address.substring(0, 2) != '0x'" @click.prevent="selectWallet(generateAddress('bostrom', item.address))" class="item" :class="{
-                'hide': index >= 3 && !data.showAll,
-                'duplicate': !checkOwner(item.address),
-                'active': store.account.currentWallet == generateAddress('bostrom', item.address)
-            }">
-                <div class="health green"></div>
+            <div class="item" v-if="item.address.substring(0, 2) != '0x'"
+                @click.prevent="selectWallet(item.address)"
+                :class="{
+                    'hide': index >= 3 && !data.showAll,
+                    'duplicate': isDuplicate(item.address),
+                    'active': store.account.currentWallet == item.address
+                }"
+            >
+                <div class="tooltip">
+                    {{ $t('message.account_duplicate_ext') }}
+                </div>
 
                 <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
 
-                <div class="tooltip">{{ $t('message.account_duplicate_ext') }}</div>
+                <!-- <div class="name">
+                    {{ store.account.owner.moonPassport.extension.nickname }}
+                </div> -->
 
-                <div class="name">{{ item.address }}</div>
+                <div class="name">
+                    {{ item.address }}
+                </div>
+
+                <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
 
                 <button class="remove_btn" @click.prevent="deleteAddress(item.address)">
                     <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
 
-                <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                <div class="loader_wrap">
+                    <div class="loader"><span></span></div>
+                </div>
             </div>
             </template>
         </div>
+
 
         <button class="add_btn" @click.prevent="openAddAddressModal">
             <span>{{ $t('message.add_address_btn') }}</span>
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
 
-        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="store.account.owner.moonPassport.approvals.length > 3">
+        <button class="spoler_btn" :class="{'active': data.showAll}" v-if="store.account.owner.moonPassport.extension.addresses.length >= 3"
+            @click.prevent="data.showAll = !data.showAll"
+        >
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
@@ -58,7 +75,7 @@
 
 
 <script setup>
-    import { reactive, inject } from 'vue'
+    import { reactive, inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
@@ -70,18 +87,33 @@
         i18n = inject('i18n'),
         emitter = inject('emitter'),
         notification = useNotification(),
+        uniqWallets = [],
         data = reactive({
             showAll: false
         })
 
 
-    // Check address
-    function checkOwner(address) {
-        let result = true
+    onBeforeMount(() => {
+        // Uniq wallets array
+        uniqWallets[store.account.moonPassportOwner] = true
 
-        if(generateAddress('bostrom', address) == store.account.moonPassportOwner) {
-            result = false
-        }
+        store.account.owner.moonPassport.extension.addresses.forEach(address => {
+            let tempBostromAddress = generateAddress('bostrom', address.address)
+
+            if (!uniqWallets[tempBostromAddress]) {
+                uniqWallets[tempBostromAddress] = false
+            }
+        })
+    })
+
+
+    // Check address
+    function isDuplicate(address) {
+        let result = false
+
+        !uniqWallets[generateAddress('bostrom', address)]
+            ? uniqWallets[generateAddress('bostrom', address)] = true
+            : result = true
 
         return result
     }
@@ -95,6 +127,11 @@
 
     // Delete address
     async function deleteAddress(address) {
+        let _self = event
+
+        // Show loader
+        _self.target.closest('.item').classList.add('deleting')
+
         // Show notification
         notification.notify({
             group: 'default',
@@ -156,6 +193,9 @@
                         tx_type: i18n.global.t('message.notification_action_address_delete')
                     }
                 })
+
+                // Hide loader
+                _self.target.closest('.item').classList.remove('deleting')
             }
         } catch (error) {
             console.log(error)
@@ -176,6 +216,9 @@
                     tx_type: i18n.global.t('message.notification_action_address_delete')
                 }
             })
+
+            // Hide loader
+            _self.target.closest('.item').classList.remove('deleting')
         }
     }
 
@@ -264,47 +307,6 @@
     }
 
 
-    .connected_addresses .health
-    {
-        position: relative;
-        top: 1px;
-
-        width: 14px;
-        height: 16px;
-        margin-right: 9px;
-        margin-left: 1px;
-
-        clip-path: polygon(50% 0, 100% 24%, 100% 76%, 50% 100%, 0 76%, 0 24%);
-    }
-
-    .connected_addresses .health.orange
-    {
-        background: linear-gradient(180deg, #ff650f 0%, rgba(96, 24, 2, .3) 100%);
-    }
-
-    .connected_addresses .health.red
-    {
-        background: linear-gradient(180deg, #ff0f0f 0%, rgba(87, 0, 0, .3) 100%);
-    }
-
-    .connected_addresses .health.green
-    {
-        background: linear-gradient(180deg, #5cff0f 0%, rgba(0, 47, 5, .3) 100%);
-    }
-
-
-    .connected_addresses .item .icon
-    {
-        color: #eb5757;
-
-        display: none;
-
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-    }
-
-
     .connected_addresses .tooltip
     {
         font-size: 12px;
@@ -312,8 +314,8 @@
 
         position: absolute;
         z-index: 3;
+        right: -13px;
         bottom: 100%;
-        left: 0;
 
         display: none;
 
@@ -352,9 +354,22 @@
         overflow: hidden;
 
         width: calc(100% - 52px);
+        margin-right: auto;
 
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+
+    .connected_addresses .item .icon
+    {
+        color: #eb5757;
+
+        display: none;
+
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
     }
 
 
@@ -364,11 +379,13 @@
 
         display: flex;
 
-        width: 16px;
-        height: 16px;
-        margin-left: auto;
+        width: 18px;
+        height: 18px;
+        margin-left: 10px;
 
-        transition: color .2s linear;
+        transition: opacity .2s linear;
+
+        opacity: 0;
 
         justify-content: center;
         align-items: center;
@@ -380,14 +397,8 @@
     {
         display: block;
 
-        width: 16px;
-        height: 16px;
-    }
-
-
-    .connected_addresses .remove_btn:hover
-    {
-        color: #950fff;
+        width: 100%;
+        height: 100%;
     }
 
 
@@ -405,21 +416,62 @@
         display: block;
     }
 
+    .connected_addresses .item .loader_wrap
+    {
+        display: none;
+
+        border-radius: 14px;
+    }
+
+    .connected_addresses .item .loader
+    {
+        width: 20px;
+        height: 20px;
+    }
+
+    .connected_addresses .item.deleting .loader_wrap
+    {
+        display: flex;
+    }
+
+
+    .connected_addresses .item:hover
+    {
+        color: #fff;
+
+        background: #353535;
+    }
+
+    .connected_addresses .item:hover .remove_btn
+    {
+        color: #fff;
+
+        opacity: 1;
+    }
+
+
+    .connected_addresses .item.active
+    {
+        color: #fff;
+
+        cursor: default;
+
+        background: #141414;
+        box-shadow: inset 0 0 0 1px #950fff;
+    }
 
 
     .connected_addresses .item.duplicate
     {
         color: #fff;
 
-        order: 2;
+        cursor: default;
+
+        box-shadow: none;
     }
 
-    .connected_addresses .item.duplicate .health
-    {
-        display: none;
-    }
-
-    .connected_addresses .item.duplicate .icon
+    .connected_addresses .item.duplicate .icon,
+    .connected_addresses .item.duplicate:hover .tooltip
     {
         display: block;
     }
@@ -427,27 +479,8 @@
     .connected_addresses .item.duplicate .remove_btn
     {
         color: #eb5757;
-    }
 
-
-    .connected_addresses .item.duplicate,
-    .connected_addresses .item.active
-    {
-        cursor: default;
-    }
-
-
-    .connected_addresses .item:hover,
-    .connected_addresses .item.active
-    {
-        color: #fff;
-
-        background: #353535;
-    }
-
-    .connected_addresses .item:hover .tooltip
-    {
-        display: block;
+        opacity: 1;
     }
 
 
@@ -501,7 +534,7 @@
         height: 36px;
         margin: auto;
 
-        transition: background .2s linear;
+        transition: .2s linear;
 
         border-radius: 50%;
         background: #141414;
@@ -523,6 +556,11 @@
     .connected_addresses .spoler_btn:hover
     {
         background: #950fff;
+    }
+
+    .connected_addresses .spoler_btn.active
+    {
+        transform: rotate(180deg);
     }
 
 

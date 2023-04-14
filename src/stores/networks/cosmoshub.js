@@ -10,6 +10,7 @@ const network = {
     chainId: 'cosmoshub-4',
     coingecko_api: 'cosmos',
     mintscanAlias: 'cosmos',
+    prefix: 'cosmos',
 
     health: 0,
     health_color: 'grey',

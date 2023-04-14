@@ -10,6 +10,7 @@ const network = {
     chainId: 'stride-1',
     coingecko_api: 'stride',
     mintscanAlias: 'stride',
+    prefix: 'stride',
 
     health: 0,
     health_color: 'grey',

@@ -18,12 +18,6 @@ import { createTxRaw } from '@evmos/proto'
 import { generateEndpointBroadcast, generatePostBodyBroadcast } from '@evmos/provider'
 
 
-// Config
-import desmosConfig from '@/config/chain/desmos'
-import crescentConfig from '@/config/chain/crescent'
-import omniflixConfig from '@/config/chain/omniflix'
-
-
 // Generate wallet
 export const generateAddress = (prefix, address) => {
     return toBech32(prefix, fromBech32(address).data)
@@ -34,10 +28,6 @@ export const generateAddress = (prefix, address) => {
 export const getNetworksData = async () => {
     let store = useGlobalStore()
 
-    // Set current cosmos hub wallet
-    if(store.currentAddress) {
-        store.wallets.cosmoshub = toBech32('cosmos', fromBech32(store.currentAddress).data)
-    }
 
     // Get currencies price
     let promiseCurrencies = await store.getCurrenciesPrice()
@@ -45,13 +35,6 @@ export const getNetworksData = async () => {
 
     //======== Evmos
     try{
-        // Singer
-        const offlineSignerEvmos = await window.getOfflineSigner(store.networks.evmos.chainId),
-            accountsEvmos = await offlineSignerEvmos.getAccounts()
-
-        // Set wallet address
-        store.setWallet('evmos', accountsEvmos[0].address)
-
         // Get status
         store.getNetworkStatus('evmos')
 
@@ -379,49 +362,7 @@ export const getNetworksData = async () => {
     })
 
 
-    const checkChains = [
-        {
-            chainId: 'desmos-mainnet',
-            name: 'desmos',
-            config: desmosConfig
-        },
-        {
-            chainId: 'crescent-1',
-            name: 'crescent',
-            config: crescentConfig
-        },
-        {
-            chainId: 'omniflixhub-1',
-            name: 'omniflix',
-            config: omniflixConfig
-        }
-    ]
-
-    var accountsDesmos = {}
-
-
-    // Check chains in Keplr
-    for (let i in checkChains) {
-        try{
-            let offlineSigner = await window.getOfflineSignerAuto(checkChains[i].chainId),
-                accounts = await offlineSigner.getAccounts()
-
-            if(checkChains[i].chainId == 'desmos-mainnet'){
-                accountsDesmos = accounts
-            }
-        } catch (error) {
-            console.log(error)
-
-            // Add chain in Keplr
-            await window.keplr.experimentalSuggestChain(checkChains[i].config).then(() => store.updateNetwork(checkChains[i].name))
-        }
-    }
-
-
     // ======== Desmos
-    // Set wallet address
-    store.setWallet('desmos', accountsDesmos[0].address)
-
     // Get status
     store.getNetworkStatus('desmos')
 
@@ -690,6 +631,8 @@ export const preparePassportTx = async params => {
     ])
 
     // Create request
+    await window.keplr.enable(store.networks.bostrom.chainId)
+
     let offlineSigner = await window.getOfflineSignerAuto(store.networks.bostrom.chainId)
 
     // RPC endpoint

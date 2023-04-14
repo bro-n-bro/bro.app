@@ -32,9 +32,9 @@
     watchEffect(() => {
         // Monitor the connection of the kepler
         if(store.auth && store.appLoaded) {
-            store.account.moonPassport
-                ? route.push('/account/cosmoshub')
-                : route.push({ name: 'Dashboard' })
+            !store.account.moonPassport && !store.account.moonPassportOwner
+                ? route.push({ name: 'Dashboard' })
+                : route.push('/account/cosmoshub')
         }
     })
 </script>

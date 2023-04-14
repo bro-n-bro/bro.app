@@ -130,7 +130,7 @@
     onBeforeMount(async () => {
         // Get validators for main wallet
         try {
-            let ownerAddress = generateAddress(store.networks[store.currentNetwork].mintscanAlias, store.account.moonPassportOwner)
+            let ownerAddress = generateAddress(store.networks[store.currentNetwork].prefix, store.account.moonPassportOwner)
 
             await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
                 .then(res => res.json())
@@ -164,7 +164,7 @@
         // Get validators other wallets
         if(store.account.owner.moonPassport.extension.addresses) {
             store.account.owner.moonPassport.extension.addresses.forEach(async address => {
-                let generatedAddress = generateAddress(store.networks[store.currentNetwork].mintscanAlias, address.address)
+                let generatedAddress = generateAddress(store.networks[store.currentNetwork].prefix, address.address)
 
                 if(generatedAddress != store.account.moonPassportOwner && !wallets[generatedAddress]) {
                     try {

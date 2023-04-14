@@ -10,6 +10,7 @@ const network = {
     chainId: 'stargaze-1',
     coingecko_api: 'stargaze',
     mintscanAlias: 'stargaze',
+    prefix: 'stargaze',
 
     health: 0,
     health_color: 'grey',

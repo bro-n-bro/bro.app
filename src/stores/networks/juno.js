@@ -10,6 +10,7 @@ const network = {
     chainId: 'juno-1',
     coingecko_api: 'juno-network',
     mintscanAlias: 'juno',
+    prefix: 'juno',
 
     health: 0,
     health_color: 'grey',

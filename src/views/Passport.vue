@@ -51,7 +51,7 @@
                                         {{ $t('message.passport_address_exp') }}
                                     </div>
 
-                                    <input type="text" :value="data.moonAddress.slice(0, 12) + '...' + data.moonAddress.slice(-5)" class="input" readonly>
+                                    <input type="text" :value="data.moonAddress.slice(0, 13) + '...' + data.moonAddress.slice(-6)" class="input" readonly>
                                 </div>
                             </div>
 
@@ -149,7 +149,7 @@
 
     onMounted(() => {
         // Set data from passport
-        data.nickName = store.account.moonPassport.extension.nickname
+        data.nickName = store.account.owner.moonPassport.extension.nickname
 
         // Generate gradient
         data.bgGradient = gradient(data.nickName)
@@ -159,6 +159,12 @@
     watchEffect(() => {
         // Monitor the IPFSStatus
         if(store.IPFSStatus) {
+            let delay = 0
+
+            if(!store.account.avatar) {
+                delay = 5100
+            }
+
             setTimeout(() => {
                 avatarPreview.src = store.account.avatar
                 avatarPreview.status = true
@@ -170,7 +176,7 @@
                         data.showDownloadBtn = true
                     })
                     .catch(error => console.error(error))
-            }, 100)
+            }, delay)
         }
     })
 

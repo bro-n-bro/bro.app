@@ -23,6 +23,12 @@ import desmos from '@/stores/networks/desmos'
 import stride from '@/stores/networks/stride'
 
 
+// Config
+import desmosConfig from '@/config/chain/desmos'
+import crescentConfig from '@/config/chain/crescent'
+import omniflixConfig from '@/config/chain/omniflix'
+
+
 const networks = {
     cosmoshub,
     bostrom,
@@ -80,7 +86,6 @@ export const useGlobalStore = defineStore('global', {
         networkManageModal: '',
         ref: '',
         currentNetwork: '',
-        currentAddress: '',
 
         colors: ['#950FFF', '#1BC562', '#EB5757', '#0343E8', '#F79400', '#DB11D3'],
 
@@ -100,11 +105,61 @@ export const useGlobalStore = defineStore('global', {
                 accounts = await offlineSigner.getAccounts(),
                 key = await window.keplr.getKey(chainId)
 
+            // Evmos Singer
+            let offlineSignerEvmos = await window.getOfflineSigner(this.networks.evmos.chainId),
+                accountsEvmos = await offlineSignerEvmos.getAccounts()
+
+            // Add chains
+            let checkChains = [
+                {
+                    chainId: 'desmos-mainnet',
+                    name: 'desmos',
+                    config: desmosConfig
+                },
+                {
+                    chainId: 'crescent-1',
+                    name: 'crescent',
+                    config: crescentConfig
+                },
+                {
+                    chainId: 'omniflixhub-1',
+                    name: 'omniflix',
+                    config: omniflixConfig
+                }
+            ]
+
+
+            // Desmos Singer
+            let accountsDesmos = {}
+
+
+            // Check chains in Keplr
+            for (let i in checkChains) {
+                try{
+                    let offlineSigner = await window.getOfflineSignerAuto(checkChains[i].chainId),
+                        accounts = await offlineSigner.getAccounts()
+
+                    if(checkChains[i].chainId == 'desmos-mainnet'){
+                        accountsDesmos = accounts
+                    }
+                } catch (error) {
+                    console.log(error)
+
+                    // Add chain in Keplr
+                    await window.keplr.experimentalSuggestChain(checkChains[i].config).then(() => this.updateNetwork(checkChains[i].name))
+                }
+            }
+
+            // Set keplr offline signer
+            this.activeKeplrAddress = accounts[0].address
+
             // Pre wallets
             this.$patch({
                 wallets: {
                     'cosmoshub': accounts[0].address,
-                    'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data)
+                    'bostrom': toBech32('bostrom', fromBech32(accounts[0].address).data),
+                    'evmos': accountsEvmos[0].address,
+                    'desmos': accountsDesmos[0].address
                 }
             })
 
@@ -114,17 +169,27 @@ export const useGlobalStore = defineStore('global', {
             // Get moon passport
             await this.getMoonPassport()
 
-            if(updateOwnerMoonPassport && this.account.moonPassportOwner) {
+            if (updateOwnerMoonPassport && this.account.moonPassport) {
+                // Set owner to localStorage
+                this.account.moonPassportOwner = this.account.moonPassport.owner
+
+                // Set current wallet
+                this.account.currentWallet = this.account.moonPassportOwner
+
+                // Set owner moon passport
+                this.account.owner.moonPassport = this.account.moonPassport
+            }
+
+            // Get owner moon passport
+            if (updateOwnerMoonPassport && this.account.moonPassportOwner) {
                 await this.getOwnerMoonPassport()
             }
 
             // Set user info
-            if(updateAvatar){
-                this.setUserInfo({
-                    userName: key.name,
-                    auth: true
-                })
-            }
+            this.setUserInfo({
+                userName: key.name,
+                auth: true
+            }, updateAvatar)
         },
 
 
@@ -143,12 +208,6 @@ export const useGlobalStore = defineStore('global', {
                         }
                     }
                 )
-
-                // Set owner to localStorage
-                this.account.moonPassportOwner = this.account.moonPassport.owner
-
-                // Set current wallet
-                this.account.currentWallet = this.account.moonPassportOwner
             } catch (error) {
                 console.log(error)
 
@@ -180,21 +239,25 @@ export const useGlobalStore = defineStore('global', {
 
 
         // Set user info
-        async setUserInfo(user) {
+        async setUserInfo(user, updateAvatar) {
             this.account.userName = user.userName
             this.auth = user.auth
 
-            // Set robohash avatar
-            this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
+            if (updateAvatar) {
+                // Set robohash avatar
+                this.account.owner.moonPassport
+                    ? this.account.avatar = `https://robohash.org/${this.account.owner.moonPassport.extension.nickname.toLowerCase()}?set=set4`
+                    : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
 
-            // Start IPFS
-            if (!this.node) {
-                await this.startIPFS()
-            }
+                // Start IPFS
+                if (!this.node) {
+                    await this.startIPFS()
+                }
 
-            // Get avatar
-            if (this.node.isOnline()) {
-                this.getAvatar()
+                // Get avatar
+                if (this.node.isOnline()) {
+                    this.getAvatar()
+                }
             }
         },
 
@@ -202,39 +265,39 @@ export const useGlobalStore = defineStore('global', {
         // IPFS
         async startIPFS() {
             this.node = await IPFS.create({
-                // repo: 'ipfs-repo-cyber',
-                // init: true,
-                // start: true,
-                // relay: {
-                //     enabled: true,
-                //     hop: {
-                //         enabled: true,
-                //     },
-                // },
-                // EXPERIMENTAL: {
-                //     pubsub: true,
-                // },
-                // config: {
-                //     Addresses: {
-                //         Swarm: [
-                //             '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
-                //             '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-                //             '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-                //         ],
-                //     },
-                //     Bootstrap: [
-                //         '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
-                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
-                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-                //         '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-                //         '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
-                //         '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
-                //         '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
-                //         '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN',
-                //     ]
-                // }
+                repo: 'ipfs-repo-cyber',
+                init: true,
+                start: true,
+                relay: {
+                    enabled: true,
+                    hop: {
+                        enabled: true,
+                    },
+                },
+                EXPERIMENTAL: {
+                    pubsub: true,
+                },
+                config: {
+                    Addresses: {
+                        Swarm: [
+                            '/dns4/ws-star.discovery.cybernode.ai/tcp/443/wss/p2p-webrtc-star',
+                            '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+                            '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+                        ],
+                    },
+                    Bootstrap: [
+                        '/dns4/ws-star.discovery.cybernode.ai/tcp/4430/wss/p2p/QmUgmRxoLtGERot7Y6G7UyF6fwvnusQZfGR15PuE6pY3aB',
+                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
+                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+                        '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+                        '/dns4/node0.preload.ipfs.io/tcp/443/wss/p2p/QmZMxNdpMkewiVZLMRxaNxUeZpDUb34pWjZ1kZvsd16Zic',
+                        '/dns4/node1.preload.ipfs.io/tcp/443/wss/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
+                        '/dns4/node2.preload.ipfs.io/tcp/443/wss/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS',
+                        '/dns4/node3.preload.ipfs.io/tcp/443/wss/p2p/QmY7JB6MQXhxHvq7dBDh4HpbH29v4yE9JRadAVpndvzySN',
+                    ]
+                }
             })
 
             if (this.node.isOnline()) {
@@ -245,22 +308,27 @@ export const useGlobalStore = defineStore('global', {
 
         // Avatar
         async getAvatar() {
+            let avatarStatus = false,
+                delay = 5000
+
+            // Getting avatar from gateway
+            setTimeout(() => {
+                if (!avatarStatus) {
+                    this.account.avatar = `https://gateway.ipfs.cybernode.ai/ipfs/${this.account.owner.moonPassport.extension.avatar}`
+                }
+            }, delay)
+
+            // Getting avatar from ipfs node
             if(this.account.owner.moonPassport) {
                 let content = []
 
-                for await (let file of this.node.cat(this.account.owner.moonPassport.extension.avatar)) {
-                    content.push(file)
+                for await (let chunk of this.node.cat(this.account.owner.moonPassport.extension.avatar)) {
+                    content.push(chunk)
                 }
 
-                this.account.avatar = URL.createObjectURL(new Blob(content, {type: 'image/jpeg'}))
-            } else {
-                fetch(`https://lcd.bostrom.cybernode.ai/txs?cyberlink.neuron=${this.account.moonPassportOwner}&cyberlink.particleFrom=Qmf89bXkJH9jw4uaLkHmZkxQ51qGKfUPtAMxA8rTwBrmTs&limit=1000000`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.txs) {
-                            this.account.avatar = 'https://ipfs.io/ipfs/' + data.txs[0].tx.value.msg[0].value.links[0].to
-                        }
-                    })
+                this.account.avatar = URL.createObjectURL(new Blob(content, { type: 'image/jpeg' }))
+
+                avatarStatus = true
             }
         },
 

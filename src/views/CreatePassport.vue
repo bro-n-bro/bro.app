@@ -36,7 +36,7 @@
                     <form class="info" @submit.prevent="createPassport">
                         <div class="line">
                             <div class="field">
-                                <input type="text" :value="data.moonAddress.slice(0, 12) + '...' + data.moonAddress.slice(-5)" class="input" readonly>
+                                <input type="text" :value="data.moonAddress.slice(0, 13) + '...' + data.moonAddress.slice(-6)" class="input" readonly>
 
                                 <div class="exp">
                                     {{ $t('message.passport_address_exp') }}

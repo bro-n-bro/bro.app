@@ -10,6 +10,7 @@ const network = {
     chainId: 'desmos-mainnet',
     coingecko_api: 'desmos',
     mintscanAlias: 'desmos',
+    prefix: 'desmos',
 
     health: 0,
     health_color: 'grey',

@@ -10,6 +10,7 @@ const network = {
     chainId: 'crescent-1',
     coingecko_api: 'crescent-network',
     mintscanAlias: 'crescent',
+    prefix: 'crescent',
 
     health: 0,
     health_color: 'grey',

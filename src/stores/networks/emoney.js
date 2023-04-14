@@ -10,6 +10,7 @@ const network = {
     chainId: 'emoney-3',
     coingecko_api: 'e-money',
     mintscanAlias: 'emoney',
+    prefix: 'emoney',
 
     health: 0,
     health_color: 'grey',

@@ -1,12 +1,12 @@
 <template>
     <section class="modal" id="add_address_modal">
-        <div class="modal_content" @click.self="emitter.emit('closeAddAddressModal')">
+        <div class="modal_content">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeAddAddressModal')">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
 
-                <template v-if="store.account.moonPassport">
+                <template v-if="store.account.moonPassport && activeStep == 1">
                 <div class="error">
                     <div class="title">
                         {{ $t('message.add_address_modal_title') }}
@@ -37,7 +37,7 @@
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
 
-                        <div :class="{'active': activeStep == 2, 'completed': activeStep > 2}" @click.prevent="activeStep = 2">
+                        <div :class="{'active': activeStep == 2, 'completed': activeStep > 2}">
                             <span>{{ $t('message.add_address_modal_step2_name') }}</span>
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
@@ -61,7 +61,7 @@
 
                         <div class="current_account">
                             <div class="logo">
-                                <img :src="`/${activeNetwork}_logo.png`" alt="">
+                                <img :src="`/${addedNetwork}_logo.png`" alt="">
                             </div>
 
                             <div>
@@ -70,13 +70,23 @@
                                 </div>
 
                                 <div class="address">
-                                    {{ generateAddress(store.networks[activeNetwork].mintscanAlias, store.wallets.cosmoshub) }}
+                                    <template v-if="addedNetwork == 'evmos'">
+                                    {{ store.wallets.evmos.slice(0, 13) + '...' + store.wallets.evmos.slice(-6) }}
+                                    </template>
+
+                                    <template v-else-if="addedNetwork == 'desmos'">
+                                    {{ store.wallets.desmos.slice(0, 13) + '...' + store.wallets.desmos.slice(-6) }}
+                                    </template>
+
+                                    <template v-else>
+                                    {{ generateAddress(store.networks[addedNetwork].prefix, store.wallets.cosmoshub).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].prefix, store.wallets.cosmoshub).slice(-6) }}
+                                    </template>
                                 </div>
                             </div>
                         </div>
 
                         <div class="networks">
-                            <div><button class="network" :class="{'active': activeNetwork == 'cosmoshub'}" @click.prevent="selectNetwork('cosmoshub')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'cosmoshub'}" @click.prevent="selectNetwork('cosmoshub')">
                                 <div class="logo">
                                     <img src="/cosmoshub_logo.png" alt="">
                                 </div>
@@ -86,7 +96,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'desmos'}" @click.prevent="selectNetwork('desmos')">
+                            <!-- <div><button class="network" :class="{'active': addedNetwork == 'desmos'}" @click.prevent="selectNetwork('desmos')">
                                 <div class="logo">
                                     <img src="/desmos_logo.png" alt="">
                                 </div>
@@ -94,9 +104,9 @@
                                 <div>{{ store.networks.desmos.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
-                            </button></div>
+                            </button></div> -->
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'juno'}" @click.prevent="selectNetwork('juno')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'juno'}" @click.prevent="selectNetwork('juno')">
                                 <div class="logo">
                                     <img src="/juno_logo.png" alt="">
                                 </div>
@@ -106,7 +116,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'stargaze'}" @click.prevent="selectNetwork('stargaze')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'stargaze'}" @click.prevent="selectNetwork('stargaze')">
                                 <div class="logo">
                                     <img src="/stargaze_logo.png" alt="">
                                 </div>
@@ -116,7 +126,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'gravity'}" @click.prevent="selectNetwork('gravity')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'gravity'}" @click.prevent="selectNetwork('gravity')">
                                 <div class="logo">
                                     <img src="/gravity_logo.png" alt="">
                                 </div>
@@ -126,7 +136,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'stride'}" @click.prevent="selectNetwork('stride')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'stride'}" @click.prevent="selectNetwork('stride')">
                                 <div class="logo">
                                     <img src="/stride_logo.png" alt="">
                                 </div>
@@ -136,7 +146,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'omniflix'}" @click.prevent="selectNetwork('omniflix')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'omniflix'}" @click.prevent="selectNetwork('omniflix')">
                                 <div class="logo">
                                     <img src="/omniflix_logo.png" alt="">
                                 </div>
@@ -146,7 +156,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'osmosis'}" @click.prevent="selectNetwork('osmosis')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'osmosis'}" @click.prevent="selectNetwork('osmosis')">
                                 <div class="logo">
                                     <img src="/osmosis_logo.png" alt="">
                                 </div>
@@ -156,7 +166,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'evmos'}" @click.prevent="selectNetwork('evmos')">
+                            <!-- <div><button class="network" :class="{'active': addedNetwork == 'evmos'}" @click.prevent="selectNetwork('evmos')">
                                 <div class="logo">
                                     <img src="/evmos_logo.png" alt="">
                                 </div>
@@ -164,9 +174,9 @@
                                 <div>{{ store.networks.evmos.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
-                            </button></div>
+                            </button></div> -->
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'bostrom'}" @click.prevent="selectNetwork('bostrom')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'bostrom'}" @click.prevent="selectNetwork('bostrom')">
                                 <div class="logo">
                                     <img src="/bostrom_logo.png" alt="">
                                 </div>
@@ -176,7 +186,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'crescent'}" @click.prevent="selectNetwork('crescent')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'crescent'}" @click.prevent="selectNetwork('crescent')">
                                 <div class="logo">
                                     <img src="/crescent_logo.png" alt="">
                                 </div>
@@ -186,7 +196,7 @@
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': activeNetwork == 'emoney'}" @click.prevent="selectNetwork('emoney')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'emoney'}" @click.prevent="selectNetwork('emoney')">
                                 <div class="logo">
                                     <img src="/emoney_logo.png" alt="">
                                 </div>
@@ -197,7 +207,7 @@
                             </button></div>
                         </div>
 
-                        <button class="btn" @click.prevent="activeStep += 1">
+                        <button class="btn" @click.prevent="setActiveKeplrAddress">
                             {{ $t('message.next_btn') }}
                         </button>
                     </div>
@@ -234,6 +244,10 @@
                         <button class="btn" :class="{'disabled': !ownerAccount}" @click.prevent="activeStep += 1">
                             {{ $t('message.next_btn') }}
                         </button>
+
+                        <div class="loader_wrap" v-if="loading">
+                            <div class="loader"><span></span></div>
+                        </div>
                     </div>
 
 
@@ -287,37 +301,55 @@
     import { ref, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
-    import { generateAddress } from '@/utils'
+    import { preparePassportTx, sendTx, generateAddress } from '@/utils'
     import { toAscii, toBase64 } from '@cosmjs/encoding'
+
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
         notification = useNotification(),
         emitter = inject('emitter'),
         activeStep = ref(1),
-        activeNetwork = ref('cosmoshub'),
-        ownerAccount = ref(true),
-        loading = ref(false)
+        activeKeplrAddress = ref(store.activeKeplrAddress),
+        addedNetwork = ref('cosmoshub'),
+        addedAddress = ref(generateAddress(store.networks.cosmoshub.prefix, store.wallets.cosmoshub)),
+        ownerAccount = ref(false),
+        loading = ref(false),
+        signature = ref('')
 
 
     // Select network
-    function selectNetwork(network) {
-        activeNetwork.value = network
+    async function selectNetwork(network) {
+        addedNetwork.value = network
+
+        await window.keplr.enable(store.networks[network].chainId)
+
+        let offlineSigner = await window.getOfflineSignerAuto(store.networks[network].chainId),
+            accounts = await offlineSigner.getAccounts()
+
+        addedAddress.value = accounts[0].address
+    }
+
+
+    // Set active Keplr address
+    function setActiveKeplrAddress() {
+        activeKeplrAddress.value = store.activeKeplrAddress
+
+        // Go to next step
+        activeStep.value += 1
     }
 
 
     // Create signature
     async function createSignature() {
         try {
-            await window.keplr.enable(store.networks.bostrom.chainId)
-
             let res = await window.keplr.signArbitrary(
-                store.networks.bostrom.chainId,
-                store.wallets.bostrom,
-                `${store.wallets.bostrom}:${store.CONSTITUTION_HASH}`
+                store.networks[addedNetwork.value].chainId,
+                addedAddress.value,
+                `${store.account.moonPassportOwner}:${store.CONSTITUTION_HASH}`
             )
 
-            store.account.signature = toBase64(toAscii(JSON.stringify({
+            signature.value = toBase64(toAscii(JSON.stringify({
                 pub_key: res.pub_key.value,
                 signature: res.signature
             })))
@@ -328,6 +360,9 @@
                 title: i18n.global.t('message.notification_passport_signature'),
                 type: 'success'
             })
+
+            // Hide loader
+            loading.value = false
 
             // Go to next step
             activeStep.value += 1
@@ -349,16 +384,88 @@
             title: i18n.global.t('message.notification_address_adding_process')
         })
 
-        setTimeout(() => {
+        try{
+            // Prepare Tx
+            let prepareResult = await preparePassportTx({
+                proof_address: {
+                    address: addedAddress.value,
+                    nickname: store.account.owner.moonPassport.extension.nickname,
+                    signature: signature.value
+                }
+            })
+
+            // Send Tx
+            let result = await sendTx(prepareResult)
+
+            if (result.code === 0) {
+                // Set TXS
+                store.lastTXS = result.transactionHash
+
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_success_address_added_title'),
+                    type: 'success',
+                    data: {
+                        chain: 'bostrom',
+                        tx_type: i18n.global.t('message.notification_action_address_add')
+                    }
+                })
+
+                // Go to next step
+                activeStep.value += 1
+                store.needReload = true
+            }
+
+            if (result.code) {
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    type: 'error',
+                    data: {
+                        chain: 'passport',
+                        tx_type: i18n.global.t('message.notification_action_address_add')
+                    }
+                })
+
+                // Hide loader
+                loading.value = false
+            }
+        } catch (error) {
+            console.log(error)
+
             // Show notification
             notification.notify({
                 group: 'default',
                 clean: true
             })
 
-            activeStep.value += 1
-            store.needReload = true
-        }, 2000)
+            notification.notify({
+                group: store.networks.bostrom.denom,
+                title: i18n.global.t('message.notification_failed_title'),
+                text: i18n.global.t('message.manage_modal_error_rejected'),
+                type: 'error',
+                data: {
+                    chain: 'passport',
+                    tx_type: i18n.global.t('message.notification_action_address_add')
+                }
+            })
+
+            // Hide loader
+            loading.value = false
+        }
     }
 
 
@@ -369,10 +476,44 @@
             // Show loader
             loading.value = true
 
-            // Check passport
+            // New keplr connect
             await store.connectWallet(false, false)
 
-            if(store.account.moonPassport) {
+            // Step 0 and Step 2
+            if (activeStep.value == 1 || activeStep.value == 2) {
+                if(store.account.moonPassport) {
+                    // Hide loader
+                    loading.value = false
+
+                    // Go to zero step
+                    activeStep.value = 1
+                }
+            }
+
+            // Step 3
+            if (activeStep.value == 3) {
+                if(store.wallets.bostrom == store.account.moonPassportOwner) {
+                    // Set condition
+                    ownerAccount.value = true
+
+                    // Go to next step
+                    activeStep.value += 1
+                }
+
+                // Hide loader
+                loading.value = false
+            }
+
+            // Step 4
+            if (activeStep.value == 4) {
+                if(store.wallets.bostrom != store.account.moonPassportOwner) {
+                    // Set condition
+                    ownerAccount.value = false
+
+                    // Go to next step
+                    activeStep.value -= 1
+                }
+
                 // Hide loader
                 loading.value = false
             }
@@ -530,6 +671,7 @@
     {
         display: block;
 
+        height: 150px;
         margin: 24px auto 0;
     }
 
@@ -589,11 +731,11 @@
     {
         color: #555;
         font-size: 14px;
-        line-height: 100%;
+        line-height: 16px;
 
         overflow: hidden;
 
-        margin-top: 8px;
+        margin-top: 6px;
 
         white-space: nowrap;
         text-overflow: ellipsis;

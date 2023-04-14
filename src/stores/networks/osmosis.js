@@ -10,6 +10,7 @@ const network = {
     chainId: 'osmosis-1',
     coingecko_api: 'osmosis',
     mintscanAlias: 'osmosis',
+    prefix: 'osmosis',
 
     health: 0,
     health_color: 'grey',

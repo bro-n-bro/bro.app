@@ -9,6 +9,7 @@ const network = {
     token_name: 'MBOOT',
     chainId: 'bostrom',
     coingecko_api: 'bostrom',
+    prefix: 'bostrom',
 
     health: 0,
     health_color: 'grey',

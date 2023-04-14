@@ -106,8 +106,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const store = useGlobalStore(),
 		modalId = to.query.manage_modal,
-		ref = to.query.ref,
-		address = to.params.address
+		ref = to.query.ref
 
 	if (modalId) {
 		store.networkManageModal = modalId
@@ -115,10 +114,6 @@ router.beforeEach((to, from, next) => {
 
 	if (ref) {
 		store.ref = ref
-	}
-
-	if (address) {
-		store.currentAddress = address
 	}
 
 	// Current network

@@ -1,9 +1,11 @@
 <template>
     <section class="proposals">
         <div class="head">
-            <div class="title">
-                <router-link :to="`/proposals/${store.currentNetwork}`">
-                    {{ $t('message.account_proposals_title') }} &rarr;
+            <div class="title">{{ $t('message.account_proposals_title') }}</div>
+
+            <div class="all_link">
+                <router-link :to="`/proposals/${store.currentNetwork}`" class="link">
+                    {{ $t('message.see_more_btn') }} &rarr;
                 </router-link>
             </div>
         </div>
@@ -72,7 +74,7 @@
 
 
 <script setup>
-    import { onMounted, reactive, inject, ref } from 'vue'
+    import { onBeforeMount, reactive, inject, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
@@ -84,10 +86,10 @@
         })
 
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         // Get proposals
         try {
-            await fetch('https://rpc.bronbro.io/gov/proposals')
+            fetch('https://rpc.bronbro.io/gov/proposals')
                 .then(res => res.json())
                 .then(response => {
                     data.proposals = response
@@ -165,24 +167,22 @@
     }
 
 
-    .proposals .title a
+    .proposals .all_link
+    {
+        color: #950fff;
+        font-size: 14px;
+        line-height: 100%;
+
+        margin-left: auto;
+    }
+
+
+    .proposals .all_link .link
     {
         color: currentColor;
 
-        display: flex;
-
-        transition: color .2s linear;
+        white-space: nowrap;
         text-decoration: none;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .proposals .title a:hover
-    {
-        color: #950fff;
     }
 
 
