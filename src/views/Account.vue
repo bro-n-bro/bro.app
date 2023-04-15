@@ -11,7 +11,7 @@
                 <section class="col_main">
                     <section class="main_data">
                         <!-- Contract address -->
-                        <ContractAddress />
+                        <!-- <ContractAddress /> -->
 
                         <!-- Charts -->
                         <Charts />
@@ -46,7 +46,7 @@
 <script setup>
     // Components
     import Networks from '../components/account/Networks.vue'
-    import ContractAddress from '../components/account/ContractAddress.vue'
+    // import ContractAddress from '../components/account/ContractAddress.vue'
     import Charts from '../components/account/Charts.vue'
     import Stats from '../components/account/Stats.vue'
     import Validators from '../components/account/Validators.vue'

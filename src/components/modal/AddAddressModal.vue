@@ -32,22 +32,22 @@
                     </div>
 
                     <div class="names">
-                        <div :class="{'active': activeStep == 1, 'completed': activeStep > 1}" @click.prevent="activeStep = 1">
+                        <div :class="{'active': activeStep == 1, 'completed': activeStep > 1, 'disabled': activeStep == 5}" @click.prevent="activeStep = 1">
                             <span>{{ $t('message.add_address_modal_step1_name') }}</span>
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
 
-                        <div :class="{'active': activeStep == 2, 'completed': activeStep > 2}">
+                        <div :class="{'active': activeStep == 2, 'completed': activeStep > 2, 'disabled': activeStep == 5}">
                             <span>{{ $t('message.add_address_modal_step2_name') }}</span>
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
 
-                        <div :class="{'active': activeStep == 3, 'completed': activeStep > 3}" @click.prevent="activeStep = 3">
+                        <div :class="{'active': activeStep == 3, 'completed': activeStep > 3, 'disabled': activeStep == 5}" @click.prevent="activeStep = 3">
                             <span>{{ $t('message.add_address_modal_step3_name') }}</span>
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
 
-                        <div :class="{'active': activeStep == 4, 'completed': activeStep > 4}" @click.prevent="activeStep = 4">
+                        <div :class="{'active': activeStep == 4, 'completed': activeStep > 4, 'disabled': activeStep == 5}" @click.prevent="activeStep = 4">
                             <span>{{ $t('message.add_address_modal_step4_name') }}</span>
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                         </div>
@@ -417,6 +417,9 @@
                     }
                 })
 
+                // Hide loader
+                loading.value = false
+
                 // Go to next step
                 activeStep.value += 1
                 store.needReload = true
@@ -476,6 +479,9 @@
             // Show loader
             loading.value = true
 
+            // Set condition
+            ownerAccount.value = false
+
             // New keplr connect
             await store.connectWallet(false, false)
 
@@ -507,9 +513,6 @@
             // Step 4
             if (activeStep.value == 4) {
                 if(store.wallets.bostrom != store.account.moonPassportOwner) {
-                    // Set condition
-                    ownerAccount.value = false
-
                     // Go to next step
                     activeStep.value -= 1
                 }
@@ -579,6 +582,7 @@
         flex-wrap: nowrap;
     }
 
+
     .names > *
     {
         color: #555;
@@ -600,6 +604,7 @@
         align-content: center;
         flex-wrap: wrap;
     }
+
 
     .names > * + *
     {
@@ -627,11 +632,6 @@
     }
 
 
-    .names > *.disabled
-    {
-        pointer-events: none;
-    }
-
     .names > *.active,
     .names > *.completed
     {
@@ -641,6 +641,11 @@
         pointer-events: auto;
 
         border-color: #950fff;
+    }
+
+    .names > *.disabled
+    {
+        pointer-events: none;
     }
 
     .names > *.completed .icon

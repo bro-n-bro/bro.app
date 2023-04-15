@@ -19,9 +19,9 @@
                 <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
             </div>
 
-            <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index">
+            <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index" v-if="store.account.owner.moonPassport.extension.addresses">
             <div class="item" v-if="item.address.substring(0, 2) != '0x'"
-                @click.prevent="selectWallet(item.address)"
+                @click.self="selectWallet(item.address)"
                 :class="{
                     'hide': index >= 3 && !data.showAll,
                     'duplicate': isDuplicate(item.address),
@@ -61,7 +61,8 @@
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
 
-        <button class="spoler_btn" :class="{'active': data.showAll}" v-if="store.account.owner.moonPassport.extension.addresses.length >= 3"
+        <button class="spoler_btn" :class="{'active': data.showAll}"
+            v-if="store.account.owner.moonPassport.extension.addresses && store.account.owner.moonPassport.extension.addresses.length >= 3"
             @click.prevent="data.showAll = !data.showAll"
         >
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -75,7 +76,7 @@
 
 
 <script setup>
-    import { reactive, inject, onBeforeMount } from 'vue'
+    import { reactive, inject, onBeforeMount, onBeforeUpdate } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
@@ -87,24 +88,42 @@
         i18n = inject('i18n'),
         emitter = inject('emitter'),
         notification = useNotification(),
-        uniqWallets = [],
         data = reactive({
             showAll: false
         })
 
+    var uniqWallets = []
+
 
     onBeforeMount(() => {
-        // Uniq wallets array
+        // Create uniq wallets array
+        createUniwWalletsArray()
+    })
+
+
+    onBeforeUpdate(() => {
+        // Clear array
+        uniqWallets = []
+
+        // Create uniq wallets array
+        createUniwWalletsArray()
+    })
+
+
+    // Create uniq wallets array
+    function createUniwWalletsArray() {
         uniqWallets[store.account.moonPassportOwner] = true
 
-        store.account.owner.moonPassport.extension.addresses.forEach(address => {
-            let tempBostromAddress = generateAddress('bostrom', address.address)
+        if(store.account.owner.moonPassport.extension.addresses) {
+            store.account.owner.moonPassport.extension.addresses.forEach(address => {
+                let tempBostromAddress = generateAddress('bostrom', address.address)
 
-            if (!uniqWallets[tempBostromAddress]) {
-                uniqWallets[tempBostromAddress] = false
-            }
-        })
-    })
+                if (!uniqWallets[tempBostromAddress]) {
+                    uniqWallets[tempBostromAddress] = false
+                }
+            })
+        }
+    }
 
 
     // Check address
@@ -171,8 +190,8 @@
                     }
                 })
 
-                // Get moon passport
-                store.getMoonPassport()
+                // Reload page
+                setTimeout(() => window.location.reload())
             }
 
             if (result.code) {
@@ -234,6 +253,7 @@
     // Event "close add address modal"
     emitter.on('closeAddAddressModal', () => {
         if(store.needReload) {
+            // Reload page
             window.location.reload()
         } else {
             store.showAddAddressModal = false
@@ -304,6 +324,11 @@
     .connected_addresses .item.hide
     {
         display: none;
+    }
+
+    .connected_addresses .item > *
+    {
+        pointer-events: none;
     }
 
 
@@ -384,6 +409,7 @@
         margin-left: 10px;
 
         transition: opacity .2s linear;
+        pointer-events: auto;
 
         opacity: 0;
 
@@ -460,12 +486,18 @@
         box-shadow: inset 0 0 0 1px #950fff;
     }
 
+    .connected_addresses .item.active .remove_btn
+    {
+        display: none;
+    }
+
 
     .connected_addresses .item.duplicate
     {
         color: #fff;
 
         cursor: default;
+        pointer-events: none;
 
         box-shadow: none;
     }
@@ -479,6 +511,8 @@
     .connected_addresses .item.duplicate .remove_btn
     {
         color: #eb5757;
+
+        pointer-events: auto;
 
         opacity: 1;
     }
