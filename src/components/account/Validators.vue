@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="amount">
-                            <span>{{ validator.coin.amount / store.networks[store.currentNetwork].exponent }}</span> {{ store.networks[store.currentNetwork].token_name }}
+                            <span>{{ $filters.toFixed(validator.coin.amount / store.networks[store.currentNetwork].exponent, 3) }}</span> {{ store.networks[store.currentNetwork].token_name }}
                         </div>
                     </div>
 

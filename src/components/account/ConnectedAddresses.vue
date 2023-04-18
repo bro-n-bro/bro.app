@@ -15,15 +15,12 @@
                 <div class="name">
                     {{ store.account.moonPassportOwner }}
                 </div>
-
-                <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
             </div>
 
             <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index" v-if="store.account.owner.moonPassport.extension.addresses">
-            <div class="item" v-if="item.address.substring(0, 2) != '0x'"
+            <div><div class="item" v-if="item.address.substring(0, 2) != '0x'"
                 @click.self="selectWallet(item.address)"
                 :class="{
-                    'hide': index >= 3 && !data.showAll,
                     'duplicate': isDuplicate(item.address),
                     'active': store.account.currentWallet == item.address
                 }"
@@ -42,8 +39,6 @@
                     {{ item.address }}
                 </div>
 
-                <svg class="check"><use xlink:href="/sprite.svg#ic_check"></use></svg>
-
                 <button class="remove_btn" @click.prevent="deleteAddress(item.address)">
                     <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
@@ -51,21 +46,14 @@
                 <div class="loader_wrap">
                     <div class="loader"><span></span></div>
                 </div>
-            </div>
+            </div></div>
             </template>
         </div>
 
 
-        <button class="add_btn" @click.prevent="openAddAddressModal">
+        <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.owner.moonPassport.extension.addresses.length >= 8}">
             <span>{{ $t('message.add_address_btn') }}</span>
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
-        </button>
-
-        <button class="spoler_btn" :class="{'active': data.showAll}"
-            v-if="store.account.owner.moonPassport.extension.addresses && store.account.owner.moonPassport.extension.addresses.length >= 3"
-            @click.prevent="data.showAll = !data.showAll"
-        >
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
 
@@ -87,10 +75,7 @@
     const store = useGlobalStore(),
         i18n = inject('i18n'),
         emitter = inject('emitter'),
-        notification = useNotification(),
-        data = reactive({
-            showAll: false
-        })
+        notification = useNotification()
 
     var uniqWallets = []
 
@@ -292,6 +277,12 @@
         flex-direction: column;
     }
 
+
+    .connected_addresses .list > *
+    {
+        position: relative;
+    }
+
     .connected_addresses .list > * + *
     {
         margin-top: 8px;
@@ -301,8 +292,6 @@
     .connected_addresses .item
     {
         color: rgba(255,255,255,.7);
-
-        position: relative;
 
         display: flex;
 
@@ -339,8 +328,8 @@
 
         position: absolute;
         z-index: 3;
-        right: -13px;
         bottom: 100%;
+        left: 0;
 
         display: none;
 
@@ -427,21 +416,6 @@
         height: 100%;
     }
 
-
-    .connected_addresses .check
-    {
-        display: none;
-
-        width: 22px;
-        height: 22px;
-        margin-left: auto;
-    }
-
-    .connected_addresses .item:not(.duplicate).active .check
-    {
-        display: block;
-    }
-
     .connected_addresses .item .loader_wrap
     {
         display: none;
@@ -486,11 +460,6 @@
         box-shadow: inset 0 0 0 1px #950fff;
     }
 
-    .connected_addresses .item.active .remove_btn
-    {
-        display: none;
-    }
-
 
     .connected_addresses .item.duplicate
     {
@@ -503,7 +472,7 @@
     }
 
     .connected_addresses .item.duplicate .icon,
-    .connected_addresses .item.duplicate:hover .tooltip
+    .connected_addresses .list > *:hover .item.duplicate .tooltip
     {
         display: block;
     }
@@ -549,52 +518,16 @@
         margin-left: 8px;
     }
 
+    .connected_addresses .add_btn.disabled
+    {
+        pointer-events: none;
+
+        opacity: .3;
+    }
+
     .connected_addresses .add_btn:hover
     {
         background: #7700e1;
-    }
-
-
-    .connected_addresses .spoler_btn
-    {
-        position: absolute;
-        right: 0;
-        bottom: -18px;
-        left: 0;
-
-        display: flex;
-
-        width: 36px;
-        height: 36px;
-        margin: auto;
-
-        transition: .2s linear;
-
-        border-radius: 50%;
-        background: #141414;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .connected_addresses .spoler_btn .icon
-    {
-        display: block;
-
-        width: 20px;
-        height: 20px;
-    }
-
-    .connected_addresses .spoler_btn:hover
-    {
-        background: #950fff;
-    }
-
-    .connected_addresses .spoler_btn.active
-    {
-        transform: rotate(180deg);
     }
 
 

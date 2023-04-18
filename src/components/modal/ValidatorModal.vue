@@ -68,48 +68,48 @@
 
                 <div class="features">
                     <div class="row">
-                        <div class="feature">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_greed_notice'))">
                             <div class="label">{{ $t('message.validator_modal_commission_label') }}</div>
 
-                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_greed_notice'))">
+                            <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('greed')] * 100, 2) }}%
                             </div>
                         </div>
 
-                        <div class="feature">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_self_bonded_ownership_notice'))">
                             <div class="label" v-html="$t('message.validator_modal_ownership_label')"></div>
 
                             <div class="val">
-                                <span @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_self_bonded_notice'))">
+                                <span>
                                     {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
                                 </span>
                                 /
-                                <span @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_ownership_notice'))">
+                                <span>
                                     {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * 100, 2) }}%
                                 </span>
                             </div>
                         </div>
 
-                        <div class="feature">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_total_delegated_notice'))">
                             <div class="label">{{ $t('message.validator_modal_total_delegated_label') }}</div>
 
-                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_total_delegated_notice'))">
+                            <div class="val">
                                 {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
                             </div>
                         </div>
 
-                        <div class="feature">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 2) }))">
                             <div class="label">{{ $t('message.validator_modal_voted_label') }}</div>
 
-                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 2) }))">
+                            <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 0) }}
                             </div>
                         </div>
 
-                        <div class="feature">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_blurring_notice'))">
                             <div class="label">{{ $t('message.validator_modal_blurring_label') }}</div>
 
-                            <div class="val" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_blurring_notice'))">
+                            <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('blurring')] * 100, 2) }}%
                             </div>
                         </div>
@@ -519,7 +519,7 @@
 
         display: block;
 
-        width: 156px;
+        width: 163px;
         max-width: 100%;
         height: 42px;
         margin-top: 20px;

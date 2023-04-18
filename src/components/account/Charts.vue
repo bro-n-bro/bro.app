@@ -38,26 +38,31 @@
             </div>
 
 
-            <div class="bullets">
+            <!-- <div class="bullets">
                 <div class="row">
                     <button class="btn bullet" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1"></button>
                     <button class="btn bullet" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2"></button>
                     <button class="btn bullet" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3"></button>
                 </div>
-            </div>
+            </div> -->
         </div>
 
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legend" v-if="accountBalance.staked">
+                <div class="legend" v-if="accountBalance.staked" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #950FFF;"></div>
                         <span>{{ $t('message.account_charts_staked_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ accountBalance.staked / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(accountBalance.staked / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ store.networks[store.currentNetwork].token_name }}
+
+                        <div class="price">
+                            200 {{ store.currency }}
+                        </div>
                     </div>
 
                     <div class="progress">
@@ -66,14 +71,19 @@
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.liquid">
+                <div class="legend" v-if="accountBalance.liquid" :class="{'active': chartFirstActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFirst', 1)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #0343E8;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ accountBalance.liquid / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(accountBalance.liquid / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ store.networks[store.currentNetwork].token_name }}
+
+                        <div class="price">
+                            200 {{ store.currency }}
+                        </div>
                     </div>
 
                     <div class="progress">
@@ -82,14 +92,19 @@
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.unbonding">
+                <div class="legend" v-if="accountBalance.unbonding" :class="{'active': chartFirstActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFirst', 2)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #EB5757;"></div>
                         <span>{{ $t('message.account_charts_unbonding_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ accountBalance.unbonding / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(accountBalance.unbonding / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ store.networks[store.currentNetwork].token_name }}
+
+                        <div class="price">
+                            200 {{ store.currency }}
+                        </div>
                     </div>
 
                     <div class="progress">
@@ -101,7 +116,7 @@
 
 
             <div class="legends" v-if="chartActive == 2">
-                <div class="legend inline" v-if="accountBalance.liquid">
+                <div class="legend" v-if="accountBalance.liquid">
                     <div class="name">
                         <div class="color" style="background-color: #7879F1;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
@@ -268,7 +283,7 @@
                     </div>
                 </div>
 
-                <div class="legend inline" v-if="accountBalance.rewards">
+                <div class="legend" v-if="accountBalance.rewards">
                     <div class="name">
                         <div class="color" style="background-color: #1BC562;"></div>
                         <span>{{ $t('message.account_charts_rewards_label') }}</span>
@@ -397,10 +412,10 @@
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
-    import { Chart as ChartJS, ArcElement } from 'chart.js'
+    import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js'
     import { Pie, Doughnut } from 'vue-chartjs'
 
-    ChartJS.register(ArcElement)
+    ChartJS.register(ArcElement, Tooltip)
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -409,18 +424,19 @@
         chartFirst = ref(null),
         chartSecond = ref(null),
         chartThird = ref(null),
+        chartFirstActiveLegend = ref(),
+        chartSecondActiveLegend = ref(),
         chartThirdActiveLegend = ref(),
         chartOptionsFirst = reactive({
             responsive: true,
             plugins: {
-                legend: false,
-                tooltip: false
+                legend: false
             },
-            // onHover: (e, item) => {
-            //     item.length
-            //         ? activeLegend.value = item[0].index + 1
-            //         : activeLegend.value = null
-            // }
+            onHover: (e, item) => {
+                item.length
+                    ? chartFirstActiveLegend.value = item[0].index
+                    : chartFirstActiveLegend.value = null
+            }
         }),
         chartOptionsSecond = reactive({
             responsive: true,
@@ -428,11 +444,11 @@
                 legend: false,
                 tooltip: false
             },
-            // onHover: (e, item) => {
-            //     item.length
-            //         ? activeLegend.value = item[0].index + 3
-            //         : activeLegend.value = null
-            // }
+            onHover: (e, item) => {
+                item.length
+                    ? chartSecondActiveLegend.value = item[0].index
+                    : chartSecondActiveLegend.value = null
+            }
         }),
         chartOptionsThird = reactive({
             responsive: true,
@@ -460,7 +476,9 @@
                 backgroundColor: ['#950FFF', '#0343E8', '#EB5757'],
                 borderColor: 'transparent',
                 hoverOffset: 0,
-                // hoverBackgroundColor: ['#7700E1', '#3400D1']
+                hoverBackgroundColor: ['#7700E1', '#3400D1', '#D74343'],
+                hoverBorderColor: '#000',
+                hoverBorderWidth: 3
             }]
         })),
         chartDataSecond = computed(() => ({
@@ -485,7 +503,7 @@
                 backgroundColor: ['#7879F1', '#C5811B', '#EF5DA8', '#1BC562', '#7879F1', '#C5811B', '#EF5DA8'],
                 borderColor: 'transparent',
                 hoverOffset: 0,
-                cutout: '86%'
+                cutout: '86%',
                 // hoverBackgroundColor: ['#D17D00', '#D74343', '#07B14E']
             }]
         })),
@@ -557,10 +575,23 @@
 
 
     // Mouse enter on legend for third chart
-    function mouseenterLegend(dataIndex) {
-        let chartInstance = chartThird.value.chart
+    function mouseenterLegend(chart, dataIndex) {
+        let chartInstance = {}
 
-        chartThirdActiveLegend.value = dataIndex
+        if(chart == 'chartFirst') {
+            chartInstance = chartFirst.value.chart
+            chartFirstActiveLegend.value = dataIndex
+        }
+
+        if(chart == 'chartSecond') {
+            chartInstance = chartSecond.value.chart
+            chartSecondActiveLegend.value = dataIndex
+        }
+
+        if(chart == 'chartThird') {
+            chartInstance = chartThird.value.chart
+            chartThirdActiveLegend.value = dataIndex
+        }
 
         chartInstance.setActiveElements([{
             datasetIndex: 0,
@@ -572,10 +603,23 @@
 
 
     // Mouse leave from legend for first chart
-    function mouseleaveLegend() {
-        let chartInstance = chartThird.value.chart
+    function mouseleaveLegend(chart) {
+        let chartInstance = {}
 
-        chartThirdActiveLegend.value = null
+        if(chart == 'chartFirst') {
+            chartInstance = chartFirst.value.chart
+            chartFirstActiveLegend.value = null
+        }
+
+        if(chart == 'chartSecond') {
+            chartInstance = chartSecond.value.chart
+            chartSecondActiveLegend.value = null
+        }
+
+        if(chart == 'chartThird') {
+            chartInstance = chartThird.value.chart
+            chartThirdActiveLegend.value = null
+        }
 
         chartInstance.setActiveElements([])
         chartInstance.update()
@@ -617,6 +661,8 @@
         width: 291px;
         max-width: 100%;
         height: 291px;
+
+        border-radius: 50%;
     }
 
 
@@ -641,8 +687,8 @@
     {
         z-index: 3;
 
-        width: calc(100% - 40px);
-        height: calc(100% - 40px);
+        width: calc(100% - 38px);
+        height: calc(100% - 38px);
         margin: auto;
 
         inset: 0;
@@ -670,7 +716,13 @@
         pointer-events: none;
 
         opacity: .8;
+        border-radius: 50%;
         background: #000;
+    }
+
+    .chart.active
+    {
+        z-index: 3;
     }
 
     .chart.active:after,
@@ -742,65 +794,26 @@
 
 
 
-    .bullets
-    {
-        display: flex;
-
-        margin-top: 16px;
-    }
-
-
-    .bullets .row
-    {
-        display: flex;
-
-        margin: 0 auto;
-        padding: 8px;
-
-        border-radius: 12px;
-        background: #141414;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .bullets .bullet
-    {
-        width: 10px;
-        height: 10px;
-
-        transition: background .2s linear;
-
-        border-radius: 50%;
-        background: #464646;
-    }
-
-    .bullets .bullet + .bullet
-    {
-        margin-left: 8px;
-    }
-
-    .bullets .bullet:hover,
-    .bullets .bullet.active
-    {
-        background: #fff;
-    }
-
-
-
     .legends > * + *
     {
-        margin-top: 8px;
+        margin-top: 16px;
     }
 
 
     .legends .legend
     {
-        padding: 8px;
+        display: flex;
+
+        padding: 6px 8px;
+
+        transition: background .2s linear;
 
         border-radius: 10px;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 
@@ -859,16 +872,33 @@
         font-weight: 600;
         line-height: 100%;
 
-        margin-top: 10px;
+        margin-left: auto;
 
+        text-align: right;
+        white-space: nowrap;
         text-transform: uppercase;
     }
+
+
+    .legends .legend .price
+    {
+        color: #555;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 100%;
+
+        margin-top: 4px;
+
+        white-space: nowrap;
+    }
+
 
 
     .legends .legend .progress
     {
         display: flex;
 
+        width: 100%;
         margin-top: 8px;
 
         justify-content: space-between;
@@ -1003,49 +1033,10 @@
     }
 
 
-
-
-    .legends .legend .tokens .amount
+    .legends .legend.active
     {
-        font-size: 16px;
-        font-weight: 400;
-
-        margin: 0;
-
-        text-align: right;
-        white-space: nowrap;
+        background: #141414;
     }
-
-
-    .legends .legend .tokens .price
-    {
-        color: #555;
-        font-size: 12px;
-        line-height: 100%;
-
-        margin-top: 4px;
-
-        text-align: right;
-        white-space: nowrap;
-    }
-
-
-    .legends .legend.inline
-    {
-        display: flex;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .legends .legend.inline .amount
-    {
-        margin-top: 0;
-        margin-left: auto;
-    }
-
 
     .legends .legend.active .arr
     {
@@ -1142,10 +1133,10 @@
     .avatar
     {
         position: absolute;
-        z-index: 9;
+        z-index: 5;
 
-        width: 203px;
-        height: 203px;
+        width: 211px;
+        height: 211px;
         margin: auto;
 
         border-radius: 50%;

@@ -322,21 +322,31 @@
     async function selectNetwork(network) {
         addedNetwork.value = network
 
-        await window.keplr.enable(store.networks[network].chainId)
-
-        let offlineSigner = await window.getOfflineSignerAuto(store.networks[network].chainId),
-            accounts = await offlineSigner.getAccounts()
-
-        addedAddress.value = accounts[0].address
+        // Set new singer
+        await setNewSinger()
     }
 
 
     // Set active Keplr address
-    function setActiveKeplrAddress() {
+    async function setActiveKeplrAddress() {
         activeKeplrAddress.value = store.activeKeplrAddress
+
+        // Set new singer
+        await setNewSinger()
 
         // Go to next step
         activeStep.value += 1
+    }
+
+
+    // Set new singer
+    async function setNewSinger() {
+        await window.keplr.enable(store.networks[addedNetwork.value].chainId)
+
+        let offlineSigner = await window.getOfflineSignerAuto(store.networks[addedNetwork.value].chainId),
+            accounts = await offlineSigner.getAccounts()
+
+        addedAddress.value = accounts[0].address
     }
 
 
