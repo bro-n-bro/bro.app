@@ -1,7 +1,35 @@
 <template>
     <div class="row">
+        <div class="tabs">
+            <button class="btn" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">1</button>
+            <button class="btn" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">2</button>
+            <button class="btn" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3">3</button>
+            <button class="btn" :class="{'active': chartActive == 4}" @click.prevent="chartActive = 4">4</button>
+            <button class="btn" :class="{'active': chartActive == 5}" @click.prevent="chartActive = 5">5</button>
+        </div>
+
+
+        <template v-if="chartActive == 1">
+        <div class="block_title">H1</div>
+
+        <div class="block_desc">small explanation</div>
+        </template>
+
+        <template v-if="chartActive == 2">
+        <div class="block_title">H1</div>
+
+        <div class="block_desc">small explanation</div>
+        </template>
+
+        <template v-if="chartActive == 3">
+        <div class="block_title">H1</div>
+
+        <div class="block_desc">small explanation</div>
+        </template>
+
+
         <div class="col_left">
-            <div class="charts" v-if="chartActive != 3">
+            <div class="charts" v-if="chartActive == 1 || chartActive == 2">
                 <div class="avatar">
                     <img :src="store.account.avatar" alt="">
 
@@ -14,17 +42,16 @@
                 </div>
 
                 <div class="chart chartFirst" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">
-                    <Pie ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" v-if="chartDone" />
+                    <Doughnut ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" v-if="chartDone" />
                 </div>
 
                 <div class="chart chartSecond" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
-                    <Pie ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" v-if="chartDone" />
+                    <Doughnut ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" v-if="chartDone" />
                 </div>
             </div>
 
-
-            <div class="charts" v-else>
-                <div class="chart chartThird">
+            <div class="charts" v-if="chartActive == 3">
+                <div class="chart chartThird active">
                     <Doughnut ref="chartThird" :data="chartDataThird" :options="chartOptionsThird" v-if="chartDone" />
 
                     <div class="total">
@@ -36,15 +63,6 @@
                     </div>
                 </div>
             </div>
-
-
-            <!-- <div class="bullets">
-                <div class="row">
-                    <button class="btn bullet" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1"></button>
-                    <button class="btn bullet" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2"></button>
-                    <button class="btn bullet" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3"></button>
-                </div>
-            </div> -->
         </div>
 
 
@@ -61,7 +79,23 @@
                         {{ store.networks[store.currentNetwork].token_name }}
 
                         <div class="price">
-                            200 {{ store.currency }}
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
                         </div>
                     </div>
 
@@ -82,7 +116,23 @@
                         {{ store.networks[store.currentNetwork].token_name }}
 
                         <div class="price">
-                            200 {{ store.currency }}
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
                         </div>
                     </div>
 
@@ -413,7 +463,7 @@
     import { generateAddress } from '@/utils'
 
     import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js'
-    import { Pie, Doughnut } from 'vue-chartjs'
+    import { Doughnut } from 'vue-chartjs'
 
     ChartJS.register(ArcElement, Tooltip)
 
@@ -430,7 +480,18 @@
         chartOptionsFirst = reactive({
             responsive: true,
             plugins: {
-                legend: false
+                legend: false,
+                tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
             },
             onHover: (e, item) => {
                 item.length
@@ -443,6 +504,16 @@
             plugins: {
                 legend: false,
                 tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
             },
             onHover: (e, item) => {
                 item.length
@@ -474,11 +545,12 @@
             datasets: [{
                 data: chartDatasetsFirst,
                 backgroundColor: ['#950FFF', '#0343E8', '#EB5757'],
-                borderColor: 'transparent',
-                hoverOffset: 0,
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
                 hoverBackgroundColor: ['#7700E1', '#3400D1', '#D74343'],
-                hoverBorderColor: '#000',
-                hoverBorderWidth: 3
+                hoverBorderColor: ['#7700E1', '#3400D1', '#D74343'],
+                borderAlign: 'inner',
+                cutout: '84%',
             }]
         })),
         chartDataSecond = computed(() => ({
@@ -491,20 +563,25 @@
             datasets: [{
                 data: chartDatasetsSecond,
                 backgroundColor: ['#7879F1', '#C5811B', '#EF5DA8', '#1BC562'],
-                borderColor: 'transparent',
-                hoverOffset: 0,
-                // hoverBackgroundColor: ['#D17D00', '#D74343', '#07B14E']
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
+                hoverBackgroundColor: ['#7879F1', '#D17D00', '#EF5DA8', '#07B14E'],
+                hoverBorderColor: ['#7879F1', '#D17D00', '#EF5DA8', '#07B14E'],
+                borderAlign: 'inner',
+                cutout: '80%'
             }]
         })),
         chartDataThird = computed(() => ({
-            labels: ['Atom', 'Osmo', 'Juno', 'Evmos', 'Gravity', 'Star', 'Boot'],
+            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub', 'Gravity bridge', 'Osmosis'],
             datasets: [{
                 data: chartDatasetsThird,
-                backgroundColor: ['#7879F1', '#C5811B', '#EF5DA8', '#1BC562', '#7879F1', '#C5811B', '#EF5DA8'],
-                borderColor: 'transparent',
-                hoverOffset: 0,
-                cutout: '86%',
-                // hoverBackgroundColor: ['#D17D00', '#D74343', '#07B14E']
+                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
+                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                borderAlign: 'inner',
+                cutout: '84%',
             }]
         })),
         accountBalance = reactive({
@@ -640,6 +717,70 @@
 
 
 <style scoped>
+    .tabs
+    {
+        display: flex;
+
+        width: 100%;
+        margin-bottom: 24px;
+
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        flex-wrap: nowrap;
+    }
+
+
+    .tabs .btn
+    {
+        color: #555;
+        font-size: 14px;
+        line-height: 100%;
+
+        display: block;
+
+        width: 100%;
+        padding: 10px 0 9px;
+
+        text-align: left;
+
+        border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .tabs .btn + .btn
+    {
+        margin-left: 4px;
+    }
+
+    .tabs .btn:hover,
+    .tabs .btn.active
+    {
+        color: #950fff;
+
+        border-color: #950fff;
+    }
+
+
+    .block_title
+    {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 24px;
+
+        width: 100%;
+    }
+
+
+    .block_desc
+    {
+        color: #555;
+        line-height: 110%;
+
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+
     .col_left
     {
         width: 291px;
@@ -663,6 +804,7 @@
         height: 291px;
 
         border-radius: 50%;
+        background: #0d0d0d;
     }
 
 
@@ -678,6 +820,7 @@
 
         cursor: pointer;
 
+        opacity: .2;
         border-radius: 50%;
 
         clip-path: circle(50% at 50% 50%);
@@ -687,8 +830,8 @@
     {
         z-index: 3;
 
-        width: calc(100% - 38px);
-        height: calc(100% - 38px);
+        width: calc(100% - 44px);
+        height: calc(100% - 44px);
         margin: auto;
 
         inset: 0;
@@ -712,23 +855,18 @@
         height: 100%;
 
         content: '';
-        transition: opacity .2s linear;
-        pointer-events: none;
 
-        opacity: .8;
         border-radius: 50%;
-        background: #000;
     }
 
     .chart.active
     {
-        z-index: 3;
+        opacity: 1;
     }
 
-    .chart.active:after,
-    .chart.chartThird:after
+    .chart.active:after
     {
-        opacity: 0;
+        display: none;
     }
 
 
@@ -1135,10 +1273,11 @@
         position: absolute;
         z-index: 5;
 
-        width: 211px;
-        height: 211px;
+        width: 200px;
+        height: 200px;
         margin: auto;
 
+        border: 5px solid #0d0d0d;
         border-radius: 50%;
 
         inset: 0;

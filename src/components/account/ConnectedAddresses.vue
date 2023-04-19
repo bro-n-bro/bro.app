@@ -50,8 +50,7 @@
             </template>
         </div>
 
-
-        <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.owner.moonPassport.extension.addresses.length >= 8}">
+        <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.owner.moonPassport.extension.addresses && store.account.owner.moonPassport.extension.addresses.length >= 8}">
             <span>{{ $t('message.add_address_btn') }}</span>
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
@@ -64,7 +63,7 @@
 
 
 <script setup>
-    import { reactive, inject, onBeforeMount, onBeforeUpdate } from 'vue'
+    import { inject, onBeforeMount, onBeforeUpdate } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'

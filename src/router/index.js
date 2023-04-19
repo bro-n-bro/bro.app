@@ -122,6 +122,10 @@ router.beforeEach((to, from, next) => {
 		: store.currentNetwork = ''
 
 
+	// Get currencies price
+	store.getCurrenciesPrice()
+
+
 	// Connect wallet
 	setTimeout(async () => {
 		if(!store.connected && typeof window.keplr != 'undefined') {
