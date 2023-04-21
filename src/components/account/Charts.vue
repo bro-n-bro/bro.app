@@ -9,6 +9,11 @@
         </div>
 
 
+        <div class="loader_wrap" v-if="!loading">
+            <div class="loader"><span></span></div>
+        </div>
+
+        <template v-else>
         <template v-if="chartActive == 1">
         <div class="block_title">H1</div>
 
@@ -22,6 +27,18 @@
         </template>
 
         <template v-if="chartActive == 3">
+        <div class="block_title">H1</div>
+
+        <div class="block_desc">small explanation</div>
+        </template>
+
+        <template v-if="chartActive == 4">
+        <div class="block_title">H1</div>
+
+        <div class="block_desc">small explanation</div>
+        </template>
+
+        <template v-if="chartActive == 5">
         <div class="block_title">H1</div>
 
         <div class="block_desc">small explanation</div>
@@ -42,24 +59,55 @@
                 </div>
 
                 <div class="chart chartFirst" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">
-                    <Doughnut ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" v-if="chartDone" />
+                    <Doughnut ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" />
                 </div>
 
                 <div class="chart chartSecond" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
-                    <Doughnut ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" v-if="chartDone" />
+                    <Doughnut ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" />
                 </div>
             </div>
 
             <div class="charts" v-if="chartActive == 3">
                 <div class="chart chartThird active">
-                    <Doughnut ref="chartThird" :data="chartDataThird" :options="chartOptionsThird" v-if="chartDone" />
+                    <Doughnut ref="chartThird" :data="chartDataThird" :options="chartOptionsThird" />
 
                     <div class="total">
                         <div class="label">Total Assets</div>
 
-                        <div class="amount">1,484.4047 <span>{{ store.networks[store.currentNetwork].token_name }}</span></div>
+                        <div class="price">
+                            56,875
+                            <span>{{ store.currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="price">$56,875</div>
+            <div class="charts" v-if="chartActive == 4">
+                <div class="chart chartFourth active">
+                    <Doughnut ref="chartFourth" :data="chartDataFourth" :options="chartOptionsFourth" />
+
+                    <div class="total">
+                        <div class="label">Total Assets</div>
+
+                        <div class="price">
+                            56,875
+                            <span>{{ store.currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts" v-if="chartActive == 5">
+                <div class="chart chartFifth active">
+                    <Doughnut ref="chartFifth" :data="chartDataFifth" :options="chartOptionsFifth" />
+
+                    <div class="total">
+                        <div class="label">Total Assets</div>
+
+                        <div class="price">
+                            1,484.4047
+                            <span>{{ store.currency }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -166,34 +214,71 @@
 
 
             <div class="legends" v-if="chartActive == 2">
-                <div class="legend" v-if="accountBalance.liquid">
+                <div class="legend" v-if="accountBalance.liquid" :class="{'active': chartSecondActiveLegend == 0}" @mouseenter="mouseenterLegend('chartSecond', 0)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name">
                         <div class="color" style="background-color: #7879F1;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ accountBalance.liquid / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(accountBalance.liquid / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ store.networks[store.currentNetwork].token_name }}
+
+                        <div class="price">
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
+                        </div>
                     </div>
                 </div>
 
                 <!-- <div class="legend" v-if="accountBalance.outside"> -->
-                    <div class="legend" v-if="accountBalance.outside">
-                    <div class="name spoler_btn" @click.prevent="toggleActiveClass">
+                <div class="legend" v-if="accountBalance.outside" :class="{'active': chartSecondActiveLegend == 1}" @mouseenter="mouseenterLegend('chartSecond', 1)" @mouseleave="mouseleaveLegend('chartSecond')">
+                    <div class="name" @click.prevent="toggleActiveClass">
                         <div class="color" style="background-color: #C5811B;"></div>
                         <span>{{ $t('message.account_charts_outside_label') }}</span>
 
-                        <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                        <!-- <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg> -->
                     </div>
 
                     <div class="dropdown">
                         <div class="amount">
-                            {{ accountBalance.outside / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
-                        </div>
+                            {{ $filters.toFixed(accountBalance.outside / store.networks[store.currentNetwork].exponent, 2) }}
+                            {{ store.networks[store.currentNetwork].token_name }}
 
-                        <div class="progress">
-                            <div class="bar"><div style="background-color: #C5811B;" :style="setWidth(6)"></div></div>
-                            <div class="percents">6%</div>
+                            <div class="price">
+                                <template v-if="store.currency == 'USDT'">
+                                {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                </template>
+
+                                <template v-if="store.currency == 'ATOM'">
+                                {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                </template>
+
+                                <template v-if="store.currency == 'ETH'">
+                                {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                </template>
+
+                                <template v-if="store.currency == 'BTC'">
+                                {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                </template>
+
+                                {{ store.currency }}
+                            </div>
                         </div>
 
                         <div class="tokens">
@@ -212,8 +297,29 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">360 {{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="price">16,230$</div>
+                                    <div class="amount">
+                                        360 {{ store.networks[store.currentNetwork].token_name }}
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -232,8 +338,29 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">360 {{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="price">16,230$</div>
+                                    <div class="amount">
+                                        360 {{ store.networks[store.currentNetwork].token_name }}
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -252,20 +379,41 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">360 {{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="price">16,230$</div>
+                                    <div class="amount">
+                                        360 {{ store.networks[store.currentNetwork].token_name }}
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="legend">
-                    <div class="name spoler_btn" @click.prevent="toggleActiveClass">
+                <div class="legend" :class="{'active': chartSecondActiveLegend == 2}" @mouseenter="mouseenterLegend('chartSecond', 2)" @mouseleave="mouseleaveLegend('chartSecond')">
+                    <div class="name" @click.prevent="toggleActiveClass">
                         <div class="color" style="background-color: #EF5DA8;"></div>
                         <span>{{ $t('message.account_charts_ibc_label') }}</span>
 
-                        <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                        <!-- <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg> -->
                     </div>
 
                     <div class="dropdown">
@@ -285,8 +433,29 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">360 OSMO</div>
-                                    <div class="price">16,230$</div>
+                                    <div class="amount">
+                                        360 OSMO
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -305,8 +474,29 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">160 DSM</div>
-                                    <div class="price">220$</div>
+                                    <div class="amount">
+                                        160 DSM
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -325,29 +515,71 @@
                                 </div>
 
                                 <div>
-                                    <div class="amount">140 STARS</div>
-                                    <div class="price">200$</div>
+                                    <div class="amount">
+                                        140 STARS
+
+                                        <div class="price">
+                                            <template v-if="store.currency == 'USDT'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ATOM'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'ETH'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            </template>
+
+                                            <template v-if="store.currency == 'BTC'">
+                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            </template>
+
+                                            {{ store.currency }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.rewards">
+                <div class="legend" v-if="accountBalance.rewards" :class="{'active': chartSecondActiveLegend == 3}" @mouseenter="mouseenterLegend('chartSecond', 3)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name">
                         <div class="color" style="background-color: #1BC562;"></div>
                         <span>{{ $t('message.account_charts_rewards_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ accountBalance.rewards / store.networks[store.currentNetwork].exponent }} {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(accountBalance.rewards / store.networks[store.currentNetwork].exponent, 5) }}
+                        {{ store.networks[store.currentNetwork].token_name }}
+
+                        <div class="price">
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((accountBalance.rewards / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((accountBalance.rewards / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((accountBalance.rewards / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((accountBalance.rewards / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
+                        </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="tokens_legends" v-if="chartActive == 3">
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 0}" @mouseenter="mouseenterLegend(0)" @mouseleave="mouseleaveLegend()">
+            <div class="legends2" v-if="chartActive == 3">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 0}" @mouseenter="mouseenterLegend('chartThird', 0)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/cosmoshub_logo.png`" alt="">
                     </div>
@@ -356,13 +588,13 @@
                         {{ store.networks.cosmoshub.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$46,875</span>
-                        <span class="percents">(29.13%)</span>
+                    <div class="price">
+                        <div>46,875 {{ store.currency }}</div>
+                        <div class="percents">65.43%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 1}" @mouseenter="mouseenterLegend(1)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 1}" @mouseenter="mouseenterLegend('chartThird', 1)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/osmosis_logo.png`" alt="">
                     </div>
@@ -371,13 +603,13 @@
                         {{ store.networks.osmosis.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$7,200</span>
-                        <span class="percents">(15.13%)</span>
+                    <div class="price">
+                        <div>7,200 {{ store.currency }}</div>
+                        <div class="percents">10.32%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 2}" @mouseenter="mouseenterLegend(2)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 2}" @mouseenter="mouseenterLegend('chartThird', 2)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/juno_logo.png`" alt="">
                     </div>
@@ -386,13 +618,13 @@
                         {{ store.networks.juno.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$1,200</span>
-                        <span class="percents">(12.17%)</span>
+                    <div class="price">
+                        <div>1,200 {{ store.currency }}</div>
+                        <div class="percents">9.12%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 3}" @mouseenter="mouseenterLegend(3)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 3}" @mouseenter="mouseenterLegend('chartThird', 3)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/evmos_logo.png`" alt="">
                     </div>
@@ -401,13 +633,13 @@
                         {{ store.networks.evmos.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$976</span>
-                        <span class="percents">(8.22%)</span>
+                    <div class="price">
+                        <div>976 {{ store.currency }}</div>
+                        <div class="percents">7.75%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 4}" @mouseenter="mouseenterLegend(4)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 4}" @mouseenter="mouseenterLegend('chartThird', 4)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/gravity_logo.png`" alt="">
                     </div>
@@ -416,13 +648,13 @@
                         {{ store.networks.gravity.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$880</span>
-                        <span class="percents">(5.6%)</span>
+                    <div class="price">
+                        <div>880 {{ store.currency }}</div>
+                        <div class="percents">3.86%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 5}" @mouseenter="mouseenterLegend(5)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 5}" @mouseenter="mouseenterLegend('chartThird', 5)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/stargaze_logo.png`" alt="">
                     </div>
@@ -431,13 +663,13 @@
                         {{ store.networks.stargaze.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$550</span>
-                        <span class="percents">(3.2%)</span>
+                    <div class="price">
+                        <div>550 {{ store.currency }}</div>
+                        <div class="percents">2.34%</div>
                     </div>
                 </div>
 
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 6}" @mouseenter="mouseenterLegend(6)" @mouseleave="mouseleaveLegend()">
+                <div class="legend" :class="{'active': chartThirdActiveLegend == 6}" @mouseenter="mouseenterLegend('chartThird', 6)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/bostrom_logo.png`" alt="">
                     </div>
@@ -446,13 +678,170 @@
                         {{ store.networks.bostrom.token_name }}
                     </div>
 
-                    <div class="amount">
-                        <span>$115</span>
-                        <span class="percents">(2.%)</span>
+                    <div class="price">
+                        <div>115 {{ store.currency }}</div>
+                        <div class="percents">1.02%</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="legends2" v-if="chartActive == 4">
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFourth', 0)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/cosmoshub_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.cosmoshub.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>65.43%</div>
+                        <div class="percents">46,875 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFourth', 1)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/osmosis_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.osmosis.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>10.32%</div>
+                        <div class="percents">7,200 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFourth', 2)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/juno_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.juno.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>9.12%</div>
+                        <div class="percents">1,200 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 3}" @mouseenter="mouseenterLegend('chartFourth', 3)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/evmos_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.evmos.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>7.75%</div>
+                        <div class="percents">976 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 4}" @mouseenter="mouseenterLegend('chartFourth', 4)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/gravity_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.gravity.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>3.86%</div>
+                        <div class="percents">880 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 5}" @mouseenter="mouseenterLegend('chartFourth', 5)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/stargaze_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.stargaze.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>2.34%</div>
+                        <div class="percents">550 {{ store.currency }}</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFourthActiveLegend == 6}" @mouseenter="mouseenterLegend('chartFourth', 6)" @mouseleave="mouseleaveLegend('chartFourth')">
+                    <div class="logo">
+                        <img :src="`/bostrom_logo.png`" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ store.networks.bostrom.name }}
+                    </div>
+
+                    <div class="price">
+                        <div>1.02%</div>
+                        <div class="percents">115 {{ store.currency }}</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="legends2" v-if="chartActive == 5">
+                <div class="legend" :class="{'active': chartFifthActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFifth', 0)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">Valentin Prikolistov</div>
+
+                    <div class="price">
+                        <div>46,875 {{ store.currency }}</div>
+                        <div class="percents">45.43%</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFifthActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFifth', 1)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">Masha Kozlova</div>
+
+                    <div class="price">
+                        <div>3,345 {{ store.currency }}</div>
+                        <div class="percents">32.65%</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFifthActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFifth', 2)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">Airdrop111 </div>
+
+                    <div class="price">
+                        <div>2,543 {{ store.currency }}</div>
+                        <div class="percents">22.78%</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFifthActiveLegend == 3}" @mouseenter="mouseenterLegend('chartFifth', 3)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">Airdrop_main</div>
+
+                    <div class="price">
+                        <div>1,234 {{ store.currency }}</div>
+                        <div class="percents">18.12%</div>
+                    </div>
+                </div>
+
+                <div class="legend" :class="{'active': chartFifthActiveLegend == 4}" @mouseenter="mouseenterLegend('chartFifth', 4)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">Airdrop222</div>
+
+                    <div class="price">
+                        <div>843 {{ store.currency }}</div>
+                        <div class="percents">8.34%</div>
                     </div>
                 </div>
             </div>
         </div>
+        </template>
     </div>
 </template>
 
@@ -469,14 +858,18 @@
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
-        chartDone = ref(false),
+        loading = ref(false),
         chartActive = ref(1),
         chartFirst = ref(null),
         chartSecond = ref(null),
         chartThird = ref(null),
+        chartFourth = ref(null),
+        chartFifth = ref(null),
         chartFirstActiveLegend = ref(),
         chartSecondActiveLegend = ref(),
         chartThirdActiveLegend = ref(),
+        chartFourthActiveLegend = ref(),
+        chartFifthActiveLegend = ref(),
         chartOptionsFirst = reactive({
             responsive: true,
             plugins: {
@@ -527,15 +920,71 @@
                 legend: false,
                 tooltip: false
             },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
+            },
             onHover: (e, item) => {
                 item.length
                     ? chartThirdActiveLegend.value = item[0].index
                     : chartThirdActiveLegend.value = null
             }
         }),
+        chartOptionsFourth = reactive({
+            responsive: true,
+            plugins: {
+                legend: false,
+                tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
+            },
+            onHover: (e, item) => {
+                item.length
+                    ? chartFourthActiveLegend.value = item[0].index
+                    : chartFourthActiveLegend.value = null
+            }
+        }),
+        chartOptionsFifth = reactive({
+            responsive: true,
+            plugins: {
+                legend: false,
+                tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
+            },
+            onHover: (e, item) => {
+                item.length
+                    ? chartFifthActiveLegend.value = item[0].index
+                    : chartFifthActiveLegend.value = null
+            }
+        }),
         chartDatasetsFirst = reactive([]),
         chartDatasetsSecond = reactive([]),
         chartDatasetsThird = reactive([]),
+        chartDatasetsFourth = reactive([]),
+        chartDatasetsFifth = reactive([]),
         chartDataFirst = computed(() => ({
             labels: [
                 i18n.global.t('message.account_charts_staked_label'),
@@ -584,6 +1033,32 @@
                 cutout: '84%',
             }]
         })),
+        chartDataFourth = computed(() => ({
+            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub', 'Gravity bridge', 'Osmosis'],
+            datasets: [{
+                data: chartDatasetsFourth,
+                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
+                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                borderAlign: 'inner',
+                cutout: '84%',
+            }]
+        })),
+        chartDataFifth = computed(() => ({
+            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub'],
+            datasets: [{
+                data: chartDatasetsFifth,
+                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
+                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
+                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
+                borderAlign: 'inner',
+                cutout: '84%',
+            }]
+        })),
         accountBalance = reactive({
             staked: 0,
             liquid: 0,
@@ -620,6 +1095,22 @@
                     chartDatasetsThird.push(10)
                     chartDatasetsThird.push(10)
 
+                    // Set data for fourth chart
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+                    chartDatasetsFourth.push(10)
+
+                    // Set data for fifth chart
+                    chartDatasetsFifth.push(50)
+                    chartDatasetsFifth.push(10)
+                    chartDatasetsFifth.push(10)
+                    chartDatasetsFifth.push(10)
+                    chartDatasetsFifth.push(10)
+
                     // Set data
                     accountBalance.staked = response.staked.uatom
                     accountBalance.liquid = response.liquid.uatom
@@ -630,8 +1121,8 @@
                     // Calc totals
                     accountBalance.totalChartFirst = response.staked.uatom + response.liquid.uatom + response.unbonding.uatom
 
-                    // Set charts status
-                    chartDone.value = true
+                    // Hide loader
+                    loading.value = true
                 })
         } catch (error) {
             console.log(error)
@@ -758,6 +1249,17 @@
         color: #950fff;
 
         border-color: #950fff;
+    }
+
+
+    .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        padding: 0;
+
+        background: none;
     }
 
 
@@ -905,7 +1407,7 @@
     }
 
 
-    .chart .total .amount
+    .chart .total .price
     {
         color: #fff;
         font-size: 18px;
@@ -915,26 +1417,20 @@
         width: 100%;
     }
 
-    .chart .total .amount span
+    .chart .total .price span
     {
         font-size: 12px;
+        font-weight: 400;
         line-height: 100%;
 
         text-transform: uppercase;
     }
 
 
-    .chart .total .price
-    {
-        width: 100%;
-        margin-top: 4px;
-    }
-
-
 
     .legends > * + *
     {
-        margin-top: 16px;
+        margin-top: 8px;
     }
 
 
@@ -969,10 +1465,10 @@
         flex-wrap: wrap;
     }
 
-    .legends .legend .name.spoler_btn
-    {
-        cursor: pointer;
-    }
+    /* .legends .legend .name.spoler_btn
+                                {
+                                    cursor: pointer;
+                                } */
 
     .legends .legend .color
     {
@@ -984,23 +1480,25 @@
     }
 
 
-    .legends .legend .arr
-    {
-        color: #fff;
+    /* .legends .legend .arr
+                                {
+                                    color: #fff;
 
-        display: block;
+                                    display: block;
 
-        width: 24px;
-        height: 24px;
-        margin-left: auto;
+                                    width: 24px;
+                                    height: 24px;
+                                    margin-left: auto;
 
-        transition: transform .2s linear;
-    }
+                                    transition: transform .2s linear;
+                                } */
 
 
     .legends .legend .dropdown
     {
-        display: none;
+        /* display: none; */
+        width: 100%;
+        margin-top: 8px;
     }
 
 
@@ -1188,11 +1686,11 @@
 
 
 
-    .tokens_legends .legend
+    .legends2 .legend
     {
         display: flex;
 
-        padding: 8px;
+        padding: 6px 8px;
 
         cursor: pointer;
         transition: background .2s linear;
@@ -1206,13 +1704,13 @@
         flex-wrap: wrap;
     }
 
-    .tokens_legends .legend + .legend
+    .legends2 .legend + .legend
     {
         margin-top: 8px;
     }
 
 
-    .tokens_legends .legend .logo
+    .legends2 .legend .logo
     {
         width: 24px;
         height: 24px;
@@ -1221,7 +1719,7 @@
         border-radius: 50%;
     }
 
-    .tokens_legends .legend .logo img
+    .legends2 .legend .logo img
     {
         display: block;
 
@@ -1234,34 +1732,48 @@
     }
 
 
-    .tokens_legends .legend .token
+    .legends2 .legend .token,
+    .legends2 .legend .address
     {
         font-size: 14px;
         line-height: 100%;
     }
 
+    .legends2 .legend .address
+    {
+        overflow: hidden;
 
-    .tokens_legends .legend .amount
+        width: calc(100% - 140px);
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+
+    .legends2 .legend .price
     {
         font-size: 14px;
         line-height: 100%;
 
         margin-left: auto;
 
+        text-align: right;
         white-space: nowrap;
     }
 
 
-    .tokens_legends .legend .percents
+    .legends2 .legend .percents
     {
-        color: #555;
+        color: #464646;
+        font-size: 12px;
+        line-height: 100%;
 
-        margin-left: 4px;
+        margin-top: 4px;
     }
 
 
-    .tokens_legends .legend:hover,
-    .tokens_legends .legend.active
+    .legends2 .legend:hover,
+    .legends2 .legend.active
     {
         background: #212121;
     }
