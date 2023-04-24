@@ -33,7 +33,7 @@
         <div class="items" v-else>
             <!-- <pre>{{ wallets }}</pre> -->
 
-            <div v-for="(wallet, index) in wallets" :key="index" class="item" :class="{'hide': index >= 3 && !showAll}">
+            <div v-for="(wallet, index) in wallets" :key="index" class="item" :class="{'hide': index >= 3 && !showAll}" v-if="wallets.length">
                 <div class="col_account_name">
                     {{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}
                 </div>
@@ -109,7 +109,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -128,6 +128,75 @@
 
 
     onBeforeMount(async () => {
+        // Clear data
+        wallets = reactive([])
+
+        // Get data
+        store.account.currentWallet == 'all'
+            ? await getAllData()
+            : await getAddressData()
+    })
+
+
+    // Monitor of current wallet changes
+    watch(() => store.account.currentWallet, async () => {
+        // Clear data
+        wallets = reactive([])
+
+        // Get data
+        store.account.currentWallet == 'all'
+            ? await getAllData()
+            : await getAddressData()
+    })
+
+
+    // Get address data
+    async function getAddressData() {
+        // Set loader
+        loading.value = false
+
+        // Get validators for current wallet
+        try {
+            let currentAddress = generateAddress(store.networks[store.currentNetwork].prefix, store.account.currentWallet)
+
+            await fetch(`https://rpc.bronbro.io/account/validators/${currentAddress}`)
+                .then(res => res.json())
+                .then(response => {
+                    if(response.length) {
+                        let totalTokens = 0
+
+                        // Calc total totalTokens
+                        response.forEach(validator => totalTokens += validator.coin.amount)
+
+                        // Sort and set
+                        wallets.push({
+                            address: currentAddress,
+                            totalTokens,
+                            validators: response.sort((a, b) => {
+                                if (a.coin.amount > b.coin.amount) { return -1 }
+                                if (a.coin.amount < b.coin.amount) { return 1 }
+                                return 0
+                            })
+                        })
+
+                        // Math total passport tokens
+                        response.forEach(validator => totalPassportTokens += validator.coin.amount)
+                    }
+
+                    // Hide loader
+                    loading.value = true
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    // Get all data
+    async function getAllData() {
+        // Set loader
+        loading.value = false
+
         // Get validators for main wallet
         try {
             let ownerAddress = generateAddress(store.networks[store.currentNetwork].prefix, store.account.moonPassportOwner)
@@ -187,7 +256,7 @@
                 }
             })
         }
-    })
+    }
 
 
     // Toggle active class

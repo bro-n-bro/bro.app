@@ -174,7 +174,9 @@ export const useGlobalStore = defineStore('global', {
                 this.account.moonPassportOwner = this.account.moonPassport.owner
 
                 // Set current wallet
-                this.account.currentWallet = this.account.moonPassportOwner
+                if(!this.account.currentWallet) {
+                    this.account.currentWallet = this.account.moonPassportOwner
+                }
 
                 // Set owner moon passport
                 this.account.owner.moonPassport = this.account.moonPassport

@@ -29,9 +29,6 @@
         showDropdown = ref(false)
 
 
-    // watchEffect(() => showDropdown.value = false)
-
-
     // Select currency
     function selectCurrency(newCurrency) {
         store.$patch({ currency: newCurrency })

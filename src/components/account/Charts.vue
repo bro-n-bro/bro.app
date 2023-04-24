@@ -847,7 +847,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject, computed } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, computed, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -856,7 +856,7 @@
 
     ChartJS.register(ArcElement, Tooltip)
 
-    const store = useGlobalStore(),
+    var store = useGlobalStore(),
         i18n = inject('i18n'),
         loading = ref(false),
         chartActive = ref(1),
@@ -1071,10 +1071,34 @@
 
 
     onBeforeMount(async () => {
+        // Get data
+        await getData()
+    })
+
+
+    // Monitor of current wallet changes
+    watch(() => store.account.currentWallet, async () => {
+        // Get data
+        await getData()
+    })
+
+
+    // Get data
+    async function getData() {
+        // Set loader
+        loading.value = false
+
         try {
-            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].mintscanAlias, store.account.moonPassportOwner)}`)
+            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].prefix, store.account.currentWallet)}`)
                 .then(res => res.json())
                 .then(response => {
+                    // Clear data
+                    chartDatasetsFirst = reactive([]),
+                    chartDatasetsSecond = reactive([]),
+                    chartDatasetsThird = reactive([]),
+                    chartDatasetsFourth = reactive([]),
+                    chartDatasetsFifth = reactive([]),
+
                     // Set data for first chart
                     chartDatasetsFirst.push(response.staked.uatom)
                     chartDatasetsFirst.push(response.liquid.uatom)
@@ -1127,7 +1151,7 @@
         } catch (error) {
             console.log(error)
         }
-    })
+    }
 
 
     // Set width
