@@ -4,23 +4,29 @@ export default {
         message: {
             'page_title': 'Bro APP',
 
+
             // IPFS
             'ipfs': "Ipfs node",
+
 
             // Error page
             'error_title_404': "Page was lost in space....<br> Are you sure that it exist?",
 
+
             // Under construction page
             'under_construction_title': "This part of site is under construction",
+
 
             // Mobile plug
             'mobile_plug_title': '',
             'mobile_plug_desc': '',
 
+
             // Keplr Error page
             'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
             'keplr_reload_title': 'Reload page after you<br> installed Kepler',
             'keplr_install_btn': "Install Keplr",
+
 
             // Buttons
             'connect_wallet_btn': 'Connect wallet',
@@ -47,9 +53,11 @@ export default {
             'done_btn': 'Done',
             'see_more_btn': 'See more',
 
+
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
             'main_page_desc': 'Bro will help decompose active',
+
 
             // Make a choice
             'choice_title': 'Are you ready to unlock the full potential of the features available?',
@@ -57,6 +65,7 @@ export default {
             // Dashboard
             'personal_apr': 'Personal APR',
             'RPDE': 'RPDE',
+
 
             // Create passport
             'passport_avatar_label': 'Upload avatar',
@@ -72,6 +81,7 @@ export default {
             'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
             'passport_activation_label': 'я крутой',
 
+
             // Proposals
             'proposal_date_label_default': 'Voting ended:',
             'proposal_deposite_label_collected': 'Collected funds:',
@@ -80,6 +90,7 @@ export default {
             'proposal_voting_label_no': 'No',
             'proposal_voting_label_nwv': 'NWV',
             'proposal_voting_label_abstain': 'Abstain',
+
 
             // Notofications
             'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
@@ -226,11 +237,11 @@ export default {
 
             // Account
             'account_networks_title': 'Networks',
-            'account_contract_address_title': 'Contract address',
+            // 'account_contract_address_title': 'Contract address',
             'account_abilities_title': 'Abilities',
             'account_validators_title': 'Validators',
             'account_proposals_title': 'Proposals',
-            'account_connected_addresses_title': 'Connected addresses',
+            'account_connected_addresses_title': 'My Portfolio',
 
             'account_charts_staked_label': 'Staked',
             'account_charts_outside_label': 'Outside',

@@ -19,9 +19,7 @@
 
 
                     <!-- Stats -->
-                    <Suspense>
                     <Stats />
-                    </Suspense>
 
 
                     <!-- Validators -->

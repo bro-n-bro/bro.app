@@ -2,6 +2,13 @@
     <section class="connected_addresses">
         <div class="title">
             {{ $t('message.account_connected_addresses_title') }}
+
+            <button class="all_btn">
+                <div class="check">
+                    <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                </div>
+                <span>All address</span>
+            </button>
         </div>
 
         <div class="list">
@@ -29,8 +36,6 @@
                     {{ $t('message.account_duplicate_ext') }}
                 </div>
 
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
-
                 <!-- <div class="name">
                     {{ store.account.owner.moonPassport.extension.nickname }}
                 </div> -->
@@ -39,9 +44,15 @@
                     {{ item.address }}
                 </div>
 
+                <button class="edit_btn">
+                    <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
+                </button>
+
                 <button class="remove_btn" @click.prevent="deleteAddress(item.address)">
                     <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
+
+                <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
 
                 <div class="loader_wrap">
                     <div class="loader"><span></span></div>
@@ -266,7 +277,64 @@
         font-weight: 600;
         line-height: 36px;
 
+        display: flex;
+
         margin-bottom: 20px;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .connected_addresses .all_btn
+    {
+        font-size: 14px;
+        line-height: 17px;
+
+        display: flex;
+
+        margin-left: auto;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .connected_addresses .all_btn .check
+    {
+        display: flex;
+
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+
+        border-radius: 7px;
+        background: #464646;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .connected_addresses .all_btn .check svg
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+
+        transition: opacity .2s linear;
+
+        opacity: 0;
+    }
+
+    .connected_addresses .all_btn.active .check svg
+    {
+        opacity: 1;
     }
 
 
@@ -303,10 +371,10 @@
         border-radius: 14px;
         background: #141414;
 
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         align-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
     .connected_addresses .item.hide
@@ -327,8 +395,8 @@
 
         position: absolute;
         z-index: 3;
+        right: 0;
         bottom: 100%;
-        left: 0;
 
         display: none;
 
@@ -366,8 +434,9 @@
 
         overflow: hidden;
 
-        width: calc(100% - 52px);
+        width: 100%;
         margin-right: auto;
+        padding-right: 8px;
 
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -381,8 +450,43 @@
         display: none;
 
         width: 16px;
+        min-width: 16px;
         height: 16px;
-        margin-right: 8px;
+        margin-left: 8px;
+    }
+
+
+    .connected_addresses .edit_btn
+    {
+        color: #555;
+
+        display: none;
+
+        width: 16px;
+        min-width: 16px;
+        height: 16px;
+        margin-left: 8px;
+
+        transition: color .2s linear;
+        pointer-events: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .connected_addresses .edit_btn svg
+    {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .connected_addresses .edit_btn:hover
+    {
+        color: #fff;
     }
 
 
@@ -390,16 +494,15 @@
     {
         color: #555;
 
-        display: flex;
+        display: none;
 
         width: 18px;
+        min-width: 18px;
         height: 18px;
-        margin-left: 10px;
+        margin-left: 8px;
 
-        transition: opacity .2s linear;
+        transition: color .2s linear;
         pointer-events: auto;
-
-        opacity: 0;
 
         justify-content: center;
         align-items: center;
@@ -414,6 +517,12 @@
         width: 100%;
         height: 100%;
     }
+
+    .connected_addresses .remove_btn:hover
+    {
+        color: #fff;
+    }
+
 
     .connected_addresses .item .loader_wrap
     {
@@ -434,18 +543,17 @@
     }
 
 
-    .connected_addresses .item:hover
+    .connected_addresses .list > *:hover .item
     {
         color: #fff;
 
-        background: #353535;
+        background: #212121;
     }
 
-    .connected_addresses .item:hover .remove_btn
+    .connected_addresses .list > *:hover .item .remove_btn,
+    .connected_addresses .list > *:hover .item .edit_btn
     {
-        color: #fff;
-
-        opacity: 1;
+        display: flex;
     }
 
 
@@ -474,15 +582,6 @@
     .connected_addresses .list > *:hover .item.duplicate .tooltip
     {
         display: block;
-    }
-
-    .connected_addresses .item.duplicate .remove_btn
-    {
-        color: #eb5757;
-
-        pointer-events: auto;
-
-        opacity: 1;
     }
 
 

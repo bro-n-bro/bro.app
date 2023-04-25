@@ -84,6 +84,7 @@ export const useGlobalStore = defineStore('global', {
         showAddAddressModal: false,
 
         networkManageModal: '',
+        validatorManageModal: {},
         ref: '',
         currentNetwork: '',
 
@@ -616,6 +617,10 @@ export const useGlobalStore = defineStore('global', {
                             this.networks[el.network].health = el.health
                             this.networks[el.network].apr = el.apr
                             this.networks[el.network].apy = Math.pow(1 + (el.apr.toFixed(2) / 365), 365) - 1
+
+                            // console.log(el.network)
+                            // console.log(el.price)
+                            // console.log(this.ATOM_price)
 
                             this.networks[el.network].price = el.price
                             this.networks[el.network].price_usdt = el.price

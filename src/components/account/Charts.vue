@@ -9,7 +9,7 @@
         </div>
 
 
-        <div class="loader_wrap" v-if="!loading">
+        <div class="loader_wrap" v-if="loading">
             <div class="loader"><span></span></div>
         </div>
 
@@ -149,7 +149,7 @@
 
                     <div class="progress">
                         <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked'))"></div></div>
-                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('staked'), 2) }}%</div>
+                        <!-- <div class="percents">{{ $filters.toFixed(calcPercentsChart1('staked'), 2) }}%</div> -->
                     </div>
                 </div>
 
@@ -186,7 +186,7 @@
 
                     <div class="progress">
                         <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid'))"></div></div>
-                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('liquid'), 2) }}%</div>
+                        <!-- <div class="percents">{{ $filters.toFixed(calcPercentsChart1('liquid'), 2) }}%</div> -->
                     </div>
                 </div>
 
@@ -207,7 +207,7 @@
 
                     <div class="progress">
                         <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding'))"></div></div>
-                        <div class="percents">{{ $filters.toFixed(calcPercentsChart1('unbonding'), 2) }}%</div>
+                        <!-- <div class="percents">{{ $filters.toFixed(calcPercentsChart1('unbonding'), 2) }}%</div> -->
                     </div>
                 </div>
             </div>
@@ -858,7 +858,7 @@
 
     var store = useGlobalStore(),
         i18n = inject('i18n'),
-        loading = ref(false),
+        loading = ref(true),
         chartActive = ref(1),
         chartFirst = ref(null),
         chartSecond = ref(null),
@@ -1086,7 +1086,7 @@
     // Get data
     async function getData() {
         // Set loader
-        loading.value = false
+        loading.value = true
 
         try {
             await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].prefix, store.account.currentWallet)}`)
@@ -1146,7 +1146,7 @@
                     accountBalance.totalChartFirst = response.staked.uatom + response.liquid.uatom + response.unbonding.uatom
 
                     // Hide loader
-                    loading.value = true
+                    loading.value = false
                 })
         } catch (error) {
             console.log(error)
@@ -1570,7 +1570,7 @@
 
     .legends .legend .bar
     {
-        width: calc(100% - 60px);
+        width: 100%;
         height: 8px;
 
         border-radius: 4px;
@@ -1588,7 +1588,7 @@
     }
 
 
-    .legends .legend .percents
+    /* .legends .legend .percents
     {
         font-size: 14px;
         font-weight: 500;
@@ -1599,7 +1599,7 @@
 
         text-align: right;
         white-space: nowrap;
-    }
+    } */
 
 
     .legends .legend .tokens

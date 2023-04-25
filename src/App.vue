@@ -128,6 +128,7 @@
                 store.$patch((state) => {
                     state.showManageModal = true,
                     state.networkManageModal = modal_data.network,
+                    state.validatorManageModal = modal_data.validator,
                     state.networks[modal_data.network].unbonding_time = parseInt(data.params.unbonding_time)
                 })
 
@@ -138,7 +139,9 @@
 
     // Event "close manage modal"
     emitter.on('closeManageModal', function() {
-        store.$patch({ showManageModal: false })
+        store.showManageModal = false
+        state.networkManageModal = ''
+        store.validatorManageModal = {}
 
         document.body.classList.remove('lock')
     })

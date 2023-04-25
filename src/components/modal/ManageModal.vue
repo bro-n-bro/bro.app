@@ -46,7 +46,7 @@
 
 
 <script setup>
-    import { inject, reactive, onMounted } from 'vue'
+    import { inject, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     // Components

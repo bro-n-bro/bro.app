@@ -5,22 +5,42 @@
         <div class="row">
             <div class="item">
                 <div class="label">{{ $t('message.account_APR') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.apr * 100, 2) }}%</div>
+
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
+                <div class="val" v-else>{{ $filters.toFixed(data.info.apr * 100, 2) }}%</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_voting_power') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.voting_power * 100, 8) }}</div>
+
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
+                <div class="val" v-else>{{ $filters.toFixed(data.info.voting_power * 100, 8) }}</div>
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_passport_value') }}</div>
+
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
                 <!-- <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div> -->
             </div>
 
             <div class="item">
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
-                <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
+
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
+                <div class="val" v-else>{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
             </div>
         </div>
     </section>
@@ -28,28 +48,53 @@
 
 
 <script setup>
-    import { reactive } from 'vue'
+    import { reactive, ref, onBeforeMount, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
+        loading = ref(true),
         data = reactive({
             info: {},
             showAll: false
         })
 
 
-    try {
-        await fetch(`https://rpc.bronbro.io/account/account_info/${store.wallets.cosmoshub}`)
-            .then(res => res.json())
-            .then(response => data.info = response)
-    } catch (error) {
-        console.log(error)
+    onBeforeMount(async () => {
+        // Get data
+        await getData()
+    })
+
+
+    // Monitor of current wallet changes
+    watch(() => store.account.currentWallet, async () => {
+        // Get data
+        await getData()
+    })
+
+
+    // Get data
+    async function getData() {
+        // Set loader
+        loading.value = true
+
+        try {
+            await fetch(`https://rpc.bronbro.io/account/account_info/${store.account.currentWallet}`)
+                .then(res => res.json())
+                .then(response => {
+                    data.info = response
+
+                    // Hide loader
+                    loading.value = false
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
 </script>
 
 
 <style scoped>
-    .stats .row
+    .row
     {
         margin-bottom: -20px;
         margin-left: -20px;
@@ -58,7 +103,7 @@
         align-content: stretch;
     }
 
-    .stats .row > *
+    .row > *
     {
         width: calc(25% - 20px);
         margin-bottom: 20px;
@@ -66,7 +111,7 @@
     }
 
 
-    .stats .item
+    .item
     {
         padding: 16px 8px;
 
@@ -77,7 +122,7 @@
     }
 
 
-    .stats .label
+    .label
     {
         color: #555;
         font-size: 14px;
@@ -88,13 +133,30 @@
     }
 
 
-    .stats .val
+    .val
     {
         font-size: 23px;
         font-weight: 700;
         line-height: 100%;
 
         white-space: nowrap;
+    }
+
+
+    .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        margin: 8px auto -4px;
+
+        background: none;
+    }
+
+    .loader
+    {
+        width: 23px;
+        height: 23px;
     }
 
 </style>

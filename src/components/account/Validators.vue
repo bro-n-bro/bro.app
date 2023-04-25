@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="loader_wrap" v-if="!loading">
+        <div class="loader_wrap" v-if="loading">
             <div class="loader"><span></span></div>
         </div>
 
@@ -118,7 +118,7 @@
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        loading = ref(false),
+        loading = ref(true),
         showValidatorModal = ref(false),
         validatorInfo = ref({})
 
@@ -153,7 +153,7 @@
     // Get address data
     async function getAddressData() {
         // Set loader
-        loading.value = false
+        loading.value = true
 
         // Get validators for current wallet
         try {
@@ -184,7 +184,7 @@
                     }
 
                     // Hide loader
-                    loading.value = true
+                    loading.value = false
                 })
         } catch (error) {
             console.log(error)
@@ -195,7 +195,7 @@
     // Get all data
     async function getAllData() {
         // Set loader
-        loading.value = false
+        loading.value = true
 
         // Get validators for main wallet
         try {
@@ -224,7 +224,7 @@
                     response.forEach(validator => totalPassportTokens += validator.coin.amount)
 
                     // Hide loader
-                    loading.value = true
+                    loading.value = false
                 })
         } catch (error) {
             console.log(error)
@@ -522,6 +522,8 @@
 
     .validators .item .arr
     {
+        color: #555;
+
         display: block;
 
         width: 16px;
