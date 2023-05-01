@@ -4,7 +4,6 @@
             <div class="back_btn">
                 <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/all'" class="btn">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
-                    <span>{{ $t('message.back_btn') }}</span>
                 </router-link>
             </div>
 
@@ -175,12 +174,6 @@
 <style scoped>
     .back_btn
     {
-        color: #f2f2f2;
-        font-size: 12px;
-        line-height: 15px;
-
-        display: flex;
-
         margin-bottom: 20px;
     }
 
@@ -191,9 +184,16 @@
 
         display: flex;
 
+        width: 36px;
+        height: 36px;
+
+        transition: background .2s linear;
         text-decoration: none;
 
-        justify-content: flex-start;
+        border-radius: 50%;
+        background: #141414;
+
+        justify-content: center;
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
@@ -206,7 +206,12 @@
 
         width: 14px;
         height: 14px;
-        margin-right: 10px;
+    }
+
+
+    .back_btn .btn:hover
+    {
+        background: #950fff;
     }
 
 

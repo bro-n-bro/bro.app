@@ -1,18 +1,20 @@
 <template>
     <div class="validator">
         <div class="logo">
-            <img src="@/assets/images/logo_mini.svg" alt="">
+            <img :src="`${props.validator.logo ? props.validator.logo : '/logo_mini.svg'}`" alt="">
         </div>
 
         <div>
             <div class="name">
-                {{ $t('message.manage_modal_validator_name') }}
+                {{ props.validator.name }}
             </div>
 
             <div class="commission">
                 {{ $t('message.manage_modal_commission') }}
-                <span class="sep">—</span>
-                <span class="val">{{ commision }}%</span>
+
+                <span class="sep">{{ $t('message.manage_modal_commission_sep') }}</span>
+
+                <span class="val">{{ props.validator.commision }}%</span>
             </div>
         </div>
     </div>
@@ -20,7 +22,7 @@
 
 
 <script setup>
-    const commision = 5
+    const props = defineProps(['validator'])
 </script>
 
 

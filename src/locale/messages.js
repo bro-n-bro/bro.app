@@ -44,14 +44,15 @@ export default {
             'settings_btn': 'Setting',
             'change_image_btn': 'Change image',
             'update_btn': 'Aprove with tx',
-            'account_btn': 'Account',
-            'back_btn': 'Back',
+            // 'account_btn': 'Account',
+            // 'back_btn': 'Back',
             'load_more_btn': 'Load more',
             'next_btn': 'Next',
             'sign_btn': 'Sign',
             'sing_broadcast_btn': 'Sing and broadcast',
             'done_btn': 'Done',
             'see_more_btn': 'See more',
+            'delete_passport_btn': 'DELETE PASSPORT',
 
 
             // Main page
@@ -124,6 +125,7 @@ export default {
 
             'manage_modal_validator_name': 'Bro_n_Bro',
             'manage_modal_commission': 'Commission',
+            'manage_modal_commission_sep': '-',
 
             'manage_modal_notice_title': 'Staking will lock up your funds for {unbonding_time} days',
             'manage_modal_claim_notice_title': 'Your claimed rewards will be added<br> to Available Balance.',
@@ -338,6 +340,8 @@ export default {
             'add_address_modal_step5_title': 'Bravo rebyata',
             'add_address_modal_step5_desc': 'small explanation',
 
+            'add_address_added_label': 'Added',
+
 
             // Filter
             'filter_title': 'Filter',
@@ -371,8 +375,11 @@ export default {
             'notification_error_create_passport_title': 'Passport issue error',
 
             'notification_action_update_passport': 'Update passport',
+            'notification_action_delete_passport': 'Delete passport',
             'notification_passport_update_process': 'Passport updating...',
+            'notification_passport_delete_process': 'Passport deleting...',
             'notification_success_update_passport_title': 'Passport updated successfully',
+            'notification_success_delete_passport_title': 'Passport delete successfully',
             'notification_error_update_passport_title': 'Passport issue error',
 
             'notification_action_address_delete': 'Address delete',
@@ -382,6 +389,10 @@ export default {
             'notification_action_address_add': 'Address add',
             'notification_address_adding_process': 'Address adding to passport...',
             'notification_success_address_added_title': 'Address added successfully',
+
+            'notification_action_address_rename': 'Address rename',
+            'notification_address_renaming_process': 'Address renaming...',
+            'notification_success_address_rename_title': 'Address renamed successfully',
 
 
             // Footer

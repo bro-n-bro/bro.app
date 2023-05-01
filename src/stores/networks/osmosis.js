@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'osmosis',
     mintscanAlias: 'osmosis',
     prefix: 'osmosis',
+    address_prefix: 'osmo',
 
     health: 0,
     health_color: 'grey',

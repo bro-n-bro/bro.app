@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'graviton',
     mintscanAlias: 'gravity-bridge',
     prefix: 'gravity',
+    address_prefix: 'gravity',
 
     health: 0,
     health_color: 'grey',

@@ -79,14 +79,14 @@
                                     </template>
 
                                     <template v-else>
-                                    {{ generateAddress(store.networks[addedNetwork].prefix, store.wallets.cosmoshub).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].prefix, store.wallets.cosmoshub).slice(-6) }}
+                                    {{ generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(-6) }}
                                     </template>
                                 </div>
                             </div>
                         </div>
 
                         <div class="networks">
-                            <div><button class="network" :class="{'active': addedNetwork == 'cosmoshub'}" @click.prevent="selectNetwork('cosmoshub')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'cosmoshub', 'added': checkAddress('cosmos')}" @click.prevent="selectNetwork('cosmoshub')">
                                 <div class="logo">
                                     <img src="/cosmoshub_logo.png" alt="">
                                 </div>
@@ -94,6 +94,8 @@
                                 <div>{{ store.networks.cosmoshub.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
                             <!-- <div><button class="network" :class="{'active': addedNetwork == 'desmos'}" @click.prevent="selectNetwork('desmos')">
@@ -104,9 +106,11 @@
                                 <div>{{ store.networks.desmos.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div> -->
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'juno'}" @click.prevent="selectNetwork('juno')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'juno', 'added': checkAddress('juno')}" @click.prevent="selectNetwork('juno')">
                                 <div class="logo">
                                     <img src="/juno_logo.png" alt="">
                                 </div>
@@ -114,9 +118,11 @@
                                 <div>{{ store.networks.juno.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'stargaze'}" @click.prevent="selectNetwork('stargaze')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'stargaze', 'added': checkAddress('stargaze')}" @click.prevent="selectNetwork('stargaze')">
                                 <div class="logo">
                                     <img src="/stargaze_logo.png" alt="">
                                 </div>
@@ -124,9 +130,11 @@
                                 <div>{{ store.networks.stargaze.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'gravity'}" @click.prevent="selectNetwork('gravity')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'gravity', 'added': checkAddress('gravity')}" @click.prevent="selectNetwork('gravity')">
                                 <div class="logo">
                                     <img src="/gravity_logo.png" alt="">
                                 </div>
@@ -134,9 +142,11 @@
                                 <div>{{ store.networks.gravity.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'stride'}" @click.prevent="selectNetwork('stride')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'stride', 'added': checkAddress('stride')}" @click.prevent="selectNetwork('stride')">
                                 <div class="logo">
                                     <img src="/stride_logo.png" alt="">
                                 </div>
@@ -144,9 +154,11 @@
                                 <div>{{ store.networks.stride.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'omniflix'}" @click.prevent="selectNetwork('omniflix')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'omniflix', 'added': checkAddress('omniflix')}" @click.prevent="selectNetwork('omniflix')">
                                 <div class="logo">
                                     <img src="/omniflix_logo.png" alt="">
                                 </div>
@@ -154,9 +166,11 @@
                                 <div>{{ store.networks.omniflix.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'osmosis'}" @click.prevent="selectNetwork('osmosis')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'osmosis', 'added': checkAddress('osmo')}" @click.prevent="selectNetwork('osmosis')">
                                 <div class="logo">
                                     <img src="/osmosis_logo.png" alt="">
                                 </div>
@@ -164,19 +178,11 @@
                                 <div>{{ store.networks.osmosis.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <!-- <div><button class="network" :class="{'active': addedNetwork == 'evmos'}" @click.prevent="selectNetwork('evmos')">
-                                <div class="logo">
-                                    <img src="/evmos_logo.png" alt="">
-                                </div>
-
-                                <div>{{ store.networks.evmos.name }}</div>
-
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
-                            </button></div> -->
-
-                            <div><button class="network" :class="{'active': addedNetwork == 'bostrom'}" @click.prevent="selectNetwork('bostrom')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'bostrom', 'added': checkAddress('bostrom')}" @click.prevent="selectNetwork('bostrom')">
                                 <div class="logo">
                                     <img src="/bostrom_logo.png" alt="">
                                 </div>
@@ -184,9 +190,11 @@
                                 <div>{{ store.networks.bostrom.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'crescent'}" @click.prevent="selectNetwork('crescent')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'crescent', 'added': checkAddress('cre')}" @click.prevent="selectNetwork('crescent')">
                                 <div class="logo">
                                     <img src="/crescent_logo.png" alt="">
                                 </div>
@@ -194,9 +202,11 @@
                                 <div>{{ store.networks.crescent.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'emoney'}" @click.prevent="selectNetwork('emoney')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'emoney', 'added': checkAddress('emoney')}" @click.prevent="selectNetwork('emoney')">
                                 <div class="logo">
                                     <img src="/emoney_logo.png" alt="">
                                 </div>
@@ -204,6 +214,8 @@
                                 <div>{{ store.networks.emoney.name }}</div>
 
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+
+                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
                         </div>
 
@@ -311,11 +323,25 @@
         emitter = inject('emitter'),
         activeStep = ref(1),
         activeKeplrAddress = ref(store.activeKeplrAddress),
-        addedNetwork = ref('cosmoshub'),
+        addedNetwork = checkAddress('cosmos') ? ref('osmosis') : ref('cosmoshub'),
         addedAddress = ref(generateAddress(store.networks.cosmoshub.prefix, store.wallets.cosmoshub)),
         ownerAccount = ref(false),
         loading = ref(false),
         signature = ref('')
+
+
+    // Checking if the address was previously added
+    function checkAddress(prefix) {
+        if(store.account.owner.moonPassport.extension.addresses) {
+            let addresses = []
+
+            store.account.owner.moonPassport.extension.addresses.forEach(el => {
+                addresses.push(el.address)
+            })
+
+            return addresses.includes(generateAddress(prefix, store.wallets.cosmoshub))
+        }
+    }
 
 
     // Select network
@@ -536,12 +562,6 @@
 
 
 <style scoped>
-    .modal_content .data
-    {
-        width: 424px;
-    }
-
-
     .loader_wrap
     {
         border-radius: 36px;
@@ -787,24 +807,26 @@
         display: flex;
 
         width: 100%;
-        padding: 8px;
+        padding: 7px;
 
-        transition: background .2s linear;
+        transition: .2s linear;
         text-align: left;
 
+        border: 1px solid transparent;
         border-radius: 8px;
         background: #191919;
 
         justify-content: flex-start;
         align-items: center;
         align-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
 
     .step1 .networks .logo
     {
         width: 24px;
+        min-width: 24px;
         height: 24px;
 
         border-radius: 50%;
@@ -824,8 +846,8 @@
 
     .step1 .networks .logo + *
     {
-        width: calc(100% - 52px);
-        margin-left: auto;
+        width: 100%;
+        margin-left: 8px;
     }
 
 
@@ -836,12 +858,38 @@
         display: block;
 
         width: 16px;
+        min-width: 16px;
         height: 16px;
-        margin-left: auto;
+        margin-left: 8px;
 
         transition: opacity .2s linear;
 
         opacity: 0;
+    }
+
+
+    .step1 .networks .added_label
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        display: none;
+
+        margin-left: 8px;
+
+        white-space: nowrap;
+
+        opacity: .5;
+    }
+
+    .step1 .networks .network.added .icon
+    {
+        display: none;
+    }
+
+    .step1 .networks .network.added .added_label
+    {
+        display: block;
     }
 
 
@@ -854,6 +902,15 @@
     .step1 .networks .network.active .icon
     {
         opacity: 1;
+    }
+
+
+    .step1 .networks .network.added
+    {
+        pointer-events: none;
+
+        border-color: #950fff;
+        background: rgba(149, 15, 255, .1);
     }
 
 

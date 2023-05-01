@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'juno-network',
     mintscanAlias: 'juno',
     prefix: 'juno',
+    address_prefix: 'juno',
 
     health: 0,
     health_color: 'grey',

@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'e-money',
     mintscanAlias: 'emoney',
     prefix: 'emoney',
+    address_prefix: 'emoney',
 
     health: 0,
     health_color: 'grey',

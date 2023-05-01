@@ -116,7 +116,7 @@
 
     // Event "set notification"
     emitter.on('setNotification', notice => {
-        store.$patch({ tooltip: notice })
+        store.tooltip = notice
     })
 
 
@@ -125,12 +125,10 @@
         await fetch(`${store.networks[modal_data.network].lcd_api}/cosmos/staking/v1beta1/params`)
             .then(response => response.json())
             .then(data => {
-                store.$patch((state) => {
-                    state.showManageModal = true,
-                    state.networkManageModal = modal_data.network,
-                    state.validatorManageModal = modal_data.validator,
-                    state.networks[modal_data.network].unbonding_time = parseInt(data.params.unbonding_time)
-                })
+                store.showManageModal = true,
+                store.manageModalNetwork = modal_data.network,
+                store.validatorManageModal = modal_data.validator,
+                store.networks[modal_data.network].unbonding_time = parseInt(data.params.unbonding_time)
 
                 document.body.classList.add('lock')
             })
@@ -149,7 +147,7 @@
 
     // Event "open manage success modal"
     emitter.on('openManageSuccessModal', async function() {
-        store.$patch({ showManageSuccessModal: true })
+        store.showManageSuccessModal = true
 
         document.body.classList.add('lock')
     })
@@ -157,7 +155,7 @@
 
     // Event "close manage success modal"
     emitter.on('closeManageSuccessModal', function() {
-        store.$patch({ showManageSuccessModal: false })
+        store.showManageSuccessModal = false
 
         document.body.classList.remove('lock')
     })
@@ -165,7 +163,7 @@
 
     // Event "open manage error modal"
     emitter.on('openManageErrorModal', async function() {
-        store.$patch({ showManageErrorModal: true })
+        store.showManageErrorModal = true
 
         document.body.classList.add('lock')
     })
@@ -173,7 +171,7 @@
 
     // Event "close manage error modal"
     emitter.on('closeManageErrorModal', function() {
-        store.$patch({ showManageErrorModal: false })
+        store.showManageErrorModal = false
 
         document.body.classList.remove('lock')
     })

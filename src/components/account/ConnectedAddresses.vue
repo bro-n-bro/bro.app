@@ -12,17 +12,17 @@
         </div>
 
         <div class="list">
-            <!-- <pre>{{ store.account.moonPassport }}</pre>
-            <pre>{{ store.account.owner.moonPassport }}</pre> -->
+            <!-- <pre>{{ store.account.moonPassport }}</pre> -->
+            <!-- <pre>{{ store.account.owner.moonPassport }}</pre> -->
 
-            <div class="item"
+            <div><div class="item"
                 :class="{'active': store.account.moonPassportOwner == generateAddress('bostrom', store.account.currentWallet)}"
                 @click.prevent="selectWallet(store.account.moonPassportOwner)"
             >
                 <div class="name">
-                    {{ store.account.moonPassportOwner }}
+                    {{ store.account.moonPassportOwner.slice(0, 13) + '...' + store.account.moonPassportOwner.slice(-6) }}
                 </div>
-            </div>
+            </div></div>
 
             <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index" v-if="store.account.owner.moonPassport.extension.addresses">
             <div><div class="item" v-if="item.address.substring(0, 2) != '0x'"
@@ -36,27 +36,22 @@
                     {{ $t('message.account_duplicate_ext') }}
                 </div>
 
-                <!-- <div class="name">
-                    {{ store.account.owner.moonPassport.extension.nickname }}
-                </div> -->
-
                 <div class="name">
-                    {{ item.address }}
+                    <span v-if="item.label">{{ item.label }}</span>
+                    <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                 </div>
 
-                <button class="edit_btn">
+                <button class="edit_btn" @click.prevent="e => e.target.closest('.item').classList.add('editing')">
                     <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
                 </button>
 
-                <button class="remove_btn" @click.prevent="deleteAddress(item.address)">
+                <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)">
                     <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
 
                 <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
 
-                <div class="loader_wrap">
-                    <div class="loader"><span></span></div>
-                </div>
+                <EditAddressName :address="item.address"/>
             </div></div>
             </template>
         </div>
@@ -67,8 +62,12 @@
         </button>
 
 
-        <!-- Validator modal -->
+        <!-- Add address modal -->
         <AddAddressModal v-if="store.showAddAddressModal" />
+
+
+        <!-- Delete address modal -->
+        <DeleteAddressModal v-if="store.showDeleteAddressModal" />
     </section>
 </template>
 
@@ -76,16 +75,15 @@
 <script setup>
     import { inject, onBeforeMount, onBeforeUpdate } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useNotification } from '@kyvg/vue3-notification'
-    import { preparePassportTx, sendTx, generateAddress } from '@/utils'
+    import { generateAddress } from '@/utils'
 
     // Components
     import AddAddressModal from '@/components/modal/AddAddressModal.vue'
+    import DeleteAddressModal from '@/components/modal/DeleteAddressModal.vue'
+    import EditAddressName from '@/components/account/EditAddressName.vue'
 
     const store = useGlobalStore(),
-        i18n = inject('i18n'),
-        emitter = inject('emitter'),
-        notification = useNotification()
+        emitter = inject('emitter')
 
     var uniqWallets = []
 
@@ -139,107 +137,18 @@
     }
 
 
-    // Delete address
-    async function deleteAddress(address) {
-        let _self = event
-
-        // Show loader
-        _self.target.closest('.item').classList.add('deleting')
-
-        // Show notification
-        notification.notify({
-            group: 'default',
-            duration: -100,
-            title: i18n.global.t('message.notification_address_deleting_process')
-        })
-
-        try{
-            // Prepare Tx
-            let prepareResult = await preparePassportTx({
-                remove_address: {
-                    address,
-                    nickname: store.account.moonPassport.extension.nickname
-                }
-            })
-
-            // Send Tx
-            let result = await sendTx(prepareResult)
-
-            if (result.code === 0) {
-                // Set TXS
-                store.lastTXS = result.transactionHash
-
-                // Show notification
-                notification.notify({
-                    group: 'default',
-                    clean: true
-                })
-
-                notification.notify({
-                    group: store.networks.bostrom.denom,
-                    title: i18n.global.t('message.notification_success_address_delete_title'),
-                    type: 'success',
-                    data: {
-                        chain: 'bostrom',
-                        tx_type: i18n.global.t('message.notification_action_address_delete')
-                    }
-                })
-
-                // Reload page
-                setTimeout(() => window.location.reload())
-            }
-
-            if (result.code) {
-                // Show notification
-                notification.notify({
-                    group: 'default',
-                    clean: true
-                })
-
-                notification.notify({
-                    duration: -100,
-                    group: store.networks.bostrom.denom,
-                    title: i18n.global.t('message.notification_failed_title'),
-                    text: result?.rawLog.toString(),
-                    type: 'error',
-                    data: {
-                        chain: 'bostrom',
-                        tx_type: i18n.global.t('message.notification_action_address_delete')
-                    }
-                })
-
-                // Hide loader
-                _self.target.closest('.item').classList.remove('deleting')
-            }
-        } catch (error) {
-            console.log(error)
-
-            // Show notification
-            notification.notify({
-                group: 'default',
-                clean: true
-            })
-
-            notification.notify({
-                group: store.networks.bostrom.denom,
-                title: i18n.global.t('message.notification_failed_title'),
-                text: i18n.global.t('message.manage_modal_error_rejected'),
-                type: 'error',
-                data: {
-                    chain: 'bostrom',
-                    tx_type: i18n.global.t('message.notification_action_address_delete')
-                }
-            })
-
-            // Hide loader
-            _self.target.closest('.item').classList.remove('deleting')
-        }
-    }
-
-
     // Open add address modal
     function openAddAddressModal() {
         store.showAddAddressModal = true
+
+        document.body.classList.add('lock')
+    }
+
+
+    // Open delete address modal
+    function openDeleteAddressModal(address) {
+        store.currentDeleteAddress = address
+        store.showDeleteAddressModal = true
 
         document.body.classList.add('lock')
     }
@@ -255,6 +164,14 @@
 
             document.body.classList.remove('lock')
         }
+    })
+
+
+    // Event "close delete address modal"
+    emitter.on('closeDeleteAddressModal', () => {
+        store.showDeleteAddressModal = false
+
+        document.body.classList.remove('lock')
     })
 </script>
 
@@ -360,6 +277,8 @@
     {
         color: rgba(255,255,255,.7);
 
+        position: relative;
+
         display: flex;
 
         min-height: 42px;
@@ -395,7 +314,7 @@
 
         position: absolute;
         z-index: 3;
-        right: 0;
+        right: -41px;
         bottom: 100%;
 
         display: none;
@@ -443,7 +362,7 @@
     }
 
 
-    .connected_addresses .item .icon
+    .connected_addresses .item > .icon
     {
         color: #eb5757;
 
@@ -524,22 +443,16 @@
     }
 
 
-    .connected_addresses .item .loader_wrap
+    .connected_addresses .item form
     {
         display: none;
 
-        border-radius: 14px;
+        pointer-events: auto;
     }
 
-    .connected_addresses .item .loader
+    .connected_addresses .item.editing form
     {
-        width: 20px;
-        height: 20px;
-    }
-
-    .connected_addresses .item.deleting .loader_wrap
-    {
-        display: flex;
+        display: block;
     }
 
 
@@ -578,7 +491,7 @@
         box-shadow: none;
     }
 
-    .connected_addresses .item.duplicate .icon,
+    .connected_addresses .item.duplicate > .icon,
     .connected_addresses .list > *:hover .item.duplicate .tooltip
     {
         display: block;

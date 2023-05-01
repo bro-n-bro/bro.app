@@ -10,6 +10,7 @@ const network = {
     chainId: 'bostrom',
     coingecko_api: 'bostrom',
     prefix: 'bostrom',
+    address_prefix: 'bostrom',
 
     health: 0,
     health_color: 'grey',

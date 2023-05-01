@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'omniflix-network',
     mintscanAlias: 'omniflix',
     prefix: 'omniflix',
+    address_prefix: 'omniflix',
 
     health: 0,
     health_color: 'grey',

@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'crescent-network',
     mintscanAlias: 'crescent',
     prefix: 'crescent',
+    address_prefix: 'cre',
 
     health: 0,
     health_color: 'grey',

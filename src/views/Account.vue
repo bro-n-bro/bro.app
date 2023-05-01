@@ -44,7 +44,6 @@
 <script setup>
     // Components
     import Networks from '../components/account/Networks.vue'
-    // import ContractAddress from '../components/account/ContractAddress.vue'
     import Charts from '../components/account/Charts.vue'
     import Stats from '../components/account/Stats.vue'
     import Validators from '../components/account/Validators.vue'

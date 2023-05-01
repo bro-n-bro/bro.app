@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'desmos',
     mintscanAlias: 'desmos',
     prefix: 'desmos',
+    address_prefix: 'desmos',
 
     health: 0,
     health_color: 'grey',

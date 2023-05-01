@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'cosmos',
     mintscanAlias: 'cosmos',
     prefix: 'cosmos',
+    address_prefix: 'cosmos',
 
     health: 0,
     health_color: 'grey',
@@ -73,6 +74,7 @@ const network = {
     total_annual_provision: 0,
     exponent: 1000000,
     tokens_sum: 0,
+    unbonding_time: 0,
     proposal_need: 250,
 
     restake: {

@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'stargaze',
     mintscanAlias: 'stargaze',
     prefix: 'stargaze',
+    address_prefix: 'stars',
 
     health: 0,
     health_color: 'grey',

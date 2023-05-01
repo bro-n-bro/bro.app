@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'evmos',
     mintscanAlias: 'evmos',
     prefix: 'evmos',
+    address_prefix: 'evmos',
 
     health: 0,
     health_color: 'grey',

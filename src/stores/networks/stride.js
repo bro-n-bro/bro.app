@@ -11,6 +11,7 @@ const network = {
     coingecko_api: 'stride',
     mintscanAlias: 'stride',
     prefix: 'stride',
+    address_prefix: 'stride',
 
     health: 0,
     health_color: 'grey',
