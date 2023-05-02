@@ -61,12 +61,14 @@
 
                         <div class="current_account">
                             <div class="logo">
-                                <img :src="`/${addedNetwork}_logo.png`" alt="">
+                                <img :src="`/${addedNetwork}_logo.png`" alt="" v-if="!duplicate">
+                                <svg class="icon" v-else><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
                             </div>
 
                             <div>
-                                <div class="name">
+                                <div class="name" :class="{'error': duplicate}">
                                     {{ store.account.userName }}
+                                    <span v-if="duplicate">Duplicated</span>
                                 </div>
 
                                 <div class="address">
@@ -219,7 +221,7 @@
                             </button></div>
                         </div>
 
-                        <button class="btn" @click.prevent="setActiveKeplrAddress">
+                        <button class="btn" :class="{'disabled': duplicate}" @click.prevent="setActiveKeplrAddress">
                             {{ $t('message.next_btn') }}
                         </button>
                     </div>
@@ -310,12 +312,11 @@
 
 
 <script setup>
-    import { ref, inject } from 'vue'
+    import { ref, inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
     import { toAscii, toBase64 } from '@cosmjs/encoding'
-
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -323,11 +324,18 @@
         emitter = inject('emitter'),
         activeStep = ref(1),
         activeKeplrAddress = ref(store.activeKeplrAddress),
-        addedNetwork = checkAddress('cosmos') ? ref('osmosis') : ref('cosmoshub'),
-        addedAddress = ref(generateAddress(store.networks.cosmoshub.prefix, store.wallets.cosmoshub)),
+        addedNetwork = ref(),
+        addedAddress = ref(''),
         ownerAccount = ref(false),
         loading = ref(false),
-        signature = ref('')
+        signature = ref(''),
+        duplicate = ref(false)
+
+
+    onBeforeMount(() => {
+        // Select network
+        selectNetwork('cosmoshub')
+    })
 
 
     // Checking if the address was previously added
@@ -347,6 +355,13 @@
     // Select network
     async function selectNetwork(network) {
         addedNetwork.value = network
+
+        // Checking if the address was previously added
+        let result = checkAddress(store.networks[network].address_prefix)
+
+        result
+            ? duplicate.value = true
+            : duplicate.value = false
 
         // Set new singer
         await setNewSinger()
@@ -755,10 +770,42 @@
     }
 
 
+    .step1 .current_account .logo .icon
+    {
+        color: #eb5757;
+
+        display: block;
+
+        width: 24px;
+        height: 24px;
+    }
+
+
     .step1 .current_account .name
     {
         font-weight: 500;
         line-height: 100%;
+
+        display: flex;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: nowrap;
+    }
+
+    .step1 .current_account .name.error
+    {
+        color: #eb5757;
+    }
+
+    .step1 .current_account .name span
+    {
+        color: #555;
+        font-size: 14px;
+        font-weight: 400;
+
+        margin-left: 8px;
     }
 
 
@@ -882,12 +929,7 @@
         opacity: .5;
     }
 
-    .step1 .networks .network.added .icon
-    {
-        display: none;
-    }
-
-    .step1 .networks .network.added .added_label
+    .step1 .networks .network.added:not(.active) .added_label
     {
         display: block;
     }
@@ -907,10 +949,27 @@
 
     .step1 .networks .network.added
     {
-        pointer-events: none;
-
         border-color: #950fff;
         background: rgba(149, 15, 255, .1);
+    }
+
+    .step1 .networks .network.added .icon
+    {
+        display: none;
+    }
+
+
+    .step1 .networks .network.added.active
+    {
+        border: 1px solid #eb5757;
+        background: rgba(235, 87, 87, .1);
+    }
+
+    .step1 .networks .network.added.active .icon
+    {
+        color: #fff;
+
+        display: block;
     }
 
 
