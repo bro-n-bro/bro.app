@@ -50,6 +50,7 @@
 <script setup>
     import { reactive, ref, onBeforeMount, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { generateAddress } from '@/utils'
 
     const store = useGlobalStore(),
         loading = ref(true),
@@ -77,8 +78,10 @@
         // Set loader
         loading.value = true
 
+        let currentAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)
+
         try {
-            await fetch(`https://rpc.bronbro.io/account/account_info/${store.account.currentWallet}`)
+            await fetch(`https://rpc.bronbro.io/account/account_info/${currentAddress}`)
                 .then(res => res.json())
                 .then(response => {
                     data.info = response

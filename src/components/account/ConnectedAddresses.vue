@@ -41,7 +41,7 @@
                     <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                 </div>
 
-                <button class="edit_btn" @click.prevent="e => e.target.closest('.item').classList.add('editing')">
+                <button class="edit_btn" @click.prevent="showEditForm">
                     <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
                 </button>
 
@@ -51,7 +51,7 @@
 
                 <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
 
-                <EditAddressName :address="item.address"/>
+                <EditAddressName :address="item.address" :name="item.label ? item.label : `${item.address.slice(0, 13)}...${item.address.slice(-6)}`"/>
             </div></div>
             </template>
         </div>
@@ -134,6 +134,17 @@
     // Select wallet
     function selectWallet(address) {
         store.account.currentWallet = address
+    }
+
+
+    // Show edit form
+    function showEditForm() {
+        let _self = event.target
+
+        _self.closest('.item').classList.add('editing')
+
+        // Focus on input
+        setTimeout(() => _self.closest('.item').querySelector('.input').focus())
     }
 
 
@@ -313,7 +324,7 @@
         line-height: 100%;
 
         position: absolute;
-        z-index: 3;
+        z-index: 9;
         right: -41px;
         bottom: 100%;
 

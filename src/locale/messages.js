@@ -297,6 +297,7 @@ export default {
 
             'validator_modal_website_btn': 'Website',
             'validator_modal_mintscan_btn': 'Mintscan',
+            'validator_modal_broscore_btn': 'Bro Score',
 
             'validator_modal_active_set': 'Active',
             'validator_modal_inactive_set': 'Inactive',

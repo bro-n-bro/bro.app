@@ -157,22 +157,22 @@
 
         // Get validators for current wallet
         try {
-            let currentAddress = generateAddress(store.networks[store.currentNetwork].prefix, store.account.currentWallet)
+            let currentAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)
 
             await fetch(`https://rpc.bronbro.io/account/validators/${currentAddress}`)
                 .then(res => res.json())
                 .then(response => {
-                    if(response.length) {
+                    if(response.validators.length) {
                         let totalTokens = 0
 
                         // Calc total totalTokens
-                        response.forEach(validator => totalTokens += validator.coin.amount)
+                        response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
                         // Sort and set
                         wallets.push({
                             address: currentAddress,
                             totalTokens,
-                            validators: response.sort((a, b) => {
+                            validators: response.validators.sort((a, b) => {
                                 if (a.coin.amount > b.coin.amount) { return -1 }
                                 if (a.coin.amount < b.coin.amount) { return 1 }
                                 return 0
@@ -180,7 +180,7 @@
                         })
 
                         // Math total passport tokens
-                        response.forEach(validator => totalPassportTokens += validator.coin.amount)
+                        response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
                     }
 
                     // Hide loader
@@ -199,7 +199,7 @@
 
         // Get validators for main wallet
         try {
-            let ownerAddress = generateAddress(store.networks[store.currentNetwork].prefix, store.account.moonPassportOwner)
+            let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwner)
 
             await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
                 .then(res => res.json())
@@ -207,13 +207,13 @@
                     let totalTokens = 0
 
                     // Calc total totalTokens
-                    response.forEach(validator => totalTokens += validator.coin.amount)
+                    response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
                     // Sort and set
                     wallets.push({
                         address: ownerAddress,
                         totalTokens,
-                        validators: response.sort((a, b) => {
+                        validators: response.validators.sort((a, b) => {
                             if (a.coin.amount > b.coin.amount) { return -1 }
                             if (a.coin.amount < b.coin.amount) { return 1 }
                             return 0
@@ -221,7 +221,7 @@
                     })
 
                     // Math total passport tokens
-                    response.forEach(validator => totalPassportTokens += validator.coin.amount)
+                    response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
 
                     // Hide loader
                     loading.value = false
@@ -233,7 +233,7 @@
         // Get validators other wallets
         if(store.account.owner.moonPassport.extension.addresses) {
             store.account.owner.moonPassport.extension.addresses.forEach(async address => {
-                let generatedAddress = generateAddress(store.networks[store.currentNetwork].prefix, address.address)
+                let generatedAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, address.address)
 
                 if(generatedAddress != store.account.moonPassportOwner && !wallets[generatedAddress]) {
                     try {
@@ -241,7 +241,7 @@
                             .then(res => res.json())
                             .then(response => {
                                 // Sort
-                                wallets[generatedAddress] = response.sort((a, b) => {
+                                wallets[generatedAddress] = response.validators.sort((a, b) => {
                                     if (a.coin.amount > b.coin.amount) { return -1 }
                                     if (a.coin.amount < b.coin.amount) { return 1 }
                                     return 0

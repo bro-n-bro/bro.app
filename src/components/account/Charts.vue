@@ -62,12 +62,12 @@
                     <Doughnut ref="chartFirst" :data="chartDataFirst" :options="chartOptionsFirst" />
                 </div>
 
-                <div class="chart chartSecond" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
+                <!-- <div class="chart chartSecond" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
                     <Doughnut ref="chartSecond" :data="chartDataSecond" :options="chartOptionsSecond" />
-                </div>
+                </div> -->
             </div>
 
-            <div class="charts" v-if="chartActive == 3">
+            <!-- <div class="charts" v-if="chartActive == 3">
                 <div class="chart chartThird active">
                     <Doughnut ref="chartThird" :data="chartDataThird" :options="chartOptionsThird" />
 
@@ -80,9 +80,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="charts" v-if="chartActive == 4">
+            <!-- <div class="charts" v-if="chartActive == 4">
                 <div class="chart chartFourth active">
                     <Doughnut ref="chartFourth" :data="chartDataFourth" :options="chartOptionsFourth" />
 
@@ -95,9 +95,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="charts" v-if="chartActive == 5">
+            <!-- <div class="charts" v-if="chartActive == 5">
                 <div class="chart chartFifth active">
                     <Doughnut ref="chartFifth" :data="chartDataFifth" :options="chartOptionsFifth" />
 
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
 
@@ -123,24 +123,24 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.staked / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ $filters.toFixed(accountBalance.staked_total / store.networks[store.currentNetwork].exponent, 2) }}
                         {{ store.networks[store.currentNetwork].token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.staked / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -153,31 +153,31 @@
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.liquid" :class="{'active': chartFirstActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFirst', 1)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="accountBalance.liquid_total" :class="{'active': chartFirstActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFirst', 1)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #0343E8;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.liquid / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ $filters.toFixed(accountBalance.liquid_total / store.networks[store.currentNetwork].exponent, 2) }}
                         {{ store.networks[store.currentNetwork].token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.liquid / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -190,18 +190,34 @@
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.unbonding" :class="{'active': chartFirstActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFirst', 2)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="accountBalance.unbonding_total" :class="{'active': chartFirstActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFirst', 2)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #EB5757;"></div>
                         <span>{{ $t('message.account_charts_unbonding_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.unbonding / store.networks[store.currentNetwork].exponent, 2) }}
+                        {{ $filters.toFixed(accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent, 2) }}
                         {{ store.networks[store.currentNetwork].token_name }}
 
                         <div class="price">
-                            200 {{ store.currency }}
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
                         </div>
                     </div>
 
@@ -1059,15 +1075,7 @@
                 cutout: '84%',
             }]
         })),
-        accountBalance = reactive({
-            staked: 0,
-            liquid: 0,
-            unbonding: 0,
-            outside: 0,
-            rewards: 0,
-            totalChartFirst: 0,
-            totalChartSecond: 0
-        })
+        accountBalance = ref({})
 
 
     onBeforeMount(async () => {
@@ -1089,7 +1097,7 @@
         loading.value = true
 
         try {
-            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].prefix, store.account.currentWallet)}`)
+            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)}`)
                 .then(res => res.json())
                 .then(response => {
                     // Clear data
@@ -1099,51 +1107,110 @@
                     chartDatasetsFourth = reactive([]),
                     chartDatasetsFifth = reactive([]),
 
+                    accountBalance.value = response
+
+                    // Sum
+                    accountBalance.value.liquid_total = 0
+                    accountBalance.value.staked_total = 0
+                    accountBalance.value.unbonding_total = 0
+                    accountBalance.value.rewards_total = 0
+                    accountBalance.value.outside_total = 0
+                    accountBalance.value.ibc_total = 0
+
+                    if(accountBalance.value.staked) {
+                        accountBalance.value.liquid.forEach(el => {
+                            // Sum
+                            accountBalance.value.liquid_total += el.amount
+
+                            // Currencies
+                            el.price_usdt = el.price
+                            el.price_atom = el.price / store.ATOM_price
+                            el.price_eth = el.price / store.ETH_price
+                            el.price_btc = el.price / store.BTC_price
+                        })
+                    }
+
+                    if(accountBalance.value.staked) {
+                        accountBalance.value.staked.forEach(el => {
+                            // Sum
+                            accountBalance.value.staked_total += el.amount
+
+                            // Currencies
+                            el.price_usdt = el.price
+                            el.price_atom = el.price / store.ATOM_price
+                            el.price_eth = el.price / store.ETH_price
+                            el.price_btc = el.price / store.BTC_price
+                        })
+                    }
+
+                    if(accountBalance.value.unbonding) {
+                        accountBalance.value.unbonding.forEach(el => {
+                            // Sum
+                            accountBalance.value.unbonding_total += el.amount
+
+                            // Currencies
+                            el.price_usdt = el.price
+                            el.price_atom = el.price / store.ATOM_price
+                            el.price_eth = el.price / store.ETH_price
+                            el.price_btc = el.price / store.BTC_price
+                        })
+                    }
+
+                    if(accountBalance.value.rewards) {
+                        accountBalance.value.rewards.forEach(el => {
+                            // Sum
+                            accountBalance.value.rewards_total += parseFloat(el.amount)
+
+                            // Currencies
+                            el.price_usdt = el.price
+                            el.price_atom = el.price / store.ATOM_price
+                            el.price_eth = el.price / store.ETH_price
+                            el.price_btc = el.price / store.BTC_price
+                        })
+                    }
+                    // accountBalance.value.liquid.forEach(el => accountBalance.value.outside_total +- el.amount)
+                    // accountBalance.value.ibc.forEach(el => accountBalance.value.ibc_total +- el.amount)
+
+                    console.log(accountBalance.value)
+
                     // Set data for first chart
-                    chartDatasetsFirst.push(response.staked.uatom)
-                    chartDatasetsFirst.push(response.liquid.uatom)
-                    chartDatasetsFirst.push(response.unbonding.uatom)
+                    chartDatasetsFirst.push(accountBalance.value.staked_total)
+                    chartDatasetsFirst.push(accountBalance.value.liquid_total)
+                    chartDatasetsFirst.push(accountBalance.value.unbonding_total)
 
-                    // Set data for second chart
-                    chartDatasetsSecond.push(response.staked.uatom)
-                    chartDatasetsSecond.push(response.outside.uatom)
-                    chartDatasetsSecond.push(0)
-                    chartDatasetsSecond.push(response.rewards.uatom)
+                    // // Set data for second chart
+                    // chartDatasetsSecond.push(response.staked.uatom)
+                    // chartDatasetsSecond.push(response.outside.uatom)
+                    // chartDatasetsSecond.push(0)
+                    // chartDatasetsSecond.push(response.rewards.uatom)
 
-                    // Set data for third chart
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
-                    chartDatasetsThird.push(10)
+                    // // Set data for third chart
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
+                    // chartDatasetsThird.push(10)
 
-                    // Set data for fourth chart
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
-                    chartDatasetsFourth.push(10)
+                    // // Set data for fourth chart
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
+                    // chartDatasetsFourth.push(10)
 
-                    // Set data for fifth chart
-                    chartDatasetsFifth.push(50)
-                    chartDatasetsFifth.push(10)
-                    chartDatasetsFifth.push(10)
-                    chartDatasetsFifth.push(10)
-                    chartDatasetsFifth.push(10)
-
-                    // Set data
-                    accountBalance.staked = response.staked.uatom
-                    accountBalance.liquid = response.liquid.uatom
-                    accountBalance.unbonding = response.unbonding.uatom
-                    accountBalance.outside = response.outside.uatom
-                    accountBalance.rewards = response.rewards.uatom
+                    // // Set data for fifth chart
+                    // chartDatasetsFifth.push(50)
+                    // chartDatasetsFifth.push(10)
+                    // chartDatasetsFifth.push(10)
+                    // chartDatasetsFifth.push(10)
+                    // chartDatasetsFifth.push(10)
 
                     // Calc totals
-                    accountBalance.totalChartFirst = response.staked.uatom + response.liquid.uatom + response.unbonding.uatom
+                    accountBalance.value.totalChartFirst = accountBalance.value.staked_total + accountBalance.value.liquid_total + accountBalance.value.unbonding_total
 
                     // Hide loader
                     loading.value = false

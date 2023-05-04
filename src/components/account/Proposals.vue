@@ -92,7 +92,7 @@
             fetch('https://rpc.bronbro.io/gov/proposals')
                 .then(res => res.json())
                 .then(response => {
-                    data.proposals = response
+                    data.proposals = response.proposals
 
                     // Hide loader
                     loading.value = true

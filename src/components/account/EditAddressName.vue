@@ -2,7 +2,7 @@
     <form @submit.prevent="onSubmit">
         <input type="text" v-model="name" class="input">
 
-        <button type="button" class="submit_btn">
+        <button type="submit" class="submit_btn">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
         </button>
 
@@ -23,7 +23,7 @@
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx } from '@/utils'
 
-    const props = defineProps(['address']),
+    const props = defineProps(['address', 'name']),
         store = useGlobalStore(),
         notification = useNotification(),
         i18n = inject('i18n'),
@@ -32,7 +32,7 @@
 
 
     onBeforeMount(() => {
-        name.value = props.address.slice(0, 13) + '...' + props.address.slice(-6)
+        name.value = props.name
     })
 
 

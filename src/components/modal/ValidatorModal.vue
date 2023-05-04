@@ -56,6 +56,11 @@
                         <img src="/mintscan_logo.png" alt="">
                         <span>{{ $t('message.validator_modal_mintscan_btn') }}</span>
                     </a>
+
+                    <a :href="`https://score.bronbro.io/network?network=${store.currentNetwork}`" target="_blank" rel="noopener nofollow" class="link">
+                        <img src="/broscore_logo.svg" alt="">
+                        <span>{{ $t('message.validator_modal_broscore_btn') }}</span>
+                    </a>
                 </div>
 
                 <div class="details">
@@ -409,6 +414,7 @@
         min-height: 32px;
         padding: 4px 6px;
 
+        transition: background .2s linear;
         text-decoration: none;
 
         border-radius: 10px;
@@ -436,6 +442,12 @@
         width: 24px;
         height: 20px;
         margin-right: 8px;
+    }
+
+
+    .btns .link:hover
+    {
+        background: #950fff;
     }
 
 

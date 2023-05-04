@@ -59,7 +59,7 @@
                             {{ $t('message.add_address_modal_step1_title') }}
                         </div>
 
-                        <div class="current_account">
+                        <div class="current_account" :class="{'editing': editForm, 'error': !tempAddressName.length}">
                             <div class="logo">
                                 <img :src="`/${addedNetwork}_logo.png`" alt="" v-if="!duplicate">
                                 <svg class="icon" v-else><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
@@ -67,9 +67,21 @@
 
                             <div>
                                 <div class="name" :class="{'error': duplicate}">
-                                    {{ store.account.userName }}
+                                    {{ tempAddressName }}
                                     <span v-if="duplicate">Duplicated</span>
                                 </div>
+
+                                <form class="edit_name_form" @submit.prevent="hideEditForm">
+                                    <input type="text" v-model="tempAddressName" class="input" id="temp_name">
+
+                                    <button type="submit" class="submit_btn">
+                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                    </button>
+
+                                    <button type="button" class="cancel_btn" @click.prevent="cancelEditForm">
+                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                                    </button>
+                                </form>
 
                                 <div class="address">
                                     <template v-if="addedNetwork == 'evmos'">
@@ -84,6 +96,10 @@
                                     {{ generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(-6) }}
                                     </template>
                                 </div>
+
+                                <button class="edit_btn" @click.prevent="showEditForm">
+                                    <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -124,7 +140,7 @@
                                 <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'stargaze', 'added': checkAddress('stargaze')}" @click.prevent="selectNetwork('stargaze')">
+                            <div><button class="network" :class="{'active': addedNetwork == 'stargaze', 'added': checkAddress('stars')}" @click.prevent="selectNetwork('stargaze')">
                                 <div class="logo">
                                     <img src="/stargaze_logo.png" alt="">
                                 </div>
@@ -221,7 +237,7 @@
                             </button></div>
                         </div>
 
-                        <button class="btn" :class="{'disabled': duplicate}" @click.prevent="setActiveKeplrAddress">
+                        <button class="btn" :class="{'disabled': duplicate || !tempAddressName.length}" @click.prevent="setActiveKeplrAddress">
                             {{ $t('message.next_btn') }}
                         </button>
                     </div>
@@ -329,7 +345,9 @@
         ownerAccount = ref(false),
         loading = ref(false),
         signature = ref(''),
-        duplicate = ref(false)
+        duplicate = ref(false),
+        editForm = ref(false),
+        tempAddressName = ref(store.account.userName)
 
 
     onBeforeMount(() => {
@@ -365,6 +383,32 @@
 
         // Set new singer
         await setNewSinger()
+    }
+
+
+    // Show edit form
+    function showEditForm() {
+        editForm.value = true
+
+        // Focus on input
+        setTimeout(() => document.getElementById('temp_name').focus())
+    }
+
+
+    // Hide edit form
+    function hideEditForm() {
+        if(tempAddressName.value.length) {
+            editForm.value = false
+        }
+    }
+
+
+    // Cancel edit form
+    function cancelEditForm() {
+        hideEditForm()
+
+        // Set default name
+        tempAddressName.value = store.account.userName
     }
 
 
@@ -437,13 +481,22 @@
 
         try{
             // Prepare Tx
-            let prepareResult = await preparePassportTx({
-                proof_address: {
-                    address: addedAddress.value,
-                    nickname: store.account.owner.moonPassport.extension.nickname,
-                    signature: signature.value
+            let prepareResult = await preparePassportTx([
+                {
+                    proof_address: {
+                        address: addedAddress.value,
+                        nickname: store.account.owner.moonPassport.extension.nickname,
+                        signature: signature.value
+                    }
+                },
+                {
+                    set_address_label: {
+                        address: addedAddress.value,
+                        label: tempAddressName.value,
+                        nickname: store.account.owner.moonPassport.extension.nickname
+                    }
                 }
-            })
+            ])
 
             // Send Tx
             let result = await sendTx(prepareResult)
@@ -728,11 +781,16 @@
 
     .step1 .current_account
     {
+        position: relative;
+
         display: flex;
 
         margin-top: 16px;
-        padding: 12px 10px;
+        padding: 11px 9px;
 
+        transition: border-color .2s linear;
+
+        border: 1px solid transparent;
         border-radius: 12px;
         background: #191919;
 
@@ -788,6 +846,10 @@
 
         display: flex;
 
+        padding-right: 40px;
+
+        transition: color .2s linear;
+
         justify-content: flex-start;
         align-items: center;
         align-content: center;
@@ -809,6 +871,92 @@
     }
 
 
+    .step1 .current_account .edit_name_form
+    {
+        position: relative;
+
+        display: none;
+
+        width: 100%;
+    }
+
+
+    .step1 .current_account .edit_name_form .input
+    {
+        color: var(--text_color);
+        font-family: var(--font-family);
+        font-size: var(--font_size);
+        font-weight: 500;
+
+        display: block;
+
+        width: 100%;
+        height: 16px;
+        padding-right: 60px;
+
+        border: none;
+        background: none;
+    }
+
+
+    .step1 .current_account .edit_name_form .submit_btn
+    {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 30px;
+        bottom: 0;
+
+        display: flex;
+
+        width: 16px;
+        height: 16px;
+        margin: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .step1 .current_account .edit_name_form .submit_btn .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+    }
+
+
+    .step1 .current_account .edit_name_form .cancel_btn
+    {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        right: 10px;
+        bottom: 0;
+
+        display: flex;
+
+        width: 16px;
+        height: 16px;
+        margin: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .step1 .current_account .edit_name_form .cancel_btn .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+    }
+
+
     .step1 .current_account .address
     {
         color: #555;
@@ -821,6 +969,66 @@
 
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+
+    .step1 .current_account .edit_btn
+    {
+        color: #555;
+
+        position: absolute;
+        top: 12px;
+        right: 10px;
+
+        display: flex;
+
+        width: 16px;
+        height: 16px;
+
+        transition: color .2s linear;
+        pointer-events: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .step1 .current_account .edit_btn svg
+    {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .step1 .current_account .edit_btn:hover
+    {
+        color: #fff;
+    }
+
+
+
+    .step1 .current_account.editing
+    {
+        border-color: #950fff;
+    }
+
+    .step1 .current_account.editing.error
+    {
+        border: 1px solid #eb5757;
+        background: rgba(235, 87, 87, .1);
+    }
+
+    .step1 .current_account.editing .name,
+    .step1 .current_account.editing .edit_btn
+    {
+        display: none;
+    }
+
+    .step1 .current_account.editing .edit_name_form
+    {
+        display: block;
     }
 
 

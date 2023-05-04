@@ -120,7 +120,7 @@
             await fetch(`https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`)
                 .then(res => res.json())
                 .then(response => {
-                    data.proposals = response
+                    data.proposals = response.proposals
 
                     // Hide loader
                     loading.value = true
@@ -163,8 +163,8 @@
             .then(response => {
                 data.loading = false
 
-                response.length
-                    ? data.proposals = data.proposals.concat(response)
+                response.proposals.length
+                    ? data.proposals = data.proposals.concat(response.proposals)
                     : data.allReceived = true
             })
     }

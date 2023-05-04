@@ -659,28 +659,34 @@ export const preparePassportTx = async params => {
     let funds = []
 
     // Params
-    let msg = {
-        typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-        value: MsgExecuteContract.fromPartial({
-            sender: store.wallets.bostrom,
-            contract: store.CONTRACT_ADDRESS_PASSPORT,
-            msg: toUtf8(JSON.stringify(params)),
-            funds
-        })
-    }
+    let messages = []
 
-    let msg2 = {
-        typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-        value: MsgExecuteContract.fromPartial({
-            sender: store.wallets.bostrom,
-            contract: store.CONTRACT_ADDRESS_PASSPORT,
-            msg: toUtf8(JSON.stringify(params)),
-            funds
+    if(Array.isArray(params)) {
+        params.forEach(el => {
+            messages.push({
+                typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+                value: MsgExecuteContract.fromPartial({
+                    sender: store.wallets.bostrom,
+                    contract: store.CONTRACT_ADDRESS_PASSPORT,
+                    msg: toUtf8(JSON.stringify(el)),
+                    funds
+                })
+            })
+        })
+    } else {
+        messages.push({
+            typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+            value: MsgExecuteContract.fromPartial({
+                sender: store.wallets.bostrom,
+                contract: store.CONTRACT_ADDRESS_PASSPORT,
+                msg: toUtf8(JSON.stringify(params)),
+                funds
+            })
         })
     }
 
     // Sign transaction
-    let txRaw = await client.sign(store.wallets.bostrom, [msg, msg2], fee, memo)
+    let txRaw = await client.sign(store.wallets.bostrom, messages, fee, memo)
 
     return { txRaw, client }
 }
