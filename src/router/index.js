@@ -87,6 +87,15 @@ const routes = [
 		}
 	},
 	{
+		path: '/proposal/:id',
+		name: 'Proposals',
+		component: () => import('../views/Proposal.vue'),
+		meta: {
+			layout: defaultLayut,
+			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
+		}
+	},
+	{
 		path: '/',
 		name: 'MainPage',
 		component: () => import('../views/MainPage.vue'),
