@@ -88,7 +88,7 @@ const routes = [
 	},
 	{
 		path: '/proposal/:id',
-		name: 'Proposals',
+		name: 'Proposal',
 		component: () => import('../views/Proposal.vue'),
 		meta: {
 			layout: defaultLayut,

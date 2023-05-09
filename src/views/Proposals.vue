@@ -50,27 +50,27 @@
                         </div>
 
                         <div class="items">
-                            <button class="btn active">
+                            <button class="btn" :class="{'active': !data.filter.length}" @click.prevent="resetFilter">
                                 <span>{{ $t('message.account_proposals_status_all') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button>
 
-                            <button class="btn">
+                            <button class="btn" :class="{'active': data.filter_deposit}" @click.prevent="setFilter('deposit')">
                                 <span>{{ $t('message.account_proposals_status_deposite') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button>
 
-                            <button class="btn">
+                            <button class="btn" :class="{'active': data.filter_passed}" @click.prevent="setFilter('passed')">
                                 <span>{{ $t('message.account_proposals_status_passed') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button>
 
-                            <button class="btn">
+                            <button class="btn" :class="{'active': data.filter_rejected}" @click.prevent="setFilter('rejected')">
                                 <span>{{ $t('message.account_proposals_status_rejected') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button>
 
-                            <button class="btn">
+                            <button class="btn" :class="{'active': data.filter_voting}" @click.prevent="setFilter('voting')">
                                 <span>{{ $t('message.account_proposals_status_voting') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
                             </button>
@@ -110,41 +110,22 @@
             loading: false,
             allReceived: false,
             showButtonUp: false,
-            proposals: []
+            proposals: [],
+            filter_deposit: false,
+            filter_voting: false,
+            filter_passed: false,
+            filter_rejected: false,
+            filter: ''
         })
 
 
     onMounted(async () => {
         // Get proposals
         try {
-            await fetch(`https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`)
-                .then(res => res.json())
-                .then(response => {
-                    data.proposals = response.proposals
-
-                    // Hide loader
-                    loading.value = true
-                })
+            await getProposals()
         } catch (error) {
             console.log(error)
         }
-
-
-        // Load more proposals
-        function scrollTracking(entries) {
-            for (const entry of entries) {
-                if (entry.intersectionRatio >= 1 && !data.loading && !data.allReceived) {
-                    loadMoreProposals()
-                }
-            }
-        }
-
-        let observer = new IntersectionObserver(scrollTracking, {
-            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-        })
-
-        observer.observe(document.querySelector('.load_more_area'))
-
 
         // Sticky element
         let stickyElements = document.querySelectorAll('.sticky')
@@ -158,16 +139,116 @@
         data.loading = true
         data.offset = data.offset + data.limit
 
-        await fetch(`https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`)
+        // Get proposals
+        await getProposals(true)
+    }
+
+
+    // Set filter
+    async function setFilter(status) {
+        if(status == 'deposit') {
+            data.filter_deposit = !data.filter_deposit
+        }
+
+        if(status == 'voting') {
+            data.filter_voting = !data.filter_voting
+        }
+
+        if(status == 'passed') {
+            data.filter_passed = !data.filter_passed
+        }
+
+        if(status == 'rejected') {
+            data.filter_rejected = !data.filter_rejected
+        }
+
+        data.filter = ''
+
+        if(data.filter_deposit) {
+            data.filter += ',PROPOSAL_STATUS_DEPOSIT_PERIOD'
+        }
+
+        if(data.filter_voting) {
+            data.filter += ',PROPOSAL_STATUS_VOTING_PERIOD'
+        }
+
+        if(data.filter_passed) {
+            data.filter += ',PROPOSAL_STATUS_PASSED'
+        }
+
+        if(data.filter_rejected) {
+            data.filter += ',PROPOSAL_STATUS_REJECTED'
+        }
+
+        // Get proposals
+        await getProposals()
+    }
+
+
+    // Reset filter
+    async function resetFilter() {
+        data.filter_deposit = false
+        data.filter_voting = false
+        data.filter_passed = false
+        data.filter_rejected = false
+        data.filter = ''
+
+        // Get proposals
+        await getProposals()
+    }
+
+
+    // Get proposals
+    async function getProposals(loadMore = false) {
+        let url = ''
+
+        if(!loadMore) {
+            // Show loader
+            loading.value = false
+
+            // Clear data
+            data.proposals = []
+            data.offset = 0
+            data.limit = 10
+        }
+
+        !data.filter.length
+            ? url = `https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`
+            : url = `https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}&status__in=${data.filter.substring(1)}`
+
+        await fetch(url)
             .then(res => res.json())
             .then(response => {
-                data.loading = false
-
                 response.proposals.length
                     ? data.proposals = data.proposals.concat(response.proposals)
                     : data.allReceived = true
+
+                if(!loadMore) {
+                    // Hide loader
+                    loading.value = true
+                } else {
+                    // Hide loader
+                    data.loading = false
+                }
             })
+
+        // Load more proposals
+        observer.observe(document.querySelector('.load_more_area'))
     }
+
+
+    // Load more proposals
+    function scrollTracking(entries) {
+        for (const entry of entries) {
+            if (entry.intersectionRatio >= 1 && !data.loading && !data.allReceived) {
+                loadMoreProposals()
+            }
+        }
+    }
+
+    var observer = new IntersectionObserver(scrollTracking, {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    })
 </script>
 
 

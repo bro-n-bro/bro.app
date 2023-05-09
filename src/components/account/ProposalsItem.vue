@@ -75,55 +75,55 @@
 
         <div class="progress" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
             <div class="bar">
-                <div class="yes green" :style="`width: ${getProgressPercents(props.proposal['tally.yes'])}%;`"></div>
-                <div class="no orange" :style="`width: ${getProgressPercents(props.proposal['tally.no'])}%;`"></div>
-                <div class="nwv red" :style="`width: ${getProgressPercents(props.proposal['tally.no_with_veto'])}%;`"></div>
+                <div class="yes green" :style="`width: ${getProgressPercents(props.proposal.tally_yes)}%;`"></div>
+                <div class="no orange" :style="`width: ${getProgressPercents(props.proposal.tally_no)}%;`"></div>
+                <div class="nwv red" :style="`width: ${getProgressPercents(props.proposal.tally_no_with_veto)}%;`"></div>
             </div>
 
             <div class="exp">
                 <div class="yes green">
                     <div class="label">{{ $t('message.proposal_voting_label_yes') }}</div>
-                    <div class="val">{{ getProgressPercents(props.proposal['tally.yes']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal.tally_yes) }}%</div>
                 </div>
 
                 <div class="no orange">
                     <div class="label">{{ $t('message.proposal_voting_label_no') }}</div>
-                    <div class="val">{{ getProgressPercents(props.proposal['tally.no']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal.tally_no) }}%</div>
                 </div>
 
                 <div class="nwv red">
                     <div class="label">{{ $t('message.proposal_voting_label_nwv') }}</div>
-                    <div class="val">{{ getProgressPercents(props.proposal['tally.no_with_veto']) }}%</div>
+                    <div class="val">{{ getProgressPercents(props.proposal.tally_no_with_veto) }}%</div>
                 </div>
             </div>
         </div>
 
         <div class="progress" v-if="props.proposal.status == 'PROPOSAL_STATUS_PASSED' || proposal.status == 'PROPOSAL_STATUS_REJECTED'">
             <div class="bar">
-                <div class="yes green" :style="`width: ${getProgressPercentsWithAbstain(props.proposal['tally.yes'])}%;`"></div>
-                <div class="no orange" :style="`width: ${getProgressPercentsWithAbstain(props.proposal['tally.no'])}%;`"></div>
-                <div class="nwv red" :style="`width: ${getProgressPercentsWithAbstain(props.proposal['tally.no_with_veto'])}%;`"></div>
+                <div class="yes green" :style="`width: ${getProgressPercentsWithAbstain(props.proposal.tally_yes)}%;`"></div>
+                <div class="no orange" :style="`width: ${getProgressPercentsWithAbstain(props.proposal.tally_no)}%;`"></div>
+                <div class="nwv red" :style="`width: ${getProgressPercentsWithAbstain(props.proposal.tally_no_with_veto)}%;`"></div>
             </div>
 
             <div class="exp">
                 <div class="yes green">
                     <div class="label">{{ $t('message.proposal_voting_label_yes') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.yes']) }}%</div>
+                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal.tally_yes) }}%</div>
                 </div>
 
                 <div class="no orange">
                     <div class="label">{{ $t('message.proposal_voting_label_no') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.no']) }}%</div>
+                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal.tally_no) }}%</div>
                 </div>
 
                 <div class="nwv red">
                     <div class="label">{{ $t('message.proposal_voting_label_nwv') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.no_with_veto']) }}%</div>
+                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal.tally_no_with_veto) }}%</div>
                 </div>
 
                 <div class="abstain grey">
                     <div class="label">{{ $t('message.proposal_voting_label_abstain') }}</div>
-                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal['tally.abstain']) }}%</div>
+                    <div class="val">{{ getProgressPercentsWithAbstain(props.proposal.tally_abstain) }}%</div>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
 
     // Get progress percents
     function getProgressPercents(value) {
-        let sum = props.proposal['tally.no'] + props.proposal['tally.no_with_veto'] + props.proposal['tally.yes']
+        let sum = props.proposal.tally_no + props.proposal.tally_no_with_veto + props.proposal.tally_yes
 
         return (value / sum * 100).toFixed(2)
     }
@@ -172,7 +172,7 @@
 
     // Get progress percents
     function getProgressPercentsWithAbstain(value) {
-        let sum = props.proposal['tally.abstain'] + props.proposal['tally.no'] + props.proposal['tally.no_with_veto'] + props.proposal['tally.yes']
+        let sum = props.proposal.tally_abstain + props.proposal.tally_no + props.proposal.tally_no_with_veto + props.proposal.tally_yes
 
         return (value / sum * 100).toFixed(2)
     }
