@@ -180,6 +180,8 @@
             data.filter += ',PROPOSAL_STATUS_REJECTED'
         }
 
+        data.allReceived = false
+
         // Get proposals
         await getProposals()
     }
@@ -187,6 +189,7 @@
 
     // Reset filter
     async function resetFilter() {
+        data.allReceived = false
         data.filter_deposit = false
         data.filter_voting = false
         data.filter_passed = false

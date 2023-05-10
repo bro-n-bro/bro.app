@@ -660,13 +660,18 @@ export const useGlobalStore = defineStore('global', {
 
         // Currencies price
         async getCurrenciesPrice() {
-            await fetch('https://rpc.bronbro.io/get_prices/')
+            await fetch('https://rpc.bronbro.io/price_feed_api/tokens/')
                 .then(response => response.json())
                 .then(data => {
-                    this.ATOM_price = parseFloat(data.cosmos)
-                    this.ETH_price = parseFloat(data.ethereum)
-                    this.BTC_price = parseFloat(data.bitcoin)
+                    let ATOM = data.find(el => el.symbol == 'ATOM'),
+                        BTC = data.find(el => el.symbol == 'WBTC'),
+                        ETH = data.find(el => el.symbol == 'WETH')
 
+                    this.ATOM_price = ATOM.price
+                    this.ETH_price = BTC.price
+                    this.BTC_price = ETH.price
+
+                    // Networks info
                     this.getNetworksInfo()
                 })
         },

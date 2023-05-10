@@ -20,7 +20,7 @@
                 @click.prevent="selectWallet(store.account.moonPassportOwner)"
             >
                 <div class="name">
-                    {{ store.account.moonPassportOwner.slice(0, 13) + '...' + store.account.moonPassportOwner.slice(-6) }}
+                    {{ store.account.owner.moonPassport.extension.nickname }}
                 </div>
             </div></div>
 

@@ -47,16 +47,11 @@
                 </div>
 
                 <div class="col_validator" @click.prevent="toggleActiveClass">
-                    <!-- <div class="logo" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
-                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                        <img :src="validator.logo_path" alt="">
-                    </div> -->
+                    <div class="logo" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
+                        <img :src="validator.avatar_url" alt="">
+                    </div>
 
                     <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
-
-                    <!-- <div class="name" @click.prevent="emitter.emit('openValidatorModal', validator)">
-                        {{ validator.moniker }}
-                    </div> -->
                 </div>
 
                 <div class="col_percent"></div>
@@ -65,14 +60,13 @@
                     {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
                 </div>
 
-                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
+                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
                     <div class="col_account_name"></div>
                     <div class="col_network"></div>
 
                     <div class="col_validator">
                         <div class="logo">
-                            <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                            <!-- <img :src="validator.logo_path" alt=""> -->
+                            <img :src="validator.avatar_url" alt="">
                         </div>
 
                         <div class="name" @click.prevent="openValidatorModal(validator)">

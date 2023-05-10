@@ -121,7 +121,7 @@
                     </div>
                 </div>
 
-                <button class="manage_btn" @click.prevent="emitter.emit('openManageModal', {
+                <!-- <button class="manage_btn" @click.prevent="emitter.emit('openManageModal', {
                     network: store.currentNetwork,
                     validator: {
                         logo: store.validatorInfo.result[0][getValidatorInfo('logo_path')],
@@ -130,7 +130,7 @@
                     }
                 })">
                     {{ $t('message.manage_btn') }}
-                </button>
+                </button> -->
             </div>
         </div>
 
