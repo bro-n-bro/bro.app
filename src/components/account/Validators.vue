@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="col_validator" @click.prevent="toggleActiveClass">
-                    <div class="logo" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
+                    <div class="logo" v-for="(validator, validators_index) in wallet.validatorsReverse" :key="validators_index">
                         <img :src="validator.avatar_url" alt="">
                     </div>
 
@@ -60,7 +60,7 @@
                     {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
                 </div>
 
-                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators.reverse()" :key="validators_index">
+                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
                     <div class="col_account_name"></div>
                     <div class="col_network"></div>
 
@@ -169,6 +169,11 @@
                             validators: response.validators.sort((a, b) => {
                                 if (a.coin.amount > b.coin.amount) { return -1 }
                                 if (a.coin.amount < b.coin.amount) { return 1 }
+                                return 0
+                            }),
+                            validatorsReverse: response.validators.sort((a, b) => {
+                                if (a.coin.amount > b.coin.amount) { return 1 }
+                                if (a.coin.amount < b.coin.amount) { return -1 }
                                 return 0
                             })
                         })

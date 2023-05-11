@@ -116,7 +116,7 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legend" v-if="accountBalance.staked" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="accountBalance.staked_total" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #950FFF;"></div>
                         <span>{{ $t('message.account_charts_staked_label') }}</span>
@@ -148,7 +148,7 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked'))"></div></div>
+                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked_total'))"></div></div>
                     </div>
                 </div>
 
@@ -184,7 +184,7 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid'))"></div></div>
+                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid_rewards_total'))"></div></div>
                     </div>
                 </div>
 
@@ -220,7 +220,7 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding'))"></div></div>
+                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding_total'))"></div></div>
                     </div>
                 </div>
             </div>
@@ -591,7 +591,25 @@
 
 
             <div class="legends2" v-if="chartActive == 3">
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 0}" @mouseenter="mouseenterLegend('chartThird', 0)" @mouseleave="mouseleaveLegend('chartThird')">
+                <pre>{{ accountBalance.groupByDenom }}</pre>
+                <div v-for="(item, index) in accountBalance.groupByDenom" :key="index" class="legend" :class="{'active': chartThirdActiveLegend == index}" @mouseenter="mouseenterLegend('chartThird', index)" @mouseleave="mouseleaveLegend('chartThird')">
+                    <div class="logo">
+                        <img :src="item.logo" alt="">
+                    </div>
+
+                    <div class="token">
+                        {{ item.symbol }}
+                    </div>
+
+                    <div class="price">
+                        <div>{{ item.symbol / store.networks[store.currentNetwork].exponent }} {{ store.currency }}</div>
+                        <div class="percents">65.43%</div>
+                    </div>
+                </div>
+
+
+
+                <!-- <div class="legend" :class="{'active': chartThirdActiveLegend == 0}" @mouseenter="mouseenterLegend('chartThird', 0)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="`/cosmoshub_logo.png`" alt="">
                     </div>
@@ -694,7 +712,7 @@
                         <div>115 {{ store.currency }}</div>
                         <div class="percents">1.02%</div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
 
@@ -1098,6 +1116,8 @@
                 .then(response => {
                     console.log(response)
 
+                    var groupByDenom = []
+
                     // Clear data
                     chartDatasetsFirst = reactive([]),
                     chartDatasetsSecond = reactive([]),
@@ -1105,7 +1125,19 @@
                     chartDatasetsFourth = reactive([]),
                     chartDatasetsFifth = reactive([]),
 
+                    // Set data
                     accountBalance.value = response
+                    accountBalance.value.groupByDenom = []
+
+                    // Set current denom
+                    accountBalance.value.currentDenom = {
+                        'denom': store.networks[store.currentNetwork].denom,
+                        'exponent': store.networks[store.currentNetwork].exponent,
+                        'price_usdt': store.networks[store.currentNetwork].price_usdt,
+                        'price_atom': store.networks[store.currentNetwork].price_atom,
+                        'price_eth': store.networks[store.currentNetwork].price_eth,
+                        'price_btc': store.networks[store.currentNetwork].price_btc
+                    }
 
                     // Sum
                     accountBalance.value.liquid_total = 0
@@ -1122,11 +1154,22 @@
                             // Sum
                             accountBalance.value.liquid_total += el.amount
 
-                            // Currencies
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
+                            // Group by denom
+                            if(groupByDenom[el.denom]) {
+                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            } else {
+                                groupByDenom[el.denom] = {
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                }
+                            }
+
+                            // // Currencies
+                            // el.price_usdt = el.price
+                            // el.price_atom = el.price / store.ATOM_price
+                            // el.price_eth = el.price / store.ETH_price
+                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
@@ -1136,11 +1179,22 @@
                             // Sum
                             accountBalance.value.ibc_total += el.amount
 
-                            // Currencies
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
+                            // Group by denom
+                            if(groupByDenom[el.denom]) {
+                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            } else {
+                                groupByDenom[el.denom] = {
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                }
+                            }
+
+                            // // Currencies
+                            // el.price_usdt = el.price
+                            // el.price_atom = el.price / store.ATOM_price
+                            // el.price_eth = el.price / store.ETH_price
+                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
@@ -1150,11 +1204,22 @@
                             // Sum
                             accountBalance.value.staked_total += el.amount
 
-                            // Currencies
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
+                            // Group by denom
+                            if(groupByDenom[el.denom]) {
+                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            } else {
+                                groupByDenom[el.denom] = {
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                }
+                            }
+
+                            // // Currencies
+                            // el.price_usdt = el.price
+                            // el.price_atom = el.price / store.ATOM_price
+                            // el.price_eth = el.price / store.ETH_price
+                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
@@ -1164,39 +1229,64 @@
                             // Sum
                             accountBalance.value.unbonding_total += el.amount
 
-                            // Currencies
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
+                            // Group by denom
+                            if(groupByDenom[el.denom]) {
+                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            } else {
+                                groupByDenom[el.denom] = {
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                }
+                            }
+
+                            // // Currencies
+                            // el.price_usdt = el.price
+                            // el.price_atom = el.price / store.ATOM_price
+                            // el.price_eth = el.price / store.ETH_price
+                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
                     // Calc rewards tokens
                     if(accountBalance.value.rewards) {
-                        // Set current denom
-                        let currentDenom = accountBalance.value.rewards.find(el => el.denom == store.networks[store.currentNetwork].denom)
-
                         accountBalance.value.rewards.forEach(el => {
                             // Convert to current denom
-                            el.amount_current_denom = el.amount * (el.price / currentDenom.price)
+                            el.amount_current_denom = el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)
 
-                            // Currencies
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
+                            // // Currencies
+                            // el.price_usdt = el.price
+                            // el.price_atom = el.price / store.ATOM_price
+                            // el.price_eth = el.price / store.ETH_price
+                            // el.price_btc = el.price / store.BTC_price
 
                             // Sum
                             if(el.amount * Math.pow(10, el.exponent) >= 1) {
-                                accountBalance.value.rewards_total += parseFloat(el.amount_current_denom)
+                                accountBalance.value.rewards_total += parseFloat(el.amount_current_denom * accountBalance.value.currentDenom.exponent)
+                            }
+
+                            // Group by denom
+                            if(groupByDenom[el.denom]) {
+                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            } else {
+                                groupByDenom[el.denom] = {
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                }
                             }
                         })
 
                         accountBalance.value.liquid_rewards_total = accountBalance.value.liquid_total + accountBalance.value.rewards_total
                     }
 
+
+                    // Group by denom
+                    groupByDenom.forEach(e => accountBalance.value.groupByDenom.push(e))
+
+
                     console.log(accountBalance.value)
+
 
                     // Set data for first chart
                     chartDatasetsFirst.push(accountBalance.value.staked_total)
@@ -1235,7 +1325,9 @@
                     // chartDatasetsFifth.push(10)
 
                     // Calc totals
-                    accountBalance.value.totalChartFirst = accountBalance.value.staked_total + accountBalance.value.liquid_total + accountBalance.value.unbonding_total
+                    accountBalance.value.totalChartFirst = accountBalance.value.staked_total + accountBalance.value.liquid_rewards_total + accountBalance.value.unbonding_total
+
+                    accountBalance.value.totalChartThird = accountBalance.value.staked_total + accountBalance.value.liquid_total + accountBalance.value.unbonding_total + accountBalance.value.rewards_total + accountBalance.value.ibc_total
 
                     // Hide loader
                     loading.value = false
@@ -1314,8 +1406,8 @@
     function calcPercentsChart1(type) {
         let result = 0
 
-        if(accountBalance.totalChartFirst) {
-            result = accountBalance[type] / accountBalance.totalChartFirst * 100
+        if(accountBalance.value.totalChartFirst) {
+            result = accountBalance.value[type] / accountBalance.value.totalChartFirst * 100
         }
 
         return result
