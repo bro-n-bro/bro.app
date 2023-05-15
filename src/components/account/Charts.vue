@@ -67,35 +67,65 @@
                 </div>
             </div>
 
-            <!-- <div class="charts" v-if="chartActive == 3">
+            <div class="charts" v-if="chartActive == 3">
                 <div class="chart chartThird active">
                     <Doughnut ref="chartThird" :data="chartDataThird" :options="chartOptionsThird" />
 
                     <div class="total">
-                        <div class="label">Total Assets</div>
+                        <div class="label">{{ $t('message.account_charts_total_assets') }}</div>
 
                         <div class="price">
-                            56,875
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((totalChartThird / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((totalChartThird / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((totalChartThird / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((totalChartThird / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
+                            </template>
+
                             <span>{{ store.currency }}</span>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
-            <!-- <div class="charts" v-if="chartActive == 4">
+            <div class="charts" v-if="chartActive == 4">
                 <div class="chart chartFourth active">
                     <Doughnut ref="chartFourth" :data="chartDataFourth" :options="chartOptionsFourth" />
 
                     <div class="total">
-                        <div class="label">Total Assets</div>
+                        <div class="label">{{ $t('message.account_charts_total_assets') }}</div>
 
                         <div class="price">
-                            56,875
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed(totalChartFourth_usdt, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed(totalChartFourth_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed(totalChartFourth_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed(totalChartFourth_btc, 5) }}
+                            </template>
+
                             <span>{{ store.currency }}</span>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- <div class="charts" v-if="chartActive == 5">
                 <div class="chart chartFifth active">
@@ -116,31 +146,31 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legend" v-if="accountBalance.staked_total" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="currentNetwork.total.staked" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #950FFF;"></div>
                         <span>{{ $t('message.account_charts_staked_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.staked_total / store.networks[store.currentNetwork].exponent, 2) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(currentNetwork.total.staked / currentNetwork.exponent, 2) }}
+                        {{ currentNetwork.token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((currentNetwork.total.staked / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((currentNetwork.total.staked / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((currentNetwork.total.staked / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.staked_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((currentNetwork.total.staked / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -148,35 +178,35 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked_total'))"></div></div>
+                        <div class="bar"><div style="background-color: #950FFF;" :style="setWidth(calcPercentsChart1('staked'))"></div></div>
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.liquid_rewards_total" :class="{'active': chartFirstActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFirst', 1)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="currentNetwork.total.liquid_rewards" :class="{'active': chartFirstActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFirst', 1)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #0343E8;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.liquid_rewards_total / store.networks[store.currentNetwork].exponent, 2) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(currentNetwork.total.liquid_rewards / currentNetwork.exponent, 2) }}
+                        {{ currentNetwork.token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.liquid_rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid_rewards / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.liquid_rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid_rewards / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.liquid_rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid_rewards / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.liquid_rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid_rewards / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -184,35 +214,35 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid_rewards_total'))"></div></div>
+                        <div class="bar"><div style="background-color: #0343E8;" :style="setWidth(calcPercentsChart1('liquid_rewards'))"></div></div>
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.unbonding_total" :class="{'active': chartFirstActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFirst', 2)" @mouseleave="mouseleaveLegend('chartFirst')">
+                <div class="legend" v-if="currentNetwork.total.unbonding" :class="{'active': chartFirstActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFirst', 2)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #EB5757;"></div>
                         <span>{{ $t('message.account_charts_unbonding_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent, 2) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(currentNetwork.total.unbonding / currentNetwork.exponent, 2) }}
+                        {{ currentNetwork.token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((currentNetwork.total.unbonding / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((currentNetwork.total.unbonding / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((currentNetwork.total.unbonding / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.unbonding_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((currentNetwork.total.unbonding / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -220,38 +250,38 @@
                     </div>
 
                     <div class="progress">
-                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding_total'))"></div></div>
+                        <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding'))"></div></div>
                     </div>
                 </div>
             </div>
 
 
             <div class="legends" v-if="chartActive == 2">
-                <div class="legend" v-if="accountBalance.liquid_total" :class="{'active': chartSecondActiveLegend == 0}" @mouseenter="mouseenterLegend('chartSecond', 0)" @mouseleave="mouseleaveLegend('chartSecond')">
+                <div class="legend" v-if="currentNetwork.total.liquid" :class="{'active': chartSecondActiveLegend == 0}" @mouseenter="mouseenterLegend('chartSecond', 0)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name">
                         <div class="color" style="background-color: #7879F1;"></div>
                         <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.liquid_total / store.networks[store.currentNetwork].exponent, 2) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(currentNetwork.total.liquid / currentNetwork.exponent, 2) }}
+                        {{ currentNetwork.token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.liquid_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((currentNetwork.total.liquid / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -259,168 +289,8 @@
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.outside_total" :class="{'active': chartSecondActiveLegend == 1}" @mouseenter="mouseenterLegend('chartSecond', 1)" @mouseleave="mouseleaveLegend('chartSecond')">
-                    <div class="name" @click.prevent="toggleActiveClass">
-                        <div class="color" style="background-color: #C5811B;"></div>
-                        <span>{{ $t('message.account_charts_outside_label') }}</span>
 
-                        <!-- <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg> -->
-                    </div>
-
-                    <div class="dropdown">
-                        <div class="amount">
-                            {{ $filters.toFixed(accountBalance.outside_total / store.networks[store.currentNetwork].exponent, 2) }}
-                            {{ store.networks[store.currentNetwork].token_name }}
-
-                            <div class="price">
-                                <template v-if="store.currency == 'USDT'">
-                                {{ $filters.toFixed((accountBalance.outside_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                </template>
-
-                                <template v-if="store.currency == 'ATOM'">
-                                {{ $filters.toFixed((accountBalance.outside_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                </template>
-
-                                <template v-if="store.currency == 'ETH'">
-                                {{ $filters.toFixed((accountBalance.outside_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                </template>
-
-                                <template v-if="store.currency == 'BTC'">
-                                {{ $filters.toFixed((accountBalance.outside_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                </template>
-
-                                {{ store.currency }}
-                            </div>
-                        </div>
-
-                        <div class="tokens">
-                            <!-- <div class="item">
-                                <div class="logo">
-                                    <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-
-                                    <div class="on_chain_logo">
-                                        <img :src="`/osmosis_logo.png`" alt="">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="token">{{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="on_chain">On Osmosis</div>
-                                </div>
-
-                                <div>
-                                    <div class="amount">
-                                        360 {{ store.networks[store.currentNetwork].token_name }}
-
-                                        <div class="price">
-                                            <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                            </template>
-
-                                            {{ store.currency }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="logo">
-                                    <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-
-                                    <div class="on_chain_logo">
-                                        <img :src="`/stargaze_logo.png`" alt="">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="token">{{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="on_chain">On Osmosis</div>
-                                </div>
-
-                                <div>
-                                    <div class="amount">
-                                        360 {{ store.networks[store.currentNetwork].token_name }}
-
-                                        <div class="price">
-                                            <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                            </template>
-
-                                            {{ store.currency }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="logo">
-                                    <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-
-                                    <div class="on_chain_logo">
-                                        <img :src="`/juno_logo.png`" alt="">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="token">{{ store.networks[store.currentNetwork].token_name }}</div>
-                                    <div class="on_chain">On Osmosis</div>
-                                </div>
-
-                                <div>
-                                    <div class="amount">
-                                        360 {{ store.networks[store.currentNetwork].token_name }}
-
-                                        <div class="price">
-                                            <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                            </template>
-
-                                            {{ store.currency }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="legend" v-if="accountBalance.ibc_total" :class="{'active': chartSecondActiveLegend == 2}" @mouseenter="mouseenterLegend('chartSecond', 2)" @mouseleave="mouseleaveLegend('chartSecond')">
+                <div class="legend" v-if="currentNetwork.total.ibc" :class="{'active': chartSecondActiveLegend == 1}" @mouseenter="mouseenterLegend('chartSecond', 1)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name" @click.prevent="toggleActiveClass">
                         <div class="color" style="background-color: #EF5DA8;"></div>
                         <span>{{ $t('message.account_charts_ibc_label') }}</span>
@@ -429,40 +299,45 @@
                     </div>
 
                     <div class="dropdown">
+                        <!-- <pre>{{ currentNetwork.balance.liquid.ibc }}</pre> -->
+
                         <div class="tokens">
-                            <!-- <div class="item">
+                            <div v-for="(item, index) in currentNetwork.balance.liquid.ibc" :key="index" class="item">
                                 <div class="logo">
-                                    <img :src="`/osmosis_logo.png`" alt="">
+                                    <img :src="`${item.logo}`" alt="">
 
                                     <div class="on_chain_logo">
-                                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
+                                        <img :src="`/${currentNetwork.name}_logo.png`" alt="">
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div class="token">OSMO</div>
-                                    <div class="on_chain">On {{ store.networks[store.currentNetwork].name }}</div>
+                                    <div class="token">{{ item.symbol }}</div>
+
+                                    <div class="on_chain">
+                                        {{ $t('message.account_charts_on_chain') }} {{ store.networks[currentNetwork.name].name }}
+                                    </div>
                                 </div>
 
                                 <div>
                                     <div class="amount">
-                                        360 OSMO
+                                        {{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }} {{ item.symbol }}
 
                                         <div class="price">
                                             <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                                            {{ $filters.toFixed((item.amount / Math.pow(10, item.exponent)) * item.price_usdt, 2) }}
                                             </template>
 
                                             <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                                            {{ $filters.toFixed((item.amount / Math.pow(10, item.exponent)) * item.price_atom, 2) }}
                                             </template>
 
                                             <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                                            {{ $filters.toFixed((item.amount / Math.pow(10, item.exponent)) * item.price_eth, 4) }}
                                             </template>
 
                                             <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                                            {{ $filters.toFixed((item.amount / Math.pow(10, item.exponent)) * item.price_btc, 5) }}
                                             </template>
 
                                             {{ store.currency }}
@@ -470,117 +345,36 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="item">
-                                <div class="logo">
-                                    <img :src="`/desmos_logo.png`" alt="">
-
-                                    <div class="on_chain_logo">
-                                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="token">DSM</div>
-                                    <div class="on_chain">On {{ store.networks[store.currentNetwork].name }}</div>
-                                </div>
-
-                                <div>
-                                    <div class="amount">
-                                        160 DSM
-
-                                        <div class="price">
-                                            <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                            </template>
-
-                                            {{ store.currency }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="logo">
-                                    <img :src="`/stargaze_logo.png`" alt="">
-
-                                    <div class="on_chain_logo">
-                                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="token">STARS</div>
-                                    <div class="on_chain">On {{ store.networks[store.currentNetwork].name }}</div>
-                                </div>
-
-                                <div>
-                                    <div class="amount">
-                                        140 STARS
-
-                                        <div class="price">
-                                            <template v-if="store.currency == 'USDT'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ATOM'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'ETH'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
-                                            </template>
-
-                                            <template v-if="store.currency == 'BTC'">
-                                            {{ $filters.toFixed((accountBalance.outside / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
-                                            </template>
-
-                                            {{ store.currency }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
 
-                <div class="legend" v-if="accountBalance.rewards_total" :class="{'active': chartSecondActiveLegend == 3}" @mouseenter="mouseenterLegend('chartSecond', 3)" @mouseleave="mouseleaveLegend('chartSecond')">
+
+                <div class="legend" v-if="currentNetwork.total.rewards" :class="{'active': chartSecondActiveLegend == 2}" @mouseenter="mouseenterLegend('chartSecond', 2)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name">
                         <div class="color" style="background-color: #1BC562;"></div>
                         <span>{{ $t('message.account_charts_rewards_label') }}</span>
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(accountBalance.rewards_total / store.networks[store.currentNetwork].exponent, 5) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(currentNetwork.total.rewards / currentNetwork.exponent, 5) }}
+                        {{ currentNetwork.token_name }}
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed((accountBalance.rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_usdt, 1) }}
+                            {{ $filters.toFixed((currentNetwork.total.rewards / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed((accountBalance.rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_atom, 2) }}
+                            {{ $filters.toFixed((currentNetwork.total.rewards / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed((accountBalance.rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_eth, 4) }}
+                            {{ $filters.toFixed((currentNetwork.total.rewards / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed((accountBalance.rewards_total / store.networks[store.currentNetwork].exponent) * store.networks[store.currentNetwork].price_btc, 5) }}
+                            {{ $filters.toFixed((currentNetwork.total.rewards / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
                             </template>
 
                             {{ store.currency }}
@@ -591,8 +385,7 @@
 
 
             <div class="legends2" v-if="chartActive == 3">
-                <pre>{{ accountBalance.groupByDenom }}</pre>
-                <div v-for="(item, index) in accountBalance.groupByDenom" :key="index" class="legend" :class="{'active': chartThirdActiveLegend == index}" @mouseenter="mouseenterLegend('chartThird', index)" @mouseleave="mouseleaveLegend('chartThird')">
+                <div v-for="(item, index) in currentNetwork.balance.groupByDenom" :key="index" class="legend" :class="{'active': chartThirdActiveLegend == index}" @mouseenter="mouseenterLegend('chartThird', index)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="item.logo" alt="">
                     </div>
@@ -602,223 +395,66 @@
                     </div>
 
                     <div class="price">
-                        <div>{{ item.symbol / store.networks[store.currentNetwork].exponent }} {{ store.currency }}</div>
-                        <div class="percents">65.43%</div>
+                        <div>
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed((item.amount / currentNetwork.exponent) * currentNetwork.price_usdt, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed((item.amount / currentNetwork.exponent) * currentNetwork.price_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed((item.amount / currentNetwork.exponent) * currentNetwork.price_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed((item.amount / currentNetwork.exponent) * currentNetwork.price_btc, 5) }}
+                            </template>
+
+                            {{ store.currency }}
+                        </div>
+
+                        <div class="percents">
+                            {{ $filters.toFixed(calcPercentsChart3(item.symbol), 2) }}%
+                        </div>
                     </div>
                 </div>
-
-
-
-                <!-- <div class="legend" :class="{'active': chartThirdActiveLegend == 0}" @mouseenter="mouseenterLegend('chartThird', 0)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/cosmoshub_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.cosmoshub.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>46,875 {{ store.currency }}</div>
-                        <div class="percents">65.43%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 1}" @mouseenter="mouseenterLegend('chartThird', 1)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/osmosis_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.osmosis.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>7,200 {{ store.currency }}</div>
-                        <div class="percents">10.32%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 2}" @mouseenter="mouseenterLegend('chartThird', 2)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/juno_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.juno.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>1,200 {{ store.currency }}</div>
-                        <div class="percents">9.12%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 3}" @mouseenter="mouseenterLegend('chartThird', 3)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/evmos_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.evmos.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>976 {{ store.currency }}</div>
-                        <div class="percents">7.75%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 4}" @mouseenter="mouseenterLegend('chartThird', 4)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/gravity_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.gravity.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>880 {{ store.currency }}</div>
-                        <div class="percents">3.86%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 5}" @mouseenter="mouseenterLegend('chartThird', 5)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/stargaze_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.stargaze.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>550 {{ store.currency }}</div>
-                        <div class="percents">2.34%</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartThirdActiveLegend == 6}" @mouseenter="mouseenterLegend('chartThird', 6)" @mouseleave="mouseleaveLegend('chartThird')">
-                    <div class="logo">
-                        <img :src="`/bostrom_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.bostrom.token_name }}
-                    </div>
-
-                    <div class="price">
-                        <div>115 {{ store.currency }}</div>
-                        <div class="percents">1.02%</div>
-                    </div>
-                </div> -->
             </div>
 
 
             <div class="legends2" v-if="chartActive == 4">
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFourth', 0)" @mouseleave="mouseleaveLegend('chartFourth')">
+                <div v-for="(network, index) in currentWallet.networks" :key="index" class="legend" :class="{'active': chartFourthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFourth', index)" @mouseleave="mouseleaveLegend('chartFourth')">
                     <div class="logo">
-                        <img :src="`/cosmoshub_logo.png`" alt="">
+                        <img :src="`/${network.name}_logo.png`" alt="">
                     </div>
 
                     <div class="token">
-                        {{ store.networks.cosmoshub.name }}
+                        {{ store.networks[network.name].name }}
                     </div>
 
                     <div class="price">
-                        <div>65.43%</div>
-                        <div class="percents">46,875 {{ store.currency }}</div>
-                    </div>
-                </div>
+                        <div>{{ $filters.toFixed(calcPercentsChart4(network.totalPrice_usdt), 2) }}%</div>
 
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFourth', 1)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/osmosis_logo.png`" alt="">
-                    </div>
+                        <div class="percents">
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed(network.totalPrice_usdt, 2) }}
+                            </template>
 
-                    <div class="token">
-                        {{ store.networks.osmosis.name }}
-                    </div>
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed(network.totalPrice_atom, 2) }}
+                            </template>
 
-                    <div class="price">
-                        <div>10.32%</div>
-                        <div class="percents">7,200 {{ store.currency }}</div>
-                    </div>
-                </div>
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed(network.totalPrice_eth, 4) }}
+                            </template>
 
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFourth', 2)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/juno_logo.png`" alt="">
-                    </div>
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed(network.totalPrice_btc, 5) }}
+                            </template>
 
-                    <div class="token">
-                        {{ store.networks.juno.name }}
-                    </div>
-
-                    <div class="price">
-                        <div>9.12%</div>
-                        <div class="percents">1,200 {{ store.currency }}</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 3}" @mouseenter="mouseenterLegend('chartFourth', 3)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/evmos_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.evmos.name }}
-                    </div>
-
-                    <div class="price">
-                        <div>7.75%</div>
-                        <div class="percents">976 {{ store.currency }}</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 4}" @mouseenter="mouseenterLegend('chartFourth', 4)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/gravity_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.gravity.name }}
-                    </div>
-
-                    <div class="price">
-                        <div>3.86%</div>
-                        <div class="percents">880 {{ store.currency }}</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 5}" @mouseenter="mouseenterLegend('chartFourth', 5)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/stargaze_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.stargaze.name }}
-                    </div>
-
-                    <div class="price">
-                        <div>2.34%</div>
-                        <div class="percents">550 {{ store.currency }}</div>
-                    </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartFourthActiveLegend == 6}" @mouseenter="mouseenterLegend('chartFourth', 6)" @mouseleave="mouseleaveLegend('chartFourth')">
-                    <div class="logo">
-                        <img :src="`/bostrom_logo.png`" alt="">
-                    </div>
-
-                    <div class="token">
-                        {{ store.networks.bostrom.name }}
-                    </div>
-
-                    <div class="price">
-                        <div>1.02%</div>
-                        <div class="percents">115 {{ store.currency }}</div>
+                            {{ store.currency }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1033,25 +669,18 @@
             }]
         })),
         chartDataSecond = computed(() => ({
-            labels: [
-                i18n.global.t('message.account_charts_liquid_tokens_label'),
-                i18n.global.t('message.account_charts_outside_label'),
-                i18n.global.t('message.account_charts_ibc_label'),
-                i18n.global.t('message.account_charts_rewards_label')
-            ],
             datasets: [{
                 data: chartDatasetsSecond,
-                backgroundColor: ['#7879F1', '#C5811B', '#EF5DA8', '#1BC562'],
+                backgroundColor: ['#7879F1', '#EF5DA8', '#1BC562'],
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
-                hoverBackgroundColor: ['#7879F1', '#D17D00', '#EF5DA8', '#07B14E'],
-                hoverBorderColor: ['#7879F1', '#D17D00', '#EF5DA8', '#07B14E'],
+                hoverBackgroundColor: ['#7879F1', '#EF5DA8', '#07B14E'],
+                hoverBorderColor: ['#7879F1', '#EF5DA8', '#07B14E'],
                 borderAlign: 'inner',
                 cutout: '80%'
             }]
         })),
         chartDataThird = computed(() => ({
-            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub', 'Gravity bridge', 'Osmosis'],
             datasets: [{
                 data: chartDatasetsThird,
                 backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
@@ -1064,7 +693,6 @@
             }]
         })),
         chartDataFourth = computed(() => ({
-            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub', 'Gravity bridge', 'Osmosis'],
             datasets: [{
                 data: chartDatasetsFourth,
                 backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
@@ -1077,7 +705,6 @@
             }]
         })),
         chartDataFifth = computed(() => ({
-            labels: ['Bostrom', 'Evmos', 'Stargaze', 'Juno', 'Crescent hub'],
             datasets: [{
                 data: chartDatasetsFifth,
                 backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
@@ -1089,7 +716,14 @@
                 cutout: '84%',
             }]
         })),
-        accountBalance = ref({})
+        totalChartFirst = ref(0),
+        totalChartThird = ref(0),
+        totalChartFourth_usdt = ref(0),
+        totalChartFourth_atom = ref(0),
+        totalChartFourth_eth = ref(0),
+        totalChartFourth_btc = ref(0),
+        currentWallet = ref({}),
+        currentNetwork = ref({})
 
 
     onBeforeMount(async () => {
@@ -1110,212 +744,207 @@
         // Set loader
         loading.value = true
 
+        // Get cosmos hub data
         try {
-            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)}`)
+            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, store.account.currentWallet)}`)
                 .then(res => res.json())
                 .then(response => {
                     console.log(response)
 
-                    var groupByDenom = []
+                    let currentWalletData = store.account.wallets.find(el => el.address == store.account.currentWallet),
+                        totals = {
+                            liquid: 0,
+                            staked: 0,
+                            unbonding: 0,
+                            rewards: 0,
+                            outside: 0,
+                            ibc: 0,
+                            liquid_rewards: 0
+                        },
+                        groupByDenom = []
+
 
                     // Clear data
-                    chartDatasetsFirst = reactive([]),
-                    chartDatasetsSecond = reactive([]),
-                    chartDatasetsThird = reactive([]),
-                    chartDatasetsFourth = reactive([]),
-                    chartDatasetsFifth = reactive([]),
+                    chartDatasetsFirst = reactive([])
+                    chartDatasetsSecond = reactive([])
+                    chartDatasetsThird = reactive([])
+                    chartDatasetsFourth = reactive([])
+                    chartDatasetsFifth = reactive([])
 
-                    // Set data
-                    accountBalance.value = response
-                    accountBalance.value.groupByDenom = []
-
-                    // Set current denom
-                    accountBalance.value.currentDenom = {
-                        'denom': store.networks[store.currentNetwork].denom,
-                        'exponent': store.networks[store.currentNetwork].exponent,
-                        'price_usdt': store.networks[store.currentNetwork].price_usdt,
-                        'price_atom': store.networks[store.currentNetwork].price_atom,
-                        'price_eth': store.networks[store.currentNetwork].price_eth,
-                        'price_btc': store.networks[store.currentNetwork].price_btc
-                    }
-
-                    // Sum
-                    accountBalance.value.liquid_total = 0
-                    accountBalance.value.staked_total = 0
-                    accountBalance.value.unbonding_total = 0
-                    accountBalance.value.rewards_total = 0
-                    accountBalance.value.outside_total = 0
-                    accountBalance.value.ibc_total = 0
-                    accountBalance.value.liquid_rewards_total = 0
 
                     // Calc liquid tokens
-                    if(accountBalance.value.liquid.native.length) {
-                        accountBalance.value.liquid.native.forEach(el => {
-                            // Sum
-                            accountBalance.value.liquid_total += el.amount
+                    if(response.liquid.native.length) {
+                        response.liquid.native.forEach(el => {
+                            // Sum total
+                            totals.liquid += el.amount
 
                             // Group by denom
-                            if(groupByDenom[el.denom]) {
-                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
                             } else {
-                                groupByDenom[el.denom] = {
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                groupByDenom.push({
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
                                     'logo': el.logo,
                                     'symbol': el.symbol
-                                }
+                                })
                             }
-
-                            // // Currencies
-                            // el.price_usdt = el.price
-                            // el.price_atom = el.price / store.ATOM_price
-                            // el.price_eth = el.price / store.ETH_price
-                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
                     // Calc ibc tokens
-                    if(accountBalance.value.liquid.ibc.length) {
-                        accountBalance.value.liquid.ibc.forEach(el => {
-                            // Sum
-                            accountBalance.value.ibc_total += el.amount
+                    if(response.liquid.ibc.length) {
+                        response.liquid.ibc.forEach(el => {
+                            // Convert to current denom
+                            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
+
+                            // Sum total
+                            totals.ibc += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
 
                             // Group by denom
-                            if(groupByDenom[el.denom]) {
-                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
                             } else {
-                                groupByDenom[el.denom] = {
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                groupByDenom.push({
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
                                     'logo': el.logo,
                                     'symbol': el.symbol
-                                }
+                                })
                             }
 
-                            // // Currencies
-                            // el.price_usdt = el.price
-                            // el.price_atom = el.price / store.ATOM_price
-                            // el.price_eth = el.price / store.ETH_price
-                            // el.price_btc = el.price / store.BTC_price
+                            // Set prices
+                            el.price_usdt = el.price
+                            el.price_atom = el.price / store.ATOM_price
+                            el.price_eth = el.price / store.ETH_price
+                            el.price_btc = el.price / store.BTC_price
                         })
                     }
 
                     // Calc staked tokens
-                    if(accountBalance.value.staked) {
-                        accountBalance.value.staked.forEach(el => {
-                            // Sum
-                            accountBalance.value.staked_total += el.amount
+                    if(response.staked) {
+                        response.staked.forEach(el => {
+                            // Sum total
+                            totals.staked += el.amount
 
                             // Group by denom
-                            if(groupByDenom[el.denom]) {
-                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
                             } else {
-                                groupByDenom[el.denom] = {
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                groupByDenom.push({
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
                                     'logo': el.logo,
                                     'symbol': el.symbol
-                                }
+                                })
                             }
-
-                            // // Currencies
-                            // el.price_usdt = el.price
-                            // el.price_atom = el.price / store.ATOM_price
-                            // el.price_eth = el.price / store.ETH_price
-                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
                     // Calc unbonding tokens
-                    if(accountBalance.value.unbonding) {
-                        accountBalance.value.unbonding.forEach(el => {
-                            // Sum
-                            accountBalance.value.unbonding_total += el.amount
+                    if(response.unbonding) {
+                        response.unbonding.forEach(el => {
+                            // Sum total
+                            totals.unbonding += el.amount
 
                             // Group by denom
-                            if(groupByDenom[el.denom]) {
-                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
                             } else {
-                                groupByDenom[el.denom] = {
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                groupByDenom.push({
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
                                     'logo': el.logo,
                                     'symbol': el.symbol
-                                }
+                                })
                             }
-
-                            // // Currencies
-                            // el.price_usdt = el.price
-                            // el.price_atom = el.price / store.ATOM_price
-                            // el.price_eth = el.price / store.ETH_price
-                            // el.price_btc = el.price / store.BTC_price
                         })
                     }
 
                     // Calc rewards tokens
-                    if(accountBalance.value.rewards) {
-                        accountBalance.value.rewards.forEach(el => {
+                    if(response.rewards) {
+                        response.rewards.forEach(el => {
                             // Convert to current denom
-                            el.amount_current_denom = el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)
+                            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
 
-                            // // Currencies
-                            // el.price_usdt = el.price
-                            // el.price_atom = el.price / store.ATOM_price
-                            // el.price_eth = el.price / store.ETH_price
-                            // el.price_btc = el.price / store.BTC_price
-
-                            // Sum
+                            // Sum total
                             if(el.amount * Math.pow(10, el.exponent) >= 1) {
-                                accountBalance.value.rewards_total += parseFloat(el.amount_current_denom * accountBalance.value.currentDenom.exponent)
+                                totals.rewards += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
                             }
+
+                            totals.liquid_rewards = totals.liquid + totals.rewards
 
                             // Group by denom
-                            if(groupByDenom[el.denom]) {
-                                groupByDenom[el.denom].amount += (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent
+                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
                             } else {
-                                groupByDenom[el.denom] = {
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / accountBalance.value.currentDenom.price_usdt)) * accountBalance.value.currentDenom.exponent,
+                                groupByDenom.push({
+                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
                                     'logo': el.logo,
                                     'symbol': el.symbol
-                                }
+                                })
                             }
                         })
-
-                        accountBalance.value.liquid_rewards_total = accountBalance.value.liquid_total + accountBalance.value.rewards_total
                     }
 
 
-                    // Group by denom
-                    groupByDenom.forEach(e => accountBalance.value.groupByDenom.push(e))
+                    currentWalletData.networks.push({
+                        name: 'cosmoshub',
+                        address: response.address,
+                        denom: store.networks.cosmoshub.denom,
+                        token_name: store.networks.cosmoshub.token_name,
+                        exponent: store.networks.cosmoshub.exponent,
+                        price: store.prices.find(el => el.symbol == 'ATOM').price,
+                        price_usdt: store.networks.cosmoshub.price_usdt,
+                        price_atom: store.networks.cosmoshub.price_atom,
+                        price_eth: store.networks.cosmoshub.price_eth,
+                        price_btc: store.networks.cosmoshub.price_btc,
+                        total: totals,
+                        balance: {
+                            liquid: {
+                                native: response.liquid.native,
+                                ibc: response.liquid.ibc
+                            },
+                            staked: response.staked,
+                            unbonding: response.unbonding,
+                            rewards: response.rewards,
+                            groupByDenom: groupByDenom.sort((a, b) => {
+                                if (a.amount > b.amount) { return -1 }
+                                if (a.amount < b.amount) { return 1 }
+                                return 0
+                            })
+                        },
+                        totalPrice_usdt: totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
 
+                        totalPrice_atom:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
 
-                    console.log(accountBalance.value)
+                        totalPrice_eth:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
+
+                        totalPrice_btc:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
+                    })
 
 
                     // Set data for first chart
-                    chartDatasetsFirst.push(accountBalance.value.staked_total)
-                    chartDatasetsFirst.push(accountBalance.value.liquid_rewards_total)
-                    chartDatasetsFirst.push(accountBalance.value.unbonding_total)
+                    chartDatasetsFirst.push(totals.staked)
+                    chartDatasetsFirst.push(totals.liquid_rewards)
+                    chartDatasetsFirst.push(totals.unbonding)
 
                     // Set data for second chart
-                    chartDatasetsSecond.push(accountBalance.value.liquid_total)
-                    chartDatasetsSecond.push(accountBalance.value.ibc_total)
-                    chartDatasetsSecond.push(accountBalance.value.outside_total)
-                    chartDatasetsSecond.push(accountBalance.value.rewards_total)
+                    chartDatasetsSecond.push(totals.liquid)
+                    chartDatasetsSecond.push(totals.ibc)
+                    chartDatasetsSecond.push(totals.rewards)
 
-                    // // Set data for third chart
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
-                    // chartDatasetsThird.push(10)
+                    // Set data for third chart
+                    groupByDenom.forEach(el => chartDatasetsThird.push(el.amount))
 
-                    // // Set data for fourth chart
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
-                    // chartDatasetsFourth.push(10)
+                    // Set data for fourth chart
+                    currentWalletData.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
 
                     // // Set data for fifth chart
                     // chartDatasetsFifth.push(50)
@@ -1324,10 +953,25 @@
                     // chartDatasetsFifth.push(10)
                     // chartDatasetsFifth.push(10)
 
-                    // Calc totals
-                    accountBalance.value.totalChartFirst = accountBalance.value.staked_total + accountBalance.value.liquid_rewards_total + accountBalance.value.unbonding_total
 
-                    accountBalance.value.totalChartThird = accountBalance.value.staked_total + accountBalance.value.liquid_total + accountBalance.value.unbonding_total + accountBalance.value.rewards_total + accountBalance.value.ibc_total
+                    // Calc totals
+                    totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
+
+                    totalChartThird.value = 0
+                    groupByDenom.forEach(el => totalChartThird.value += el.amount)
+
+                    currentWalletData.networks.forEach(el => totalChartFourth_usdt.value += el.totalPrice_usdt)
+                    currentWalletData.networks.forEach(el => totalChartFourth_eth.value += el.totalPrice_eth)
+                    currentWalletData.networks.forEach(el => totalChartFourth_btc.value += el.totalPrice_btc)
+                    currentWalletData.networks.forEach(el => totalChartFourth_atom.value += el.totalPrice_atom)
+
+
+                    // Get current walllet data
+                    currentWallet.value = currentWalletData
+
+                    // Get current network data
+                    currentNetwork.value = currentWalletData.networks.find(el => el.name == 'cosmoshub')
+
 
                     // Hide loader
                     loading.value = false
@@ -1369,6 +1013,11 @@
             chartThirdActiveLegend.value = dataIndex
         }
 
+        if(chart == 'chartFourth') {
+            chartInstance = chartFourth.value.chart
+            chartFourthActiveLegend.value = dataIndex
+        }
+
         chartInstance.setActiveElements([{
             datasetIndex: 0,
             index: dataIndex
@@ -1397,17 +1046,47 @@
             chartThirdActiveLegend.value = null
         }
 
+        if(chart == 'chartFourth') {
+            chartInstance = chartFourth.value.chart
+            chartFourthActiveLegend.value = null
+        }
+
         chartInstance.setActiveElements([])
         chartInstance.update()
     }
 
 
-    // Calc percents
+    // Calc percents for chart 1
     function calcPercentsChart1(type) {
         let result = 0
 
-        if(accountBalance.value.totalChartFirst) {
-            result = accountBalance.value[type] / accountBalance.value.totalChartFirst * 100
+        if(totalChartFirst.value) {
+            result = currentNetwork.value.total[type] / totalChartFirst.value * 100
+        }
+
+        return result
+    }
+
+
+    // Calc percents for chart 3
+    function calcPercentsChart3(symbol) {
+        let result = 0,
+            token = currentNetwork.value.balance.groupByDenom.find(e => e.symbol == symbol)
+
+        if(totalChartThird.value) {
+            result = token.amount / totalChartThird.value * 100
+        }
+
+        return result
+    }
+
+
+    // Calc percents for chart 4
+    function calcPercentsChart4(price) {
+        let result = 0
+
+        if(totalChartFourth_usdt.value) {
+            result = price / totalChartFourth_usdt.value * 100
         }
 
         return result
@@ -1631,6 +1310,8 @@
         font-weight: 400;
         line-height: 100%;
 
+        margin-left: 4px;
+
         text-transform: uppercase;
     }
 
@@ -1674,9 +1355,9 @@
     }
 
     /* .legends .legend .name.spoler_btn
-                                {
-                                    cursor: pointer;
-                                } */
+                                            {
+                                                cursor: pointer;
+                                            } */
 
     .legends .legend .color
     {
@@ -1689,17 +1370,17 @@
 
 
     /* .legends .legend .arr
-                                {
-                                    color: #fff;
+                                            {
+                                                color: #fff;
 
-                                    display: block;
+                                                display: block;
 
-                                    width: 24px;
-                                    height: 24px;
-                                    margin-left: auto;
+                                                width: 24px;
+                                                height: 24px;
+                                                margin-left: auto;
 
-                                    transition: transform .2s linear;
-                                } */
+                                                transition: transform .2s linear;
+                                            } */
 
 
     .legends .legend .dropdown
@@ -1773,17 +1454,17 @@
 
 
     /* .legends .legend .percents
-    {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 100%;
+                {
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: 100%;
 
-        width: 52px;
-        margin-left: auto;
+                    width: 52px;
+                    margin-left: auto;
 
-        text-align: right;
-        white-space: nowrap;
-    } */
+                    text-align: right;
+                    white-space: nowrap;
+                } */
 
 
     .legends .legend .tokens
@@ -1873,7 +1554,6 @@
 
         border: 1px solid #141414;
         border-radius: 50%;
-        background: #fff;
     }
 
 

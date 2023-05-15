@@ -239,7 +239,6 @@ export default {
 
             // Account
             'account_networks_title': 'Networks',
-            // 'account_contract_address_title': 'Contract address',
             'account_abilities_title': 'Abilities',
             'account_validators_title': 'Validators',
             'account_proposals_title': 'Proposals',
@@ -251,6 +250,9 @@ export default {
             'account_charts_unbonding_label': 'Unbondend',
             'account_charts_ibc_label': 'IBC Tokens',
             'account_charts_rewards_label': 'Rewards',
+            'account_charts_on_chain': 'On',
+
+            'account_charts_total_assets': 'Total Assets',
 
             'account_validators_col_account_name': 'Account name',
             'account_validators_col_network': 'Network',

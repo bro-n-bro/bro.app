@@ -4,6 +4,7 @@ import { CyberClient } from '@cybercongress/cyber-js'
 import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 import { fromBech32, toBech32 } from '@cosmjs/encoding'
 import * as IPFS from 'ipfs-core'
+import { generateAddress } from '@/utils'
 
 // Account
 import account from '@/stores/account'
@@ -173,19 +174,19 @@ export const useGlobalStore = defineStore('global', {
 
             if (updateOwnerMoonPassport && this.account.moonPassport) {
                 // Set owner to localStorage
-                this.account.moonPassportOwner = this.account.moonPassport.owner
+                this.account.moonPassportOwnerAddress = this.account.moonPassport.owner
 
                 // Set current wallet
                 if(!this.account.currentWallet) {
-                    this.account.currentWallet = this.account.moonPassportOwner
+                    this.account.currentWallet = this.account.moonPassportOwnerAddress
                 }
 
                 // Set owner moon passport
-                this.account.owner.moonPassport = this.account.moonPassport
+                this.account.moonPassportOwner = this.account.moonPassport
             }
 
             // Get owner moon passport
-            if (updateOwnerMoonPassport && this.account.moonPassportOwner) {
+            if (updateOwnerMoonPassport && this.account.moonPassportOwnerAddress) {
                 await this.getOwnerMoonPassport()
             }
 
@@ -224,18 +225,37 @@ export const useGlobalStore = defineStore('global', {
         // Get owner moon passport
         async getOwnerMoonPassport() {
             try {
+                // Get data
                 let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
 
                 this.jsCyber = new CyberClient(tendermintClient)
 
-                this.account.owner.moonPassport = await this.jsCyber.queryContractSmart(
+                this.account.moonPassportOwner = await this.jsCyber.queryContractSmart(
                     this.CONTRACT_ADDRESS_PASSPORT,
                     {
                         active_passport: {
-                            address: this.account.moonPassportOwner
+                            address: this.account.moonPassportOwnerAddress
                         }
                     }
                 )
+
+                // Set owner wallet
+                this.account.wallets.push({
+                    address: this.account.moonPassportOwner.owner,
+                    networks: []
+                })
+
+                // Set other wallets
+                this.account.moonPassportOwner.extension.addresses.forEach(address => {
+                    let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
+
+                    if(typeof result === 'undefined') {
+                        this.account.wallets.push({
+                            address: generateAddress('bostrom', address.address),
+                            networks: []
+                        })
+                    }
+                })
             } catch (error) {
                 console.log(error)
             }
@@ -249,8 +269,8 @@ export const useGlobalStore = defineStore('global', {
 
             if (updateAvatar) {
                 // Set robohash avatar
-                this.account.owner.moonPassport
-                    ? this.account.avatar = `https://robohash.org/${this.account.owner.moonPassport.extension.nickname.toLowerCase()}?set=set4`
+                this.account.moonPassportOwner
+                    ? this.account.avatar = `https://robohash.org/${this.account.moonPassportOwner.extension.nickname.toLowerCase()}?set=set4`
                     : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
 
                 // Start IPFS
@@ -318,15 +338,15 @@ export const useGlobalStore = defineStore('global', {
             // Getting avatar from gateway
             setTimeout(() => {
                 if (!avatarStatus) {
-                    this.account.avatar = `https://gateway.ipfs.cybernode.ai/ipfs/${this.account.owner.moonPassport.extension.avatar}`
+                    this.account.avatar = `https://gateway.ipfs.cybernode.ai/ipfs/${this.account.moonPassportOwner.extension.avatar}`
                 }
             }, delay)
 
             // Getting avatar from ipfs node
-            if(this.account.owner.moonPassport) {
+            if(this.account.moonPassportOwner) {
                 let content = []
 
-                for await (let chunk of this.node.cat(this.account.owner.moonPassport.extension.avatar)) {
+                for await (let chunk of this.node.cat(this.account.moonPassportOwner.extension.avatar)) {
                     content.push(chunk)
                 }
 
@@ -344,32 +364,32 @@ export const useGlobalStore = defineStore('global', {
 
 
         // Reset state
-        async reset () {
-            // Load from localstorage
-            let defaultAccount = JSON.parse(window.localStorage.getItem('account')),
-                defaultNetworks = JSON.parse(window.localStorage.getItem('networks'))
+        // async reset () {
+        //     // Load from localstorage
+        //     let defaultAccount = JSON.parse(window.localStorage.getItem('account')),
+        //         defaultNetworks = JSON.parse(window.localStorage.getItem('networks'))
 
-            this.connected = false
-            this.showManageModal = false
-            this.showManageSuccessModal = false
-            this.showManageErrorModal = false
-            this.showManageRejectModal = false
-            this.loaderManageModal = false
-            this.showConstitutionModal = false
-            this.constitutionStatus = null
+        //     this.connected = false
+        //     this.showManageModal = false
+        //     this.showManageSuccessModal = false
+        //     this.showManageErrorModal = false
+        //     this.showManageRejectModal = false
+        //     this.loaderManageModal = false
+        //     this.showConstitutionModal = false
+        //     this.constitutionStatus = null
 
-            // Clear state
-            Object.assign(this, {
-                account: defaultAccount,
-                networks: defaultNetworks
-            })
-        },
+        //     // Clear state
+        //     Object.assign(this, {
+        //         account: defaultAccount,
+        //         networks: defaultNetworks
+        //     })
+        // },
 
 
         // Connect to network websocket
-        connectNetworkWebsocket(network) {
-            this.networks[network].websocket = new WebSocket(this.networks[network].websocket_url)
-        },
+        // connectNetworkWebsocket(network) {
+        //     this.networks[network].websocket = new WebSocket(this.networks[network].websocket_url)
+        // },
 
 
         // Networks status
@@ -619,10 +639,6 @@ export const useGlobalStore = defineStore('global', {
                             this.networks[el.network].apr = el.apr
                             this.networks[el.network].apy = Math.pow(1 + (el.apr.toFixed(2) / 365), 365) - 1
 
-                            // console.log(el.network)
-                            // console.log(el.price)
-                            // console.log(this.ATOM_price)
-
                             this.networks[el.network].price = el.price
                             this.networks[el.network].price_usdt = el.price
                             this.networks[el.network].price_atom = el.price / this.ATOM_price
@@ -663,6 +679,8 @@ export const useGlobalStore = defineStore('global', {
             await fetch('https://rpc.bronbro.io/price_feed_api/tokens/')
                 .then(response => response.json())
                 .then(data => {
+                    this.prices = data
+
                     let ATOM = data.find(el => el.symbol == 'ATOM'),
                         BTC = data.find(el => el.symbol == 'WBTC'),
                         ETH = data.find(el => el.symbol == 'WETH')

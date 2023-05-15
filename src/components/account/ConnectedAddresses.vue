@@ -13,23 +13,23 @@
 
         <div class="list">
             <!-- <pre>{{ store.account.moonPassport }}</pre> -->
-            <!-- <pre>{{ store.account.owner.moonPassport }}</pre> -->
+            <!-- <pre>{{ store.account.moonPassportOwner }}</pre> -->
 
             <div><div class="item"
-                :class="{'active': store.account.moonPassportOwner == generateAddress('bostrom', store.account.currentWallet)}"
-                @click.prevent="selectWallet(store.account.moonPassportOwner)"
+                :class="{'active': store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.account.currentWallet)}"
+                @click.prevent="selectWallet(store.account.moonPassportOwnerAddress)"
             >
                 <div class="name">
-                    {{ store.account.owner.moonPassport.extension.nickname }}
+                    {{ store.account.moonPassportOwner.extension.nickname }}
                 </div>
             </div></div>
 
-            <template v-for="(item, index) in store.account.owner.moonPassport.extension.addresses" :key="index" v-if="store.account.owner.moonPassport.extension.addresses">
+            <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
             <div><div class="item" v-if="item.address.substring(0, 2) != '0x'"
                 @click.self="selectWallet(item.address)"
                 :class="{
                     'duplicate': isDuplicate(item.address),
-                    'active': store.account.currentWallet == item.address
+                    'active': store.account.currentWallet == generateAddress('bostrom', item.address)
                 }"
             >
                 <div class="tooltip">
@@ -56,7 +56,7 @@
             </template>
         </div>
 
-        <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.owner.moonPassport.extension.addresses && store.account.owner.moonPassport.extension.addresses.length >= 8}">
+        <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.moonPassportOwner.extension.addresses && store.account.moonPassportOwner.extension.addresses.length >= 8}">
             <span>{{ $t('message.add_address_btn') }}</span>
             <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
         </button>
@@ -105,10 +105,10 @@
 
     // Create uniq wallets array
     function createUniwWalletsArray() {
-        uniqWallets[store.account.moonPassportOwner] = true
+        uniqWallets[store.account.moonPassportOwnerAddress] = true
 
-        if(store.account.owner.moonPassport.extension.addresses) {
-            store.account.owner.moonPassport.extension.addresses.forEach(address => {
+        if(store.account.moonPassportOwner.extension.addresses) {
+            store.account.moonPassportOwner.extension.addresses.forEach(address => {
                 let tempBostromAddress = generateAddress('bostrom', address.address)
 
                 if (!uniqWallets[tempBostromAddress]) {
@@ -133,7 +133,7 @@
 
     // Select wallet
     function selectWallet(address) {
-        store.account.currentWallet = address
+        store.account.currentWallet = generateAddress('bostrom', address)
     }
 
 

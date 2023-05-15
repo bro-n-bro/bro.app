@@ -7,7 +7,7 @@
             </div>
 
             <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
-                <span v-if="store.account.owner.moonPassport">{{ store.account.owner.moonPassport.extension.nickname }}</span>
+                <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </router-link>
@@ -20,7 +20,7 @@
             </div>
 
             <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
-                <span v-if="store.account.owner.moonPassport">{{ store.account.owner.moonPassport.extension.nickname }}</span>
+                <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </div>

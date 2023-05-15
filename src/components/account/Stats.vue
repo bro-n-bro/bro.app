@@ -10,8 +10,9 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <div class="val" v-else>{{ $filters.toFixed(data.info.apr * 100, 2) }}%</div>
+                <div class="val" v-else>{{ $filters.toFixed(data.apr * 100, 2) }}%</div>
             </div>
+
 
             <div class="item">
                 <div class="label">{{ $t('message.account_voting_power') }}</div>
@@ -20,8 +21,9 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <div class="val" v-else>{{ $filters.toFixed(data.info.voting_power * 100, 8) }}</div>
+                <div class="val" v-else>{{ $filters.toFixed(data.voting_power * 100, 8) }}</div>
             </div>
+
 
             <div class="item">
                 <div class="label">{{ $t('message.account_passport_value') }}</div>
@@ -30,8 +32,9 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <!-- <div class="val">{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div> -->
+                <!-- <div class="val">{{ $filters.toFixed(data.rpde / 1000000, 5) }}</div> -->
             </div>
+
 
             <div class="item">
                 <div class="label">{{ $t('message.account_RPDE') }}</div>
@@ -40,7 +43,7 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <div class="val" v-else>{{ $filters.toFixed(data.info.rpde / 1000000, 5) }}</div>
+                <div class="val" v-else>{{ $filters.toFixed(data.rpde / 1000000, 5) }}</div>
             </div>
         </div>
     </section>
@@ -48,16 +51,13 @@
 
 
 <script setup>
-    import { reactive, ref, onBeforeMount, watch } from 'vue'
+    import { ref, onBeforeMount, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
     const store = useGlobalStore(),
         loading = ref(true),
-        data = reactive({
-            info: {},
-            showAll: false
-        })
+        data = ref({})
 
 
     onBeforeMount(async () => {
@@ -84,7 +84,8 @@
             await fetch(`https://rpc.bronbro.io/account/account_info/${currentAddress}`)
                 .then(res => res.json())
                 .then(response => {
-                    data.info = response
+                    // Set data
+                    data.value = response
 
                     // Hide loader
                     loading.value = false

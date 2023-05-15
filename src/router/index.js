@@ -172,13 +172,13 @@ router.beforeEach((to, from, next) => {
 				}
 
 				// Forbidden without a passport
-				if (access.includes('without_passport') && !store.account.moonPassport && !store.account.moonPassportOwner) {
+				if (access.includes('without_passport') && !store.account.moonPassport && !store.account.moonPassportOwnerAddress) {
 					next({ name: 'Dashboard' })
 					return false
 				}
 
 				// Forbidden with a global passport
-				if (access.includes('with_global_passport') && store.account.moonPassportOwner && !store.account.moonPassport) {
+				if (access.includes('with_global_passport') && store.account.moonPassportOwnerAddress && !store.account.moonPassport) {
 					next('/account/cosmoshub')
 					return false
 				}

@@ -3,11 +3,13 @@ import { useLocalStorage } from '@vueuse/core'
 const account = {
     userName: '',
     avatar: '',
-    moonPassport: null,
-    moonPassportOwner: useLocalStorage('moonPassportOwner'),
     signature: '',
 
-    owner: {},
+    moonPassport: null,
+    moonPassportOwnerAddress: useLocalStorage('moonPassportOwner'),
+    moonPassportOwner: {},
+
+    wallets: [],
     currentWallet: useLocalStorage('currentWallet'),
 
     balance_usdt: 0,
