@@ -3,10 +3,6 @@
         <div class="cont">
             <div class="title" v-html="$t('message.main_page_title')"></div>
 
-            <div class="desc">
-                {{ $t('message.main_page_desc') }}
-            </div>
-
             <button class="btn" @click.prevent="emitter.emit('connectWallet')">
                 {{ $t('message.connect_wallet_btn') }}
             </button>
@@ -20,13 +16,15 @@
 
 
 <script setup>
-    import { inject, watchEffect } from 'vue'
+    import { inject, watchEffect, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
 
+
     const emitter = inject('emitter'),
         store = useGlobalStore(),
-        route = useRouter()
+        route = useRouter(),
+        i18n = inject('i18n')
 
 
     watchEffect(() => {
@@ -36,6 +34,12 @@
                 ? route.push({ name: 'Dashboard' })
                 : route.push('/account/cosmoshub')
         }
+    })
+
+
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_main_page')
     })
 </script>
 
@@ -59,6 +63,8 @@
     {
         position: relative;
         z-index: 3;
+
+        padding-top: 80px;
     }
 
 
@@ -70,16 +76,6 @@
 
         letter-spacing: -.02em;
         text-transform: uppercase;
-    }
-
-
-    .main_page .desc
-    {
-        color: #f2f2f2;
-        font-size: 20px;
-        line-height: 24px;
-
-        margin-top: 24px;
     }
 
 
@@ -147,9 +143,9 @@
     {
         position: absolute;
         z-index: 2;
-        top: 88px;
+        top: 80px;
         right: 0;
-        left: 24px;
+        left: 0;
 
         display: block;
 

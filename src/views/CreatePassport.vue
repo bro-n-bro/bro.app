@@ -205,7 +205,7 @@
 
 
 <script setup>
-    import { ref, reactive, computed, inject } from 'vue'
+    import { ref, reactive, computed, inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import * as htmlToImage from 'html-to-image'
@@ -238,6 +238,12 @@
             showBottomBtns: false,
             bgGradient: ''
         })
+
+
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_create_passport')
+    })
 
 
     // Open constitution modal

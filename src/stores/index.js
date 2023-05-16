@@ -242,6 +242,7 @@ export const useGlobalStore = defineStore('global', {
                 // Set owner wallet
                 this.account.wallets.push({
                     address: this.account.moonPassportOwner.owner,
+                    nickname: this.account.moonPassportOwner.extension.nickname,
                     networks: []
                 })
 
@@ -252,6 +253,7 @@ export const useGlobalStore = defineStore('global', {
                     if(typeof result === 'undefined') {
                         this.account.wallets.push({
                             address: generateAddress('bostrom', address.address),
+                            nickname: '',
                             networks: []
                         })
                     }

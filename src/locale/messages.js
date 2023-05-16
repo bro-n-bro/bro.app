@@ -6,15 +6,15 @@ export default {
 
 
             // IPFS
-            'ipfs': "Ipfs node",
+            'ipfs': 'Ipfs node',
 
 
             // Error page
-            'error_title_404': "Page was lost in space....<br> Are you sure that it exist?",
+            'error_title_404': 'Page was lost in space....<br> Are you sure that it exist?',
 
 
             // Under construction page
-            'under_construction_title': "This part of site is under construction",
+            'under_construction_title': 'This part of site is under construction',
 
 
             // Mobile plug
@@ -23,13 +23,12 @@ export default {
 
 
             // Keplr Error page
-            'keplr_error_title': "Oooops, seems you don't have<br> a Keplr extension",
-            'keplr_reload_title': 'Reload page after you<br> installed Kepler',
-            'keplr_install_btn': "Install Keplr",
+            'keplr_error_title': "Oooops, it seems you don't have<br> a Keplr extension",
+            'keplr_reload_title': 'Please reload the page',
 
 
             // Buttons
-            'connect_wallet_btn': 'Connect wallet',
+            'connect_wallet_btn': 'Сonnect wallet',
             'details_btn': 'Details',
             'manage_btn': 'Manage',
             'delegate_btn': 'Delegate to your Bro',
@@ -53,15 +52,16 @@ export default {
             'done_btn': 'Done',
             'see_more_btn': 'See more',
             'delete_passport_btn': 'DELETE PASSPORT',
+            'keplr_install_btn': 'Install Keplr',
 
 
             // Main page
             'main_page_title': 'Welcome<br> to the Bro App',
-            'main_page_desc': 'Bro will help decompose active',
+            // 'main_page_desc': 'Bro will help decompose active',
 
 
             // Make a choice
-            'choice_title': 'Are you ready to unlock the full potential of the features available?',
+            'choice_title': 'Create your moon citizen for full feature access',
 
             // Dashboard
             'personal_apr': 'Personal APR',
@@ -94,7 +94,9 @@ export default {
 
 
             // Notofications
-            'notice_default': 'Bro_n_Bro foundation has come to light at early 2021 as a Validator for Cosmos Ecosystem. Some time after we started relaying and expanding other services to networks and projects.',
+            'notice_default_main_page': 'Welcome to the best Cosmos managing tool.',
+            'notice_default_dashboard': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
+            'notice_default_create_passport': 'To create your passport, please ensure that you upload the information correctly. Then you will be asked to sign the transaction.',
 
             'ipfs_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
             'ipfs_not_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",

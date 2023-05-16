@@ -57,7 +57,7 @@
 
 
 <script setup>
-    import { onBeforeMount } from 'vue'
+    import { inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { getNetworksData } from '@/utils'
 
@@ -66,12 +66,17 @@
     import Account from '../components/Account.vue'
     import MakeChoice from '../components/modal/MakeChoice.vue'
 
-    const store = useGlobalStore()
+
+    const store = useGlobalStore(),
+        i18n = inject('i18n')
 
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_dashboard')
+
         // Get networks data
-        getNetworksData()
+        await getNetworksData()
     })
 </script>
 

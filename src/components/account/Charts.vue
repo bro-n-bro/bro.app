@@ -106,19 +106,19 @@
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed(totalChartFourth_usdt, 2) }}
+                            {{ $filters.toFixed(currentWallet.totalPrice_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed(totalChartFourth_atom, 2) }}
+                            {{ $filters.toFixed(currentWallet.totalPrice_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed(totalChartFourth_eth, 4) }}
+                            {{ $filters.toFixed(currentWallet.totalPrice_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed(totalChartFourth_btc, 5) }}
+                            {{ $filters.toFixed(currentWallet.totalPrice_btc, 5) }}
                             </template>
 
                             <span>{{ store.currency }}</span>
@@ -127,20 +127,35 @@
                 </div>
             </div>
 
-            <!-- <div class="charts" v-if="chartActive == 5">
+            <div class="charts" v-if="chartActive == 5">
                 <div class="chart chartFifth active">
                     <Doughnut ref="chartFifth" :data="chartDataFifth" :options="chartOptionsFifth" />
 
                     <div class="total">
-                        <div class="label">Total Assets</div>
+                        <div class="label">{{ $t('message.account_charts_total_assets') }}</div>
 
                         <div class="price">
-                            1,484.4047
+                            <template v-if="store.currency == 'USDT'">
+                            {{ $filters.toFixed(store.account.totalPrice_usdt, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ATOM'">
+                            {{ $filters.toFixed(store.account.totalPrice_atom, 2) }}
+                            </template>
+
+                            <template v-if="store.currency == 'ETH'">
+                            {{ $filters.toFixed(store.account.totalPrice_eth, 4) }}
+                            </template>
+
+                            <template v-if="store.currency == 'BTC'">
+                            {{ $filters.toFixed(store.account.totalPrice_btc, 5) }}
+                            </template>
+
                             <span>{{ store.currency }}</span>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
 
 
@@ -461,48 +476,34 @@
 
 
             <div class="legends2" v-if="chartActive == 5">
-                <div class="legend" :class="{'active': chartFifthActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFifth', 0)" @mouseleave="mouseleaveLegend('chartFifth')">
-                    <div class="address">Valentin Prikolistov</div>
-
-                    <div class="price">
-                        <div>46,875 {{ store.currency }}</div>
-                        <div class="percents">45.43%</div>
+                <div v-for="(wallet, index) in store.account.wallets" :key="index" class="legend" :class="{'active': chartFifthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFifth', index)" @mouseleave="mouseleaveLegend('chartFifth')">
+                    <div class="address">
+                        <span v-if="wallet.nickname.length">{{ wallet.nickname }}</span>
+                        <span v-else>{{ wallet.address.slice(0, 13) + '...' + wallet.address.slice(-6) }}</span>
                     </div>
-                </div>
-
-                <div class="legend" :class="{'active': chartFifthActiveLegend == 1}" @mouseenter="mouseenterLegend('chartFifth', 1)" @mouseleave="mouseleaveLegend('chartFifth')">
-                    <div class="address">Masha Kozlova</div>
 
                     <div class="price">
-                        <div>3,345 {{ store.currency }}</div>
-                        <div class="percents">32.65%</div>
-                    </div>
-                </div>
+                        <div>
+                        <template v-if="store.currency == 'USDT'">
+                        {{ $filters.toFixed(wallet.totalPrice_usdt, 2) }}
+                        </template>
 
-                <div class="legend" :class="{'active': chartFifthActiveLegend == 2}" @mouseenter="mouseenterLegend('chartFifth', 2)" @mouseleave="mouseleaveLegend('chartFifth')">
-                    <div class="address">Airdrop111 </div>
+                        <template v-if="store.currency == 'ATOM'">
+                        {{ $filters.toFixed(wallet.totalPrice_atom, 2) }}
+                        </template>
 
-                    <div class="price">
-                        <div>2,543 {{ store.currency }}</div>
-                        <div class="percents">22.78%</div>
-                    </div>
-                </div>
+                        <template v-if="store.currency == 'ETH'">
+                        {{ $filters.toFixed(wallet.totalPrice_eth, 4) }}
+                        </template>
 
-                <div class="legend" :class="{'active': chartFifthActiveLegend == 3}" @mouseenter="mouseenterLegend('chartFifth', 3)" @mouseleave="mouseleaveLegend('chartFifth')">
-                    <div class="address">Airdrop_main</div>
+                        <template v-if="store.currency == 'BTC'">
+                        {{ $filters.toFixed(wallet.totalPrice_btc, 5) }}
+                        </template>
 
-                    <div class="price">
-                        <div>1,234 {{ store.currency }}</div>
-                        <div class="percents">18.12%</div>
-                    </div>
-                </div>
+                        {{ store.currency }}
+                        </div>
 
-                <div class="legend" :class="{'active': chartFifthActiveLegend == 4}" @mouseenter="mouseenterLegend('chartFifth', 4)" @mouseleave="mouseleaveLegend('chartFifth')">
-                    <div class="address">Airdrop222</div>
-
-                    <div class="price">
-                        <div>843 {{ store.currency }}</div>
-                        <div class="percents">8.34%</div>
+                        <div class="percents">{{ $filters.toFixed(calcPercentsChart5(wallet.totalPrice_usdt), 2) }}%</div>
                     </div>
                 </div>
             </div>
@@ -718,10 +719,6 @@
         })),
         totalChartFirst = ref(0),
         totalChartThird = ref(0),
-        totalChartFourth_usdt = ref(0),
-        totalChartFourth_atom = ref(0),
-        totalChartFourth_eth = ref(0),
-        totalChartFourth_btc = ref(0),
         currentWallet = ref({}),
         currentNetwork = ref({})
 
@@ -930,6 +927,41 @@
                     })
 
 
+                    // Calc totals
+                    totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
+
+                    totalChartThird.value = 0
+                    groupByDenom.forEach(el => totalChartThird.value += el.amount)
+
+                    // Calc totals for each wallet
+                    store.account.wallets.forEach(el => {
+                        el.totalPrice_usdt = 0
+                        el.totalPrice_eth = 0
+                        el.totalPrice_btc = 0
+                        el.totalPrice_atom = 0
+
+                        el.networks.forEach(network => {
+                            el.totalPrice_usdt += network.totalPrice_usdt
+                            el.totalPrice_eth += network.totalPrice_eth
+                            el.totalPrice_btc += network.totalPrice_btc
+                            el.totalPrice_atom += network.totalPrice_atom
+                        })
+                    })
+
+                    // Calc totals for account
+                    store.account.totalPrice_usdt = 0
+                    store.account.totalPrice_eth = 0
+                    store.account.totalPrice_btc = 0
+                    store.account.totalPrice_atom = 0
+
+                    store.account.wallets.forEach(wallet => {
+                        store.account.totalPrice_usdt += wallet.totalPrice_usdt
+                        store.account.totalPrice_eth += wallet.totalPrice_eth
+                        store.account.totalPrice_btc += wallet.totalPrice_btc
+                        store.account.totalPrice_atom += wallet.totalPrice_atom
+                    })
+
+
                     // Set data for first chart
                     chartDatasetsFirst.push(totals.staked)
                     chartDatasetsFirst.push(totals.liquid_rewards)
@@ -946,24 +978,8 @@
                     // Set data for fourth chart
                     currentWalletData.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
 
-                    // // Set data for fifth chart
-                    // chartDatasetsFifth.push(50)
-                    // chartDatasetsFifth.push(10)
-                    // chartDatasetsFifth.push(10)
-                    // chartDatasetsFifth.push(10)
-                    // chartDatasetsFifth.push(10)
-
-
-                    // Calc totals
-                    totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
-
-                    totalChartThird.value = 0
-                    groupByDenom.forEach(el => totalChartThird.value += el.amount)
-
-                    currentWalletData.networks.forEach(el => totalChartFourth_usdt.value += el.totalPrice_usdt)
-                    currentWalletData.networks.forEach(el => totalChartFourth_eth.value += el.totalPrice_eth)
-                    currentWalletData.networks.forEach(el => totalChartFourth_btc.value += el.totalPrice_btc)
-                    currentWalletData.networks.forEach(el => totalChartFourth_atom.value += el.totalPrice_atom)
+                    // Set data for fifth chart
+                    store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))
 
 
                     // Get current walllet data
@@ -1018,6 +1034,11 @@
             chartFourthActiveLegend.value = dataIndex
         }
 
+        if(chart == 'chartFifth') {
+            chartInstance = chartFifth.value.chart
+            chartFifthActiveLegend.value = dataIndex
+        }
+
         chartInstance.setActiveElements([{
             datasetIndex: 0,
             index: dataIndex
@@ -1049,6 +1070,11 @@
         if(chart == 'chartFourth') {
             chartInstance = chartFourth.value.chart
             chartFourthActiveLegend.value = null
+        }
+
+        if(chart == 'chartFifth') {
+            chartInstance = chartFifth.value.chart
+            chartFifthActiveLegend.value = null
         }
 
         chartInstance.setActiveElements([])
@@ -1085,8 +1111,20 @@
     function calcPercentsChart4(price) {
         let result = 0
 
-        if(totalChartFourth_usdt.value) {
-            result = price / totalChartFourth_usdt.value * 100
+        if(currentWallet.value.totalPrice_usdt) {
+            result = price / currentWallet.value.totalPrice_usdt * 100
+        }
+
+        return result
+    }
+
+
+    // Calc percents for chart 5
+    function calcPercentsChart5(price) {
+        let result = 0
+
+        if(store.account.totalPrice_usdt) {
+            result = price / store.account.totalPrice_usdt * 100
         }
 
         return result
