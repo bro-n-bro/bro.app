@@ -91,6 +91,7 @@ export default {
             'proposal_voting_label_no': 'No',
             'proposal_voting_label_nwv': 'NWV',
             'proposal_voting_label_abstain': 'Abstain',
+            'proposal_voting_label_abstain2': 'Abstain',
 
 
             // Notofications
