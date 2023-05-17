@@ -44,7 +44,7 @@
 
 
 <script setup>
-    import { onMounted, ref, watchEffect } from 'vue'
+    import { onMounted, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRoute } from 'vue-router'
 
@@ -54,6 +54,7 @@
     import Currency from '../components/header/Currency.vue'
     import User from '../components/header/User.vue'
     import ConnectBtn from '../components/header/ConnectBtn.vue'
+
 
     const store = useGlobalStore(),
         route = useRoute(),
@@ -76,11 +77,9 @@
     })
 
 
-    // watchEffect(() => showDropdown.value = false)
-
-
     // Сlick element outside
     function clickOut() {
+        // Hide dropdown
         showDropdown.value = false
     }
 </script>

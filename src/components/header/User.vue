@@ -26,9 +26,9 @@
         </div>
         </template>
 
-        <a href="https://cyb.ai/citizenship" target="_blank" rel="noopener nofollow" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
-        </a>
+        </router-link>
     </div>
 </template>
 
@@ -36,6 +36,7 @@
 <script setup>
     import { inject } from 'vue'
     import { useGlobalStore } from '@/stores'
+
 
     const store = useGlobalStore(),
         emitter = inject('emitter')

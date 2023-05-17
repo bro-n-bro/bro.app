@@ -2,7 +2,7 @@
     <section class="proposals_page">
         <div class="cont middle">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/all'" class="btn">
+                <router-link to="/account/cosmoshub" class="btn">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
@@ -91,9 +91,8 @@
 
 
 <script setup>
-    import { onMounted, reactive, ref } from 'vue'
+    import { onBeforeMount, reactive, ref, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useRouter } from 'vue-router'
     import hcSticky from 'hc-sticky'
 
     // Components
@@ -101,8 +100,9 @@
     import ProposalsItem from '../components/account/ProposalsItem.vue'
     import ButtonUp from 'vue-button-up'
 
+
     const store = useGlobalStore(),
-        router = useRouter(),
+        i18n = inject('i18n'),
         loading = ref(false),
         data = reactive({
             limit: 10,
@@ -119,7 +119,10 @@
         })
 
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_proposals_page')
+
         // Get proposals
         try {
             await getProposals()

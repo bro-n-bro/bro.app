@@ -92,6 +92,7 @@
     // Components
     import MobilePlug from '@/components/MobilePlug.vue'
 
+
     const route = useRoute(),
         layout = computed(() => route.meta.layout || 'default-layout'),
         store = useGlobalStore(),
@@ -115,9 +116,7 @@
 
 
     // Event "set notification"
-    emitter.on('setNotification', notice => {
-        store.tooltip = notice
-    })
+    emitter.on('setNotification', notice => store.tooltip = notice)
 
 
     // Event "open manage modal"

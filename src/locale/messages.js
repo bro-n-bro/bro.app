@@ -53,6 +53,9 @@ export default {
             'see_more_btn': 'See more',
             'delete_passport_btn': 'DELETE PASSPORT',
             'keplr_install_btn': 'Install Keplr',
+            'reject_btn': 'Reject',
+            'confirm_btn': 'Confirm',
+            'agree_sign_btn': 'Agree & Sign',
 
 
             // Main page
@@ -91,13 +94,17 @@ export default {
             'proposal_voting_label_no': 'No',
             'proposal_voting_label_nwv': 'NWV',
             'proposal_voting_label_abstain': 'Abstain',
-            'proposal_voting_label_abstain2': 'Abstain',
 
 
             // Notofications
             'notice_default_main_page': 'Welcome to the best Cosmos managing tool.',
             'notice_default_dashboard': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
             'notice_default_create_passport': 'To create your passport, please ensure that you upload the information correctly. Then you will be asked to sign the transaction.',
+            'notice_default_create_passport_success': 'Congrats! You have successfully created a Passport. You can now continue the journey and explore the app in BETA 2.0.',
+            'notice_default_constitution_modal': "By clicking 'Agree & Sign,' you confirm that you have read the Constitution in full and wish to create a passport. After clicking 'Agree & Sign,' you will be asked to sign the transaction.",
+            'notice_default_account_passport': 'That’s your recently created passport. You can now change the image or download the passport.',
+            'notice_default_proposals_page': 'All proposals including proposals in Deposit period can be found on this page.',
+            'notice_default_account_page': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
 
             'ipfs_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
             'ipfs_not_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",
@@ -118,6 +125,17 @@ export default {
             'account_balance_notice': "Your account valuation in the chosen currency",
             'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
             'account_RPDE_notice': "Rewards Per Day Estimation. The number of tokens in the chosen currency you earn per day from all displayed networks.",
+
+            'notice_delete_address': 'To Delete linked account please press on “delete icon” for selected address and then confirm your actions.',
+            'notice_edit_address': 'To Edit linked account please press on “edit icon” for selected address and then confirm your actions.',
+
+            'notice_add_address_step1': 'Please select a new address in Keplr to be able to link it to the portfolio.',
+            'notice_add_address_step2': 'Select the right address that you want to add to the portfolio.',
+            'notice_add_address_step2_error': 'The address you have selected already linked to your portfolio, please switch to another account.',
+            'notice_add_address_step3': 'To approve selected address and confirm the change you need to sign a transaction.',
+            'notice_add_address_step4': 'To complete the process, you need to switch to your passport account in Keplr.',
+            'notice_add_address_step5': 'To finish the process and finalize adding a new account please sign a broadcast transaction.',
+            'notice_add_address_success': 'You have successfully added new wallet address to your portfolio.',
 
 
             // Manage modal
@@ -247,6 +265,29 @@ export default {
             'account_proposals_title': 'Proposals',
             'account_connected_addresses_title': 'My Portfolio',
 
+            'account_connected_addresses_all': 'View all',
+
+            'account_charts_tab1': 'Stake',
+            'account_charts_tab2': 'Liquid',
+            'account_charts_tab3': 'Accounts',
+            'account_charts_tab4': 'Assets',
+            'account_charts_tab5': 'Networks',
+
+            'account_charts_block_title1': 'Stake Management',
+            'account_charts_desc1': 'contain staked, liquid and unbonding tokens',
+
+            'account_charts_block_title2': 'Liquid Management',
+            'account_charts_desc2': 'contain liquid, rewards and IBC tokens',
+
+            'account_charts_block_title3': 'Asset Management',
+            'account_charts_desc3': 'represent all networks in portfolio',
+
+            'account_charts_block_title4': 'Network Management',
+            'account_charts_desc4': 'represent all tokens in portfolio',
+
+            'account_charts_block_title5': 'Account Management',
+            'account_charts_desc5': 'contain your linked accounts',
+
             'account_charts_staked_label': 'Staked',
             'account_charts_outside_label': 'Outside',
             'account_charts_liquid_tokens_label': 'Liquid',
@@ -324,27 +365,19 @@ export default {
 
 
             // Add address modal
-            'add_address_modal_title': 'Add adress',
+            'add_address_modal_title': 'Add new address',
             'add_address_modal_error_desc': 'To add a new address — select a different Keplr account',
 
-            'add_address_modal_step1_name': 'Prove address',
-            'add_address_modal_step2_name': 'Create Signature',
-            'add_address_modal_step3_name': 'Back to Passport',
-            'add_address_modal_step4_name': 'Bundle Wallet',
+            'add_address_modal_step1_name': 'Choose Address',
+            'add_address_modal_step2_name': 'Approve Address',
+            'add_address_modal_step3_name': 'Switch the Account',
+            'add_address_modal_step4_name': 'Accounts Linked',
 
-            'add_address_modal_step1_title': 'Would you like to bundle this wallet to your account',
-
-            'add_address_modal_step2_title': 'Create signature in Kepler',
-            'add_address_modal_step2_desc': 'small explanation',
-
-            'add_address_modal_step3_title': 'Switch to your passport account in Keplr',
-            'add_address_modal_step3_desc': 'small explanation',
-
-            'add_address_modal_step4_title': 'Bundled Wallet',
-            'add_address_modal_step4_desc': 'small explanation',
-
-            'add_address_modal_step5_title': 'Bravo rebyata',
-            'add_address_modal_step5_desc': 'small explanation',
+            'add_address_modal_step1_title': 'Select the address',
+            'add_address_modal_step2_title': 'To approve the address you need to sign the transaction.',
+            'add_address_modal_step3_title': 'Switch to passport account in Keplr',
+            'add_address_modal_step4_title': 'Almost there...',
+            'add_address_modal_step5_title': 'Bravo! Congrats!',
 
             'add_address_added_label': 'Added',
 

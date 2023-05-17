@@ -74,11 +74,10 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, inject, ref } from 'vue'
+    import { onBeforeMount, reactive, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
-        emitter = inject('emitter'),
         loading = ref(false),
         data = reactive({
             proposals: [],
@@ -86,7 +85,7 @@
         })
 
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
         // Get proposals
         try {
             fetch('https://rpc.bronbro.io/gov/proposals')

@@ -6,7 +6,7 @@ const account = {
     signature: '',
 
     moonPassport: null,
-    moonPassportOwnerAddress: useLocalStorage('moonPassportOwner'),
+    moonPassportOwnerAddress: useLocalStorage('moonPassportOwnerAddress'),
     moonPassportOwner: {},
 
     wallets: [],

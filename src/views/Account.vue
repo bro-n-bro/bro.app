@@ -21,10 +21,8 @@
                     <!-- Stats -->
                     <Stats />
 
-
                     <!-- Validators -->
                     <Validators />
-
 
                     <!-- Proposals -->
                     <Proposals />
@@ -42,6 +40,9 @@
 
 
 <script setup>
+    import { onBeforeMount, inject } from 'vue'
+    import { useGlobalStore } from '@/stores'
+
     // Components
     import Networks from '../components/account/Networks.vue'
     import Charts from '../components/account/Charts.vue'
@@ -49,6 +50,16 @@
     import Validators from '../components/account/Validators.vue'
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
+
+
+    const store = useGlobalStore(),
+        i18n = inject('i18n')
+
+
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_account_page')
+    })
 </script>
 
 

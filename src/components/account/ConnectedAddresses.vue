@@ -7,7 +7,7 @@
                 <div class="check">
                     <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
                 </div>
-                <span>All address</span>
+                <span>{{ $t('message.account_connected_addresses_all') }}</span>
             </button>
         </div>
 
@@ -41,11 +41,11 @@
                     <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                 </div>
 
-                <button class="edit_btn" @click.prevent="showEditForm">
+                <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))">
                     <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
                 </button>
 
-                <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)">
+                <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
                     <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
                 </button>
 

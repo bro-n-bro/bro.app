@@ -1,11 +1,25 @@
 <template>
     <div class="row">
         <div class="tabs">
-            <button class="btn" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">1</button>
-            <button class="btn" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">2</button>
-            <button class="btn" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3">3</button>
-            <button class="btn" :class="{'active': chartActive == 4}" @click.prevent="chartActive = 4">4</button>
-            <button class="btn" :class="{'active': chartActive == 5}" @click.prevent="chartActive = 5">5</button>
+            <button class="btn" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">
+                {{ $t('message.account_charts_tab1') }}
+            </button>
+
+            <button class="btn" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
+                {{ $t('message.account_charts_tab2') }}
+            </button>
+
+            <button class="btn" :class="{'active': chartActive == 5}" @click.prevent="chartActive = 5">
+                {{ $t('message.account_charts_tab5') }}
+            </button>
+
+            <button class="btn" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3">
+                {{ $t('message.account_charts_tab3') }}
+            </button>
+
+            <button class="btn" :class="{'active': chartActive == 4}" @click.prevent="chartActive = 4">
+                {{ $t('message.account_charts_tab4') }}
+            </button>
         </div>
 
 
@@ -15,33 +29,33 @@
 
         <template v-else>
         <template v-if="chartActive == 1">
-        <div class="block_title">H1</div>
+        <div class="block_title">{{ $t('message.account_charts_block_title1') }}</div>
 
-        <div class="block_desc">small explanation</div>
+        <div class="block_desc">{{ $t('message.account_charts_desc1') }}</div>
         </template>
 
         <template v-if="chartActive == 2">
-        <div class="block_title">H1</div>
+        <div class="block_title">{{ $t('message.account_charts_block_title1') }}</div>
 
-        <div class="block_desc">small explanation</div>
-        </template>
-
-        <template v-if="chartActive == 3">
-        <div class="block_title">H1</div>
-
-        <div class="block_desc">small explanation</div>
-        </template>
-
-        <template v-if="chartActive == 4">
-        <div class="block_title">H1</div>
-
-        <div class="block_desc">small explanation</div>
+        <div class="block_desc">{{ $t('message.account_charts_desc1') }}</div>
         </template>
 
         <template v-if="chartActive == 5">
-        <div class="block_title">H1</div>
+        <div class="block_title">{{ $t('message.account_charts_block_title5') }}</div>
 
-        <div class="block_desc">small explanation</div>
+        <div class="block_desc">{{ $t('message.account_charts_desc5') }}</div>
+        </template>
+
+        <template v-if="chartActive == 3">
+        <div class="block_title">{{ $t('message.account_charts_block_title3') }}</div>
+
+        <div class="block_desc">{{ $t('message.account_charts_desc3') }}</div>
+        </template>
+
+        <template v-if="chartActive == 4">
+        <div class="block_title">{{ $t('message.account_charts_block_title4') }}</div>
+
+        <div class="block_desc">{{ $t('message.account_charts_desc4') }}</div>
         </template>
 
 
@@ -1150,15 +1164,16 @@
     .tabs .btn
     {
         color: #555;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 100%;
 
         display: block;
 
         width: 100%;
+        min-height: 62px;
         padding: 10px 0 9px;
 
-        text-align: left;
+        text-align: center;
 
         border-bottom: 1px solid rgba(255, 255, 255, .1);
     }
@@ -1195,6 +1210,7 @@
         line-height: 24px;
 
         width: 100%;
+        margin-bottom: 8px;
     }
 
 
@@ -1393,9 +1409,9 @@
     }
 
     /* .legends .legend .name.spoler_btn
-                                            {
-                                                cursor: pointer;
-                                            } */
+                                                    {
+                                                        cursor: pointer;
+                                                    } */
 
     .legends .legend .color
     {
@@ -1408,17 +1424,17 @@
 
 
     /* .legends .legend .arr
-                                            {
-                                                color: #fff;
+                                                    {
+                                                        color: #fff;
 
-                                                display: block;
+                                                        display: block;
 
-                                                width: 24px;
-                                                height: 24px;
-                                                margin-left: auto;
+                                                        width: 24px;
+                                                        height: 24px;
+                                                        margin-left: auto;
 
-                                                transition: transform .2s linear;
-                                            } */
+                                                        transition: transform .2s linear;
+                                                    } */
 
 
     .legends .legend .dropdown
@@ -1492,17 +1508,17 @@
 
 
     /* .legends .legend .percents
-                {
-                    font-size: 14px;
-                    font-weight: 500;
-                    line-height: 100%;
+                        {
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height: 100%;
 
-                    width: 52px;
-                    margin-left: auto;
+                            width: 52px;
+                            margin-left: auto;
 
-                    text-align: right;
-                    white-space: nowrap;
-                } */
+                            text-align: right;
+                            white-space: nowrap;
+                        } */
 
 
     .legends .legend .tokens

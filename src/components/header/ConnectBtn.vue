@@ -8,6 +8,7 @@
 <script setup>
     import { inject } from 'vue'
 
+
     const emitter = inject('emitter')
 </script>
 

@@ -21,7 +21,7 @@
 
 
 <script setup>
-    import { inject, ref, watchEffect } from 'vue'
+    import { inject, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
@@ -31,13 +31,16 @@
 
     // Select currency
     function selectCurrency(newCurrency) {
-        store.$patch({ currency: newCurrency })
+        // Set new currency
+        store.currency= newCurrency
 
+        // Hide dropdown
         showDropdown.value = false
     }
 
     // Сlick element outside
     function clickOut() {
+        // Hide dropdown
         showDropdown.value = false
     }
 </script>

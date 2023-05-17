@@ -29,5 +29,6 @@
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'
 
+
     const store = useGlobalStore()
 </script>

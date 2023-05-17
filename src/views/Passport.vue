@@ -15,17 +15,6 @@
                         <div class="avatar">
                             <input type="file" id="avatar" ref="avatar" accept="image/png, image/jpeg" @change="avatarUpload">
                             <label for="avatar" class="box hide">
-                                <!-- <div class="icon" v-if="!avatarPreview.status"></div>
-
-                                <div class="label" v-if="!avatarPreview.status">
-                                    {{ $t('message.passport_avatar_label') }}
-                                </div>
-
-                                <div class="exp" v-if="!avatarPreview.status">
-                                    {{ $t('message.passport_avatar_file_size') }}<br>
-                                    {{ $t('message.passport_avatar_mimetype_size') }}
-                                </div> -->
-
                                 <div class="loader_wrap" v-if="!avatarPreview.status">
                                     <div class="loader"><span></span></div>
                                 </div>
@@ -118,7 +107,7 @@
 
 
 <script setup>
-    import { ref, reactive, inject, onMounted, watchEffect } from 'vue'
+    import { ref, reactive, inject, onBeforeMount, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
     import { useNotification } from '@kyvg/vue3-notification'
@@ -126,21 +115,19 @@
     import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
     import { preparePassportTx, sendTx } from '@/utils'
-    import { toAscii, toBase64 } from '@cosmjs/encoding'
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
         notification = useNotification(),
-        router = useRouter()
-
-    var avatar = ref(null),
+        router = useRouter(),
+        avatar = ref(null),
         avatarPreview = reactive({
             src: '',
             buffer: '',
             status: false
         }),
         data = reactive({
-            moonAddress: store.wallets.bostrom,
+            moonAddress: store.account.moonPassportOwnerAddress,
             nickName: '',
             passportImage: '',
             status: false,
@@ -149,9 +136,12 @@
         })
 
 
-    onMounted(() => {
+    onBeforeMount(() => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_account_passport')
+
         // Set data from passport
-        data.nickName = store.account.owner.moonPassport.extension.nickname
+        data.nickName = store.account.moonPassportOwner.extension.nickname
 
         // Generate gradient
         data.bgGradient = gradient(data.nickName)

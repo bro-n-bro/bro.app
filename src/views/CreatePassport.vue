@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="line activation">
+                        <!-- <div class="line activation">
                             <div class="field">
                                 <button type="button" class="btn" @click.prevent="activationHandler" :class="{
                                     'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8,
@@ -86,15 +86,15 @@
                                     <div>{{ $t('message.passport_activation_label') }}</div>
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="btns">
                             <router-link class="btn" to="/dashboard">
-                                {{ $t('message.no_btn') }}
+                                {{ $t('message.reject_btn') }}
                             </router-link>
 
                             <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || data.activationProcess != true}">
-                                {{ $t('message.yes_btn') }}
+                                {{ $t('message.confirm_btn') }}
                             </button>
                         </div>
                     </form>
@@ -205,7 +205,7 @@
 
 
 <script setup>
-    import { ref, reactive, computed, inject, onBeforeMount } from 'vue'
+    import { ref, reactive, computed, inject, onBeforeMount, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import * as htmlToImage from 'html-to-image'
@@ -215,14 +215,13 @@
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
-    import Loader from '../components/Loader.vue'
+    // import Loader from '../components/Loader.vue'
 
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
-        notification = useNotification()
-
-    var avatar = ref(null),
+        notification = useNotification(),
+        avatar = ref(null),
         avatarPreview = reactive({
             src: '',
             buffer: '',
@@ -240,9 +239,17 @@
         })
 
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_create_passport')
+    })
+
+
+    watchEffect(async () => {
+        // Monitor the constitution status
+        if(store.constitutionStatus) {
+            await activationHandler()
+        }
     })
 
 
@@ -464,6 +471,9 @@
                     // Set avatar
                     store.account.avatar = avatarPreview.src
                     store.account.userName = data.nickName
+
+                    // Set default notification
+                    store.tooltip = i18n.global.t('message.notice_default_create_passport_success')
                 }
 
                 if (result.code) {

@@ -48,7 +48,7 @@
 
                 <div class="col_validator" @click.prevent="toggleActiveClass">
                     <div class="logo" v-for="(validator, validators_index) in wallet.validatorsReverse" :key="validators_index">
-                        <img :src="validator.avatar_url" alt="">
+                        <img :src="validator.mintscan_avatar" alt="">
                     </div>
 
                     <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -66,7 +66,7 @@
 
                     <div class="col_validator">
                         <div class="logo">
-                            <img :src="validator.avatar_url" alt="">
+                            <img :src="validator.mintscan_avatar" alt="">
                         </div>
 
                         <div class="name" @click.prevent="openValidatorModal(validator)">
@@ -472,6 +472,7 @@
     .validators .item .logo
     {
         position: relative;
+        z-index: 1;
 
         overflow: hidden;
 
@@ -486,6 +487,8 @@
 
     .validators .item .logo + .logo
     {
+        z-index: 2;
+
         margin-right: -6px;
     }
 

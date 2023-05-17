@@ -23,6 +23,7 @@
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx } from '@/utils'
 
+
     const props = defineProps(['address', 'name']),
         store = useGlobalStore(),
         notification = useNotification(),
@@ -54,14 +55,12 @@
                 set_address_label: {
                     address: props.address,
                     label: name.value,
-                    nickname: store.account.owner.moonPassport.extension.nickname
+                    nickname: store.account.moonPassportOwner.extension.nickname
                 }
             })
 
             // Send Tx
             let result = await sendTx(prepareResult)
-
-            console.log(result)
 
             if (result.code === 0) {
                 // Set TXS

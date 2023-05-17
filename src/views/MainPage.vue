@@ -37,7 +37,7 @@
     })
 
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_main_page')
     })

@@ -248,10 +248,6 @@
                             {{ $t('message.add_address_modal_step2_title') }}
                         </div>
 
-                        <div class="desc">
-                            {{ $t('message.add_address_modal_step2_desc') }}
-                        </div>
-
                         <img src="@/assets/images/add_address_step2.svg" alt="" class="img">
 
                         <button class="btn" @click.prevent="createSignature">
@@ -263,10 +259,6 @@
                     <div class="step step3" v-if="activeStep == 3">
                         <div class="title">
                             {{ $t('message.add_address_modal_step3_title') }}
-                        </div>
-
-                        <div class="desc">
-                            {{ $t('message.add_address_modal_step3_desc') }}
                         </div>
 
                         <img src="@/assets/images/add_address_step3.svg" alt="" class="img">
@@ -286,10 +278,6 @@
                             {{ $t('message.add_address_modal_step4_title') }}
                         </div>
 
-                        <div class="desc">
-                            {{ $t('message.add_address_modal_step4_desc') }}
-                        </div>
-
                         <img src="@/assets/images/add_address_step4.svg" alt="" class="img">
 
                         <button class="btn" @click.prevent="addAddress">
@@ -305,10 +293,6 @@
                     <div class="step step5" v-if="activeStep == 5">
                         <div class="title">
                             {{ $t('message.add_address_modal_step5_title') }}
-                        </div>
-
-                        <div class="desc">
-                            {{ $t('message.add_address_modal_step5_desc') }}
                         </div>
 
                         <img src="@/assets/images/add_address_step5.svg" alt="" class="img">
@@ -328,7 +312,7 @@
 
 
 <script setup>
-    import { ref, inject, onBeforeMount } from 'vue'
+    import { ref, inject, onBeforeMount, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
@@ -356,12 +340,46 @@
     })
 
 
+    watchEffect(() => {
+        // Set tooltip
+        if(activeStep.value == 0) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step1')
+        }
+
+        if(activeStep.value == 1) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step2')
+        }
+
+        if(activeStep.value == 2) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step3')
+        }
+
+        if(activeStep.value == 3) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step4')
+        }
+
+        if(activeStep.value == 4) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step5')
+        }
+
+        if(activeStep.value == 5) {
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_success')
+        }
+    })
+
+
     // Checking if the address was previously added
     function checkAddress(prefix) {
-        if(store.account.owner.moonPassport.extension.addresses) {
+        if(store.account.moonPassportOwner.extension.addresses) {
             let addresses = []
 
-            store.account.owner.moonPassport.extension.addresses.forEach(el => {
+            store.account.moonPassportOwner.extension.addresses.forEach(el => {
                 addresses.push(el.address)
             })
 
@@ -377,9 +395,17 @@
         // Checking if the address was previously added
         let result = checkAddress(store.networks[network].address_prefix)
 
-        result
-            ? duplicate.value = true
-            : duplicate.value = false
+        if(result) {
+            duplicate.value = true
+
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step2_error')
+        } else {
+            duplicate.value = false
+
+            // Set notification
+            store.tooltip = i18n.global.t('message.notice_add_address_step2')
+        }
 
         // Set new singer
         await setNewSinger()
@@ -441,7 +467,7 @@
             let res = await window.keplr.signArbitrary(
                 store.networks[addedNetwork.value].chainId,
                 addedAddress.value,
-                `${store.account.moonPassportOwner}:${store.CONSTITUTION_HASH}`
+                `${store.account.moonPassportOwnerAddress}:${store.CONSTITUTION_HASH}`
             )
 
             signature.value = toBase64(toAscii(JSON.stringify({
@@ -485,7 +511,7 @@
                 {
                     proof_address: {
                         address: addedAddress.value,
-                        nickname: store.account.owner.moonPassport.extension.nickname,
+                        nickname: store.account.moonPassportOwner.extension.nickname,
                         signature: signature.value
                     }
                 },
@@ -493,7 +519,7 @@
                     set_address_label: {
                         address: addedAddress.value,
                         label: tempAddressName.value,
-                        nickname: store.account.owner.moonPassport.extension.nickname
+                        nickname: store.account.moonPassportOwner.extension.nickname
                     }
                 }
             ])
@@ -602,7 +628,7 @@
 
             // Step 3
             if (activeStep.value == 3) {
-                if(store.wallets.bostrom == store.account.moonPassportOwner) {
+                if(store.wallets.bostrom == store.account.moonPassportOwnerAddress) {
                     // Set condition
                     ownerAccount.value = true
 
@@ -616,7 +642,7 @@
 
             // Step 4
             if (activeStep.value == 4) {
-                if(store.wallets.bostrom != store.account.moonPassportOwner) {
+                if(store.wallets.bostrom != store.account.moonPassportOwnerAddress) {
                     // Go to next step
                     activeStep.value -= 1
                 }

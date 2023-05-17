@@ -32,7 +32,9 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <!-- <div class="val">{{ $filters.toFixed(data.rpde / 1000000, 5) }}</div> -->
+                <div class="val" v-else>
+                    {{ store.currency }}
+                </div>
             </div>
 
 

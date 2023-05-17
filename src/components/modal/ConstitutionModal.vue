@@ -94,11 +94,11 @@
 
                 <div class="btns">
                     <button type="button" class="btn no_btn" @click.prevent="rejectConstitution">
-                        {{ $t('message.no_btn') }}
+                        {{ $t('message.reject_btn') }}
                     </button>
 
                     <button type="submit" class="btn yes_btn" @click.prevent="acceptConstitution">
-                        {{ $t('message.yes_btn') }}
+                        {{ $t('message.agree_sign_btn') }}
                     </button>
                 </div>
             </div>
@@ -110,14 +110,21 @@
 
 
 <script setup>
-    import { inject } from 'vue'
+    import { inject, onMounted } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { toAscii, toBase64 } from '@cosmjs/encoding'
 
+
     const store = useGlobalStore(),
         i18n = inject('i18n'),
         notification = useNotification()
+
+
+    onMounted(() => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_constitution_modal')
+    })
 
 
     // Close constitution modal

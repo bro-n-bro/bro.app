@@ -39,6 +39,7 @@
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx } from '@/utils'
 
+
     const emitter = inject('emitter'),
         i18n = inject('i18n'),
         store = useGlobalStore(),
@@ -63,7 +64,7 @@
             let prepareResult = await preparePassportTx({
                 remove_address: {
                     address: store.currentDeleteAddress,
-                    nickname: store.account.moonPassport.extension.nickname
+                    nickname: store.account.moonPassportOwner.extension.nickname
                 }
             })
 
