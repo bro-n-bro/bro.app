@@ -33,6 +33,22 @@
                 </div>
 
                 <div class="val" v-else>
+                    <template v-if="store.currency == 'USDT'">
+                    {{ $filters.toFixed(store.account.totalPrice_usdt, 2) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ATOM'">
+                    {{ $filters.toFixed(store.account.totalPrice_atom, 2) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ETH'">
+                    {{ $filters.toFixed(store.account.totalPrice_eth, 4) }}
+                    </template>
+
+                    <template v-if="store.currency == 'BTC'">
+                    {{ $filters.toFixed(store.account.totalPrice_btc, 5) }}
+                    </template>
+
                     {{ store.currency }}
                 </div>
             </div>
@@ -141,7 +157,7 @@
 
     .val
     {
-        font-size: 23px;
+        font-size: 20px;
         font-weight: 700;
         line-height: 100%;
 

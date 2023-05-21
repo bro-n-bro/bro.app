@@ -35,9 +35,9 @@
         </template>
 
         <template v-if="chartActive == 2">
-        <div class="block_title">{{ $t('message.account_charts_block_title1') }}</div>
+        <div class="block_title">{{ $t('message.account_charts_block_title2') }}</div>
 
-        <div class="block_desc">{{ $t('message.account_charts_desc1') }}</div>
+        <div class="block_desc">{{ $t('message.account_charts_desc2') }}</div>
         </template>
 
         <template v-if="chartActive == 5">
@@ -147,8 +147,7 @@
 
                     <div class="total">
                         <div class="label">{{ $t('message.account_charts_total_assets') }}</div>
-
-                        <div class="price">
+                        <div class="price" v-if="(typeof chartFifthActiveLegend == 'undefined' || typeof chartFifthActiveLegend == 'object')">
                             <template v-if="store.currency == 'USDT'">
                             {{ $filters.toFixed(store.account.totalPrice_usdt, 2) }}
                             </template>
@@ -167,6 +166,28 @@
 
                             <span>{{ store.currency }}</span>
                         </div>
+
+                        <template v-for="(wallet, index) in store.account.wallets" :key="index">
+                            <div class="price" v-if="chartFifthActiveLegend == index">
+                                <template v-if="store.currency == 'USDT'">
+                                {{ $filters.toFixed(wallet.totalPrice_usdt, 2) }}
+                                </template>
+
+                                <template v-if="store.currency == 'ATOM'">
+                                {{ $filters.toFixed(wallet.totalPrice_atom, 2) }}
+                                </template>
+
+                                <template v-if="store.currency == 'ETH'">
+                                {{ $filters.toFixed(wallet.totalPrice_eth, 4) }}
+                                </template>
+
+                                <template v-if="store.currency == 'BTC'">
+                                {{ $filters.toFixed(wallet.totalPrice_btc, 5) }}
+                                </template>
+
+                                <span>{{ store.currency }}</span>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -182,7 +203,8 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(currentNetwork.total.staked / currentNetwork.exponent, 2) }}
+                        <template v-if="(currentNetwork.total.staked / currentNetwork.exponent) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currentNetwork.total.staked / currentNetwork.exponent, 2) }}</template>
                         {{ currentNetwork.token_name }}
 
                         <div class="price">
@@ -218,7 +240,8 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(currentNetwork.total.liquid_rewards / currentNetwork.exponent, 2) }}
+                        <template v-if="(currentNetwork.total.liquid_rewards / currentNetwork.exponent) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currentNetwork.total.liquid_rewards / currentNetwork.exponent, 2) }}</template>
                         {{ currentNetwork.token_name }}
 
                         <div class="price">
@@ -254,7 +277,8 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(currentNetwork.total.unbonding / currentNetwork.exponent, 2) }}
+                        <template v-if="(currentNetwork.total.unbonding / currentNetwork.exponent) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currentNetwork.total.unbonding / currentNetwork.exponent, 2) }}</template>
                         {{ currentNetwork.token_name }}
 
                         <div class="price">
@@ -293,7 +317,8 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(currentNetwork.total.liquid / currentNetwork.exponent, 2) }}
+                        <template v-if="(currentNetwork.total.liquid / currentNetwork.exponent) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currentNetwork.total.liquid / currentNetwork.exponent, 2) }}</template>
                         {{ currentNetwork.token_name }}
 
                         <div class="price">
@@ -350,7 +375,9 @@
 
                                 <div>
                                     <div class="amount">
-                                        {{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }} {{ item.symbol }}
+                                        <template v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</template>
+                                        <template v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</template>
+                                        {{ item.symbol }}
 
                                         <div class="price">
                                             <template v-if="store.currency == 'USDT'">
@@ -386,7 +413,8 @@
                     </div>
 
                     <div class="amount">
-                        {{ $filters.toFixed(currentNetwork.total.rewards / currentNetwork.exponent, 5) }}
+                        <template v-if="(currentNetwork.total.rewards / currentNetwork.exponent) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currentNetwork.total.rewards / currentNetwork.exponent, 5) }}</template>
                         {{ currentNetwork.token_name }}
 
                         <div class="price">
@@ -666,6 +694,7 @@
         chartDatasetsThird = reactive([]),
         chartDatasetsFourth = reactive([]),
         chartDatasetsFifth = reactive([]),
+        chartColorsFourth = reactive([]),
         chartDataFirst = computed(() => ({
             labels: [
                 i18n.global.t('message.account_charts_staked_label'),
@@ -710,11 +739,11 @@
         chartDataFourth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFourth,
-                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                backgroundColor: chartColorsFourth,
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
-                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
-                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                hoverBackgroundColor: chartColorsFourth,
+                hoverBorderColor: chartColorsFourth,
                 borderAlign: 'inner',
                 cutout: '84%',
             }]
@@ -722,11 +751,11 @@
         chartDataFifth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFifth,
-                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
+                backgroundColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
-                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
-                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A'],
+                hoverBackgroundColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
+                hoverBorderColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
                 borderAlign: 'inner',
                 cutout: '84%',
             }]
@@ -760,8 +789,6 @@
             await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, store.account.currentWallet)}`)
                 .then(res => res.json())
                 .then(response => {
-                    console.log(response)
-
                     let currentWalletData = store.account.wallets.find(el => el.address == store.account.currentWallet),
                         totals = {
                             liquid: 0,
@@ -781,6 +808,9 @@
                     chartDatasetsThird = reactive([])
                     chartDatasetsFourth = reactive([])
                     chartDatasetsFifth = reactive([])
+                    chartColorsFourth = reactive([]),
+
+                    currentWalletData.networks = []
 
 
                     // Calc liquid tokens
@@ -907,6 +937,7 @@
 
                     currentWalletData.networks.push({
                         name: 'cosmoshub',
+                        color: '#2E314B',
                         address: response.address,
                         denom: store.networks.cosmoshub.denom,
                         token_name: store.networks.cosmoshub.token_name,
@@ -942,6 +973,7 @@
 
 
                     // Calc totals
+                    totalChartFirst.value = 0
                     totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
 
                     totalChartThird.value = 0
@@ -991,6 +1023,7 @@
 
                     // Set data for fourth chart
                     currentWalletData.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
+                    currentWalletData.networks.forEach(el => chartColorsFourth.push(el.color))
 
                     // Set data for fifth chart
                     store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))
@@ -1358,6 +1391,11 @@
         width: 100%;
     }
 
+    .chart .total .price.hide
+    {
+        display: none;
+    }
+
     .chart .total .price span
     {
         font-size: 12px;
@@ -1409,9 +1447,9 @@
     }
 
     /* .legends .legend .name.spoler_btn
-                                                    {
-                                                        cursor: pointer;
-                                                    } */
+                                                        {
+                                                            cursor: pointer;
+                                                        } */
 
     .legends .legend .color
     {
@@ -1424,17 +1462,17 @@
 
 
     /* .legends .legend .arr
-                                                    {
-                                                        color: #fff;
+                                                        {
+                                                            color: #fff;
 
-                                                        display: block;
+                                                            display: block;
 
-                                                        width: 24px;
-                                                        height: 24px;
-                                                        margin-left: auto;
+                                                            width: 24px;
+                                                            height: 24px;
+                                                            margin-left: auto;
 
-                                                        transition: transform .2s linear;
-                                                    } */
+                                                            transition: transform .2s linear;
+                                                        } */
 
 
     .legends .legend .dropdown
@@ -1508,17 +1546,17 @@
 
 
     /* .legends .legend .percents
-                        {
-                            font-size: 14px;
-                            font-weight: 500;
-                            line-height: 100%;
+                            {
+                                font-size: 14px;
+                                font-weight: 500;
+                                line-height: 100%;
 
-                            width: 52px;
-                            margin-left: auto;
+                                width: 52px;
+                                margin-left: auto;
 
-                            text-align: right;
-                            white-space: nowrap;
-                        } */
+                                text-align: right;
+                                white-space: nowrap;
+                            } */
 
 
     .legends .legend .tokens

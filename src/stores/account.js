@@ -22,6 +22,11 @@ const account = {
     RPDE_eth: 0,
     RPDE_btc: 0,
 
+    totalPrice_usdt: 0,
+    totalPrice_atom: 0,
+    totalPrice_eth: 0,
+    totalPrice_btc: 0,
+
     personal_APR: 0,
     delegations_price: 0
 }

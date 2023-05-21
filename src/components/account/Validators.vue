@@ -138,9 +138,8 @@
         wallets = reactive([])
 
         // Get data
-        store.account.currentWallet == 'all'
-            ? await getAllData()
-            : await getAddressData()
+        await getAddressData()
+        await getAllData()
     })
 
 

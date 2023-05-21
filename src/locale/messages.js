@@ -269,9 +269,9 @@ export default {
 
             'account_charts_tab1': 'Stake',
             'account_charts_tab2': 'Liquid',
-            'account_charts_tab3': 'Accounts',
-            'account_charts_tab4': 'Assets',
-            'account_charts_tab5': 'Networks',
+            'account_charts_tab3': 'Assets',
+            'account_charts_tab4': 'Networks',
+            'account_charts_tab5': 'Accounts',
 
             'account_charts_block_title1': 'Stake Management',
             'account_charts_desc1': 'contain staked, liquid and unbonding tokens',
@@ -279,11 +279,11 @@ export default {
             'account_charts_block_title2': 'Liquid Management',
             'account_charts_desc2': 'contain liquid, rewards and IBC tokens',
 
-            'account_charts_block_title3': 'Asset Management',
-            'account_charts_desc3': 'represent all networks in portfolio',
+            'account_charts_block_title3': 'Network Management',
+            'account_charts_desc3': 'represent all tokens in portfolio',
 
-            'account_charts_block_title4': 'Network Management',
-            'account_charts_desc4': 'represent all tokens in portfolio',
+            'account_charts_block_title4': 'Asset Management',
+            'account_charts_desc4': 'represent all networks in portfolio',
 
             'account_charts_block_title5': 'Account Management',
             'account_charts_desc5': 'contain your linked accounts',

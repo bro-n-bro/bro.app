@@ -177,9 +177,7 @@ export const useGlobalStore = defineStore('global', {
                 this.account.moonPassportOwnerAddress = this.account.moonPassport.owner
 
                 // Set current wallet
-                if(!this.account.currentWallet) {
-                    this.account.currentWallet = this.account.moonPassportOwnerAddress
-                }
+                this.account.currentWallet = this.account.moonPassportOwnerAddress
 
                 // Set owner moon passport
                 this.account.moonPassportOwner = this.account.moonPassport
@@ -247,17 +245,19 @@ export const useGlobalStore = defineStore('global', {
                 })
 
                 // Set other wallets
-                this.account.moonPassportOwner.extension.addresses.forEach(address => {
-                    let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
+                if(this.account.moonPassportOwner.extension.addresses){
+                    this.account.moonPassportOwner.extension.addresses.forEach(address => {
+                        let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
 
-                    if(typeof result === 'undefined') {
-                        this.account.wallets.push({
-                            address: generateAddress('bostrom', address.address),
-                            nickname: '',
-                            networks: []
-                        })
-                    }
-                })
+                        if(typeof result === 'undefined') {
+                            this.account.wallets.push({
+                                address: generateAddress('bostrom', address.address),
+                                nickname: address.label,
+                                networks: []
+                            })
+                        }
+                    })
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -641,11 +641,11 @@ export const useGlobalStore = defineStore('global', {
                             this.networks[el.network].apr = el.apr
                             this.networks[el.network].apy = Math.pow(1 + (el.apr.toFixed(2) / 365), 365) - 1
 
-                            this.networks[el.network].price = el.price
-                            this.networks[el.network].price_usdt = el.price
-                            this.networks[el.network].price_atom = el.price / this.ATOM_price
-                            this.networks[el.network].price_eth = el.price / this.ETH_price
-                            this.networks[el.network].price_btc = el.price / this.BTC_price
+                            this.networks[el.network].price = this.prices.find(e => e.display == el.denom).price
+                            this.networks[el.network].price_usdt = this.prices.find(e => e.display == el.denom).price
+                            this.networks[el.network].price_atom = this.prices.find(e => e.display == el.denom).price / this.ATOM_price
+                            this.networks[el.network].price_eth = this.prices.find(e => e.display == el.denom).price / this.ETH_price
+                            this.networks[el.network].price_btc = this.prices.find(e => e.display == el.denom).price / this.BTC_price
 
                             switch (true) {
                                 case el.health >= 0 && el.health < 7:
