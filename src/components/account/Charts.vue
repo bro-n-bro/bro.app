@@ -769,6 +769,9 @@
     onBeforeMount(async () => {
         // Get data
         await getData()
+
+        // Set actual data
+        setActualData()
     })
 
 
@@ -776,6 +779,9 @@
     watch(() => store.account.currentWallet, async () => {
         // Get data
         await getData()
+
+        // Set actual data
+        setActualData()
     })
 
 
@@ -784,264 +790,268 @@
         // Set loader
         loading.value = true
 
+        // Clear data
+        chartDatasetsFirst = reactive([])
+        chartDatasetsSecond = reactive([])
+        chartDatasetsThird = reactive([])
+        chartDatasetsFourth = reactive([])
+        chartDatasetsFifth = reactive([])
+        chartColorsFourth = reactive([])
+
         // Get cosmos hub data
-        try {
-            await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, store.account.currentWallet)}`)
-                .then(res => res.json())
-                .then(response => {
-                    let currentWalletData = store.account.wallets.find(el => el.address == store.account.currentWallet),
-                        totals = {
-                            liquid: 0,
-                            staked: 0,
-                            unbonding: 0,
-                            rewards: 0,
-                            outside: 0,
-                            ibc: 0,
-                            liquid_rewards: 0
-                        },
-                        groupByDenom = []
-
-
-                    // Clear data
-                    chartDatasetsFirst = reactive([])
-                    chartDatasetsSecond = reactive([])
-                    chartDatasetsThird = reactive([])
-                    chartDatasetsFourth = reactive([])
-                    chartDatasetsFifth = reactive([])
-                    chartColorsFourth = reactive([]),
-
-                    currentWalletData.networks = []
-
-
-                    // Calc liquid tokens
-                    if(response.liquid.native.length) {
-                        response.liquid.native.forEach(el => {
-                            // Sum total
-                            totals.liquid += el.amount
-
-                            // Group by denom
-                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
-                            } else {
-                                groupByDenom.push({
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-                        })
-                    }
-
-                    // Calc ibc tokens
-                    if(response.liquid.ibc.length) {
-                        response.liquid.ibc.forEach(el => {
-                            // Convert to current denom
-                            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
-
-                            // Sum total
-                            totals.ibc += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
-
-                            // Group by denom
-                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
-                            } else {
-                                groupByDenom.push({
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-
-                            // Set prices
-                            el.price_usdt = el.price
-                            el.price_atom = el.price / store.ATOM_price
-                            el.price_eth = el.price / store.ETH_price
-                            el.price_btc = el.price / store.BTC_price
-                        })
-                    }
-
-                    // Calc staked tokens
-                    if(response.staked) {
-                        response.staked.forEach(el => {
-                            // Sum total
-                            totals.staked += el.amount
-
-                            // Group by denom
-                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
-                            } else {
-                                groupByDenom.push({
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-                        })
-                    }
-
-                    // Calc unbonding tokens
-                    if(response.unbonding) {
-                        response.unbonding.forEach(el => {
-                            // Sum total
-                            totals.unbonding += el.amount
-
-                            // Group by denom
-                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
-                            } else {
-                                groupByDenom.push({
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-                        })
-                    }
-
-                    // Calc rewards tokens
-                    if(response.rewards) {
-                        response.rewards.forEach(el => {
-                            // Convert to current denom
-                            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
-
-                            // Sum total
-                            if(el.amount * Math.pow(10, el.exponent) >= 1) {
-                                totals.rewards += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
-                            }
-
-                            totals.liquid_rewards = totals.liquid + totals.rewards
-
-                            // Group by denom
-                            let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
-                            } else {
-                                groupByDenom.push({
-                                    'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-                        })
-                    }
-
-
-                    currentWalletData.networks.push({
-                        name: 'cosmoshub',
-                        color: '#2E314B',
-                        address: response.address,
-                        denom: store.networks.cosmoshub.denom,
-                        token_name: store.networks.cosmoshub.token_name,
-                        exponent: store.networks.cosmoshub.exponent,
-                        price: store.prices.find(el => el.symbol == 'ATOM').price,
-                        price_usdt: store.networks.cosmoshub.price_usdt,
-                        price_atom: store.networks.cosmoshub.price_atom,
-                        price_eth: store.networks.cosmoshub.price_eth,
-                        price_btc: store.networks.cosmoshub.price_btc,
-                        total: totals,
-                        balance: {
-                            liquid: {
-                                native: response.liquid.native,
-                                ibc: response.liquid.ibc
+        for (const wallet of store.account.wallets) {
+            try {
+                await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, wallet.address)}`)
+                    .then(res => res.json())
+                    .then(response => {
+                        let totals = {
+                                liquid: 0,
+                                staked: 0,
+                                unbonding: 0,
+                                rewards: 0,
+                                outside: 0,
+                                ibc: 0,
+                                liquid_rewards: 0
                             },
-                            staked: response.staked,
-                            unbonding: response.unbonding,
-                            rewards: response.rewards,
-                            groupByDenom: groupByDenom.sort((a, b) => {
-                                if (a.amount > b.amount) { return -1 }
-                                if (a.amount < b.amount) { return 1 }
-                                return 0
+                            groupByDenom = []
+
+                        wallet.networks = []
+
+
+                        // Calc liquid tokens
+                        if(response.liquid && response.liquid.native) {
+                            response.liquid.native.forEach(el => {
+                                // Sum total
+                                totals.liquid += el.amount
+
+                                // Group by denom
+                                let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                                if(duplicate) {
+                                    duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
+                                } else {
+                                    groupByDenom.push({
+                                        'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
+                                        'logo': el.logo,
+                                        'symbol': el.symbol
+                                    })
+                                }
                             })
-                        },
-                        totalPrice_usdt: totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
+                        }
 
-                        totalPrice_atom:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
+                        // Calc ibc tokens
+                        if(response.liquid && response.liquid.ibc) {
+                            response.liquid.ibc.forEach(el => {
+                                // Convert to current denom
+                                el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
 
-                        totalPrice_eth:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
+                                // Sum total
+                                totals.ibc += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
 
-                        totalPrice_btc:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
-                    })
+                                // Group by denom
+                                let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                                if(duplicate) {
+                                    duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
+                                } else {
+                                    groupByDenom.push({
+                                        'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
+                                        'logo': el.logo,
+                                        'symbol': el.symbol
+                                    })
+                                }
+
+                                // Set prices
+                                el.price_usdt = el.price
+                                el.price_atom = el.price / store.ATOM_price
+                                el.price_eth = el.price / store.ETH_price
+                                el.price_btc = el.price / store.BTC_price
+                            })
+                        }
+
+                        // Calc staked tokens
+                        if(response.staked) {
+                            response.staked.forEach(el => {
+                                // Sum total
+                                totals.staked += el.amount
+
+                                // Group by denom
+                                let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                                if(duplicate) {
+                                    duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
+                                } else {
+                                    groupByDenom.push({
+                                        'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
+                                        'logo': el.logo,
+                                        'symbol': el.symbol
+                                    })
+                                }
+                            })
+                        }
+
+                        // Calc unbonding tokens
+                        if(response.unbonding) {
+                            response.unbonding.forEach(el => {
+                                // Sum total
+                                totals.unbonding += el.amount
+
+                                // Group by denom
+                                let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                                if(duplicate) {
+                                    duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
+                                } else {
+                                    groupByDenom.push({
+                                        'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
+                                        'logo': el.logo,
+                                        'symbol': el.symbol
+                                    })
+                                }
+                            })
+                        }
+
+                        // Calc rewards tokens
+                        if(response.rewards) {
+                            response.rewards.forEach(el => {
+                                // Convert to current denom
+                                el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)
+
+                                // Sum total
+                                if(el.amount * Math.pow(10, el.exponent) >= 1) {
+                                    totals.rewards += parseFloat(el.amountCurrentDenom * store.networks.cosmoshub.exponent)
+                                }
+
+                                totals.liquid_rewards = totals.liquid + totals.rewards
+
+                                // Group by denom
+                                let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
+
+                                if(duplicate) {
+                                    duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent
+                                } else {
+                                    groupByDenom.push({
+                                        'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.networks.cosmoshub.price_usdt)) * store.networks.cosmoshub.exponent,
+                                        'logo': el.logo,
+                                        'symbol': el.symbol
+                                    })
+                                }
+                            })
+                        }
 
 
-                    // Calc totals
-                    totalChartFirst.value = 0
-                    totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
+                        wallet.networks.push({
+                            name: 'cosmoshub',
+                            color: '#2E314B',
+                            address: response.address,
+                            denom: store.networks.cosmoshub.denom,
+                            token_name: store.networks.cosmoshub.token_name,
+                            exponent: store.networks.cosmoshub.exponent,
+                            price: store.prices.find(el => el.symbol == 'ATOM').price,
+                            price_usdt: store.networks.cosmoshub.price_usdt,
+                            price_atom: store.networks.cosmoshub.price_atom,
+                            price_eth: store.networks.cosmoshub.price_eth,
+                            price_btc: store.networks.cosmoshub.price_btc,
+                            total: totals,
+                            balance: {
+                                liquid: {
+                                    native: response.liquid && response.liquid.native ? response.liquid.native : null,
+                                    ibc: response.liquid && response.liquid.ibc ? response.liquid.ibc : null
+                                },
+                                staked: response.staked,
+                                unbonding: response.unbonding,
+                                rewards: response.rewards,
+                                groupByDenom: groupByDenom.sort((a, b) => {
+                                    if (a.amount > b.amount) { return -1 }
+                                    if (a.amount < b.amount) { return 1 }
+                                    return 0
+                                })
+                            },
+                            totalPrice_usdt: totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
 
-                    totalChartThird.value = 0
-                    groupByDenom.forEach(el => totalChartThird.value += el.amount)
+                            totalPrice_atom:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
 
-                    // Calc totals for each wallet
-                    store.account.wallets.forEach(el => {
-                        el.totalPrice_usdt = 0
-                        el.totalPrice_eth = 0
-                        el.totalPrice_btc = 0
-                        el.totalPrice_atom = 0
+                            totalPrice_eth:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
 
-                        el.networks.forEach(network => {
-                            el.totalPrice_usdt += network.totalPrice_usdt
-                            el.totalPrice_eth += network.totalPrice_eth
-                            el.totalPrice_btc += network.totalPrice_btc
-                            el.totalPrice_atom += network.totalPrice_atom
+                            totalPrice_btc:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
+                        })
+
+
+                        // Calc total prices
+                        store.account.wallets.forEach(el => {
+                            el.totalPrice_usdt = 0
+                            el.totalPrice_eth = 0
+                            el.totalPrice_btc = 0
+                            el.totalPrice_atom = 0
+
+                            el.networks.forEach(network => {
+                                el.totalPrice_usdt += network.totalPrice_usdt
+                                el.totalPrice_eth += network.totalPrice_eth
+                                el.totalPrice_btc += network.totalPrice_btc
+                                el.totalPrice_atom += network.totalPrice_atom
+                            })
                         })
                     })
-
-                    // Calc totals for account
-                    store.account.totalPrice_usdt = 0
-                    store.account.totalPrice_eth = 0
-                    store.account.totalPrice_btc = 0
-                    store.account.totalPrice_atom = 0
-
-                    store.account.wallets.forEach(wallet => {
-                        store.account.totalPrice_usdt += wallet.totalPrice_usdt
-                        store.account.totalPrice_eth += wallet.totalPrice_eth
-                        store.account.totalPrice_btc += wallet.totalPrice_btc
-                        store.account.totalPrice_atom += wallet.totalPrice_atom
-                    })
-
-
-                    // Set data for first chart
-                    chartDatasetsFirst.push(totals.staked)
-                    chartDatasetsFirst.push(totals.liquid_rewards)
-                    chartDatasetsFirst.push(totals.unbonding)
-
-                    // Set data for second chart
-                    chartDatasetsSecond.push(totals.liquid)
-                    chartDatasetsSecond.push(totals.ibc)
-                    chartDatasetsSecond.push(totals.rewards)
-
-                    // Set data for third chart
-                    groupByDenom.forEach(el => chartDatasetsThird.push(el.amount))
-
-                    // Set data for fourth chart
-                    currentWalletData.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
-                    currentWalletData.networks.forEach(el => chartColorsFourth.push(el.color))
-
-                    // Set data for fifth chart
-                    store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))
-
-
-                    // Get current walllet data
-                    currentWallet.value = currentWalletData
-
-                    // Get current network data
-                    currentNetwork.value = currentWalletData.networks.find(el => el.name == 'cosmoshub')
-
-
-                    // Hide loader
-                    loading.value = false
-                })
-        } catch (error) {
-            console.log(error)
+            } catch (error) {
+                console.log(error)
+            }
         }
+    }
+
+
+    // Set actual data
+    function setActualData() {
+        // Get current walllet data
+        currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+        // Get current network data
+        currentNetwork.value = currentWallet.value.networks.find(el => el.name == 'cosmoshub')
+
+        // Calc charts totals
+        totalChartFirst.value = 0
+        totalChartFirst.value = currentNetwork.value.total.staked + currentNetwork.value.total.liquid_rewards + currentNetwork.value.total.unbonding
+
+        totalChartThird.value = 0
+        currentNetwork.value.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
+
+
+        // Set data for first chart
+        chartDatasetsFirst.push(currentNetwork.value.total.staked)
+        chartDatasetsFirst.push(currentNetwork.value.total.liquid_rewards)
+        chartDatasetsFirst.push(currentNetwork.value.total.unbonding)
+
+        // Set data for second chart
+        chartDatasetsSecond.push(currentNetwork.value.total.liquid)
+        chartDatasetsSecond.push(currentNetwork.value.total.ibc)
+        chartDatasetsSecond.push(currentNetwork.value.total.rewards)
+
+        // Set data for third chart
+        currentNetwork.value.balance.groupByDenom.forEach(el => chartDatasetsThird.push(el.amount))
+
+        // Set data for fourth chart
+        currentWallet.value.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
+        currentWallet.value.networks.forEach(el => chartColorsFourth.push(el.color))
+
+        // Set data for fifth chart
+        store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))
+
+
+        // Calc totals for account
+        store.account.totalPrice_usdt = 0
+        store.account.totalPrice_eth = 0
+        store.account.totalPrice_btc = 0
+        store.account.totalPrice_atom = 0
+
+        store.account.wallets.forEach(wallet => {
+            store.account.totalPrice_usdt += wallet.totalPrice_usdt
+            store.account.totalPrice_eth += wallet.totalPrice_eth
+            store.account.totalPrice_btc += wallet.totalPrice_btc
+            store.account.totalPrice_atom += wallet.totalPrice_atom
+        })
+
+
+        // Hide loader
+        loading.value = false
     }
 
 

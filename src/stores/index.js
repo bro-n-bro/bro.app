@@ -247,14 +247,16 @@ export const useGlobalStore = defineStore('global', {
                 // Set other wallets
                 if(this.account.moonPassportOwner.extension.addresses){
                     this.account.moonPassportOwner.extension.addresses.forEach(address => {
-                        let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
+                        if(address.address.substr(0, 2) != '0x') {
+                            let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
 
-                        if(typeof result === 'undefined') {
-                            this.account.wallets.push({
-                                address: generateAddress('bostrom', address.address),
-                                nickname: address.label,
-                                networks: []
-                            })
+                            if(typeof result === 'undefined') {
+                                this.account.wallets.push({
+                                    address: generateAddress('bostrom', address.address),
+                                    nickname: address.label,
+                                    networks: []
+                                })
+                            }
                         }
                     })
                 }

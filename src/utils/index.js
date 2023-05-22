@@ -1,7 +1,7 @@
 import { useGlobalStore } from '@/stores'
 
 import { Registry } from '@cosmjs/proto-signing'
-import { SigningStargateClient } from '@cosmjs/stargate'
+import { AminoTypes, SigningStargateClient } from '@cosmjs/stargate'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { toUtf8, fromBech32, toBech32 } from '@cosmjs/encoding'
@@ -627,8 +627,21 @@ export const preparePassportTx = async params => {
 
     // Register type
     let typeRegistry = new Registry([
-        ['/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract],
+        ['/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract]
     ])
+
+    // Amino types
+    // let aminoTypes = new AminoTypes({
+    //     '/cosmwasm.wasm.v1.MsgExecuteContract': {
+    //         aminoType: '/cosmwasm.wasm.v1.MsgExecuteContract',
+    //         toAmino: data => {
+    //             return data
+    //         },
+    //         fromAmino: data => {
+    //             return data
+    //         }
+    //     }
+    // })
 
     // Create request
     await window.keplr.enable(store.networks.bostrom.chainId)
