@@ -10,6 +10,7 @@ const account = {
     moonPassportOwner: {},
 
     wallets: [],
+    info: {},
     currentWallet: useLocalStorage('currentWallet'),
 
     balance_usdt: 0,

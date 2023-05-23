@@ -1,23 +1,23 @@
 <template>
     <div class="row">
         <div class="tabs">
-            <button class="btn" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1">
+            <button class="btn" :class="{'active': chartActive == 1}" @click.prevent="chartActive = 1" @mouseover="emitter.emit('setNotification', $t('message.account_charts_tab1_notice'))">
                 {{ $t('message.account_charts_tab1') }}
             </button>
 
-            <button class="btn" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2">
+            <button class="btn" :class="{'active': chartActive == 2}" @click.prevent="chartActive = 2" @mouseover="emitter.emit('setNotification', $t('message.account_charts_tab2_notice'))">
                 {{ $t('message.account_charts_tab2') }}
             </button>
 
-            <button class="btn" :class="{'active': chartActive == 5}" @click.prevent="chartActive = 5">
+            <button class="btn" :class="{'active': chartActive == 5}" @click.prevent="chartActive = 5" @mouseover="emitter.emit('setNotification', $t('message.account_charts_tab5_notice'))">
                 {{ $t('message.account_charts_tab5') }}
             </button>
 
-            <button class="btn" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3">
+            <button class="btn" :class="{'active': chartActive == 3}" @click.prevent="chartActive = 3" @mouseover="emitter.emit('setNotification', $t('message.account_charts_tab3_notice'))">
                 {{ $t('message.account_charts_tab3') }}
             </button>
 
-            <button class="btn" :class="{'active': chartActive == 4}" @click.prevent="chartActive = 4">
+            <button class="btn" :class="{'active': chartActive == 4}" @click.prevent="chartActive = 4" @mouseover="emitter.emit('setNotification', $t('message.account_charts_tab4_notice'))">
                 {{ $t('message.account_charts_tab4') }}
             </button>
         </div>
@@ -567,6 +567,7 @@
 
     var store = useGlobalStore(),
         i18n = inject('i18n'),
+        emitter = inject('emitter'),
         loading = ref(true),
         chartActive = ref(1),
         chartFirst = ref(null),
@@ -815,7 +816,20 @@
                             },
                             groupByDenom = []
 
-                        wallet.networks = []
+                        wallet.networks = [
+                            {
+                                name: 'cosmoshub',
+                                color: '#2E314B',
+                                denom: store.networks.cosmoshub.denom,
+                                token_name: store.networks.cosmoshub.token_name,
+                                exponent: store.networks.cosmoshub.exponent,
+                                price: store.prices.find(el => el.symbol == 'ATOM').price,
+                                price_usdt: store.networks.cosmoshub.price_usdt,
+                                price_atom: store.networks.cosmoshub.price_atom,
+                                price_eth: store.networks.cosmoshub.price_eth,
+                                price_btc: store.networks.cosmoshub.price_btc,
+                            }
+                        ]
 
 
                         // Calc liquid tokens
@@ -940,20 +954,13 @@
                         }
 
 
-                        wallet.networks.push({
-                            name: 'cosmoshub',
-                            color: '#2E314B',
-                            address: response.address,
-                            denom: store.networks.cosmoshub.denom,
-                            token_name: store.networks.cosmoshub.token_name,
-                            exponent: store.networks.cosmoshub.exponent,
-                            price: store.prices.find(el => el.symbol == 'ATOM').price,
-                            price_usdt: store.networks.cosmoshub.price_usdt,
-                            price_atom: store.networks.cosmoshub.price_atom,
-                            price_eth: store.networks.cosmoshub.price_eth,
-                            price_btc: store.networks.cosmoshub.price_btc,
-                            total: totals,
-                            balance: {
+                        // Set data in network
+                        let currentNetworkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
+
+                        currentNetworkInWallet.address = response.address,
+                        currentNetworkInWallet.total = totals,
+
+                        currentNetworkInWallet.balance = {
                                 liquid: {
                                     native: response.liquid && response.liquid.native ? response.liquid.native : null,
                                     ibc: response.liquid && response.liquid.ibc ? response.liquid.ibc : null
@@ -966,15 +973,15 @@
                                     if (a.amount < b.amount) { return 1 }
                                     return 0
                                 })
-                            },
-                            totalPrice_usdt: totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
+                            }
 
-                            totalPrice_atom:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
+                        currentNetworkInWallet.totalPrice_usdt = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
 
-                            totalPrice_eth:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
+                        currentNetworkInWallet.totalPrice_atom = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
 
-                            totalPrice_btc:  totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
-                        })
+                        currentNetworkInWallet.totalPrice_eth = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
+
+                        currentNetworkInWallet.totalPrice_btc = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
 
 
                         // Calc total prices

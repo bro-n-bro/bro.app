@@ -122,6 +122,12 @@ export default {
             'network_lock_notice': "It is greyed out and locked because you don't have tokens in this network. To unlock the network and see the analytics delegate tokens to your Bro.",
             'network_lock_notice2': "It is highlighted in white because you have tokens in this network but none of them are delegated to Bro_n_Bro, that's why Network is currently locked. To unlock the network and see the analytics delegate tokens to your Bro.",
 
+            'account_charts_tab1_notice': 'The Stake Management tab shows how many staked, liquid, and unbonding tokens you have in your account, providing a comprehensive view of your current staking activity.',
+            'account_charts_tab2_notice': 'The Liquid Management tab shows all of your liquid tokens for the selected networks, on both Outside and IBC channels, providing a detailed overview of your current holdings.',
+            'account_charts_tab3_notice': 'The Asset Management tab represents all networks and offers a complete view of your entire portfolio',
+            'account_charts_tab4_notice': 'The Network Management tab represents the value of all tokens in your portfolio and provides a complete overview on network level. ',
+            'account_charts_tab5_notice': 'The Account Management tab provides a detailed breakdown of all your linked accounts, offering a complete overview for each.',
+
             'account_balance_notice': "Your account valuation in the chosen currency",
             'account_personal_APR_notice': "Your personal APR, given validators commissions in all displayed networks.",
             'account_RPDE_notice': "Rewards Per Day Estimation. The number of tokens in the chosen currency you earn per day from all displayed networks.",

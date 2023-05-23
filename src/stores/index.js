@@ -241,7 +241,21 @@ export const useGlobalStore = defineStore('global', {
                 this.account.wallets.push({
                     address: this.account.moonPassportOwner.owner,
                     nickname: this.account.moonPassportOwner.extension.nickname,
-                    networks: []
+                    info: {},
+                    networks: [
+                        {
+                            name: 'cosmoshub',
+                            color: '#2E314B',
+                            denom: this.networks.cosmoshub.denom,
+                            token_name: this.networks.cosmoshub.token_name,
+                            exponent: this.networks.cosmoshub.exponent,
+                            price: this.prices.find(el => el.symbol == 'ATOM').price,
+                            price_usdt: this.networks.cosmoshub.price_usdt,
+                            price_atom: this.networks.cosmoshub.price_atom,
+                            price_eth: this.networks.cosmoshub.price_eth,
+                            price_btc: this.networks.cosmoshub.price_btc,
+                        }
+                    ]
                 })
 
                 // Set other wallets
@@ -254,7 +268,21 @@ export const useGlobalStore = defineStore('global', {
                                 this.account.wallets.push({
                                     address: generateAddress('bostrom', address.address),
                                     nickname: address.label,
-                                    networks: []
+                                    info: {},
+                                    networks: [
+                                        {
+                                            name: 'cosmoshub',
+                                            color: '#2E314B',
+                                            denom: this.networks.cosmoshub.denom,
+                                            token_name: this.networks.cosmoshub.token_name,
+                                            exponent: this.networks.cosmoshub.exponent,
+                                            price: this.prices.find(el => el.symbol == 'ATOM').price,
+                                            price_usdt: this.networks.cosmoshub.price_usdt,
+                                            price_atom: this.networks.cosmoshub.price_atom,
+                                            price_eth: this.networks.cosmoshub.price_eth,
+                                            price_btc: this.networks.cosmoshub.price_btc,
+                                        }
+                                    ]
                                 })
                             }
                         }

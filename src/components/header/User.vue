@@ -11,7 +11,12 @@
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </router-link>
+
+        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+            <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
+        </router-link>
         </template>
+
 
         <template v-else>
         <div class="account_link">
@@ -24,11 +29,11 @@
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </div>
-        </template>
 
-        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+        <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
-        </router-link>
+        </div>
+        </template>
     </div>
 </template>
 
