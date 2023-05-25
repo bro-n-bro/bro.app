@@ -87,7 +87,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/proposal/:id',
+		path: '/proposal/:proposal_id',
 		name: 'Proposal',
 		component: () => import('../views/Proposal.vue'),
 		meta: {
@@ -129,6 +129,11 @@ router.beforeEach((to, from, next) => {
 	to.params.network
 		? store.currentNetwork = to.params.network
 		: store.currentNetwork = ''
+
+	// Current proposal
+	to.params.proposal_id
+		? store.proposal_id = to.params.proposal_id
+		: store.proposal_id = ''
 
 
 	// Get currencies price

@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="onSubmit">
-        <input type="text" v-model="name" class="input">
+        <input type="text" v-model="name" class="input" maxlength="16">
 
         <button type="submit" class="submit_btn">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>

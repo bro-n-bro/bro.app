@@ -4,6 +4,8 @@
             <img :src="`/${store.currentNetwork}_logo.png`" alt="">
         </div>
 
+        <!-- <pre>{{ props.proposal }}</pre> -->
+
         <div class="status">
             <div v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="violet">
                 <svg class="icon"><use xlink:href="/sprite.svg#ic_status_deposite"></use></svg>

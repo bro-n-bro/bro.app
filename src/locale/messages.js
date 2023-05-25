@@ -56,6 +56,8 @@ export default {
             'reject_btn': 'Reject',
             'confirm_btn': 'Confirm',
             'agree_sign_btn': 'Agree & Sign',
+            'refresh_btn': 'Refresh',
+            'deposit_btn': 'Deposit',
 
 
             // Main page
@@ -105,6 +107,7 @@ export default {
             'notice_default_account_passport': 'That’s your recently created passport. You can now change the image or download the passport.',
             'notice_default_proposals_page': 'All proposals including proposals in Deposit period can be found on this page.',
             'notice_default_account_page': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
+            'notice_default_proposal_page': 'Detailed overview for the selected proposal.',
 
             'ipfs_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
             'ipfs_not_active_notice': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",
@@ -329,6 +332,20 @@ export default {
             'account_duplicate_ext': 'Duplicate Address',
 
 
+            // Proposal page
+            'proposal_proposer_label': 'Proposer',
+            'proposal_tab1': 'Proposal data',
+            'proposal_tab2': 'Votes',
+            'proposal_desc_title': 'Description',
+            'proposal_deposit_status_title': 'Deposit status',
+            'proposal_details_title': 'Proposal Details',
+            'proposal_details_voting_label': 'Voting Time',
+            'proposal_details_deposit_label': 'Deposit End Time',
+            'proposal_details_submit_label': 'Submit Time',
+            'proposal_details_total_label': 'Total Deposit',
+            'proposal_details_initial_label': 'Initial Deposit',
+
+
             // Add proposal modal
             'add_proposal_modal_title': 'Create Proposal',
             'add_proposal_label_type': 'Choose type',
@@ -371,12 +388,12 @@ export default {
 
 
             // Add address modal
-            'add_address_modal_title': 'Add new address',
+            'add_address_modal_title': 'Add new account',
             'add_address_modal_error_desc': 'To add a new address — select a different Keplr account',
 
             'add_address_modal_step1_name': 'Choose Address',
             'add_address_modal_step2_name': 'Approve Address',
-            'add_address_modal_step3_name': 'Switch the Account',
+            'add_address_modal_step3_name': 'Switch Account',
             'add_address_modal_step4_name': 'Accounts Linked',
 
             'add_address_modal_step1_title': 'Select the address',
@@ -386,6 +403,7 @@ export default {
             'add_address_modal_step5_title': 'Bravo! Congrats!',
 
             'add_address_added_label': 'Added',
+            'add_address_duplicated_label': 'Duplicated',
 
 
             // Filter

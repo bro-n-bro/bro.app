@@ -27,6 +27,7 @@
 		"hc-sticky": "^2.2.7",
 		"html-to-image": "^1.11.11",
 		"ipfs-core": "^0.18.0",
+		"marked": "^5.0.2",
 		"mitt": "^3.0.0",
 		"moment": "^2.29.4",
 		"path": "^0.12.7",

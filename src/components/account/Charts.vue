@@ -560,10 +560,10 @@
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
-    import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js'
+    import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
 
-    ChartJS.register(ArcElement, Tooltip)
+    ChartJS.register(ArcElement)
 
     var store = useGlobalStore(),
         i18n = inject('i18n'),
@@ -690,12 +690,16 @@
                     : chartFifthActiveLegend.value = null
             }
         }),
+
         chartDatasetsFirst = reactive([]),
         chartDatasetsSecond = reactive([]),
         chartDatasetsThird = reactive([]),
         chartDatasetsFourth = reactive([]),
         chartDatasetsFifth = reactive([]),
+
+        chartColorsThird = reactive([]),
         chartColorsFourth = reactive([]),
+
         chartDataFirst = computed(() => ({
             labels: [
                 i18n.global.t('message.account_charts_staked_label'),
@@ -713,6 +717,7 @@
                 cutout: '84%',
             }]
         })),
+
         chartDataSecond = computed(() => ({
             datasets: [{
                 data: chartDatasetsSecond,
@@ -725,18 +730,20 @@
                 cutout: '80%'
             }]
         })),
+
         chartDataThird = computed(() => ({
             datasets: [{
                 data: chartDatasetsThird,
-                backgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                backgroundColor: chartColorsThird,
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
-                hoverBackgroundColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
-                hoverBorderColor: ['#25FF25', '#ED4E33', '#E94A9D', '#F0827D', '#FFB04A', '#0036C1', '#7900E1', '#00646F', '#2E314B', '#F98256', '#F19E22'],
+                hoverBackgroundColor: chartColorsThird,
+                hoverBorderColor: chartColorsThird,
                 borderAlign: 'inner',
                 cutout: '84%',
             }]
         })),
+
         chartDataFourth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFourth,
@@ -749,14 +756,15 @@
                 cutout: '84%',
             }]
         })),
+
         chartDataFifth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFifth,
-                backgroundColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
+                backgroundColor: ['#4B0582', '#550694', '#6B09B7', '#800CDB', '#950FFF', '#A636FF', '#B75DFF', '#C983FF'],
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
-                hoverBackgroundColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
-                hoverBorderColor: ['#950FFF', 'rgb(149, 30, 255)', 'rgb(149, 45, 255)', 'rgb(149, 60, 255)', 'rgb(149, 75, 255)', 'rgb(149, 90, 255)', 'rgb(149, 105, 255)', 'rgb(149, 120, 255)'],
+                hoverBackgroundColor: ['#4B0582', '#550694', '#6B09B7', '#800CDB', '#950FFF', '#A636FF', '#B75DFF', '#C983FF'],
+                hoverBorderColor: ['#4B0582', '#550694', '#6B09B7', '#800CDB', '#950FFF', '#A636FF', '#B75DFF', '#C983FF'],
                 borderAlign: 'inner',
                 cutout: '84%',
             }]
@@ -1033,11 +1041,31 @@
         chartDatasetsSecond.push(currentNetwork.value.total.rewards)
 
         // Set data for third chart
-        currentNetwork.value.balance.groupByDenom.forEach(el => chartDatasetsThird.push(el.amount))
+        currentNetwork.value.balance.groupByDenom.forEach(el => {
+            chartDatasetsThird.push(el.amount)
+
+            let color = store.networkColors[el.symbol]
+
+            if(el.symbol.substring(0, 2) == 'st') {
+                color = store.networkColors.STRD
+            }
+
+            if(el.symbol.substring(0, 3) == 'stk') {
+                color = store.networkColors.XPRT
+            }
+
+            if(el.symbol.substring(0, 1) == 'q') {
+                color = store.networkColors.QCK
+            }
+
+            chartColorsThird.push(color)
+        })
 
         // Set data for fourth chart
-        currentWallet.value.networks.forEach(el => chartDatasetsFourth.push(el.totalPrice_usdt))
-        currentWallet.value.networks.forEach(el => chartColorsFourth.push(el.color))
+        currentWallet.value.networks.forEach(el => {
+            chartDatasetsFourth.push(el.totalPrice_usdt)
+            chartColorsFourth.push(el.color)
+        })
 
         // Set data for fifth chart
         store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))

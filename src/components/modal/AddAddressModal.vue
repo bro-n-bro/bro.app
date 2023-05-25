@@ -68,11 +68,11 @@
                             <div>
                                 <div class="name" :class="{'error': duplicate}">
                                     {{ tempAddressName }}
-                                    <span v-if="duplicate">Duplicated</span>
+                                    <span v-if="duplicate">{{ $t('message.add_address_duplicated_label') }}</span>
                                 </div>
 
                                 <form class="edit_name_form" @submit.prevent="hideEditForm">
-                                    <input type="text" v-model="tempAddressName" class="input" id="temp_name">
+                                    <input type="text" v-model="tempAddressName" class="input" id="temp_name" maxlength="16">
 
                                     <button type="submit" class="submit_btn">
                                         <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
@@ -312,7 +312,7 @@
 
 
 <script setup>
-    import { ref, inject, onBeforeMount, watchEffect } from 'vue'
+    import { ref, inject, onBeforeMount, watchEffect, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
@@ -331,7 +331,7 @@
         signature = ref(''),
         duplicate = ref(false),
         editForm = ref(false),
-        tempAddressName = ref(store.account.userName)
+        tempAddressName = computed(() => store.account.userName)
 
 
     onBeforeMount(() => {

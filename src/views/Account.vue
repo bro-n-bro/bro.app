@@ -56,7 +56,7 @@
         i18n = inject('i18n')
 
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_account_page')
     })

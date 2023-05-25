@@ -274,8 +274,8 @@ button
 .text_block
 {
     color: #f2f2f2;
-    font-size: 14px;
-    line-height: 130%;
+    font-size: 12px;
+    line-height: 120%;
 }
 
 
@@ -296,21 +296,33 @@ button
 }
 
 
-.text_block h2
+.text_block h2,
+.text_block h3,
+.text_block h4,
+.text_block h5,
+.text_block h6
 {
     color: #fff;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 130%;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 100%;
 }
 
 
-.text_block * + h2
+.text_block * + h2,
+.text_block * + h3,
+.text_block * + h4,
+.text_block * + h5,
+.text_block * + h6
 {
     margin-top: 16px;
 }
 
-.text_block h2 + *
+.text_block h2 + *,
+.text_block h3 + *,
+.text_block h4 + *,
+.text_block h5 + *,
+.text_block h6 + *
 {
     margin-top: 0 !important;
 }
@@ -330,7 +342,7 @@ button
 
 .text_block ul li + li
 {
-    margin-top: 4px;
+    margin-top: 8px;
 }
 
 .text_block ul li:before
@@ -350,6 +362,37 @@ button
     background: currentColor;
 }
 
+
+.text_block ol li
+{
+    padding-left: 24px;
+
+    list-style-position: inside;
+}
+
+.text_block ol li + li
+{
+    margin-top: 14px;
+}
+
+
+.text_block a
+{
+    color: #950fff;
+
+    pointer-events: auto;
+}
+
+
+.text_block hr
+{
+    display: block;
+
+    height: 1px;
+
+    border: none;
+    background: rgba(255, 255, 255, .05);
+}
 
 
 /*-----------

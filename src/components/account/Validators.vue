@@ -35,7 +35,8 @@
 
             <div v-for="(wallet, index) in wallets" :key="index" class="item" :class="{'hide': index >= 3 && !showAll}" v-if="wallets.length">
                 <div class="col_account_name">
-                    {{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}
+                    <span v-if="wallet.nickname">{{ wallet.nickname }}</span>
+                    <span v-else>{{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}</span>
                 </div>
 
                 <div class="col_network">
@@ -47,7 +48,7 @@
                 </div>
 
                 <div class="col_validator" @click.prevent="toggleActiveClass">
-                    <div class="logo" v-for="(validator, validators_index) in wallet.validatorsReverse" :key="validators_index">
+                    <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
                         <img :src="validator.mintscan_avatar" alt="">
                     </div>
 
@@ -60,7 +61,7 @@
                     {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
                 </div>
 
-                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
+                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validatorsReverse" :key="validators_index">
                     <div class="col_account_name"></div>
                     <div class="col_network"></div>
 
@@ -156,21 +157,24 @@
                 .then(res => res.json())
                 .then(response => {
                     if(response.validators.length) {
-                        let totalTokens = 0
+                        let totalTokens = 0,
+                            tempArray = response.validators,
+                            nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', currentAddress)).nickname
 
                         // Calc total totalTokens
                         response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
                         // Sort and set
                         wallets.push({
+                            nickname,
                             address: currentAddress,
                             totalTokens,
                             validators: response.validators.sort((a, b) => {
-                                if (a.coin.amount > b.coin.amount) { return -1 }
-                                if (a.coin.amount < b.coin.amount) { return 1 }
+                                if (a.coin.amount > b.coin.amount) { return 1 }
+                                if (a.coin.amount < b.coin.amount) { return -1 }
                                 return 0
                             }),
-                            validatorsReverse: response.validators.sort((a, b) => {
+                            validatorsReverse: tempArray.sort((a, b) => {
                                 if (a.coin.amount > b.coin.amount) { return 1 }
                                 if (a.coin.amount < b.coin.amount) { return -1 }
                                 return 0
@@ -476,6 +480,7 @@
         overflow: hidden;
 
         width: 24px;
+        min-width: 24px;
         height: 24px;
 
         border: 1px solid #0d0d0d;

@@ -61,7 +61,23 @@
                     <div class="loader"><span></span></div>
                 </div>
 
-                <div class="val" v-else>{{ $filters.toFixed(data.rpde, 5) }}</div>
+                <div class="val" v-else>
+                    <template v-if="store.currency == 'USDT'">
+                    {{ $filters.toFixed(data.RPDE_USDT, 5) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ATOM'">
+                    {{ $filters.toFixed(data.RPDE_ATOM, 5) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ETH'">
+                    {{ $filters.toFixed(data.RPDE_ETH, 7) }}
+                    </template>
+
+                    <template v-if="store.currency == 'BTC'">
+                    {{ $filters.toFixed(data.RPDE_BTC, 7) }}
+                    </template>
+                </div>
             </div>
         </div>
     </section>
@@ -112,12 +128,18 @@
 
                 // Calc wallet info
                 wallet.info.voting_power = 0
-                wallet.info.RPDE = 0
+                wallet.info.RPDE_USDT = 0
+                wallet.info.RPDE_BTC = 0
+                wallet.info.RPDE_ETH = 0
+                wallet.info.RPDE_ATOM = 0
 
                 for (const network of wallet.networks) {
-
                     wallet.info.voting_power += network.info.voting_power
-                    wallet.info.RPDE += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * network.info.rpde.price
+
+                    wallet.info.RPDE_USDT += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * network.info.rpde.price
+                    wallet.info.RPDE_BTC += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.BTC_price)
+                    wallet.info.RPDE_ETH += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.ETH_price)
+                    wallet.info.RPDE_ATOM += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.ATOM_price)
                 }
             } catch (error) {
                 console.log(error)
@@ -127,45 +149,39 @@
 
         // Calc account info
         store.account.info.voting_power = 0
-        store.account.info.RPDE = 0
+        store.account.info.RPDE_USDT = 0
+        store.account.info.RPDE_BTC = 0
+        store.account.info.RPDE_ETH = 0
+        store.account.info.RPDE_ATOM = 0
 
         for (const wallet of store.account.wallets) {
             store.account.info.voting_power += wallet.voting_power
-            store.account.info.RPDE += wallet.RPDE
+
+            store.account.info.RPDE_USDT += wallet.RPDE_USDT
+            store.account.info.RPDE_BTC += wallet.RPDE_BTC
+            store.account.info.RPDE_ETH += wallet.RPDE_ETH
+            store.account.info.RPDE_ATOM += wallet.RPDE_ATOM
         }
 
 
         // Set current data
-        let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet),
-            currentNetwork = currentWallet.networks.find(network => network.name == 'cosmoshub')
+        let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+        let currentNetwork = currentWallet.networks.find(network => network.name == 'cosmoshub')
 
         if(store.currentWallet != 'all') {
             data.value = {
                 apr: currentNetwork.info.apr,
                 voting_power: currentWallet.info.voting_power,
-                rpde: currentWallet.info.RPDE
+                RPDE_USDT: currentWallet.info.RPDE_USDT,
+                RPDE_BTC: currentWallet.info.RPDE_BTC,
+                RPDE_ETH: currentWallet.info.RPDE_ETH,
+                RPDE_ATOM: currentWallet.info.RPDE_ATOM
             }
         }
 
 
         // Hide loader
         loading.value = false
-
-        // let currentAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, wallet.address)
-
-        // try {
-        //     await fetch(`https://rpc.bronbro.io/account/account_info/${currentAddress}`)
-        //         .then(res => res.json())
-        //         .then(response => {
-        //             // Set data
-        //             data.value = response
-
-        //             // Hide loader
-        //             loading.value = false
-        //         })
-        // } catch (error) {
-        //     console.log(error)
-        // }
     }
 </script>
 

@@ -25,7 +25,7 @@
             </div></div>
 
             <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
-            <div><div class="item" v-if="item.address.substring(0, 2) != '0x'"
+            <div><div class="item" v-if="item.address.substring(0, 2) != '0x' || item.address.substring(0, 5) != 'terra'"
                 @click.self="selectWallet(item.address)"
                 :class="{
                     'duplicate': isDuplicate(item.address),

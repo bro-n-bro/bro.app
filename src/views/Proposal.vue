@@ -1,5 +1,9 @@
 <template>
-    <section class="proposal_info">
+    <div class="loader_wrap" v-if="loading">
+        <div class="loader"><span></span></div>
+    </div>
+
+    <section class="proposal_info" v-else>
         <div class="cont middle">
             <div class="back_btn">
                 <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all'" class="btn">
@@ -7,95 +11,157 @@
                 </router-link>
             </div>
 
+            <!-- <pre>{{ proposal }}</pre> -->
+
             <div class="row">
                 <div class="data">
                     <div class="head">
-                        <div class="status green">
+                        <div v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="status violet">
+                            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_deposite"></use></svg>
+                            <span>{{ $t('message.account_proposals_status_deposite') }}</span>
+                        </div>
+
+                        <div v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="status blue">
+                            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_voting"></use></svg>
+                            <span>{{ $t('message.account_proposals_status_voting') }}</span>
+                        </div>
+
+                        <div v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'" class="status green">
                             <svg class="icon"><use xlink:href="/sprite.svg#ic_status_passed"></use></svg>
-                            <span>Passed</span>
+                            <span>{{ $t('message.account_proposals_status_passed') }}</span>
+                        </div>
+
+                        <div v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="status red">
+                            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_rejected"></use></svg>
+                            <span>{{ $t('message.account_proposals_status_rejected') }}</span>
                         </div>
 
                         <div class="type">
-                            <svg class="icon"><use :xlink:href="`/sprite.svg#ic_proposal_Text`"></use></svg>
-                            <span>Text</span>
+                            <svg class="icon"><use :xlink:href="`/sprite.svg#ic_proposal_${proposal.proposal_type}`"></use></svg>
+                            <span>{{ proposal.proposal_type }}</span>
                         </div>
 
                         <div class="name">
                             <div class="logo">
-                                <img src="/juno_logo.png" alt="">
+                                <img :src="`/${proposal.network}_logo.png`" alt="">
                             </div>
 
-                            <div class="number">#271</div>
+                            <div class="number">#{{ proposal.id }}</div>
 
-                            <div>CORRECTED: Make JUNO Carbon Neutral by Purchasing </div>
+                            <div>{{ proposal.title }}</div>
                         </div>
 
                         <div class="proposer">
-                            <div>Eco-Credits</div>
-
-                            <div class="address">
-                                <span>Proposer:</span>
-                                <a href="/" target="_blank" rel="noopener nofollow">juno13zsvgc24x5rg5ey06ext4rfu4huq0e9v5stf59</a>
-                            </div>
+                            <span>{{ $t('message.proposal_proposer_label') }}:</span>
+                            <a href="/" target="_blank" rel="noopener nofollow">{{ proposal.proposer_address }}</a>
                         </div>
                     </div>
 
                     <div class="tabs">
                         <div class="row">
-                            <button class="btn active">Proposal data</button>
-                            <button class="btn">Votes</button>
+                            <button class="btn active">{{ $t('message.proposal_tab1') }}</button>
+                            <button class="btn">{{ $t('message.proposal_tab2') }}</button>
                         </div>
                     </div>
 
                     <div>
-                        <div class="description">
+                        <div class="description" :class="{'active': showDescription}" @click.self="showDescription = !showDescription">
+                            <div class="title">{{ $t('message.proposal_desc_title') }}</div>
 
+                            <div class="text_block" v-html="parseMarkdown(proposal.description)"></div>
+
+                            <div class="icon">
+                                <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="info">
                     <div class="sticky">
-                        <div class="current_vote">
+                        <div class="current_vote" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <div class="label">Your current vote:</div>
 
                             <div class="val green">Yes</div>
                         </div>
 
-                        <div class="vote">
+
+                        <div class="vote" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <button class="btn green">Yes</button>
                             <button class="btn yellow">No</button>
                             <button class="btn red">No with veto</button>
                             <button class="btn grey">Abstain</button>
                         </div>
 
+
+                        <div class="deposit_status" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                            <div class="title">
+                                {{ $t('message.proposal_deposit_status_title') }}
+
+                                <button class="refresh_btn">
+                                    <svg class="icon"><use xlink:href="/sprite.svg#ic_refresh"></use></svg>
+                                    <span>{{ $t('message.refresh_btn') }}</span>
+                                </button>
+                            </div>
+
+                            <div class="chart">
+                                <div class="percents">
+                                    {{ $filters.toFixed(store.networks[proposal.network].proposal_need / (proposal.deposit / store.networks[proposal.network].exponent) * 100, 2) }}%
+                                </div>
+                                <Doughnut :data="depositChartData" :options="depositChartOptions" />
+                            </div>
+
+                            <button class="deposit_btn">
+                                {{ $t('message.deposit_btn') }}
+                            </button>
+                        </div>
+
+
                         <div class="details">
-                            <div class="title">Proposal Details</div>
+                            <div class="title">{{ $t('message.proposal_details_title') }}</div>
 
                             <div class="row">
                                 <div class="item">
-                                    <div class="label">Voting Time</div>
-                                    <div class="val">3D:12H:22M:54S</div>
+                                    <div class="label">{{ $t('message.proposal_details_deposit_label') }}</div>
+
+                                    <div class="val">
+                                        <vue-countdown :time="dateCalc(proposal.deposit_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
+                                            {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
+                                        </vue-countdown>
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="label">Submit Time</div>
-                                    <div class="val">2D:5H:22M:54S</div>
+                                    <div class="label">{{ $t('message.proposal_details_submit_label') }}</div>
+
+                                    <div class="val">
+                                        {{ proposal.submit_time }}
+                                        <!-- <timeago :datetime="dateCalc(proposal.submit_time)" autoUpdate /> -->
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="label">Total Deposit</div>
-                                    <div class="val">1,060 JUNO</div>
+                                    <div class="label">{{ $t('message.proposal_details_total_label') }}</div>
+
+                                    <div class="val">
+                                        {{ proposal.deposit / store.networks[proposal.network].exponent }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="label">Initial Deposit</div>
-                                    <div class="val">200 JUNO</div>
+                                    <div class="label">{{ $t('message.proposal_details_initial_label') }}</div>
+
+                                    <div class="val">
+                                        {{ proposal.init_deposit / store.networks[proposal.network].exponent }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="vote_info">
+
+                        <div class="vote_info" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <div class="head">
                                 <div class="title">Vote details</div>
 
@@ -118,7 +184,8 @@
                             <div class="exp">Minimum of staked 80,606,158.088430 ATOM (40%) need to vote for this proposal to pass</div>
                         </div>
 
-                        <div class="vote_result">
+
+                        <div class="vote_result" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <div class="row">
                                 <div class="item">
                                     <div class="val green">Yes 34%</div>
@@ -162,19 +229,112 @@
 
 
 <script setup>
-import { onMounted } from 'vue'
+    import { onMounted, onBeforeMount, inject, ref, reactive, computed } from 'vue'
+    import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
     import hcSticky from 'hc-sticky'
 
-    const router = useRouter()
+    import { Chart as ChartJS, ArcElement } from 'chart.js'
+    import { Doughnut } from 'vue-chartjs'
+
+    import { marked } from 'marked'
+
+    ChartJS.register(ArcElement)
 
 
-    onMounted(async () => {
+    const store = useGlobalStore(),
+        router = useRouter(),
+        i18n = inject('i18n'),
+        loading = ref(true),
+        showDescription = ref(false),
+        proposal = ref({}),
+        userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
+        depositChartOptions = reactive({
+            responsive: true,
+            plugins: {
+                legend: false,
+                tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
+            }
+        }),
+        depositChartDatasets = reactive([]),
+        depositChartData = computed(() => ({
+            datasets: [{
+                data: depositChartDatasets,
+                backgroundColor: ['#950FFF', '#353535'],
+                borderColor: 'transparent',
+                borderWidth: 0,
+                hoverBackgroundColor: ['#950FFF', '#353535'],
+                hoverBorderColor: ['#950FFF', '#353535'],
+                borderAlign: 'inner',
+                cutout: '84%'
+            }]
+        }))
+
+
+    onBeforeMount(async () => {
+        // Set default notification
+        store.tooltip = i18n.global.t('message.notice_default_proposal_page')
+
+        // Set loader
+        loading.value = true
+
+        // Get proposal data
+        try {
+            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.proposal_id}`)
+                .then(res => res.json())
+                .then(response => {
+                    proposal.value = response
+
+                    // Set deposit chart datasets
+                    if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+                        let remnant = store.networks[proposal.value.network].proposal_need - proposal.value.deposit
+
+                        depositChartDatasets.push(proposal.value.deposit)
+
+                        if(remnant > 0) {
+                            depositChartDatasets.push(remnant)
+                        }
+                    }
+
+                    // Hide loader
+                    loading.value = false
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+
+    onMounted(() => {
         // Sticky element
         let stickyElements = document.querySelectorAll('.sticky')
 
         stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
     })
+
+
+    // Date calc
+    function dateCalc(date) {
+        let currentDate = new Date(date)
+
+        return new Date(currentDate.setHours(currentDate.getHours() + userTimeZone))
+    }
+
+
+    // Parse markdown
+    function parseMarkdown(data) {
+        return marked.parse(data)
+    }
 </script>
 
 
@@ -219,6 +379,17 @@ import { onMounted } from 'vue'
     .back_btn .btn:hover
     {
         background: #950fff;
+    }
+
+
+    .validators .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        padding: 0;
+
+        background: none;
     }
 
 
@@ -269,6 +440,27 @@ import { onMounted } from 'vue'
         color: #1bc562;
 
         background: rgba(27, 197, 98, .05);
+    }
+
+    .data .head .status.blue
+    {
+        color: #0343e8;
+
+        background: rgba(3, 67, 232, .05);
+    }
+
+    .data .head .status.violet
+    {
+        color: #950fff;
+
+        background: rgba(149, 15, 255, .05);
+    }
+
+    .data .head .status.red
+    {
+        color: #eb5757;
+
+        background: rgba(235, 87, 87, .05);
     }
 
     .data .head .status .icon
@@ -372,15 +564,6 @@ import { onMounted } from 'vue'
 
     .data .head .proposer
     {
-        font-size: 32px;
-        font-weight: 500;
-        line-height: 120%;
-
-        margin-top: 8px;
-    }
-
-    .data .head .proposer .address
-    {
         color: #555;
         font-size: 14px;
         font-weight: 500;
@@ -396,7 +579,7 @@ import { onMounted } from 'vue'
         flex-wrap: wrap;
     }
 
-    .data .head .proposer .address a
+    .data .head .proposer a
     {
         color: #950fff;
 
@@ -456,10 +639,101 @@ import { onMounted } from 'vue'
 
     .data .description
     {
+        position: relative;
+
+        overflow: hidden;
+
+        height: 128px;
         padding: 16px;
+
+        transition: height .2s linear;
 
         border-radius: 10px;
         background: #191919;
+    }
+
+    .data .description:after
+    {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+
+        background:    -moz-linear-gradient(top,  rgba(25,25,25,0) 0%, rgba(25,25,25,1) 100%);
+        background: -webkit-linear-gradient(top,  rgba(25,25,25,0) 0%,rgba(25,25,25,1) 100%);
+        background:         linear-gradient(to bottom,  rgba(25,25,25,0) 0%,rgba(25,25,25,1) 100%);
+    }
+
+
+    .data .description .title
+    {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 100%;
+
+        margin-bottom: 16px;
+
+        pointer-events: none;
+    }
+
+    .data .description .text_block
+    {
+        width: calc(100% - 48px);
+
+        pointer-events: none;
+    }
+
+
+    .data .description .icon
+    {
+        position: absolute;
+        z-index: 3;
+        top: 48px;
+        right: 16px;
+
+        display: flex;
+
+        width: 32px;
+        height: 32px;
+
+        pointer-events: none;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .data .description .icon svg
+    {
+        display: block;
+
+        width: 32px;
+        height: 32px;
+
+        transition: transform .2s linear;
+    }
+
+
+    .data .description.active
+    {
+        height: auto;
+    }
+
+    .data .description.active:after
+    {
+        display: none;
+    }
+    .data .description.active .icon svg
+    {
+        transform: rotate(-180deg);
     }
 
 
@@ -538,6 +812,64 @@ import { onMounted } from 'vue'
     .info .vote .btn.red
     {
         background: #eb5757;
+    }
+
+
+    .info .deposit_status .title
+    {
+        font-weight: 500;
+        line-height: 100%;
+
+        display: flex;
+
+        margin-bottom: 16px;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .info .refresh_btn
+    {
+        color: #950fff;
+        font-size: 14px;
+        line-height: 20px;
+
+        display: flex;
+
+        margin-left: auto;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .info .refresh_btn .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+    }
+
+
+    .info .deposit_btn
+    {
+        font-size: 14px;
+        line-height: 100%;
+
+        display: block;
+
+        width: 100%;
+        margin-top: 16px;
+        padding: 8px;
+
+        border-radius: 10px;
+        background: #950fff;
     }
 
 
@@ -633,13 +965,35 @@ import { onMounted } from 'vue'
     }
 
 
-    .info .vote_info .chart
+    .info .chart
     {
         position: relative;
 
         width: 200px;
         height: 200px;
-        margin: 0 auto 16px;
+        margin: 0 auto;
+    }
+
+
+    .info .chart .percents
+    {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 100%;
+
+        position: absolute;
+
+        display: flex;
+
+        width: 100%;
+        height: 100%;
+
+        text-align: center;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 
