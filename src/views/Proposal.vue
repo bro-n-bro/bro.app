@@ -11,7 +11,8 @@
                 </router-link>
             </div>
 
-            <!-- <pre>{{ proposal }}</pre> -->
+            <!-- <pre>{{ proposal }}</pre>
+            <pre>{{ currentVote }}</pre> -->
 
             <div class="row">
                 <div class="data">
@@ -53,7 +54,14 @@
 
                         <div class="proposer">
                             <span>{{ $t('message.proposal_proposer_label') }}:</span>
-                            <a href="/" target="_blank" rel="noopener nofollow">{{ proposal.proposer_address }}</a>
+
+                            <a :href="`https://www.mintscan.io/${store.networks[proposal.network].mintscanAlias}/validators/${proposal.proposer_address}`" target="_blank" rel="noopener nofollow" v-if="proposal.moniker">
+                                {{ proposal.moniker }}
+                            </a>
+
+                            <a :href="`https://www.mintscan.io/${store.networks[proposal.network].mintscanAlias}/account/${proposal.proposer_address}`" target="_blank" rel="noopener nofollow" v-else>
+                                {{ proposal.proposer_address }}
+                            </a>
                         </div>
                     </div>
 
@@ -80,13 +88,25 @@
                 <div class="info">
                     <div class="sticky">
                         <div class="current_vote" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-                            <div class="label">Your current vote:</div>
+                            <div class="label">{{ $t('message.proposal_current_vote_title') }}</div>
 
-                            <div class="val green">Yes</div>
+                            <template v-if="currentVote.votes.length">
+                                <template v-if="currentVote.votes[0].option == 'VOTE_OPTION_YES'">
+                                <div class="val green">{{ $t('message.proposal_vote_result_yes_label') }}</div>
+                                </template>
+
+                                <template v-if="currentVote.votes[0].option == 'VOTE_OPTION_NO'">
+                                    <div class="val yellow">{{ $t('message.proposal_vote_result_no_label') }}</div>
+                                </template>
+
+                                <template v-if="currentVote.votes[0].option == 'VOTE_OPTION_NO_WITH_VETO'">
+                                    <div class="val red">{{ $t('message.proposal_vote_result_nwv_label') }}</div>
+                                </template>
+                            </template>
                         </div>
 
 
-                        <div class="vote" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                        <div class="vote" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
                             <button class="btn green">Yes</button>
                             <button class="btn yellow">No</button>
                             <button class="btn red">No with veto</button>
@@ -98,7 +118,7 @@
                             <div class="title">
                                 {{ $t('message.proposal_deposit_status_title') }}
 
-                                <button class="refresh_btn">
+                                <button class="refresh_btn" @click.prevent="refreshProposalData">
                                     <svg class="icon"><use xlink:href="/sprite.svg#ic_refresh"></use></svg>
                                     <span>{{ $t('message.refresh_btn') }}</span>
                                 </button>
@@ -106,9 +126,11 @@
 
                             <div class="chart">
                                 <div class="percents">
-                                    {{ $filters.toFixed(store.networks[proposal.network].proposal_need / (proposal.deposit / store.networks[proposal.network].exponent) * 100, 2) }}%
+                                    <span v-if="store.networks[proposal.network].proposal_need <= (proposal.deposit / store.networks[proposal.network].exponent)">100%</span>
+                                    <span v-else>{{ $filters.toFixed(store.networks[proposal.network].proposal_need / (proposal.deposit / store.networks[proposal.network].exponent) * 100, 2) }}%</span>
                                 </div>
-                                <Doughnut :data="depositChartData" :options="depositChartOptions" />
+
+                                <Doughnut :data="chartData" :options="chartOptions" />
                             </div>
 
                             <button class="deposit_btn">
@@ -121,13 +143,24 @@
                             <div class="title">{{ $t('message.proposal_details_title') }}</div>
 
                             <div class="row">
-                                <div class="item">
+                                <div class="item" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                                     <div class="label">{{ $t('message.proposal_details_deposit_label') }}</div>
 
                                     <div class="val">
                                         <vue-countdown :time="dateCalc(proposal.deposit_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
                                             {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
                                         </vue-countdown>
+                                    </div>
+                                </div>
+
+                                <div class="item" v-else>
+                                    <div class="label">{{ $t('message.proposal_details_voting_label') }}</div>
+
+                                    <div class="val">
+                                        {{ proposal.voting_end_time }}
+                                        <!-- <vue-countdown :time="dateCalc(proposal.voting_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
+                                            {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
+                                        </vue-countdown> -->
                                     </div>
                                 </div>
 
@@ -163,60 +196,104 @@
 
                         <div class="vote_info" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <div class="head">
-                                <div class="title">Vote details</div>
+                                <div class="title">{{ $t('message.proposal_vote_details_title') }}</div>
 
-                                <button class="refresh_btn">
+                                <button class="refresh_btn" @click.prevent="refreshProposalData">
                                     <svg class="icon"><use xlink:href="/sprite.svg#ic_refresh"></use></svg>
-                                    <span>Refresh</span>
+                                    <span>{{ $t('message.refresh_btn') }}</span>
                                 </button>
                             </div>
 
                             <div class="chart">
+                                <div class="final_status">
+                                    <div class="label">Final Status:</div>
 
+                                    <div class="val green" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'">Passed</div>
+                                    <div class="val red" v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'">Rejected</div>
+                                </div>
+
+                                <Doughnut :data="chartData" :options="chartOptions" />
                             </div>
 
                             <div class="row">
-                                <div class="turnout">Turnout: 34%</div>
+                                <div class="turnout">
+                                    {{ $t('message.proposal_vote_info_turnout_label') }}: 34%
+                                </div>
 
-                                <div class="total">Total Vote: 45</div>
+                                <div class="total">
+                                    {{ $t('message.proposal_vote_info_total_vote_label') }}:
+                                    {{ (proposal.VOTE_OPTION_YES + proposal.VOTE_OPTION_NO + proposal.VOTE_OPTION_NO_WITH_VETO + proposal.VOTE_OPTION_ABSTAIN).toLocaleString()  }}
+                                </div>
                             </div>
 
-                            <div class="exp">Minimum of staked 80,606,158.088430 ATOM (40%) need to vote for this proposal to pass</div>
+                            <div class="exp">{{ $t('message.proposal_vote_info_minimum') }}</div>
                         </div>
 
 
                         <div class="vote_result" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                             <div class="row">
                                 <div class="item">
-                                    <div class="val green">Yes 34%</div>
+                                    <div class="val green">
+                                        {{ $t('message.proposal_vote_result_yes_label') }} {{ getProgressPercents(proposal.tally_yes) }}%
+                                    </div>
 
-                                    <div class="tokens_count">60,735,207.69 ATOM</div>
+                                    <div class="tokens_count">
+                                        {{ Number($filters.toFixed(proposal.tally_yes / store.networks[proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
 
-                                    <div class="votes_count">12,000 votes</div>
+                                    <div class="votes_count">
+                                        {{ proposal.VOTE_OPTION_YES.toLocaleString('en-US') }}
+                                        {{ $t('message.proposal_vote_result_votes_label') }}
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="val yellow">no 37.16%</div>
+                                    <div class="val yellow">
+                                        {{ $t('message.proposal_vote_result_no_label') }} {{ getProgressPercents(proposal.tally_no) }}%
+                                    </div>
 
-                                    <div class="tokens_count">60,735,207.69 ATOM</div>
+                                    <div class="tokens_count">
+                                        {{ Number($filters.toFixed(proposal.tally_no / store.networks[proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
 
-                                    <div class="votes_count">12,000 votes</div>
+                                    <div class="votes_count">
+                                        {{ proposal.VOTE_OPTION_NO.toLocaleString('en-US') }}
+                                        {{ $t('message.proposal_vote_result_votes_label') }}
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="val red">nwv 0.17%</div>
+                                    <div class="val red">
+                                        {{ $t('message.proposal_vote_result_nwv_label') }} {{ getProgressPercents(proposal.tally_no_with_veto) }}%
+                                    </div>
 
-                                    <div class="tokens_count">60,735,207.69 ATOM</div>
+                                    <div class="tokens_count">
+                                        {{ Number($filters.toFixed(proposal.tally_no_with_veto / store.networks[proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
 
-                                    <div class="votes_count">12,000 votes</div>
+                                    <div class="votes_count">
+                                        {{ proposal.VOTE_OPTION_NO_WITH_VETO.toLocaleString('en-US') }}
+                                        {{ $t('message.proposal_vote_result_votes_label') }}
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                    <div class="val">abstain 26.73%</div>
+                                    <div class="val">
+                                        {{ $t('message.proposal_vote_result_abstain_label') }} {{ getProgressPercents(proposal.tally_abstain) }}%
+                                    </div>
 
-                                    <div class="tokens_count">60,735,207.69 ATOM</div>
+                                    <div class="tokens_count">
+                                        {{ Number($filters.toFixed(proposal.tally_abstain / store.networks[proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                                        {{ store.networks[proposal.network].token_name }}
+                                    </div>
 
-                                    <div class="votes_count">12,000 votes</div>
+                                    <div class="votes_count">
+                                        {{ proposal.VOTE_OPTION_ABSTAIN.toLocaleString('en-US') }}
+                                        {{ $t('message.proposal_vote_result_votes_label') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -233,6 +310,8 @@
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
     import hcSticky from 'hc-sticky'
+    import { fromBech32, toBech32 } from '@cosmjs/encoding'
+    import { generateAddress } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -248,8 +327,9 @@
         loading = ref(true),
         showDescription = ref(false),
         proposal = ref({}),
+        currentVote = ref({ votes: [] }),
         userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
-        depositChartOptions = reactive({
+        chartOptions = reactive({
             responsive: true,
             plugins: {
                 legend: false,
@@ -266,15 +346,17 @@
                 }
             }
         }),
-        depositChartDatasets = reactive([]),
-        depositChartData = computed(() => ({
+        chartColors = ['#1BC562', '#C5811B', '#EB5757', '#888888'],
+        depositChartColors = ['#950FFF', '#353535'],
+        chartDatasets = reactive([]),
+        chartData = computed(() => ({
             datasets: [{
-                data: depositChartDatasets,
-                backgroundColor: ['#950FFF', '#353535'],
+                data: chartDatasets,
+                backgroundColor: proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD' ? depositChartColors : chartColors,
                 borderColor: 'transparent',
                 borderWidth: 0,
-                hoverBackgroundColor: ['#950FFF', '#353535'],
-                hoverBorderColor: ['#950FFF', '#353535'],
+                hoverBackgroundColor: proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD' ? depositChartColors : chartColors,
+                hoverBorderColor: proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD' ? depositChartColors : chartColors,
                 borderAlign: 'inner',
                 cutout: '84%'
             }]
@@ -289,29 +371,7 @@
         loading.value = true
 
         // Get proposal data
-        try {
-            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.proposal_id}`)
-                .then(res => res.json())
-                .then(response => {
-                    proposal.value = response
-
-                    // Set deposit chart datasets
-                    if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
-                        let remnant = store.networks[proposal.value.network].proposal_need - proposal.value.deposit
-
-                        depositChartDatasets.push(proposal.value.deposit)
-
-                        if(remnant > 0) {
-                            depositChartDatasets.push(remnant)
-                        }
-                    }
-
-                    // Hide loader
-                    loading.value = false
-                })
-        } catch (error) {
-            console.log(error)
-        }
+        await getProposalData()
     })
 
 
@@ -321,6 +381,72 @@
 
         stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
     })
+
+
+    // Get proposal data
+    async function getProposalData() {
+        try {
+            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.proposal_id}`)
+                .then(res => res.json())
+                .then(async response => {
+                    proposal.value = response
+
+                    // Set chart datasets
+                    if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+                        let remnant = store.networks[proposal.value.network].proposal_need - proposal.value.deposit
+
+                        chartDatasets.push(proposal.value.deposit)
+
+                        if(remnant > 0) {
+                            chartDatasets.push(remnant)
+                        }
+                    }
+
+                    chartDatasets.push(proposal.value.tally_yes)
+                    chartDatasets.push(proposal.value.tally_no)
+                    chartDatasets.push(proposal.value.tally_no_with_veto)
+                    chartDatasets.push(proposal.value.tally_abstain)
+
+                    // Get valoper moniker
+                    let valoperAddress = toBech32(store.networks[proposal.value.network].address_prefix + 'valoper', fromBech32(proposal.value.proposer_address).data)
+
+                    try {
+                        await fetch(`https://rpc.bronbro.io/validators?address=${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}&proposal_id=${proposal.value.id}`)
+                            .then(res => res.json())
+                            .then(validator => proposal.value.moniker = validator.moniker)
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    // Get user current vote
+                    try {
+                        await fetch(`https://rpc.bronbro.io/account/votes/${valoperAddress}`)
+                            .then(res => res.json())
+                            .then(vote => currentVote.value = vote)
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    // Hide loader
+                    loading.value = false
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    // Refresh proposal data
+    async function refreshProposalData() {
+        // Set loader
+        loading.value = true
+
+        // Clear data
+        depositChartDatasets.length = 0
+
+        // Get proposal data
+        await getProposalData()
+    }
 
 
     // Date calc
@@ -334,6 +460,14 @@
     // Parse markdown
     function parseMarkdown(data) {
         return marked.parse(data)
+    }
+
+
+    // Get progress percents with abstain
+    function getProgressPercents(value) {
+        let sum = proposal.value.tally_abstain + proposal.value.tally_no + proposal.value.tally_no_with_veto + proposal.value.tally_yes
+
+        return (value / sum * 100).toFixed(2)
     }
 </script>
 
@@ -646,6 +780,7 @@
         height: 128px;
         padding: 16px;
 
+        cursor: pointer;
         transition: height .2s linear;
 
         border-radius: 10px;
@@ -725,6 +860,8 @@
     .data .description.active
     {
         height: auto;
+
+        cursor: auto;
     }
 
     .data .description.active:after
@@ -997,12 +1134,64 @@
     }
 
 
+    .info .chart .final_status
+    {
+        position: absolute;
+
+        display: flex;
+
+        width: 100%;
+        height: 100%;
+
+        text-align: center;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .info .chart .final_status .label
+    {
+        color: #555;
+        font-size: 14px;
+        line-height: 17px;
+
+        width: 100%;
+    }
+
+    .info .chart .final_status .val
+    {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 100%;
+
+        width: 100%;
+    }
+
+    .info .chart .final_status .val.green
+    {
+        color: #1bc562;
+    }
+
+    .info .chart .final_status .val.yellow
+    {
+        color: #c5811b;
+    }
+
+    .info .chart .final_status .val.red
+    {
+        color: #eb5757;
+    }
+
+
     .info .vote_info .turnout
     {
         color: #eb5757;
         font-size: 12px;
         line-height: 15px;
 
+        margin-top: 16px;
         padding: 7px;
 
         border: 1px solid;
@@ -1016,6 +1205,7 @@
         font-size: 12px;
         line-height: 15px;
 
+        margin-top: 16px;
         margin-left: auto;
         padding: 7px;
 
@@ -1067,11 +1257,6 @@
 
         border-top: 1px solid rgba(255, 255, 255, .05);
     }
-
-
-
-
-
 
     .info .vote_result .row
     {

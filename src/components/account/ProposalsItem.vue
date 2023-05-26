@@ -172,7 +172,7 @@
     }
 
 
-    // Get progress percents
+    // Get progress percents with abstain
     function getProgressPercentsWithAbstain(value) {
         let sum = props.proposal.tally_abstain + props.proposal.tally_no + props.proposal.tally_no_with_veto + props.proposal.tally_yes
 

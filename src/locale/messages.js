@@ -337,13 +337,26 @@ export default {
             'proposal_tab1': 'Proposal data',
             'proposal_tab2': 'Votes',
             'proposal_desc_title': 'Description',
+            'proposal_current_vote_title': 'Your current vote:',
             'proposal_deposit_status_title': 'Deposit status',
             'proposal_details_title': 'Proposal Details',
-            'proposal_details_voting_label': 'Voting Time',
+            'proposal_vote_details_title': 'Vote details',
+
+            'proposal_details_voting_label': 'Voting End Time',
             'proposal_details_deposit_label': 'Deposit End Time',
             'proposal_details_submit_label': 'Submit Time',
             'proposal_details_total_label': 'Total Deposit',
             'proposal_details_initial_label': 'Initial Deposit',
+
+            'proposal_vote_info_turnout_label': 'Turnout',
+            'proposal_vote_info_total_vote_label': 'Total Vote',
+            'proposal_vote_info_minimum': 'Minimum of staked 80,606,158.088430 ATOM (40%) need to vote for this proposal to pass',
+
+            'proposal_vote_result_yes_label': 'yes',
+            'proposal_vote_result_no_label': 'no',
+            'proposal_vote_result_nwv_label': 'nwv',
+            'proposal_vote_result_abstain_label': 'abstain',
+            'proposal_vote_result_votes_label': 'votes',
 
 
             // Add proposal modal
