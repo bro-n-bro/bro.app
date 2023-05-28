@@ -400,12 +400,12 @@
                         if(remnant > 0) {
                             chartDatasets.push(remnant)
                         }
+                    } else {
+                        chartDatasets.push(proposal.value.tally_yes)
+                        chartDatasets.push(proposal.value.tally_no)
+                        chartDatasets.push(proposal.value.tally_no_with_veto)
+                        chartDatasets.push(proposal.value.tally_abstain)
                     }
-
-                    chartDatasets.push(proposal.value.tally_yes)
-                    chartDatasets.push(proposal.value.tally_no)
-                    chartDatasets.push(proposal.value.tally_no_with_veto)
-                    chartDatasets.push(proposal.value.tally_abstain)
 
                     // Get valoper moniker
                     let valoperAddress = toBech32(store.networks[proposal.value.network].address_prefix + 'valoper', fromBech32(proposal.value.proposer_address).data)

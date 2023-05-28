@@ -120,10 +120,13 @@
                 await fetch(`https://rpc.bronbro.io/account/account_info/${cosmosHubAddress}`)
                     .then(res => res.json())
                     .then(response => {
-                         // Set network info
+                        // Set network info
                         let currentNetworkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
 
                         currentNetworkInWallet.info = response
+
+                        // Set current data
+                        data.value.apr = response.apr
                     })
 
                 // Calc wallet info
@@ -166,18 +169,12 @@
 
         // Set current data
         let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
-        let currentNetwork = currentWallet.networks.find(network => network.name == 'cosmoshub')
 
-        if(store.currentWallet != 'all') {
-            data.value = {
-                apr: currentNetwork.info.apr,
-                voting_power: currentWallet.info.voting_power,
-                RPDE_USDT: currentWallet.info.RPDE_USDT,
-                RPDE_BTC: currentWallet.info.RPDE_BTC,
-                RPDE_ETH: currentWallet.info.RPDE_ETH,
-                RPDE_ATOM: currentWallet.info.RPDE_ATOM
-            }
-        }
+        data.value.voting_power = currentWallet.info.voting_power,
+        data.value.RPDE_USDT = currentWallet.info.RPDE_USDT,
+        data.value.RPDE_BTC = currentWallet.info.RPDE_BTC,
+        data.value.RPDE_ETH = currentWallet.info.RPDE_ETH,
+        data.value.RPDE_ATOM = currentWallet.info.RPDE_ATOM
 
 
         // Hide loader

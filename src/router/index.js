@@ -126,14 +126,14 @@ router.beforeEach((to, from, next) => {
 	}
 
 	// Current network
-	to.params.network
-		? store.currentNetwork = to.params.network
-		: store.currentNetwork = ''
+	if(to.params.network) {
+		store.currentNetwork = to.params.network
+	}
 
 	// Current proposal
-	to.params.proposal_id
-		? store.proposal_id = to.params.proposal_id
-		: store.proposal_id = ''
+	if(to.params.proposal_id) {
+		store.proposal_id = to.params.proposal_id
+	}
 
 
 	// Get currencies price

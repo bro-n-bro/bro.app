@@ -72,6 +72,10 @@
 
                         <div class="name" @click.prevent="openValidatorModal(validator)">
                             {{ validator.moniker }}
+
+                            <div class="tooltip">
+                                {{ validator.moniker }}
+                            </div>
                         </div>
 
                         <div class="amount">
@@ -139,8 +143,9 @@
         wallets = reactive([])
 
         // Get data
-        await getAddressData()
-        await getAllData()
+        store.account.currentWallet == 'all'
+            ? await getAllData()
+            : await getAddressData()
     })
 
 
@@ -201,7 +206,7 @@
 
         // Get validators for main wallet
         try {
-            let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwner)
+            let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)
 
             await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
                 .then(res => res.json())
@@ -233,11 +238,11 @@
         }
 
         // Get validators other wallets
-        if(store.account.owner.moonPassport.extension.addresses) {
-            store.account.owner.moonPassport.extension.addresses.forEach(async address => {
+        if(store.account.moonPassportOwner.extension.addresses) {
+            store.account.moonPassportOwner.extension.addresses.forEach(async address => {
                 let generatedAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, address.address)
 
-                if(generatedAddress != store.account.moonPassportOwner && !wallets[generatedAddress]) {
+                if(generatedAddress != store.account.moonPassportOwnerAddress && !wallets[generatedAddress]) {
                     try {
                         await fetch(`https://rpc.bronbro.io/account/validators/${generatedAddress}`)
                             .then(res => res.json())
@@ -316,7 +321,7 @@
 
     .validators .col_validator
     {
-        width: calc(100% - 468px);
+        width: calc(100% - 464px);
     }
 
     .validators .col_percent
@@ -542,7 +547,7 @@
 
     .validators .item .name
     {
-        overflow: hidden;
+        position: relative;
 
         width: calc(100% - 127px);
         margin-left: auto;
@@ -556,6 +561,50 @@
     .validators .item .name:hover
     {
         color: #950fff;
+    }
+
+
+    .validators .item .tooltip
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        bottom: 100%;
+        left: -8px;
+
+        display: none;
+
+        margin-bottom: 8px;
+        padding: 8px;
+
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .validators .item .tooltip:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+    .validators .item .name:hover .tooltip
+    {
+        display: block;
     }
 
 

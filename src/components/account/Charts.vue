@@ -743,7 +743,6 @@
                 cutout: '84%',
             }]
         })),
-
         chartDataFourth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFourth,
@@ -756,7 +755,6 @@
                 cutout: '84%',
             }]
         })),
-
         chartDataFifth = computed(() => ({
             datasets: [{
                 data: chartDatasetsFifth,
@@ -799,14 +797,6 @@
         // Set loader
         loading.value = true
 
-        // Clear data
-        chartDatasetsFirst = reactive([])
-        chartDatasetsSecond = reactive([])
-        chartDatasetsThird = reactive([])
-        chartDatasetsFourth = reactive([])
-        chartDatasetsFifth = reactive([])
-        chartColorsFourth = reactive([])
-
         // Get cosmos hub data
         for (const wallet of store.account.wallets) {
             try {
@@ -814,15 +804,15 @@
                     .then(res => res.json())
                     .then(response => {
                         let totals = {
-                                liquid: 0,
-                                staked: 0,
-                                unbonding: 0,
-                                rewards: 0,
-                                outside: 0,
-                                ibc: 0,
-                                liquid_rewards: 0
-                            },
-                            groupByDenom = []
+                            liquid: 0,
+                            staked: 0,
+                            unbonding: 0,
+                            rewards: 0,
+                            outside: 0,
+                            ibc: 0,
+                            liquid_rewards: 0
+                        },
+                        groupByDenom = []
 
                         wallet.networks = [
                             {
@@ -990,32 +980,43 @@
                         currentNetworkInWallet.totalPrice_eth = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
 
                         currentNetworkInWallet.totalPrice_btc = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
-
-
-                        // Calc total prices
-                        store.account.wallets.forEach(el => {
-                            el.totalPrice_usdt = 0
-                            el.totalPrice_eth = 0
-                            el.totalPrice_btc = 0
-                            el.totalPrice_atom = 0
-
-                            el.networks.forEach(network => {
-                                el.totalPrice_usdt += network.totalPrice_usdt
-                                el.totalPrice_eth += network.totalPrice_eth
-                                el.totalPrice_btc += network.totalPrice_btc
-                                el.totalPrice_atom += network.totalPrice_atom
-                            })
-                        })
                     })
             } catch (error) {
                 console.log(error)
             }
         }
+
+
+        // Calc total prices
+        store.account.wallets.forEach(el => {
+            el.totalPrice_usdt = 0
+            el.totalPrice_eth = 0
+            el.totalPrice_btc = 0
+            el.totalPrice_atom = 0
+
+            el.networks.forEach(network => {
+                el.totalPrice_usdt += network.totalPrice_usdt
+                el.totalPrice_eth += network.totalPrice_eth
+                el.totalPrice_btc += network.totalPrice_btc
+                el.totalPrice_atom += network.totalPrice_atom
+            })
+        })
     }
 
 
     // Set actual data
     function setActualData() {
+        // Clear data
+        chartDatasetsFirst = reactive([])
+        chartDatasetsSecond = reactive([])
+        chartDatasetsThird = reactive([])
+        chartDatasetsFourth = reactive([])
+        chartDatasetsFifth = reactive([])
+
+        chartColorsThird = reactive([])
+        chartColorsFourth = reactive([])
+
+
         // Get current walllet data
         currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
