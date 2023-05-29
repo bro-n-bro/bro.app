@@ -430,11 +430,15 @@
         display: none;
 
         width: 100%;
-        padding-right: 0;
-        padding-left: 0;
+        padding: 0;
 
         border-top: 1px solid rgba(255, 255, 255, .05);
         border-radius: 0;
+    }
+
+    .validators .sub_item:last-child
+    {
+        border-radius: 0 0 8px 8px;
     }
 
 

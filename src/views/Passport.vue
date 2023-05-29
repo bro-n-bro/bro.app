@@ -2,7 +2,7 @@
     <section class="create_passport">
         <div class="cont">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/all'" class="btn">
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmos'" class="btn">
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>

@@ -58,6 +58,7 @@ export default {
             'agree_sign_btn': 'Agree & Sign',
             'refresh_btn': 'Refresh',
             'deposit_btn': 'Deposit',
+            'use_new_passport_btn': 'Use new passport',
 
 
             // Main page
@@ -348,15 +349,25 @@ export default {
             'proposal_details_total_label': 'Total Deposit',
             'proposal_details_initial_label': 'Initial Deposit',
 
+            'proposal_vote_info_final_status_label': 'Final Status',
+            'proposal_vote_info_status_passed': 'Passed',
+            'proposal_vote_info_status_rejected': 'Rejected',
+            'proposal_vote_info_status_passing': 'Passing',
+            'proposal_vote_info_status_rejecting': 'Rejecting',
             'proposal_vote_info_turnout_label': 'Turnout',
             'proposal_vote_info_total_vote_label': 'Total Vote',
-            'proposal_vote_info_minimum': 'Minimum of staked 80,606,158.088430 ATOM (40%) need to vote for this proposal to pass',
+            'proposal_vote_info_minimum': 'Minimum of staked {amount} {denom} (40%) need to vote for this proposal to pass',
 
             'proposal_vote_result_yes_label': 'yes',
             'proposal_vote_result_no_label': 'no',
             'proposal_vote_result_nwv_label': 'nwv',
             'proposal_vote_result_abstain_label': 'abstain',
             'proposal_vote_result_votes_label': 'votes',
+
+            'proposal_feature_height_label': 'Height',
+            'proposal_feature_info_label': 'Info',
+            'proposal_feature_name_label': 'Name',
+            'proposal_feature_time_label': 'Time',
 
 
             // Add proposal modal
@@ -403,6 +414,8 @@ export default {
             // Add address modal
             'add_address_modal_title': 'Add new account',
             'add_address_modal_error_desc': 'To add a new address — select a different Keplr account',
+            'add_address_modal_error_desc2': 'This wallet is already added to portfolio',
+            'add_address_modal_error_desc3': 'This wallet has its own unique passport',
 
             'add_address_modal_step1_name': 'Choose Address',
             'add_address_modal_step2_name': 'Approve Address',

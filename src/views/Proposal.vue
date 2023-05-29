@@ -11,8 +11,9 @@
                 </router-link>
             </div>
 
-            <!-- <pre>{{ proposal }}</pre>
-            <pre>{{ currentVote }}</pre> -->
+            <!-- <pre>{{ proposal }}</pre> -->
+            <!-- <pre>{{ currentVote }}</pre> -->
+            <!-- <pre>{{ stakingPool }}</pre> -->
 
             <div class="row">
                 <div class="data">
@@ -55,7 +56,7 @@
                         <div class="proposer">
                             <span>{{ $t('message.proposal_proposer_label') }}:</span>
 
-                            <a :href="`https://www.mintscan.io/${store.networks[proposal.network].mintscanAlias}/validators/${proposal.proposer_address}`" target="_blank" rel="noopener nofollow" v-if="proposal.moniker">
+                            <a :href="`https://www.mintscan.io/${store.networks[proposal.network].mintscanAlias}/validators/${proposal.moniker}`" target="_blank" rel="noopener nofollow" v-if="proposal.moniker">
                                 {{ proposal.moniker }}
                             </a>
 
@@ -76,10 +77,38 @@
                         <div class="description" :class="{'active': showDescription}" @click.self="showDescription = !showDescription">
                             <div class="title">{{ $t('message.proposal_desc_title') }}</div>
 
-                            <div class="text_block" v-html="parseMarkdown(proposal.description)"></div>
-
                             <div class="icon">
                                 <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                            </div>
+
+                            <div class="text_block" v-html="parseMarkdown(proposal.description)"></div>
+
+                            <div class="features">
+                                <div v-if="proposal.content.plan.height.length">
+                                    <div class="label">{{ $t('message.proposal_feature_height_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.plan.height }}</div>
+                                </div>
+
+                                <div v-if="proposal.content.plan.info.length">
+                                    <div class="label">{{ $t('message.proposal_feature_info_label') }}</div>
+
+                                    <div class="val full_w">
+                                        <pre>{{ JSON.parse(proposal.content.plan.info) }}</pre>
+                                    </div>
+                                </div>
+
+                                <div v-if="proposal.content.plan.name.length">
+                                    <div class="label">{{ $t('message.proposal_feature_name_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.plan.name }}</div>
+                                </div>
+
+                                <div v-if="proposal.content.plan.time.length">
+                                    <div class="label">{{ $t('message.proposal_feature_time_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.plan.time }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,7 +156,7 @@
                             <div class="chart">
                                 <div class="percents">
                                     <span v-if="store.networks[proposal.network].proposal_need <= (proposal.deposit / store.networks[proposal.network].exponent)">100%</span>
-                                    <span v-else>{{ $filters.toFixed(store.networks[proposal.network].proposal_need / (proposal.deposit / store.networks[proposal.network].exponent) * 100, 2) }}%</span>
+                                    <span v-else>{{ $filters.toFixed((proposal.deposit / store.networks[proposal.network].exponent) / store.networks[proposal.network].proposal_need * 100, 2) }}%</span>
                                 </div>
 
                                 <Doughnut :data="chartData" :options="chartOptions" />
@@ -206,18 +235,34 @@
 
                             <div class="chart">
                                 <div class="final_status">
-                                    <div class="label">Final Status:</div>
+                                    <div class="label">{{ $t('message.proposal_vote_info_final_status_label') }}:</div>
 
-                                    <div class="val green" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'">Passed</div>
-                                    <div class="val red" v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'">Rejected</div>
+                                    <div class="val green" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'">
+                                        {{ $t('message.proposal_vote_info_status_passed') }}
+                                    </div>
+
+                                    <div class="val red" v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'">
+                                        {{ $t('message.proposal_vote_info_status_rejected') }}
+                                    </div>
+
+                                    <template v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                                    <div class="val green" v-if="isQuorum()">
+                                        {{ $t('message.proposal_vote_info_status_passing') }}
+                                    </div>
+
+                                    <div class="val red" v-else>
+                                        {{ $t('message.proposal_vote_info_status_rejecting') }}
+                                    </div>
+                                    </template>
                                 </div>
 
                                 <Doughnut :data="chartData" :options="chartOptions" />
                             </div>
 
                             <div class="row">
-                                <div class="turnout">
-                                    {{ $t('message.proposal_vote_info_turnout_label') }}: 34%
+                                <div class="turnout" :class="{ green: calcTurnout() > 40 }" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                                    {{ $t('message.proposal_vote_info_turnout_label') }}:
+                                    {{ calcTurnout() }}%
                                 </div>
 
                                 <div class="total">
@@ -226,7 +271,12 @@
                                 </div>
                             </div>
 
-                            <div class="exp">{{ $t('message.proposal_vote_info_minimum') }}</div>
+                            <div class="exp" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                                {{ $t('message.proposal_vote_info_minimum', {
+                                    amount: Number($filters.toFixed(stakingPool.amount / Math.pow(10, stakingPool.exponent) * 0.4, 2)).toLocaleString('en-US'),
+                                    denom: store.networks[proposal.network].token_name
+                                })}}
+                            </div>
                         </div>
 
 
@@ -325,10 +375,11 @@
         router = useRouter(),
         i18n = inject('i18n'),
         loading = ref(true),
-        showDescription = ref(false),
+        showDescription = ref(true),
         proposal = ref({}),
         currentVote = ref({ votes: [] }),
         userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
+        stakingPool =  ref({}),
         chartOptions = reactive({
             responsive: true,
             plugins: {
@@ -391,11 +442,12 @@
                 .then(async response => {
                     proposal.value = response
 
+
                     // Set chart datasets
                     if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
-                        let remnant = store.networks[proposal.value.network].proposal_need - proposal.value.deposit
+                        let remnant = store.networks[proposal.value.network].proposal_need - (proposal.value.deposit / store.networks[proposal.value.network].exponent)
 
-                        chartDatasets.push(proposal.value.deposit)
+                        chartDatasets.push(proposal.value.deposit / store.networks[proposal.value.network].exponent)
 
                         if(remnant > 0) {
                             chartDatasets.push(remnant)
@@ -407,25 +459,40 @@
                         chartDatasets.push(proposal.value.tally_abstain)
                     }
 
+
                     // Get valoper moniker
                     let valoperAddress = toBech32(store.networks[proposal.value.network].address_prefix + 'valoper', fromBech32(proposal.value.proposer_address).data)
 
                     try {
-                        await fetch(`https://rpc.bronbro.io/validators?address=${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}&proposal_id=${proposal.value.id}`)
+                        await fetch(`https://rpc.bronbro.io/validators/${valoperAddress}`)
                             .then(res => res.json())
                             .then(validator => proposal.value.moniker = validator.moniker)
                     } catch (error) {
                         console.log(error)
                     }
 
+
                     // Get user current vote
                     try {
-                        await fetch(`https://rpc.bronbro.io/account/votes/${valoperAddress}`)
+                        await fetch(`https://rpc.bronbro.io/account/votes/${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}?proposal_id=${proposal.value.id}`)
                             .then(res => res.json())
                             .then(vote => currentVote.value = vote)
                     } catch (error) {
                         console.log(error)
                     }
+
+
+                    // Get stacking pool
+                    if(proposal.value.status == 'PROPOSAL_STATUS_VOTING_PERIOD') {
+                        try {
+                            await fetch('https://rpc.bronbro.io/distribution/staking_pool')
+                                .then(res => res.json())
+                                .then(data => stakingPool.value = data)
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+
 
                     // Hide loader
                     loading.value = false
@@ -468,6 +535,26 @@
         let sum = proposal.value.tally_abstain + proposal.value.tally_no + proposal.value.tally_no_with_veto + proposal.value.tally_yes
 
         return (value / sum * 100).toFixed(2)
+    }
+
+
+    // Calc turnout
+    function calcTurnout() {
+        let sum = proposal.value.tally_abstain + proposal.value.tally_no + proposal.value.tally_no_with_veto + proposal.value.tally_yes
+
+        return (sum / stakingPool.value.amount * 100).toFixed(2)
+    }
+
+
+    // Check quorum
+    function isQuorum() {
+        let result = ''
+
+        calcTurnout() > 40 && [proposal.value.tally_no, proposal.value.tally_no_with_veto].every(el => proposal.value.tally_yes > el)
+            ? result = true
+            : result = false
+
+        return result
     }
 </script>
 
@@ -823,6 +910,63 @@
         width: calc(100% - 48px);
 
         pointer-events: none;
+    }
+
+
+    .data .description .features > *
+    {
+        font-size: 14px;
+        line-height: 100%;
+
+        display: flex;
+
+        margin-top: 16px;
+
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+
+    .data .description .features .label
+    {
+        width: 168px;
+        padding-right: 16%;
+    }
+
+    .data .description .features .val
+    {
+        width: calc(100% - 168px);
+        margin-left: auto;
+    }
+
+    .data .description .features .val.full_w
+    {
+        width: 100%;
+        margin-top: 12px;
+    }
+
+
+    .data .description .features pre
+    {
+        line-height: 20px;
+
+        display: block;
+        overflow: auto;
+
+        width: 100%;
+        max-height: 200px;
+        padding: 8px;
+
+        border-radius: 8px;
+        background: #282828;
+    }
+
+    .data .description .features pre::-webkit-scrollbar
+    {
+        width: 4px;
+        height: 4px;
     }
 
 
@@ -1185,6 +1329,12 @@
     }
 
 
+    .info .vote_info > .row
+    {
+        justify-content: center;
+    }
+
+
     .info .vote_info .turnout
     {
         color: #eb5757;
@@ -1192,10 +1342,16 @@
         line-height: 15px;
 
         margin-top: 16px;
+        margin-right: auto;
         padding: 7px;
 
         border: 1px solid;
         border-radius: 8px;
+    }
+
+    .info .vote_info .turnout.green
+    {
+        color: #1bc562;
     }
 
 
@@ -1206,7 +1362,6 @@
         line-height: 15px;
 
         margin-top: 16px;
-        margin-left: auto;
         padding: 7px;
 
         border: 1px solid;

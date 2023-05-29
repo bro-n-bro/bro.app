@@ -6,7 +6,7 @@
                     <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
                 </button>
 
-                <template v-if="store.account.moonPassport && activeStep == 1">
+                <template v-if="duplicateError || store.account.moonPassport && activeStep == 1">
                 <div class="error">
                     <div class="title">
                         {{ $t('message.add_address_modal_title') }}
@@ -15,8 +15,16 @@
                     <img src="@/assets/images/add_address_different_account.svg" alt="">
 
                     <div class="desc">
-                        {{ $t('message.add_address_modal_error_desc') }}
+                        <span v-if="!duplicateError && !hasPassportError">{{ $t('message.add_address_modal_error_desc') }}</span>
+
+                        <span v-if="duplicateError && !hasPassportError">{{ $t('message.add_address_modal_error_desc2') }}</span>
+
+                        <span v-if="hasPassportError">{{ $t('message.add_address_modal_error_desc3') }}</span>
                     </div>
+
+                    <button class="btn" v-if="hasPassportError" @click.prevent="reloadPage()">
+                        {{ $t('message.use_new_passport_btn') }}
+                    </button>
 
                     <div class="loader_wrap" v-if="loading">
                         <div class="loader"><span></span></div>
@@ -331,6 +339,8 @@
         signature = ref(''),
         duplicate = ref(false),
         editForm = ref(false),
+        duplicateError = ref(false),
+        hasPassportError = ref(false),
         tempAddressName = computed(() => store.account.userName)
 
 
@@ -384,6 +394,19 @@
             })
 
             return addresses.includes(generateAddress(prefix, store.wallets.cosmoshub))
+        }
+    }
+
+    // Checking if the wallet was previously added
+    function checkAllAddress() {
+        if(store.account.moonPassportOwner.extension.addresses) {
+            let addresses = []
+
+            store.account.moonPassportOwner.extension.addresses.forEach(el => {
+                addresses.push(generateAddress('cosmos', el.address))
+            })
+
+            return addresses.includes(store.wallets.cosmoshub)
         }
     }
 
@@ -493,6 +516,14 @@
     }
 
 
+    // Reload page
+    function reloadPage() {
+        store.needReload = true
+
+        emitter.emit('closeAddAddressModal')
+    }
+
+
     // Sign a nd broadcast
     async function addAddress() {
         // Show loader
@@ -552,6 +583,7 @@
 
                 // Go to next step
                 activeStep.value += 1
+
                 store.needReload = true
             }
 
@@ -623,6 +655,21 @@
 
                     // Go to zero step
                     activeStep.value = 1
+
+                    // Has passport error
+                    hasPassportError.value = true
+                }
+
+                // Check duplicate
+                if(checkAllAddress()) {
+                    // Hide loader
+                    loading.value = false
+
+                    // Go to zero step
+                    activeStep.value = 1
+
+                    // Duplicate error
+                    duplicateError.value = true
                 }
             }
 
@@ -690,6 +737,21 @@
         line-height: 110%;
 
         text-align: center;
+    }
+
+
+    .error .btn
+    {
+        color: #fff;
+        font-weight: 500;
+        line-height: 19px;
+
+        width: 200px;
+        max-width: 100%;
+        margin: 16px auto 0;
+
+        border-radius: 14px;
+        background: #950fff;
     }
 
 
