@@ -85,7 +85,7 @@ export default {
             'passport_name_placeholder': 'Choose name',
             'passport_address_exp': 'Address',
             'passport_name_exp': 'Min 8 characters',
-            'passport_constitution_exp': 'Signing Constitution confirms understanding and acceptance of passport requirements',
+            'passport_constitution_exp': 'Creating a passport I confirm reading the Constitution',
             'passport_activation_label': 'я крутой',
 
 
