@@ -192,7 +192,7 @@
                     {{ $t('message.download_png_btn') }}
                 </a>
 
-                <router-link to="/wallets" class="btn continue_btn">
+                <router-link to="/account/cosmoshub" class="btn continue_btn">
                     {{ $t('message.continue_btn') }}
                 </router-link>
             </div>
@@ -329,7 +329,6 @@
                 })
             })
                 .then(result => {
-                    console.log(result)
                     if(result.status == 200) {
                         // Show notification
                         notification.notify({

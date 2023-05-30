@@ -465,6 +465,7 @@ export default {
             'notification_passport_activation_success': 'Account successfully activated',
             'notification_passport_activation_error': 'Account activation error',
             'notification_passport_activation_error_desc': 'Try again',
+            'notification_passport_wait_ipfs': 'Please, wait while local IPFS node is starting.',
 
             'notification_action_create_passport': 'Create passport',
             'notification_passport_create_process': 'Passport creation...',
