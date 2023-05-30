@@ -307,6 +307,8 @@
     async function activationHandler() {
         let response = await store.jsCyber.getAccount(store.wallets.bostrom)
 
+        console.log(response)
+
         // Show notification
         notification.notify({
             group: 'default',
@@ -317,7 +319,7 @@
         // Set activation status
         data.activationProcess = 'process'
 
-        if (typeof response == 'undefined' && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
+        if (!response && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
             await fetch('https://titan.cybernode.ai/credit', {
                 headers: {
                     'Content-Type': 'application/json'
@@ -329,6 +331,7 @@
                 })
             })
                 .then(result => {
+                    console.log(result)
                     if(result.status == 200) {
                         // Show notification
                         notification.notify({

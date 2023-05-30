@@ -83,9 +83,9 @@ export default {
             'passport_citizenship_label': 'Citizenship',
             'passport_citizenship_text': 'Moon confirmed citizen',
             'passport_name_placeholder': 'Choose name',
-            'passport_address_exp': 'Adress',
+            'passport_address_exp': 'Address',
             'passport_name_exp': 'Min 8 characters',
-            'passport_constitution_exp': 'Creating bostrom x bronbro passport im confirming i have read constitution',
+            'passport_constitution_exp': 'Signing Constitution confirms understanding and acceptance of passport requirements',
             'passport_activation_label': 'я крутой',
 
 

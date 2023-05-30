@@ -225,7 +225,7 @@
 
     .val
     {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 700;
         line-height: 100%;
 
