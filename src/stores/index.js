@@ -430,7 +430,7 @@ export const useGlobalStore = defineStore('global', {
 
             // Getting avatar from gateway
             setTimeout(() => {
-                if (!avatarStatus) {
+                if (!avatarStatus && this.account.moonPassportOwner) {
                     this.account.avatar = `https://gateway.ipfs.cybernode.ai/ipfs/${this.account.moonPassportOwner.extension.avatar}`
                 }
             }, delay)

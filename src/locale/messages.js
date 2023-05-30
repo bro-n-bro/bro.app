@@ -104,7 +104,7 @@ export default {
             'notice_default_dashboard': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
             'notice_default_create_passport': 'To create your passport, please ensure that you upload the information correctly. Then you will be asked to sign the transaction.',
             'notice_default_create_passport_success': 'Congrats! You have successfully created a Passport. You can now continue the journey and explore the app in BETA 2.0.',
-            'notice_default_constitution_modal': "By clicking 'Agree & Sign,' you confirm that you have read the Constitution in full and wish to create a passport. After clicking 'Agree & Sign,' you will be asked to sign the transaction.",
+            'notice_default_constitution_modal': "By clicking 'Agree & Sign' you confirm that you have read the Constitution in full and wish to create a passport. After clicking 'Agree & Sign' you will be asked to sign the transaction.",
             'notice_default_account_passport': 'That’s your recently created passport. You can now change the image or download the passport.',
             'notice_default_proposals_page': 'All proposals including proposals in Deposit period can be found on this page.',
             'notice_default_account_page': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',

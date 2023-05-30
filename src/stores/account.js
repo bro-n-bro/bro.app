@@ -7,7 +7,7 @@ const account = {
 
     moonPassport: null,
     moonPassportOwnerAddress: useLocalStorage('moonPassportOwnerAddress'),
-    moonPassportOwner: {},
+    moonPassportOwner: null,
 
     wallets: [],
     info: {},

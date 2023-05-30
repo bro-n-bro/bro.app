@@ -93,7 +93,7 @@
                                 {{ $t('message.reject_btn') }}
                             </router-link>
 
-                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || data.activationProcess != true}">
+                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || data.activationProcess != true || !store.node.isOnline}">
                                 {{ $t('message.confirm_btn') }}
                             </button>
                         </div>
@@ -405,7 +405,7 @@
 
     // Create passport
     async function createPassport() {
-        if(await checkNickname() === null && store.node.isOnline()) {
+        if(await checkNickname() == null) {
             // Show notification
             notification.notify({
                 group: 'default',
