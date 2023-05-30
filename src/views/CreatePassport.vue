@@ -307,8 +307,6 @@
     async function activationHandler() {
         let response = await store.jsCyber.getAccount(store.wallets.bostrom)
 
-        console.log(response)
-
         // Show notification
         notification.notify({
             group: 'default',
@@ -319,7 +317,7 @@
         // Set activation status
         data.activationProcess = 'process'
 
-        if (!response && !Object.prototype.hasOwnProperty.call(response, 'accountNumber')) {
+        if (!response) {
             await fetch('https://titan.cybernode.ai/credit', {
                 headers: {
                     'Content-Type': 'application/json'
@@ -407,7 +405,7 @@
 
     // Create passport
     async function createPassport() {
-        if(await checkNickname() === null) {
+        if(await checkNickname() === null && store.node.isOnline()) {
             // Show notification
             notification.notify({
                 group: 'default',

@@ -67,7 +67,7 @@ export default {
 
 
             // Make a choice
-            'choice_title': 'Create your moon citizen for full feature access',
+            'choice_title': 'Create your passport, to unlock the full potential of the features available?',
 
             // Dashboard
             'personal_apr': 'Personal APR',

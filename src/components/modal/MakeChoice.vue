@@ -2,21 +2,21 @@
     <section class="make_choise">
         <div class="cont">
             <div class="data">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_lock"></use></svg>
+                <div class="thumb">
+                    <img src="../../assets/images/make_choise.png" alt="">
+                </div>
 
                 <div class="title">
                     {{ $t('message.choice_title') }}
                 </div>
 
                 <div class="btns">
-                    <button class="btn blue" @click.prevent="close">
-                        <span>{{ $t('message.no_btn') }}</span>
-                        <img src="../../assets/images/pill_blue.png" alt="">
+                    <button class="btn" @click.prevent="close">
+                        {{ $t('message.no_btn') }}
                     </button>
 
-                    <router-link to="/create_passport" class="btn red">
-                        <span>{{ $t('message.yes_btn') }}</span>
-                        <img src="../../assets/images/pill_red.png" alt="">
+                    <router-link to="/create_passport" class="btn yes_btn">
+                        {{ $t('message.yes_btn') }}
                     </router-link>
                 </div>
             </div>
@@ -28,8 +28,11 @@
 <script setup>
     import { useGlobalStore } from '@/stores'
 
+
     const store = useGlobalStore()
 
+
+    // Close modal
     function close() {
         store.showMakeChoice = false
     }
@@ -63,30 +66,50 @@
 
     .make_choise .data
     {
-        width: 508px;
+        width: 473px;
         max-width: 100%;
         margin-right: auto;
         margin-left: auto;
+        padding: 20px;
+
+        border-radius: 30px;
+        background: #141414;
     }
 
 
-    .make_choise .icon
+    .make_choise .thumb
     {
         color: #464646;
 
+        display: flex;
+
+        height: 335px;
+        margin-bottom: 40px;
+        padding: 20px;
+
+        border-radius: 20px;
+        background: linear-gradient(219.08deg, #3b0268 22.41%, #950fff 99.38%);
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .make_choise .thumb img
+    {
         display: block;
 
-        width: 144px;
-        height: 144px;
-        margin: 0 auto 30px;
+        max-width: 100%;
+        max-height: 100%;
     }
 
 
     .make_choise .title
     {
-        font-size: 30px;
-        font-weight: 700;
-        line-height: 110%;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 120%;
     }
 
 
@@ -94,9 +117,9 @@
     {
         display: flex;
 
-        margin-top: 30px;
+        margin-top: 24px;
 
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
@@ -109,57 +132,32 @@
         font-weight: 500;
         line-height: 19px;
 
-        display: flex;
+        display: block;
 
-        width: 212px;
-        height: 47px;
+        width: calc(50% - 5px);
+        padding: 14px;
 
         transition: background .2s linear;
         text-decoration: none;
 
         border-radius: 14px;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        background: #353535;
     }
 
-    .make_choise .btns .btn.blue
+    .make_choise .btns .btn.yes_btn
     {
-        background: #0343e8;
-    }
-
-    .make_choise .btns .btn.red
-    {
-        background: #eb5757;
+        background: #950fff;
     }
 
 
-    .make_choise .btns .btn + .btn
+    .make_choise .btns .btn:hover
     {
-        margin-left: 10px;
+        background: #464646;
     }
 
-
-    .make_choise .btns .btn img
+    .make_choise .btns .btn.yes_btn:hover
     {
-        display: block;
-
-        width: 24px;
-        height: 24px;
-        margin-left: 10px;
-    }
-
-
-    .make_choise .btns .btn.blue:hover
-    {
-        background: #0025ca;
-    }
-
-    .make_choise .btns .btn.red:hover
-    {
-        background: #cd3939;
+        background: #7700e1;
     }
 
 </style>

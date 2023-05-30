@@ -111,10 +111,13 @@
 
         if(store.account.moonPassportOwner.extension.addresses) {
             store.account.moonPassportOwner.extension.addresses.forEach(address => {
-                let tempBostromAddress = generateAddress('bostrom', address.address)
+                // Drop eth and terra addresses
+                if(address.address.substring(0, 2) != '0x' || address.address.substring(0, 5) != 'terra') {
+                    let tempBostromAddress = generateAddress('bostrom', address.address)
 
-                if (!uniqWallets[tempBostromAddress]) {
-                    uniqWallets[tempBostromAddress] = false
+                    if (!uniqWallets[tempBostromAddress]) {
+                        uniqWallets[tempBostromAddress] = false
+                    }
                 }
             })
         }
