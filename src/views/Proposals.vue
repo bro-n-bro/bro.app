@@ -49,7 +49,7 @@
                             {{ $t('message.filter_title') }}
                         </div>
 
-                        <div class="items">
+                        <div class="items" :class="{ lock: lockFilter }">
                             <button class="btn" :class="{'active': !data.filter.length}" @click.prevent="resetFilter">
                                 <span>{{ $t('message.account_proposals_status_all') }}</span>
                                 <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
@@ -104,13 +104,11 @@
     const store = useGlobalStore(),
         i18n = inject('i18n'),
         loading = ref(false),
+        lockFilter = ref(false),
         data = reactive({
-            limit: 10,
-            offset: 0,
             loading: false,
             allReceived: false,
             showButtonUp: false,
-            proposals: [],
             filter_deposit: false,
             filter_voting: false,
             filter_passed: false,
@@ -206,6 +204,9 @@
 
     // Get proposals
     async function getProposals(loadMore = false) {
+        // Lock filter
+        lockFilter.value = true
+
         let url = ''
 
         if(!loadMore) {
@@ -236,6 +237,9 @@
                     // Hide loader
                     data.loading = false
                 }
+
+                // Lock filter
+                lockFilter.value = false
             })
 
         // Load more proposals
@@ -436,6 +440,18 @@
         margin-bottom: 24px;
     }
 
+
+    .filter .items
+    {
+        transition: opacity .2s linear;
+    }
+
+    .filter .items.lock
+    {
+        pointer-events: none;
+
+        opacity: .5;
+    }
 
     .filter .items > * + *
     {

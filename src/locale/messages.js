@@ -358,6 +358,11 @@ export default {
             'proposal_vote_info_total_vote_label': 'Total Vote',
             'proposal_vote_info_minimum': 'Minimum of staked {amount} {denom} (40%) need to vote for this proposal to pass',
 
+            'proposal_vote_yes_btn': 'Yes',
+            'proposal_vote_no_btn': 'No',
+            'proposal_vote_nwv_btn': 'No with veto',
+            'proposal_vote_abstain_btn': 'Abstain',
+
             'proposal_vote_result_yes_label': 'yes',
             'proposal_vote_result_no_label': 'no',
             'proposal_vote_result_nwv_label': 'nwv',
@@ -368,6 +373,9 @@ export default {
             'proposal_feature_info_label': 'Info',
             'proposal_feature_name_label': 'Name',
             'proposal_feature_time_label': 'Time',
+            'proposal_feature_changes_key_label': 'Key',
+            'proposal_feature_changes_subspace_label': 'Subspace',
+            'proposal_feature_changes_value_label': 'Value',
 
 
             // Add proposal modal
@@ -482,6 +490,9 @@ export default {
             'notification_action_address_rename': 'Address rename',
             'notification_address_renaming_process': 'Address renaming...',
             'notification_success_address_rename_title': 'Address renamed successfully',
+
+            'notification_action_proposal_vote': 'Proposal vote',
+            'notification_proposal_vote_process': 'Proposal voiting...',
 
 
             // Footer

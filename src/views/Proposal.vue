@@ -109,14 +109,41 @@
 
                                     <div class="val">{{ proposal.content.plan.time }}</div>
                                 </div>
+
+                                <div v-if="proposal.content.changes.length && proposal.content.changes[0].key">
+                                    <div class="label">{{ $t('message.proposal_feature_changes_key_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.changes[0].key }}</div>
+                                </div>
+
+                                <div v-if="proposal.content.changes.length && proposal.content.changes[0].subspace">
+                                    <div class="label">{{ $t('message.proposal_feature_changes_subspace_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.changes[0].subspace }}</div>
+                                </div>
+
+                                <div v-if="proposal.content.changes.length && proposal.content.changes[0].value">
+                                    <div class="label">{{ $t('message.proposal_feature_changes_value_label') }}</div>
+
+                                    <div class="val">{{ proposal.content.changes[0].value }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+
                 <div class="info">
                     <div class="sticky">
+                        <div class="loader_wrap" v-if="updateLoading">
+                            <div class="loader"><span></span></div>
+                        </div>
+
                         <div class="current_vote" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                            <div class="loader_wrap" v-if="updateLoading">
+                                <div class="loader"><span></span></div>
+                            </div>
+
                             <div class="label">{{ $t('message.proposal_current_vote_title') }}</div>
 
                             <template v-if="currentVote.votes.length">
@@ -136,10 +163,21 @@
 
 
                         <div class="vote" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-                            <button class="btn green">Yes</button>
-                            <button class="btn yellow">No</button>
-                            <button class="btn red">No with veto</button>
-                            <button class="btn grey">Abstain</button>
+                            <button class="btn green" @click.prevent="setVote(1)">
+                                {{ $t('message.proposal_vote_yes_btn') }}
+                            </button>
+
+                            <button class="btn yellow" @click.prevent="setVote(3)">
+                                {{ $t('message.proposal_vote_no_btn') }}
+                            </button>
+
+                            <button class="btn red" @click.prevent="setVote(4)">
+                                {{ $t('message.proposal_vote_nwv_btn') }}
+                            </button>
+
+                            <button class="btn grey" @click.prevent="setVote(2)">
+                                {{ $t('message.proposal_vote_abstain_btn') }}
+                            </button>
                         </div>
 
 
@@ -159,7 +197,7 @@
                                     <span v-else>{{ $filters.toFixed((proposal.deposit / store.networks[proposal.network].exponent) / store.networks[proposal.network].proposal_need * 100, 2) }}%</span>
                                 </div>
 
-                                <Doughnut :data="chartData" :options="chartOptions" />
+                                <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
                             </div>
 
                             <button class="deposit_btn">
@@ -359,9 +397,10 @@
     import { onMounted, onBeforeMount, inject, ref, reactive, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRouter } from 'vue-router'
+    import { useNotification } from '@kyvg/vue3-notification'
     import hcSticky from 'hc-sticky'
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
-    import { generateAddress } from '@/utils'
+    import { generateAddress, prepareTx, sendTx, } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -371,10 +410,13 @@
     ChartJS.register(ArcElement)
 
 
-    const store = useGlobalStore(),
+    var store = useGlobalStore(),
         router = useRouter(),
+        notification = useNotification(),
         i18n = inject('i18n'),
         loading = ref(true),
+        voteLoading = ref(true),
+        updateLoading = ref(false),
         showDescription = ref(true),
         proposal = ref({}),
         currentVote = ref({ votes: [] }),
@@ -397,6 +439,7 @@
                 }
             }
         }),
+        chart = ref(null),
         chartColors = ['#1BC562', '#C5811B', '#EB5757', '#888888'],
         depositChartColors = ['#950FFF', '#353535'],
         chartDatasets = reactive([]),
@@ -440,6 +483,7 @@
             await fetch(`https://rpc.bronbro.io/gov/proposal/${store.proposal_id}`)
                 .then(res => res.json())
                 .then(async response => {
+                    // Set data
                     proposal.value = response
 
 
@@ -496,6 +540,7 @@
 
                     // Hide loader
                     loading.value = false
+                    updateLoading.value = false
                 })
         } catch (error) {
             console.log(error)
@@ -506,10 +551,10 @@
     // Refresh proposal data
     async function refreshProposalData() {
         // Set loader
-        loading.value = true
+        updateLoading.value = true
 
         // Clear data
-        depositChartDatasets.length = 0
+        chartDatasets = reactive([])
 
         // Get proposal data
         await getProposalData()
@@ -555,6 +600,119 @@
             : result = false
 
         return result
+    }
+
+
+    // Set vote
+    async function setVote(option) {
+        // Show loader
+        voteLoading.value = true
+
+
+        // Show notification
+        notification.notify({
+            group: 'default',
+            duration: -100,
+            title: i18n.global.t('message.notification_proposal_vote_process')
+        })
+
+
+        try{
+            // Message
+            let msgAny = [{
+                typeUrl: '/cosmos.gov.v1beta1.MsgVote',
+                value: {
+                    proposalId: proposal.value.id,
+                    voter: store.wallets.cosmoshub,
+                    option: option
+                }
+            }]
+
+
+            // Prepare Tx
+            let prepareResult = await prepareTx(msgAny, false, proposal.value.network)
+
+
+            // Send Tx
+            let result = await sendTx(prepareResult)
+
+
+            if(result.code != 0){
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks[proposal.value.network].denom,
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: i18n.global.t(`message.manage_modal_error_${result.code}`),
+                    type: 'error',
+                    data: {
+                        chain: proposal.value.network,
+                        tx_type: i18n.global.t('message.notification_action_proposal_vote')
+                    }
+                })
+
+                return false
+            }
+
+
+            // Show notification
+            notification.notify({
+                group: store.networks[proposal.value.network].denom,
+                clean: true
+            })
+
+            notification.notify({
+                group: store.networks[proposal.value.network].denom,
+                title: i18n.global.t('message.notification_successful_title'),
+                type: 'success',
+                data: {
+                    chain: proposal.value.network,
+                    tx_type: i18n.global.t('message.notification_action_proposal_vote')
+                }
+            })
+
+
+            // Update user current vote
+            try {
+                await fetch(`https://rpc.bronbro.io/account/votes/${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}?proposal_id=${proposal.value.id}`)
+                    .then(res => res.json())
+                    .then(vote => currentVote.value = vote)
+            } catch (error) {
+                console.log(error)
+            }
+
+
+            // Hide loader
+            voteLoading.value = false
+        } catch (error) {
+            console.log(error)
+
+
+            // Show notification
+            notification.notify({
+                group: 'default',
+                clean: true
+            })
+
+            notification.notify({
+                group: store.networks[proposal.value.network].denom,
+                title: i18n.global.t('message.notification_failed_title'),
+                text: i18n.global.t('message.manage_modal_error_rejected'),
+                type: 'error',
+                data: {
+                    chain: proposal.value.network,
+                    tx_type: i18n.global.t('message.notification_action_proposal_vote')
+                }
+            })
+
+
+            // Hide loader
+            voteLoading.value = false
+        }
     }
 </script>
 
@@ -1020,6 +1178,8 @@
 
     .info
     {
+        position: relative;
+
         width: 353px;
         max-width: 100%;
         margin-left: auto;
@@ -1034,6 +1194,8 @@
     {
         font-weight: 500;
         line-height: 100%;
+
+        position: relative;
 
         display: flex;
 

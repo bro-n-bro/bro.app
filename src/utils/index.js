@@ -2,10 +2,10 @@ import { useGlobalStore } from '@/stores'
 
 import { Registry } from '@cosmjs/proto-signing'
 import { AminoTypes, SigningStargateClient } from '@cosmjs/stargate'
+import { createWasmAminoConverters } from '@cosmjs/cosmwasm-stargate'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { toUtf8, fromBech32, toBech32 } from '@cosmjs/encoding'
-import { createWasmAminoConverters } from "@cosmjs/cosmwasm-stargate";
 
 import {
     createTxMsgDelegate,
@@ -476,34 +476,34 @@ export const getNetworksData = async () => {
 
 
 // Prepare Tx
-export const prepareTx = async (msg, gasSimulate = true) => {
+export const prepareTx = async (msg, gasSimulate = true, chain = store.networkManageModal) => {
     let store = useGlobalStore()
 
     // Create request
-    let offlineSigner = await window.getOfflineSignerAuto(store.networks[store.networkManageModal].chainId)
+    let offlineSigner = await window.getOfflineSignerAuto(store.networks[chain].chainId)
 
     Object.assign(offlineSigner, {
         signAmino: offlineSigner.signAmino ?? offlineSigner.sign
     })
 
     // RPC endpoint
-    let rpcEndpoint = store.networks[store.networkManageModal].rpc_api
+    let rpcEndpoint = store.networks[chain].rpc_api
 
     // Client
     let client = await SigningStargateClient.connectWithSigner(rpcEndpoint, offlineSigner)
 
     // Simulate gas
     if (gasSimulate) {
-        var gasUsed = store.networkManageModal != 'emoney' ? '0' : store.networks.emoney.gas
+        var gasUsed = chain != 'emoney' ? '0' : store.networks.emoney.gas
 
-        if (store.networkManageModal != 'emoney') {
-            gasUsed = await client.simulate(store.wallets[store.networkManageModal], msg)
+        if (chain != 'emoney') {
+            gasUsed = await client.simulate(store.wallets[chain], msg)
         }
     }
 
     let fee = {
         amount: [{
-            denom: store.networks[store.networkManageModal].denom,
+            denom: store.networks[chain].denom,
             amount: '0'
         }],
         gas: gasSimulate ? Math.round(gasUsed * 1.3).toString() : '1000000'
@@ -513,7 +513,7 @@ export const prepareTx = async (msg, gasSimulate = true) => {
     let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
 
     // Sign transaction
-    let txRaw = await client.sign(store.wallets[store.networkManageModal], msg, fee, memo)
+    let txRaw = await client.sign(store.wallets[chain], msg, fee, memo)
 
     return { txRaw, client }
 }
