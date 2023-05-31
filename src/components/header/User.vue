@@ -1,7 +1,7 @@
 <template>
     <div class="user">
         <template v-if="store.account.moonPassport">
-        <router-link to="/account/cosmos" class="account_link">
+        <router-link to="/account/cosmoshub" class="account_link">
             <div class="icon">
                 <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
             </div>

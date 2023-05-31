@@ -92,6 +92,10 @@
                     </div>
                 </div>
             </div>
+
+            <div class="empty_text" v-else>
+                {{ $t('message.account_validators_empty_text') }}
+            </div>
         </div>
 
         <button class="spoler_btn" :class="{'active': showAll}" @click.prevent="showAll = !showAll" v-if="wallets.length > 4">
@@ -141,6 +145,7 @@
     watch(() => store.account.currentWallet, async () => {
         // Clear data
         wallets = reactive([])
+        totalPassportTokens = 0
 
         // Get data
         store.account.currentWallet == 'all'
@@ -369,6 +374,17 @@
     }
 
 
+    .validators .empty_text
+    {
+        color: #555;
+        line-height: 110%;
+
+        margin-top: 20px;
+
+        text-align: center;
+    }
+
+
     .validators .items > * + *
     {
         margin-top: 5px;
@@ -570,6 +586,7 @@
 
     .validators .item .tooltip
     {
+        color: #fff;
         font-size: 12px;
         line-height: 100%;
 

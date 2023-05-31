@@ -15,13 +15,35 @@
 
 
             <div class="item">
-                <div class="label">{{ $t('message.account_voting_power') }}</div>
+                <div class="label">{{ $t('message.account_rewards') }}</div>
 
                 <div class="loader_wrap" v-if="loading">
                     <div class="loader"><span></span></div>
                 </div>
 
-                <div class="val" v-else>{{ $filters.toFixed(data.voting_power * 100, 8) }}</div>
+                <div class="val" v-else>
+                    <template v-if="store.currency == 'USDT'">
+                    {{ '~' + $filters.toFixed(store.account.totalRewards_usdt, 2) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ATOM'">
+                    {{ '~' + $filters.toFixed(store.account.totalRewards_atom, 2) }}
+                    </template>
+
+                    <template v-if="store.currency == 'ETH'">
+                    {{ '~' + $filters.toFixed(store.account.totalRewards_eth, 4) }}
+                    </template>
+
+                    <template v-if="store.currency == 'BTC'">
+                    {{ '~' + $filters.toFixed(store.account.totalRewards_btc, 5) }}
+                    </template>
+
+                    <div class="currency">{{ store.currency }}</div>
+                </div>
+
+                <!-- <div class="val" v-else>
+                    {{ $filters.toFixed(data.voting_power * 100, 8) }}
+                </div> -->
             </div>
 
 
@@ -34,22 +56,22 @@
 
                 <div class="val" v-else>
                     <template v-if="store.currency == 'USDT'">
-                    {{ $filters.toFixed(store.account.totalPrice_usdt, 2) }}
+                    {{ '~' + $filters.toFixed(store.account.totalPrice_usdt, 2) }}
                     </template>
 
                     <template v-if="store.currency == 'ATOM'">
-                    {{ $filters.toFixed(store.account.totalPrice_atom, 2) }}
+                    {{ '~' + $filters.toFixed(store.account.totalPrice_atom, 2) }}
                     </template>
 
                     <template v-if="store.currency == 'ETH'">
-                    {{ $filters.toFixed(store.account.totalPrice_eth, 4) }}
+                    {{ '~' + $filters.toFixed(store.account.totalPrice_eth, 4) }}
                     </template>
 
                     <template v-if="store.currency == 'BTC'">
-                    {{ $filters.toFixed(store.account.totalPrice_btc, 5) }}
+                    {{ '~' + $filters.toFixed(store.account.totalPrice_btc, 5) }}
                     </template>
 
-                    {{ store.currency }}
+                    <div class="currency">{{ store.currency }}</div>
                 </div>
             </div>
 
@@ -63,20 +85,22 @@
 
                 <div class="val" v-else>
                     <template v-if="store.currency == 'USDT'">
-                    {{ $filters.toFixed(data.RPDE_USDT, 5) }}
+                    {{ '~' + $filters.toFixed(data.RPDE_USDT, 5) }}
                     </template>
 
                     <template v-if="store.currency == 'ATOM'">
-                    {{ $filters.toFixed(data.RPDE_ATOM, 5) }}
+                    {{ '~' + $filters.toFixed(data.RPDE_ATOM, 5) }}
                     </template>
 
                     <template v-if="store.currency == 'ETH'">
-                    {{ $filters.toFixed(data.RPDE_ETH, 7) }}
+                    {{ '~' + $filters.toFixed(data.RPDE_ETH, 7) }}
                     </template>
 
                     <template v-if="store.currency == 'BTC'">
-                    {{ $filters.toFixed(data.RPDE_BTC, 7) }}
+                    {{ '~' + $filters.toFixed(data.RPDE_BTC, 7) }}
                     </template>
+
+                    <div class="currency">{{ store.currency }}</div>
                 </div>
             </div>
         </div>
@@ -225,11 +249,22 @@
 
     .val
     {
-        font-size: 19px;
+        font-size: 24px;
         font-weight: 700;
         line-height: 100%;
 
         white-space: nowrap;
+    }
+
+
+    .val .currency
+    {
+        color: #555;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 100%;
+
+        margin-top: 4px;
     }
 
 

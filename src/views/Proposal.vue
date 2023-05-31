@@ -69,8 +69,10 @@
                     <div class="tabs">
                         <div class="row">
                             <button class="btn active">{{ $t('message.proposal_tab1') }}</button>
-                            <button class="btn">{{ $t('message.proposal_tab2') }}</button>
+                            <button class="btn" style="pointer-events: none; opacity: 0.3;">{{ $t('message.proposal_tab2') }}</button>
                         </div>
+
+                        <div class="tooltip">Coming soon</div>
                     </div>
 
                     <div>
@@ -159,6 +161,8 @@
                                     <div class="val red">{{ $t('message.proposal_vote_result_nwv_label') }}</div>
                                 </template>
                             </template>
+
+                            <div class="val grey" v-else>{{ $t('message.proposal_vote_result_no_vote_label') }}</div>
                         </div>
 
 
@@ -178,6 +182,8 @@
                             <button class="btn grey" @click.prevent="setVote(2)">
                                 {{ $t('message.proposal_vote_abstain_btn') }}
                             </button>
+
+                            <div class="tooltip">Coming soon</div>
                         </div>
 
 
@@ -193,16 +199,18 @@
 
                             <div class="chart">
                                 <div class="percents">
-                                    <span v-if="store.networks[proposal.network].proposal_need <= (proposal.deposit / store.networks[proposal.network].exponent)">100%</span>
-                                    <span v-else>{{ $filters.toFixed((proposal.deposit / store.networks[proposal.network].exponent) / store.networks[proposal.network].proposal_need * 100, 2) }}%</span>
+                                    <!-- <span v-if="store.networks[proposal.network].proposal_need <= (proposal.deposit / store.networks[proposal.network].exponent)">100%</span>
+                                    <span v-else>{{ $filters.toFixed((proposal.deposit / store.networks[proposal.network].exponent) / store.networks[proposal.network].proposal_need * 100, 2) }}%</span> -->
+                                    {{ $filters.toFixed((proposal.deposit / store.networks[proposal.network].exponent) / store.networks[proposal.network].proposal_need * 100, 2) }}%
                                 </div>
 
                                 <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
                             </div>
 
-                            <button class="deposit_btn">
-                                {{ $t('message.deposit_btn') }}
-                            </button>
+                            <div class="deposit_btn">
+                                <span>{{ $t('message.deposit_btn') }}</span>
+                                <div class="tooltip">Coming soon</div>
+                            </div>
                         </div>
 
 
@@ -970,6 +978,8 @@
 
     .data .tabs
     {
+        position: relative;
+
         margin-bottom: 32px;
         padding-bottom: 32px;
 
@@ -1016,6 +1026,52 @@
     }
 
 
+    .data .tabs .tooltip
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        bottom: 100%;
+        left: 126px;
+
+        display: none;
+
+        margin-bottom: 8px;
+        padding: 8px;
+
+        white-space: nowrap;
+
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .data .tabs .tooltip:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+    .data .tabs:hover .tooltip
+    {
+        display: block;
+    }
+
+
     .data .description
     {
         position: relative;
@@ -1054,7 +1110,7 @@
 
     .data .description .title
     {
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 500;
         line-height: 100%;
 
@@ -1210,9 +1266,16 @@
         color: #1bc562;
     }
 
+    .info .current_vote .grey
+    {
+        color: #555;
+    }
+
 
     .info .vote
     {
+        position: relative;
+
         display: flex;
 
         margin-top: 16px;
@@ -1226,6 +1289,53 @@
     }
 
 
+    .info .vote .tooltip
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        top: 50%;
+        left: 50%;
+
+        display: block;
+
+        margin-bottom: 8px;
+        padding: 8px;
+
+        transform: translate(-50%, calc(-50% - 4px));
+        white-space: nowrap;
+
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .connected_addresses .tooltip:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+    /* .info .vote:hover .tooltip
+                {
+                    display: block;
+                } */
+
+
     .info .vote .btn
     {
         font-size: 14px;
@@ -1237,7 +1347,9 @@
         padding: 8px;
 
         transition: background .2s linear;
+        pointer-events: none;
 
+        opacity: .3;
         border-radius: 10px;
         background: #353535;
     }
@@ -1302,6 +1414,13 @@
 
     .info .deposit_btn
     {
+        position: relative;
+
+        width: 100%;
+    }
+
+    .info .deposit_btn span
+    {
         font-size: 14px;
         line-height: 100%;
 
@@ -1311,8 +1430,58 @@
         margin-top: 16px;
         padding: 8px;
 
+        text-align: center;
+        pointer-events: none;
+
+        opacity: .3;
         border-radius: 10px;
         background: #950fff;
+    }
+
+    .info .deposit_btn .tooltip
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        bottom: 100%;
+        left: 50%;
+
+        display: none;
+
+        margin-bottom: 8px;
+        padding: 8px;
+
+        transform: translateX(-50%);
+        white-space: nowrap;
+
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .info .deposit_btn .tooltip:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+    .info .deposit_btn:hover .tooltip
+    {
+        display: block;
     }
 
 

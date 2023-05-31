@@ -3,7 +3,7 @@
         <div class="title">
             {{ $t('message.account_connected_addresses_title') }}
 
-            <button class="all_btn">
+            <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses">
                 <div class="check">
                     <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
                 </div>

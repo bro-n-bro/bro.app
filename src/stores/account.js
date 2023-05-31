@@ -28,6 +28,11 @@ const account = {
     totalPrice_eth: 0,
     totalPrice_btc: 0,
 
+    totalRewards_usdt: 0,
+    totalRewards_eth: 0,
+    totalRewards_btc: 0,
+    totalRewards_atom: 0,
+
     personal_APR: 0,
     delegations_price: 0
 }

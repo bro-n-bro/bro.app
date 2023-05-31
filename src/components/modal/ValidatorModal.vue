@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="btns">
-                    <a :href="`https://${props.validator.website}`" target="_blank" rel="noopener nofollow" class="link">
+                    <a :href="`https://${props.validator.website.replace('https://', '')}`" target="_blank" rel="noopener nofollow" class="link">
                         <svg class="icon"><use xlink:href="/sprite.svg#ic_website"></use></svg>
                         <span>{{ $t('message.validator_modal_website_btn') }}</span>
                     </a>

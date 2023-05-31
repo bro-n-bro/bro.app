@@ -160,9 +160,7 @@
                                         {{ $t('message.passport_citizenship_label') }}
                                     </div>
 
-                                    <div class="text">
-                                        {{ $t('message.passport_citizenship_text') }}
-                                    </div>
+                                    <div class="text" v-html="$t('message.passport_citizenship_text')"></div>
 
                                     <img src="../assets/images/passport_citizenship.svg" alt="" class="img">
                                 </div>

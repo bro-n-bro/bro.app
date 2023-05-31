@@ -51,6 +51,7 @@
 
         width: 100%;
         height: 100%;
+        padding-top: 40px;
 
         text-align: center;
 

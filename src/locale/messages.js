@@ -81,7 +81,7 @@ export default {
             'passport_constitution_link': 'read constitution',
             'passport_name_label': 'Nickname',
             'passport_citizenship_label': 'Citizenship',
-            'passport_citizenship_text': 'Moon confirmed citizen',
+            'passport_citizenship_text': 'Moon<br> citizen',
             'passport_name_placeholder': 'Choose name',
             'passport_address_exp': 'Address',
             'passport_name_exp': 'Min 8 characters',
@@ -290,10 +290,10 @@ export default {
             'account_charts_desc2': 'contain liquid, rewards and IBC tokens',
 
             'account_charts_block_title3': 'Network Management',
-            'account_charts_desc3': 'represent all tokens in portfolio',
+            'account_charts_desc3': 'represent all networks in portfolio',
 
             'account_charts_block_title4': 'Asset Management',
-            'account_charts_desc4': 'represent all networks in portfolio',
+            'account_charts_desc4': 'represent all tokens in portfolio',
 
             'account_charts_block_title5': 'Account Management',
             'account_charts_desc5': 'contain your linked accounts',
@@ -313,6 +313,7 @@ export default {
             'account_validators_col_validator': 'Validator',
             'account_validators_col_account_percent': 'Account %',
             'account_validators_col_passport_percent': 'Passport %',
+            'account_validators_empty_text': 'You have no active validators',
 
             'account_proposals_col_network': 'Network',
             'account_proposals_col_name': 'Name',
@@ -325,9 +326,9 @@ export default {
             'account_proposals_status_passed': 'Passed',
             'account_proposals_status_rejected': 'Rejected',
 
-            'account_RPDE': 'RPDE',
-            'account_APR': 'APR',
-            'account_voting_power': 'Voting power',
+            'account_RPDE': 'Daily profit',
+            'account_APR': 'Personal APR',
+            'account_rewards': 'Rewards',
             'account_passport_value': 'Passport Value',
 
             'account_duplicate_ext': 'Duplicate Address',
@@ -363,6 +364,7 @@ export default {
             'proposal_vote_nwv_btn': 'No with veto',
             'proposal_vote_abstain_btn': 'Abstain',
 
+            'proposal_vote_result_no_vote_label': 'Not voted',
             'proposal_vote_result_yes_label': 'yes',
             'proposal_vote_result_no_label': 'no',
             'proposal_vote_result_nwv_label': 'nwv',

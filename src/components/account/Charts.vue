@@ -46,13 +46,13 @@
         <div class="block_desc">{{ $t('message.account_charts_desc5') }}</div>
         </template>
 
-        <template v-if="chartActive == 3">
+        <template v-if="chartActive == 4">
         <div class="block_title">{{ $t('message.account_charts_block_title3') }}</div>
 
         <div class="block_desc">{{ $t('message.account_charts_desc3') }}</div>
         </template>
 
-        <template v-if="chartActive == 4">
+        <template v-if="chartActive == 3">
         <div class="block_title">{{ $t('message.account_charts_block_title4') }}</div>
 
         <div class="block_desc">{{ $t('message.account_charts_desc4') }}</div>
@@ -959,19 +959,19 @@
                         currentNetworkInWallet.total = totals,
 
                         currentNetworkInWallet.balance = {
-                                liquid: {
-                                    native: response.liquid && response.liquid.native ? response.liquid.native : null,
-                                    ibc: response.liquid && response.liquid.ibc ? response.liquid.ibc : null
-                                },
-                                staked: response.staked,
-                                unbonding: response.unbonding,
-                                rewards: response.rewards,
-                                groupByDenom: groupByDenom.sort((a, b) => {
-                                    if (a.amount > b.amount) { return -1 }
-                                    if (a.amount < b.amount) { return 1 }
-                                    return 0
-                                })
-                            }
+                            liquid: {
+                                native: response.liquid && response.liquid.native ? response.liquid.native : null,
+                                ibc: response.liquid && response.liquid.ibc ? response.liquid.ibc : null
+                            },
+                            staked: response.staked,
+                            unbonding: response.unbonding,
+                            rewards: response.rewards,
+                            groupByDenom: groupByDenom.sort((a, b) => {
+                                if (a.amount > b.amount) { return -1 }
+                                if (a.amount < b.amount) { return 1 }
+                                return 0
+                            })
+                        }
 
                         currentNetworkInWallet.totalPrice_usdt = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
 
@@ -980,6 +980,11 @@
                         currentNetworkInWallet.totalPrice_eth = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
 
                         currentNetworkInWallet.totalPrice_btc = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
+
+                        currentNetworkInWallet.totalRewards_usdt = totals.rewards / store.networks.cosmoshub.exponent * currentNetworkInWallet.price_usdt
+                        currentNetworkInWallet.totalRewards_eth = totals.rewards / store.networks.cosmoshub.exponent * currentNetworkInWallet.price_eth
+                        currentNetworkInWallet.totalRewards_atom = totals.rewards / store.networks.cosmoshub.exponent * currentNetworkInWallet.price_atom
+                        currentNetworkInWallet.totalRewards_btc = totals.rewards / store.networks.cosmoshub.exponent * currentNetworkInWallet.price_btc
                     })
             } catch (error) {
                 console.log(error)
@@ -999,6 +1004,22 @@
                 el.totalPrice_eth += network.totalPrice_eth
                 el.totalPrice_btc += network.totalPrice_btc
                 el.totalPrice_atom += network.totalPrice_atom
+            })
+        })
+
+
+        // Calc total rewards
+        store.account.wallets.forEach(el => {
+            el.totalRewards_usdt = 0
+            el.totalRewards_eth = 0
+            el.totalRewards_btc = 0
+            el.totalRewards_atom = 0
+
+            el.networks.forEach(network => {
+                el.totalRewards_usdt += network.totalRewards_usdt
+                el.totalRewards_eth += network.totalRewards_eth
+                el.totalRewards_btc += network.totalRewards_btc
+                el.totalRewards_atom += network.totalRewards_atom
             })
         })
     }
@@ -1083,6 +1104,18 @@
             store.account.totalPrice_eth += wallet.totalPrice_eth
             store.account.totalPrice_btc += wallet.totalPrice_btc
             store.account.totalPrice_atom += wallet.totalPrice_atom
+        })
+
+        store.account.totalRewards_usdt = 0
+        store.account.totalRewards_eth = 0
+        store.account.totalRewards_btc = 0
+        store.account.totalRewards_atom = 0
+
+        store.account.wallets.forEach(wallet => {
+            store.account.totalRewards_usdt += wallet.totalRewards_usdt
+            store.account.totalRewards_eth += wallet.totalRewards_eth
+            store.account.totalRewards_btc += wallet.totalRewards_btc
+            store.account.totalRewards_atom += wallet.totalRewards_atom
         })
 
 
