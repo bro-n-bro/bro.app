@@ -116,7 +116,16 @@
 
 
     // Event "set notification"
-    emitter.on('setNotification', notice => store.tooltip = notice)
+    emitter.on('setNotification', notice => {
+        // Animation finish
+        store.tooltipAnimate = false
+
+        // Update text
+        store.tooltip = notice
+
+        // Animation start
+        setTimeout(() => store.tooltipAnimate = true, 10)
+    })
 
 
     // Event "open manage modal"

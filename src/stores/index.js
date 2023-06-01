@@ -63,6 +63,7 @@ export const useGlobalStore = defineStore('global', {
         currency: useLocalStorage('currency', 'USDT'),
         wallets: {},
         tooltip: '',
+        tooltipAnimate: false,
         lastTXS: '',
         manageError: '',
         jsCyber: null,
