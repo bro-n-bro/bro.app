@@ -196,6 +196,65 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
+                <div class="legends empty" v-if="!currentNetwork.totalPrice_usdt">
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <template v-else>
                 <div class="legend" v-if="currentNetwork.total.staked" :class="{'active': chartFirstActiveLegend == 0}" @mouseenter="mouseenterLegend('chartFirst', 0)" @mouseleave="mouseleaveLegend('chartFirst')">
                     <div class="name">
                         <div class="color" style="background-color: #950FFF;"></div>
@@ -306,10 +365,70 @@
                         <div class="bar"><div style="background-color: #EB5757;" :style="setWidth(calcPercentsChart1('unbonding'))"></div></div>
                     </div>
                 </div>
+                </template>
             </div>
 
 
             <div class="legends" v-if="chartActive == 2">
+                <div class="legends empty" v-if="!currentNetwork.totalPrice_usdt">
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="name">
+                            <span></span>
+                        </div>
+
+                        <div class="amount">
+                            <span></span>
+                        </div>
+
+                        <div class="progress">
+                            <div class="bar"><div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <template v-else>
                 <div class="legend" v-if="currentNetwork.total.liquid" :class="{'active': chartSecondActiveLegend == 0}" @mouseenter="mouseenterLegend('chartSecond', 0)" @mouseleave="mouseleaveLegend('chartSecond')">
                     <div class="name">
                         <div class="color" style="background-color: #7879F1;"></div>
@@ -438,10 +557,22 @@
                         </div>
                     </div>
                 </div>
+                </template>
             </div>
 
 
-            <div class="legends2" v-if="chartActive == 3">
+            <div class="legends2" :class="{ empty: !currentNetwork.totalPrice_usdt }" v-if="chartActive == 3">
+                <template v-if="!currentNetwork.totalPrice_usdt">
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+                </template>
+
+                <template v-else>
                 <div v-for="(item, index) in currentNetwork.balance.groupByDenom" :key="index" class="legend" :class="{'active': chartThirdActiveLegend == index}" @mouseenter="mouseenterLegend('chartThird', index)" @mouseleave="mouseleaveLegend('chartThird')">
                     <div class="logo">
                         <img :src="item.logo" alt="">
@@ -477,10 +608,22 @@
                         </div>
                     </div>
                 </div>
+                </template>
             </div>
 
 
-            <div class="legends2" v-if="chartActive == 4">
+            <div class="legends2" :class="{ empty: !currentNetwork.totalPrice_usdt }" v-if="chartActive == 4">
+                <template v-if="!currentNetwork.totalPrice_usdt">
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+
+                <div class="legend"></div>
+                </template>
+
+                <template v-else>
                 <div v-for="(network, index) in currentWallet.networks" :key="index" class="legend" :class="{'active': chartFourthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFourth', index)" @mouseleave="mouseleaveLegend('chartFourth')">
                     <div class="logo">
                         <img :src="`/${network.name}_logo.png`" alt="">
@@ -514,6 +657,7 @@
                         </div>
                     </div>
                 </div>
+                </template>
             </div>
 
 
@@ -1397,6 +1541,24 @@
         cursor: default;
     }
 
+    .chart:before
+    {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+
+        border: 14px solid #282828;
+        border-radius: 50%;
+    }
+
     .chart:after
     {
         position: absolute;
@@ -1525,10 +1687,11 @@
         flex-wrap: wrap;
     }
 
+
     /* .legends .legend .name.spoler_btn
-                                                        {
-                                                            cursor: pointer;
-                                                        } */
+                                                                        {
+                                                                            cursor: pointer;
+                                                                        } */
 
     .legends .legend .color
     {
@@ -1541,17 +1704,17 @@
 
 
     /* .legends .legend .arr
-                                                        {
-                                                            color: #fff;
+                                                                        {
+                                                                            color: #fff;
 
-                                                            display: block;
+                                                                            display: block;
 
-                                                            width: 24px;
-                                                            height: 24px;
-                                                            margin-left: auto;
+                                                                            width: 24px;
+                                                                            height: 24px;
+                                                                            margin-left: auto;
 
-                                                            transition: transform .2s linear;
-                                                        } */
+                                                                            transition: transform .2s linear;
+                                                                        } */
 
 
     .legends .legend .dropdown
@@ -1625,17 +1788,17 @@
 
 
     /* .legends .legend .percents
-                            {
-                                font-size: 14px;
-                                font-weight: 500;
-                                line-height: 100%;
+                                            {
+                                                font-size: 14px;
+                                                font-weight: 500;
+                                                line-height: 100%;
 
-                                width: 52px;
-                                margin-left: auto;
+                                                width: 52px;
+                                                margin-left: auto;
 
-                                text-align: right;
-                                white-space: nowrap;
-                            } */
+                                                text-align: right;
+                                                white-space: nowrap;
+                                            } */
 
 
     .legends .legend .tokens
@@ -1745,6 +1908,20 @@
 
 
 
+    .legends.empty .legend .name span,
+    .legends.empty .legend .amount span
+    {
+        display: block;
+
+        width: 80px;
+        height: 14px;
+
+        border-radius: 8px;
+        background: #282828;
+    }
+
+
+
     .legends2 .legend
     {
         display: flex;
@@ -1835,6 +2012,15 @@
     .legends2 .legend.active
     {
         background: #212121;
+    }
+
+
+    .legends2.empty .legend
+    {
+        height: 40px;
+
+        border-radius: 8px;
+        background: #282828;
     }
 
 

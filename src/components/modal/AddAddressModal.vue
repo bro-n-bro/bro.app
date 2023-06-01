@@ -75,7 +75,9 @@
 
                             <div>
                                 <div class="name" :class="{'error': duplicate}">
-                                    {{ tempAddressName }}
+                                    <template v-if="tempAddressName.length">{{ tempAddressName }}</template>
+                                    <template v-else>{{ store.account.userName }}</template>
+
                                     <span v-if="duplicate">{{ $t('message.add_address_duplicated_label') }}</span>
                                 </div>
 
@@ -245,7 +247,7 @@
                             </button></div>
                         </div>
 
-                        <button class="btn" :class="{'disabled': duplicate || !tempAddressName.length}" @click.prevent="setActiveKeplrAddress">
+                        <button class="btn" :class="{'disabled': duplicate}" @click.prevent="setActiveKeplrAddress">
                             {{ $t('message.next_btn') }}
                         </button>
                     </div>
@@ -341,7 +343,7 @@
         editForm = ref(false),
         duplicateError = ref(false),
         hasPassportError = ref(false),
-        tempAddressName = computed(() => store.account.userName)
+        tempAddressName = ref('')
 
 
     onBeforeMount(() => {
@@ -446,9 +448,7 @@
 
     // Hide edit form
     function hideEditForm() {
-        if(tempAddressName.value.length) {
-            editForm.value = false
-        }
+        editForm.value = false
     }
 
 
@@ -457,13 +457,18 @@
         hideEditForm()
 
         // Set default name
-        tempAddressName.value = store.account.userName
+        tempAddressName.value = ''
     }
 
 
     // Set active Keplr address
     async function setActiveKeplrAddress() {
         activeKeplrAddress.value = store.activeKeplrAddress
+
+        // Confirm address label
+        if(!tempAddressName.value.length) {
+            tempAddressName.value = store.account.userName
+        }
 
         // Set new singer
         await setNewSinger()

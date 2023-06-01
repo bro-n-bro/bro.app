@@ -272,7 +272,7 @@ export default {
             'account_networks_title': 'Networks',
             'account_abilities_title': 'Abilities',
             'account_validators_title': 'Validators',
-            'account_proposals_title': 'Proposals',
+            'account_proposals_title': 'Proposals to Governance',
             'account_connected_addresses_title': 'My Portfolio',
 
             'account_connected_addresses_all': 'View all',
@@ -316,7 +316,7 @@ export default {
             'account_validators_empty_text': 'You have no active validators',
 
             'account_proposals_col_network': 'Network',
-            'account_proposals_col_name': 'Name',
+            'account_proposals_col_name': 'Proposal name',
             'account_proposals_col_type': 'Type',
             'account_proposals_col_status': 'Status',
 
