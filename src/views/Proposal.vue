@@ -86,13 +86,13 @@
                             <div class="text_block" v-html="parseMarkdown(proposal.description)"></div>
 
                             <div class="features">
-                                <div v-if="proposal.content.plan.height.length">
+                                <div v-if="proposal.content.plan && proposal.content.plan.height.length">
                                     <div class="label">{{ $t('message.proposal_feature_height_label') }}</div>
 
                                     <div class="val">{{ proposal.content.plan.height }}</div>
                                 </div>
 
-                                <div v-if="proposal.content.plan.info.length">
+                                <div v-if="proposal.content.plan && proposal.content.plan.info.length">
                                     <div class="label">{{ $t('message.proposal_feature_info_label') }}</div>
 
                                     <div class="val full_w">
@@ -100,13 +100,13 @@
                                     </div>
                                 </div>
 
-                                <div v-if="proposal.content.plan.name.length">
+                                <div v-if="proposal.content.plan && proposal.content.plan.name.length">
                                     <div class="label">{{ $t('message.proposal_feature_name_label') }}</div>
 
                                     <div class="val">{{ proposal.content.plan.name }}</div>
                                 </div>
 
-                                <div v-if="proposal.content.plan.time.length">
+                                <div v-if="proposal.content.plan && proposal.content.plan.time.length">
                                     <div class="label">{{ $t('message.proposal_feature_time_label') }}</div>
 
                                     <div class="val">{{ proposal.content.plan.time }}</div>
@@ -513,14 +513,16 @@
 
 
                     // Get valoper moniker
-                    let valoperAddress = toBech32(store.networks[proposal.value.network].address_prefix + 'valoper', fromBech32(proposal.value.proposer_address).data)
+                    if(proposal.value.proposer_address.length) {
+                        let valoperAddress = toBech32(store.networks[proposal.value.network].address_prefix + 'valoper', fromBech32(proposal.value.proposer_address).data)
 
-                    try {
-                        await fetch(`https://rpc.bronbro.io/validators/${valoperAddress}`)
-                            .then(res => res.json())
-                            .then(validator => proposal.value.moniker = validator.moniker)
-                    } catch (error) {
-                        console.log(error)
+                        try {
+                            await fetch(`https://rpc.bronbro.io/validators/${valoperAddress}`)
+                                .then(res => res.json())
+                                .then(validator => proposal.value.moniker = validator.moniker)
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }
 
 

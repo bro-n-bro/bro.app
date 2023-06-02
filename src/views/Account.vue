@@ -14,15 +14,15 @@
                         <!-- <ContractAddress /> -->
 
                         <!-- Charts -->
-                        <Charts />
+                        <Charts :key="chartsKey" />
                     </section>
 
 
                     <!-- Stats -->
-                    <Stats />
+                    <Stats :key="statsKey" />
 
                     <!-- Validators -->
-                    <Validators />
+                    <Validators :key="validatorsKey" />
 
                     <!-- Proposals -->
                     <Proposals />
@@ -40,7 +40,7 @@
 
 
 <script setup>
-    import { onBeforeMount, inject } from 'vue'
+    import { onBeforeMount, inject, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     // Components
@@ -53,12 +53,22 @@
 
 
     const store = useGlobalStore(),
-        i18n = inject('i18n')
+        i18n = inject('i18n'),
+        chartsKey = ref(0),
+        statsKey = ref(0),
+        validatorsKey = ref(0)
 
 
     onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_account_page')
+    })
+
+
+    watch(() => store.account.currentWallet, () => {
+        chartsKey.value += 1
+        statsKey.value += 1
+        validatorsKey.value += 1
     })
 </script>
 
@@ -96,4 +106,5 @@
         border-radius: 20px;
         background: #0d0d0d;
     }
+
 </style>

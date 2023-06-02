@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="name" @click.prevent="openValidatorModal(validator)">
-                            {{ validator.moniker }}
+                            <span>{{ validator.moniker }}</span>
 
                             <div class="tooltip">
                                 {{ validator.moniker }}
@@ -112,7 +112,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject, watch } from 'vue'
+    import { onBeforeMount, reactive, ref, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -133,19 +133,6 @@
     onBeforeMount(async () => {
         // Clear data
         wallets = reactive([])
-
-        // Get data
-        store.account.currentWallet == 'all'
-            ? await getAllData()
-            : await getAddressData()
-    })
-
-
-    // Monitor of current wallet changes
-    watch(() => store.account.currentWallet, async () => {
-        // Clear data
-        wallets = reactive([])
-        totalPassportTokens = 0
 
         // Get data
         store.account.currentWallet == 'all'
@@ -574,6 +561,15 @@
 
         cursor: pointer;
         transition: color .2s linear;
+    }
+
+    .validators .item .name span
+    {
+        display: block;
+        overflow: hidden;
+
+        width: 100%;
+
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -599,6 +595,8 @@
 
         margin-bottom: 8px;
         padding: 8px;
+
+        white-space: nowrap;
 
         border-radius: 8px;
         background: #282828;

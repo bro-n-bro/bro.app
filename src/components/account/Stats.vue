@@ -109,7 +109,7 @@
 
 
 <script setup>
-    import { ref, onBeforeMount, watch } from 'vue'
+    import { ref, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -119,13 +119,6 @@
 
 
     onBeforeMount(async () => {
-        // Get data
-        await getData()
-    })
-
-
-    // Monitor of current wallet changes
-    watch(() => store.account.currentWallet, async () => {
         // Get data
         await getData()
     })

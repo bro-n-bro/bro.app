@@ -272,7 +272,7 @@ export default {
             'account_networks_title': 'Networks',
             'account_abilities_title': 'Abilities',
             'account_validators_title': 'Validators',
-            'account_proposals_title': 'Proposals to Governance',
+            'account_proposals_title': 'Governance',
             'account_connected_addresses_title': 'My Portfolio',
 
             'account_connected_addresses_all': 'View all',

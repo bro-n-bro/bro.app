@@ -700,7 +700,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject, computed, watch } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -918,16 +918,6 @@
 
 
     onBeforeMount(async () => {
-        // Get data
-        await getData()
-
-        // Set actual data
-        setActualData()
-    })
-
-
-    // Monitor of current wallet changes
-    watch(() => store.account.currentWallet, async () => {
         // Get data
         await getData()
 
@@ -1171,17 +1161,6 @@
 
     // Set actual data
     function setActualData() {
-        // Clear data
-        chartDatasetsFirst = reactive([])
-        chartDatasetsSecond = reactive([])
-        chartDatasetsThird = reactive([])
-        chartDatasetsFourth = reactive([])
-        chartDatasetsFifth = reactive([])
-
-        chartColorsThird = reactive([])
-        chartColorsFourth = reactive([])
-
-
         // Get current walllet data
         currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
@@ -1689,9 +1668,9 @@
 
 
     /* .legends .legend .name.spoler_btn
-                                                                        {
-                                                                            cursor: pointer;
-                                                                        } */
+                                                                            {
+                                                                                cursor: pointer;
+                                                                            } */
 
     .legends .legend .color
     {
@@ -1704,17 +1683,17 @@
 
 
     /* .legends .legend .arr
-                                                                        {
-                                                                            color: #fff;
+                                                                            {
+                                                                                color: #fff;
 
-                                                                            display: block;
+                                                                                display: block;
 
-                                                                            width: 24px;
-                                                                            height: 24px;
-                                                                            margin-left: auto;
+                                                                                width: 24px;
+                                                                                height: 24px;
+                                                                                margin-left: auto;
 
-                                                                            transition: transform .2s linear;
-                                                                        } */
+                                                                                transition: transform .2s linear;
+                                                                            } */
 
 
     .legends .legend .dropdown
@@ -1788,17 +1767,17 @@
 
 
     /* .legends .legend .percents
-                                            {
-                                                font-size: 14px;
-                                                font-weight: 500;
-                                                line-height: 100%;
+                                                {
+                                                    font-size: 14px;
+                                                    font-weight: 500;
+                                                    line-height: 100%;
 
-                                                width: 52px;
-                                                margin-left: auto;
+                                                    width: 52px;
+                                                    margin-left: auto;
 
-                                                text-align: right;
-                                                white-space: nowrap;
-                                            } */
+                                                    text-align: right;
+                                                    white-space: nowrap;
+                                                } */
 
 
     .legends .legend .tokens
