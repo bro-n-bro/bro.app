@@ -42,7 +42,7 @@
         display: flex;
         overflow: hidden;
 
-        min-height: 70px;
+        min-height: 83px;
         padding: 10px 20px 10px 10px;
 
         transition: .2s linear;

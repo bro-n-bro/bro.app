@@ -426,6 +426,8 @@
                 // Send Tx
                 let result = await sendTx(prepareResult)
 
+                console.log(result)
+
                 if (result.code === 0) {
                     // Set TXS
                     store.lastTXS = result.transactionHash
@@ -472,9 +474,7 @@
 
                     // Set default notification
                     store.tooltip = i18n.global.t('message.notice_default_create_passport_success')
-                }
-
-                if (result.code) {
+                } else {
                     // Show notification
                     notification.notify({
                         group: 'default',
