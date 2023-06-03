@@ -281,7 +281,13 @@
 
                             <div class="chart">
                                 <div class="final_status">
-                                    <div class="label">{{ $t('message.proposal_vote_info_final_status_label') }}:</div>
+                                    <div class="label" v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                                        {{ $t('message.proposal_vote_info_current_status_label') }}:
+                                    </div>
+
+                                    <div class="label" v-else>
+                                        {{ $t('message.proposal_vote_info_final_status_label') }}:
+                                    </div>
 
                                     <div class="val green" v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'">
                                         {{ $t('message.proposal_vote_info_status_passed') }}

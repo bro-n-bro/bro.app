@@ -351,6 +351,7 @@ export default {
             'proposal_details_initial_label': 'Initial Deposit',
 
             'proposal_vote_info_final_status_label': 'Final Status',
+            'proposal_vote_info_current_status_label': 'Current Status',
             'proposal_vote_info_status_passed': 'Passed',
             'proposal_vote_info_status_rejected': 'Rejected',
             'proposal_vote_info_status_passing': 'Passing',
