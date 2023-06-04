@@ -36,8 +36,8 @@
 
         <div class="items" v-else>
             <!-- <pre>{{ data.proposals }}</pre> -->
-
-            <router-link :to="`/proposal/${proposal.id}`" v-for="(proposal, index) in data.proposals" :key="index" class="item" :class="{'hide': index >= 5 && !data.showAll}">
+            <template v-for="(proposal, index) in data.proposals" :key="index">
+            <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
                 <div class="col_network">
                     <template v-if="index < 1">
                     <div class="logo">
@@ -64,6 +64,7 @@
                     <span v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">{{ $t('message.account_proposals_status_rejected') }}</span>
                 </div>
             </router-link>
+            </template>
         </div>
 
         <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
