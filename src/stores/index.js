@@ -323,7 +323,7 @@ export const useGlobalStore = defineStore('global', {
                 // Set other wallets
                 if(this.account.moonPassportOwner.extension.addresses){
                     this.account.moonPassportOwner.extension.addresses.forEach(address => {
-                        if(address.address.substring(0, 2) != '0x' || address.address.substring(0, 5) != 'terra') {
+                        if(address.address.substring(0, 2) != '0x' && address.address.substring(0, 5) != 'terra') {
                             let result = this.account.wallets.find(el => el.address == generateAddress('bostrom', address.address))
 
                             if(typeof result === 'undefined') {

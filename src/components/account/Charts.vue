@@ -120,19 +120,19 @@
 
                         <div class="price">
                             <template v-if="store.currency == 'USDT'">
-                            {{ $filters.toFixed(currentWallet.totalPrice_usdt, 2) }}
+                            {{ $filters.toFixed(currentData.totalPrice_usdt, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ATOM'">
-                            {{ $filters.toFixed(currentWallet.totalPrice_atom, 2) }}
+                            {{ $filters.toFixed(currentData.totalPrice_atom, 2) }}
                             </template>
 
                             <template v-if="store.currency == 'ETH'">
-                            {{ $filters.toFixed(currentWallet.totalPrice_eth, 4) }}
+                            {{ $filters.toFixed(currentData.totalPrice_eth, 4) }}
                             </template>
 
                             <template v-if="store.currency == 'BTC'">
-                            {{ $filters.toFixed(currentWallet.totalPrice_btc, 5) }}
+                            {{ $filters.toFixed(currentData.totalPrice_btc, 5) }}
                             </template>
 
                             <span>{{ store.currency }}</span>
@@ -495,8 +495,11 @@
                                 <div>
                                     <div class="amount">
                                         <template v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</template>
+                                        <template v-if="item.symbol == 'BOOT'">{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent) / 1000000, 2) }}</template>
                                         <template v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</template>
-                                        {{ item.symbol }}
+
+                                        <span class="token" v-if="item.symbol == 'BOOT'">M{{ item.symbol }}</span>
+                                        <span class="token" v-else>{{ item.symbol }}</span>
 
                                         <div class="price">
                                             <template v-if="store.currency == 'USDT'">
@@ -624,7 +627,7 @@
                 </template>
 
                 <template v-else>
-                <div v-for="(network, index) in currentWallet.networks" :key="index" class="legend" :class="{'active': chartFourthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFourth', index)" @mouseleave="mouseleaveLegend('chartFourth')">
+                <div v-for="(network, index) in currentData.networks" :key="index" class="legend" :class="{'active': chartFourthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFourth', index)" @mouseleave="mouseleaveLegend('chartFourth')">
                     <div class="logo">
                         <img :src="`/${network.name}_logo.png`" alt="">
                     </div>
@@ -913,8 +916,19 @@
         })),
         totalChartFirst = ref(0),
         totalChartThird = ref(0),
-        currentWallet = ref({}),
-        currentNetwork = ref({})
+        currentData = ref({
+            networks: [],
+            totalPrice_usdt: 0,
+            totalPrice_eth: 0,
+            totalPrice_btc: 0,
+            totalPrice_atom: 0
+        }),
+        currentNetwork = ref({
+            totalPrice_usdt: 0,
+            totalPrice_eth: 0,
+            totalPrice_btc: 0,
+            totalPrice_atom: 0
+        })
 
 
     onBeforeMount(async () => {
@@ -948,20 +962,18 @@
                         },
                         groupByDenom = []
 
-                        wallet.networks = [
-                            {
-                                name: 'cosmoshub',
-                                color: '#2E314B',
-                                denom: store.networks.cosmoshub.denom,
-                                token_name: store.networks.cosmoshub.token_name,
-                                exponent: store.networks.cosmoshub.exponent,
-                                price: store.prices.find(el => el.symbol == 'ATOM').price,
-                                price_usdt: store.networks.cosmoshub.price_usdt,
-                                price_atom: store.networks.cosmoshub.price_atom,
-                                price_eth: store.networks.cosmoshub.price_eth,
-                                price_btc: store.networks.cosmoshub.price_btc,
-                            }
-                        ]
+                        wallet.networks = [{
+                            name: 'cosmoshub',
+                            color: '#2E314B',
+                            denom: store.networks.cosmoshub.denom,
+                            token_name: store.networks.cosmoshub.token_name,
+                            exponent: store.networks.cosmoshub.exponent,
+                            price: store.prices.find(el => el.symbol == 'ATOM').price,
+                            price_usdt: store.networks.cosmoshub.price_usdt,
+                            price_atom: store.networks.cosmoshub.price_atom,
+                            price_eth: store.networks.cosmoshub.price_eth,
+                            price_btc: store.networks.cosmoshub.price_btc,
+                        }]
 
 
                         // Calc liquid tokens
@@ -1161,56 +1173,228 @@
 
     // Set actual data
     function setActualData() {
-        // Get current walllet data
-        currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+        if(store.account.currentWallet != 'all') {
+            // Get current walllet data
+            currentData.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
-        // Get current network data
-        currentNetwork.value = currentWallet.value.networks.find(el => el.name == 'cosmoshub')
+            // Get current network data
+            currentNetwork.value = currentData.value.networks.find(el => el.name == 'cosmoshub')
 
-        // Calc charts totals
-        totalChartFirst.value = 0
-        totalChartFirst.value = currentNetwork.value.total.staked + currentNetwork.value.total.liquid_rewards + currentNetwork.value.total.unbonding
+            // Calc charts totals
+            // totalChartFirst.value = 0
+            totalChartFirst.value = currentNetwork.value.total.staked + currentNetwork.value.total.liquid_rewards + currentNetwork.value.total.unbonding
 
-        totalChartThird.value = 0
-        currentNetwork.value.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
+            // totalChartThird.value = 0
+            currentNetwork.value.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
 
 
-        // Set data for first chart
-        chartDatasetsFirst.push(currentNetwork.value.total.staked)
-        chartDatasetsFirst.push(currentNetwork.value.total.liquid_rewards)
-        chartDatasetsFirst.push(currentNetwork.value.total.unbonding)
+            // Set data for first chart
+            chartDatasetsFirst.push(currentNetwork.value.total.staked)
+            chartDatasetsFirst.push(currentNetwork.value.total.liquid_rewards)
+            chartDatasetsFirst.push(currentNetwork.value.total.unbonding)
 
-        // Set data for second chart
-        chartDatasetsSecond.push(currentNetwork.value.total.liquid)
-        chartDatasetsSecond.push(currentNetwork.value.total.ibc)
-        chartDatasetsSecond.push(currentNetwork.value.total.rewards)
 
-        // Set data for third chart
-        currentNetwork.value.balance.groupByDenom.forEach(el => {
-            chartDatasetsThird.push(el.amount)
+            // Set data for second chart
+            chartDatasetsSecond.push(currentNetwork.value.total.liquid)
+            chartDatasetsSecond.push(currentNetwork.value.total.ibc)
+            chartDatasetsSecond.push(currentNetwork.value.total.rewards)
 
-            let color = store.networkColors[el.symbol]
 
-            if(el.symbol.substring(0, 2) == 'st') {
-                color = store.networkColors.STRD
+            // Set data for third chart
+            currentNetwork.value.balance.groupByDenom.forEach(el => {
+                chartDatasetsThird.push(el.amount)
+
+                let color = store.networkColors[el.symbol]
+
+                if(el.symbol.substring(0, 2) == 'st') {
+                    color = store.networkColors.STRD
+                }
+
+                if(el.symbol.substring(0, 3) == 'stk') {
+                    color = store.networkColors.XPRT
+                }
+
+                if(el.symbol.substring(0, 1) == 'q') {
+                    color = store.networkColors.QCK
+                }
+
+                chartColorsThird.push(color)
+            })
+
+
+            // Set data for fourth chart
+            currentData.value.networks.forEach(network => {
+                chartDatasetsFourth.push(network.totalPrice_usdt)
+                chartColorsFourth.push(network.color)
+            })
+        } else {
+            let totals = {
+                liquid: 0,
+                staked: 0,
+                unbonding: 0,
+                rewards: 0,
+                outside: 0,
+                ibc: 0,
+                liquid_rewards: 0
+            },
+            allGroupByDenom = []
+
+
+            // Get current walllet data
+            for (const wallet of store.account.wallets) {
+                currentData.value.totalPrice_usdt += wallet.totalPrice_usdt,
+                currentData.value.totalPrice_eth += wallet.totalPrice_eth,
+                currentData.value.totalPrice_btc += wallet.totalPrice_btc,
+                currentData.value.totalPrice_atom += wallet.totalPrice_atom
             }
 
-            if(el.symbol.substring(0, 3) == 'stk') {
-                color = store.networkColors.XPRT
+            // Get current network data
+            currentNetwork.value = store.account.wallets[0].networks.find(el => el.name == 'cosmoshub')
+
+
+            // Calc charts totals
+            for (const wallet of store.account.wallets) {
+                for (const network of wallet.networks) {
+                    if(network.name == 'cosmoshub') {
+                        totals.liquid += network.total.liquid,
+                        totals.staked += network.total.staked ,
+                        totals.unbonding += network.total.unbonding,
+                        totals.rewards += network.total.rewards,
+                        totals.outside += network.total.outside,
+                        totals.ibc += network.total.ibc,
+                        totals.liquid_rewards += network.total.liquid_rewards
+
+                        network.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
+                    }
+                }
             }
 
-            if(el.symbol.substring(0, 1) == 'q') {
-                color = store.networkColors.QCK
+            totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
+
+
+            // Balance
+            let i = 0
+
+            for (const wallet of store.account.wallets) {
+                for (const network of wallet.networks) {
+                    if(network.name == 'cosmoshub') {
+                        // Concat ibc
+                        if(i && network.balance.liquid.ibc != null) {
+                            network.balance.liquid.ibc.forEach(el => {
+                                if(currentNetwork.value.balance.liquid.ibc != null) {
+                                    let duplicate = currentNetwork.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
+
+                                    duplicate
+                                        ? duplicate.amount += el.amount
+                                        : currentNetwork.value.balance.liquid.ibc.push(el)
+                                } else {
+                                    currentNetwork.value.balance.liquid.ibc = []
+                                    currentNetwork.value.balance.liquid.ibc.push(el)
+                                }
+                            })
+                        }
+
+                        // Group by denom
+                        network.balance.groupByDenom.forEach(el => {
+                            let duplicate = allGroupByDenom.find(e => e.symbol == el.symbol)
+
+                            if(duplicate) {
+                                duplicate.amount += el.amount
+                            } else {
+                                allGroupByDenom.push({
+                                    'amount': el.amount,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                })
+                            }
+                        })
+
+                        i++
+                    }
+                }
             }
 
-            chartColorsThird.push(color)
-        })
+            allGroupByDenom.sort((a, b) => {
+                if (a.amount > b.amount) { return -1 }
+                if (a.amount < b.amount) { return 1 }
+                return 0
+            })
 
-        // Set data for fourth chart
-        currentWallet.value.networks.forEach(el => {
-            chartDatasetsFourth.push(el.totalPrice_usdt)
-            chartColorsFourth.push(el.color)
-        })
+
+            // Set data for first chart
+            chartDatasetsFirst.push(totals.staked)
+            chartDatasetsFirst.push(totals.liquid_rewards)
+            chartDatasetsFirst.push(totals.unbonding)
+
+
+            // Set data for second chart
+            chartDatasetsSecond.push(totals.liquid)
+            chartDatasetsSecond.push(totals.ibc)
+            chartDatasetsSecond.push(totals.rewards)
+
+
+            // Set data for first/second legends
+            currentNetwork.value.total = totals
+
+
+
+            // Set data for third chart
+            allGroupByDenom.forEach(el => {
+                chartDatasetsThird.push(el.amount)
+
+                let color = store.networkColors[el.symbol]
+
+                if(el.symbol.substring(0, 2) == 'st') {
+                    color = store.networkColors.STRD
+                }
+
+                if(el.symbol.substring(0, 3) == 'stk') {
+                    color = store.networkColors.XPRT
+                }
+
+                if(el.symbol.substring(0, 1) == 'q') {
+                    color = store.networkColors.QCK
+                }
+
+                chartColorsThird.push(color)
+            })
+
+
+            // Set data for third legends
+            currentNetwork.value.balance.groupByDenom = allGroupByDenom
+
+
+            // Set data for fourth chart
+            let cosmosHubWalletTotalPrice_usdt = 0,
+                cosmosHubWalletTotalPrice_atom = 0,
+                cosmosHubWalletTotalPrice_btc = 0,
+                cosmosHubWalletTotalPrice_eth = 0
+
+            for (const wallet of store.account.wallets) {
+                for (const network of wallet.networks) {
+                    if(network.name == 'cosmoshub') {
+                        cosmosHubWalletTotalPrice_usdt += network.totalPrice_usdt
+                        cosmosHubWalletTotalPrice_atom += network.totalPrice_atom
+                        cosmosHubWalletTotalPrice_btc += network.totalPrice_ubttc
+                        cosmosHubWalletTotalPrice_eth += network.totalPrice_eth
+                    }
+                }
+            }
+
+            // Set data for fourth legends
+            currentData.value.networks.push({
+                name: 'cosmoshub',
+                totalPrice_usdt: cosmosHubWalletTotalPrice_usdt,
+                totalPrice_eth: cosmosHubWalletTotalPrice_eth,
+                totalPrice_btc: cosmosHubWalletTotalPrice_btc,
+                totalPrice_atom: cosmosHubWalletTotalPrice_atom
+            })
+
+            // Set data to chart
+            chartDatasetsFourth.push(cosmosHubWalletTotalPrice_usdt)
+            chartColorsFourth.push(currentNetwork.value.color)
+        }
+
 
         // Set data for fifth chart
         store.account.wallets.forEach(el => chartDatasetsFifth.push(el.totalPrice_usdt))
@@ -1360,8 +1544,8 @@
     function calcPercentsChart4(price) {
         let result = 0
 
-        if(currentWallet.value.totalPrice_usdt) {
-            result = price / currentWallet.value.totalPrice_usdt * 100
+        if(currentData.value.totalPrice_usdt) {
+            result = price / currentData.value.totalPrice_usdt * 100
         }
 
         return result
@@ -1668,9 +1852,9 @@
 
 
     /* .legends .legend .name.spoler_btn
-                                                                            {
-                                                                                cursor: pointer;
-                                                                            } */
+                                                                                    {
+                                                                                        cursor: pointer;
+                                                                                    } */
 
     .legends .legend .color
     {
@@ -1683,17 +1867,17 @@
 
 
     /* .legends .legend .arr
-                                                                            {
-                                                                                color: #fff;
+                                                                                    {
+                                                                                        color: #fff;
 
-                                                                                display: block;
+                                                                                        display: block;
 
-                                                                                width: 24px;
-                                                                                height: 24px;
-                                                                                margin-left: auto;
+                                                                                        width: 24px;
+                                                                                        height: 24px;
+                                                                                        margin-left: auto;
 
-                                                                                transition: transform .2s linear;
-                                                                            } */
+                                                                                        transition: transform .2s linear;
+                                                                                    } */
 
 
     .legends .legend .dropdown
@@ -1715,6 +1899,11 @@
         text-align: right;
         white-space: nowrap;
         text-transform: uppercase;
+    }
+
+    .legends .legend .amount .token
+    {
+        margin-left: 4px;
     }
 
 
@@ -1767,17 +1956,17 @@
 
 
     /* .legends .legend .percents
-                                                {
-                                                    font-size: 14px;
-                                                    font-weight: 500;
-                                                    line-height: 100%;
+                                                        {
+                                                            font-size: 14px;
+                                                            font-weight: 500;
+                                                            line-height: 100%;
 
-                                                    width: 52px;
-                                                    margin-left: auto;
+                                                            width: 52px;
+                                                            margin-left: auto;
 
-                                                    text-align: right;
-                                                    white-space: nowrap;
-                                                } */
+                                                            text-align: right;
+                                                            white-space: nowrap;
+                                                        } */
 
 
     .legends .legend .tokens

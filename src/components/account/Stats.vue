@@ -115,7 +115,12 @@
 
     const store = useGlobalStore(),
         loading = ref(true),
-        data = ref({})
+        data = ref({
+            RPDE_USDT: 0,
+            RPDE_BTC: 0,
+            RPDE_ETH: 0,
+            RPDE_ATOM: 0
+        })
 
 
     onBeforeMount(async () => {
@@ -147,14 +152,14 @@
                     })
 
                 // Calc wallet info
-                wallet.info.voting_power = 0
+                // wallet.info.voting_power = 0
                 wallet.info.RPDE_USDT = 0
                 wallet.info.RPDE_BTC = 0
                 wallet.info.RPDE_ETH = 0
                 wallet.info.RPDE_ATOM = 0
 
                 for (const network of wallet.networks) {
-                    wallet.info.voting_power += network.info.voting_power
+                    // wallet.info.voting_power += network.info.voting_power
 
                     wallet.info.RPDE_USDT += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * network.info.rpde.price
                     wallet.info.RPDE_BTC += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.BTC_price)
@@ -168,14 +173,14 @@
 
 
         // Calc account info
-        store.account.info.voting_power = 0
+        // store.account.info.voting_power = 0
         store.account.info.RPDE_USDT = 0
         store.account.info.RPDE_BTC = 0
         store.account.info.RPDE_ETH = 0
         store.account.info.RPDE_ATOM = 0
 
         for (const wallet of store.account.wallets) {
-            store.account.info.voting_power += wallet.voting_power
+            // store.account.info.voting_power += wallet.voting_power
 
             store.account.info.RPDE_USDT += wallet.RPDE_USDT
             store.account.info.RPDE_BTC += wallet.RPDE_BTC
@@ -185,13 +190,25 @@
 
 
         // Set current data
-        let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+        if(store.account.currentWallet != 'all') {
+            // Data from current wallet
+            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
-        data.value.voting_power = currentWallet.info.voting_power,
-        data.value.RPDE_USDT = currentWallet.info.RPDE_USDT,
-        data.value.RPDE_BTC = currentWallet.info.RPDE_BTC,
-        data.value.RPDE_ETH = currentWallet.info.RPDE_ETH,
-        data.value.RPDE_ATOM = currentWallet.info.RPDE_ATOM
+            // data.value.voting_power = currentWallet.info.voting_power,
+            data.value.RPDE_USDT = currentWallet.info.RPDE_USDT,
+            data.value.RPDE_BTC = currentWallet.info.RPDE_BTC,
+            data.value.RPDE_ETH = currentWallet.info.RPDE_ETH,
+            data.value.RPDE_ATOM = currentWallet.info.RPDE_ATOM
+        } else {
+            // Sum from all wallets
+            for (const wallet of store.account.wallets) {
+                // data.value.voting_power = currentWallet.info.voting_power,
+                data.value.RPDE_USDT += wallet.info.RPDE_USDT,
+                data.value.RPDE_BTC += wallet.info.RPDE_BTC,
+                data.value.RPDE_ETH += wallet.info.RPDE_ETH,
+                data.value.RPDE_ATOM += wallet.info.RPDE_ATOM
+            }
+        }
 
 
         // Hide loader

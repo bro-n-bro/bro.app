@@ -1,15 +1,15 @@
 <template>
     <section class="connected_addresses">
         <div class="title">
-            {{ $t('message.account_connected_addresses_title') }}
+            <span>{{ $t('message.account_connected_addresses_title') }}</span>
 
-            <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses">
+            <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses" :class="{ active: store.account.currentWallet == 'all' }" @click.prevent="selectWallet('all')">
                 <div class="check">
                     <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
                 </div>
                 <span>{{ $t('message.account_connected_addresses_all') }}</span>
 
-                <div class="tooltip">Coming soon</div>
+                <!-- <div class="tooltip">Coming soon</div> -->
             </button>
         </div>
 
@@ -18,7 +18,7 @@
             <!-- <pre>{{ store.account.moonPassportOwner }}</pre> -->
 
             <div><div class="item"
-                :class="{'active': store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.account.currentWallet)}"
+                :class="{'active': store.account.currentWallet == 'all' || store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.account.currentWallet)}"
                 @click.prevent="selectWallet(store.account.moonPassportOwnerAddress)"
             >
                 <div class="name">
@@ -27,11 +27,10 @@
             </div></div>
 
             <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
-            <div><div class="item" v-if="item.address.substring(0, 2) != '0x' || item.address.substring(0, 5) != 'terra'"
-                @click.self="selectWallet(item.address)"
+            <div><div class="item" v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'" @click.self="selectWallet(item.address)"
                 :class="{
                     'duplicate': isDuplicate(item.address),
-                    'active': store.account.currentWallet == generateAddress('bostrom', item.address)
+                    'active': store.account.currentWallet == 'all' || store.account.currentWallet == generateAddress('bostrom', item.address)
                 }"
             >
                 <div class="tooltip">
@@ -112,7 +111,7 @@
         if(store.account.moonPassportOwner.extension.addresses) {
             store.account.moonPassportOwner.extension.addresses.forEach(address => {
                 // Drop eth and terra addresses
-                if(address.address.substring(0, 2) != '0x' || address.address.substring(0, 5) != 'terra') {
+                if(address.address.substring(0, 2) != '0x' && address.address.substring(0, 5) != 'terra') {
                     let tempBostromAddress = generateAddress('bostrom', address.address)
 
                     if (!uniqWallets[tempBostromAddress]) {
@@ -126,19 +125,23 @@
 
     // Check address
     function isDuplicate(address) {
-        let result = false
+        if(address.substring(0, 2) != '0x' && address.substring(0, 5) != 'terra') {
+            let result = false
 
-        !uniqWallets[generateAddress('bostrom', address)]
-            ? uniqWallets[generateAddress('bostrom', address)] = true
-            : result = true
+            !uniqWallets[generateAddress('bostrom', address)]
+                ? uniqWallets[generateAddress('bostrom', address)] = true
+                : result = true
 
-        return result
+            return result
+        }
     }
 
 
     // Select wallet
     function selectWallet(address) {
-        store.account.currentWallet = generateAddress('bostrom', address)
+        address == 'all'
+            ? store.account.currentWallet = address
+            : store.account.currentWallet = generateAddress('bostrom', address)
     }
 
 
@@ -232,8 +235,6 @@
 
         margin-left: auto;
 
-        cursor: default;
-
         justify-content: flex-start;
         align-items: center;
         align-content: center;
@@ -247,6 +248,8 @@
         width: 20px;
         height: 20px;
         margin-right: 8px;
+
+        transition: background .2s linear;
 
         border-radius: 7px;
         background: #464646;
@@ -269,20 +272,25 @@
         opacity: 0;
     }
 
-    .connected_addresses .all_btn .tooltip
+    /* .connected_addresses .all_btn .tooltip
+            {
+                right: auto;
+                white-space: nowrap;
+                left: 50%;
+
+                transform: translateX(-50%);
+            } */
+
+    /* .connected_addresses .all_btn:hover .tooltip
+            {
+                display: block;
+            } */
+
+
+    .connected_addresses .all_btn.active .check
     {
-        right: auto;
-        white-space: nowrap;
-        left: 50%;
-
-        transform: translateX(-50%);
+        background: #950fff;
     }
-
-    .connected_addresses .all_btn:hover .tooltip
-    {
-        display: block;
-    }
-
     .connected_addresses .all_btn.active .check svg
     {
         opacity: 1;
@@ -507,8 +515,6 @@
     .connected_addresses .item.active
     {
         color: #fff;
-
-        cursor: default;
 
         background: #141414;
         box-shadow: inset 0 0 0 1px #950fff;
