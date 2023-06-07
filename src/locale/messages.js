@@ -380,6 +380,23 @@ export default {
             'proposal_feature_changes_subspace_label': 'Subspace',
             'proposal_feature_changes_value_label': 'Value',
 
+            'proposal_votes_filter_all': 'All',
+            'proposal_votes_filter_yes': 'Yes',
+            'proposal_votes_filter_no': 'No',
+            'proposal_votes_filter_nwv': 'No with veto',
+            'proposal_votes_filter_abstain': 'Abstain',
+
+            'proposal_votes_th_validator': 'Validator',
+            'proposal_votes_th_validator_vote': 'Validator Vote',
+            'proposal_votes_th_most_voted': 'Most voted on',
+            'proposal_votes_th_community_votes': 'Community Votes',
+
+            'proposal_depositors_title': 'Depositors',
+            'proposal_depositors_th_depositor': 'Depositor',
+            'proposal_depositors_th_tx_hash': 'TxHash',
+            'proposal_depositors_th_amount': 'Amount',
+            'proposal_depositors_th_time': 'Time',
+
 
             // Add proposal modal
             'add_proposal_modal_title': 'Create Proposal',

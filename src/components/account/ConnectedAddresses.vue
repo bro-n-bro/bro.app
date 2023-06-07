@@ -8,8 +8,6 @@
                     <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
                 </div>
                 <span>{{ $t('message.account_connected_addresses_all') }}</span>
-
-                <!-- <div class="tooltip">Coming soon</div> -->
             </button>
         </div>
 
@@ -229,8 +227,6 @@
         font-size: 14px;
         line-height: 17px;
 
-        position: relative;
-
         display: flex;
 
         margin-left: auto;
@@ -271,20 +267,6 @@
 
         opacity: 0;
     }
-
-    /* .connected_addresses .all_btn .tooltip
-            {
-                right: auto;
-                white-space: nowrap;
-                left: 50%;
-
-                transform: translateX(-50%);
-            } */
-
-    /* .connected_addresses .all_btn:hover .tooltip
-            {
-                display: block;
-            } */
 
 
     .connected_addresses .all_btn.active .check

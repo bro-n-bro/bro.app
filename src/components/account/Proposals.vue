@@ -250,7 +250,7 @@
         color: currentColor;
         font-size: 14px;
         font-weight: 500;
-        line-height: 17px;
+        line-height: 20px;
 
         position: relative;
 

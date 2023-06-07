@@ -66,16 +66,16 @@
                         </div>
                     </div>
 
+
                     <div class="tabs">
                         <div class="row">
-                            <button class="btn active">{{ $t('message.proposal_tab1') }}</button>
-                            <button class="btn" style="pointer-events: none; opacity: 0.3;">{{ $t('message.proposal_tab2') }}</button>
+                            <button class="btn" :class="{ active: activeTab == 'tab1' }" @click="activeTab = 'tab1'">{{ $t('message.proposal_tab1') }}</button>
+                            <button class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">{{ $t('message.proposal_tab2') }}</button>
                         </div>
-
-                        <div class="tooltip">Coming soon</div>
                     </div>
 
-                    <div>
+
+                    <div v-if="activeTab == 'tab1'">
                         <div class="description" :class="{'active': showDescription}" @click.self="showDescription = !showDescription">
                             <div class="title">{{ $t('message.proposal_desc_title') }}</div>
 
@@ -131,6 +131,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+
+                    <div class="votes_info" v-if="activeTab == 'tab2'">
+                        <VotesInfo :depositors="proposal.depositors" :proposal="proposal" />
                     </div>
                 </div>
 
@@ -421,6 +426,10 @@
 
     import { marked } from 'marked'
 
+    // Components
+    import VotesInfo from '../components/proposal/VotesInfo.vue'
+
+
     ChartJS.register(ArcElement)
 
 
@@ -433,6 +442,7 @@
         updateLoading = ref(false),
         showDescription = ref(true),
         proposal = ref({}),
+        activeTab = ref('tab2'),
         currentVote = ref({ votes: [] }),
         userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
         stakingPool =  ref({}),
@@ -476,7 +486,7 @@
         store.tooltip = i18n.global.t('message.notice_default_proposal_page')
 
         // Set loader
-        loading.value = true
+        // loading.value = true
 
         // Get proposal data
         await getProposalData()
@@ -489,6 +499,14 @@
 
         stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
     })
+
+
+    // watch(() => activeTab.value, async () => {
+    //     if(activeTab.value == 'tabs') {
+    //         // Get proposal votes
+    //         await getProposalVotes()
+    //     }
+    // })
 
 
     // Get proposal data
@@ -777,17 +795,6 @@
     }
 
 
-    .validators .loader_wrap
-    {
-        position: relative;
-
-        height: auto;
-        padding: 0;
-
-        background: none;
-    }
-
-
 
     .data
     {
@@ -986,8 +993,6 @@
 
     .data .tabs
     {
-        position: relative;
-
         margin-bottom: 32px;
         padding-bottom: 32px;
 
@@ -1031,52 +1036,6 @@
 
         border-color: #fff;
         background: #fff;
-    }
-
-
-    .data .tabs .tooltip
-    {
-        font-size: 12px;
-        line-height: 100%;
-
-        position: absolute;
-        z-index: 9;
-        bottom: 100%;
-        left: 126px;
-
-        display: none;
-
-        margin-bottom: 8px;
-        padding: 8px;
-
-        white-space: nowrap;
-
-        border-radius: 8px;
-        background: #282828;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
-    }
-
-    .data .tabs .tooltip:before
-    {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        left: 0;
-
-        display: block;
-
-        width: 29px;
-        height: 7px;
-        margin: 0 auto;
-
-        content: '';
-
-        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
-    }
-
-    .data .tabs:hover .tooltip
-    {
-        display: block;
     }
 
 
@@ -1339,9 +1298,9 @@
     }
 
     /* .info .vote:hover .tooltip
-                {
-                    display: block;
-                } */
+                    {
+                        display: block;
+                    } */
 
 
     .info .vote .btn
