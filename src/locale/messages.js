@@ -332,6 +332,7 @@ export default {
             'account_passport_value': 'Passport Value',
 
             'account_duplicate_ext': 'Duplicate Address',
+            'account_not_supported_ext': 'Not supported',
 
 
             // Proposal page

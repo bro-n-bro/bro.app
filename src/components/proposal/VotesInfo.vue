@@ -408,14 +408,14 @@
     {
         color: #fff;
         font-size: 10px;
-        line-height: 20px;
+        line-height: 14px;
 
         position: absolute;
-        top: -6px;
-        right: -6px;
+        top: -5px;
+        right: -8px;
 
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 14px;
 
         text-align: center;
 
@@ -530,13 +530,12 @@
         height: 8px;
 
         border-radius: 8px;
+        background: #282828;
 
         justify-content: flex-start;
         align-items: center;
         align-content: center;
         flex-wrap: nowrap;
-
-        background: #282828;
     }
 
     table td .bar > *

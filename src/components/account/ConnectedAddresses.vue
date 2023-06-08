@@ -25,33 +25,57 @@
             </div></div>
 
             <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
-            <div><div class="item" v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'" @click.self="selectWallet(item.address)"
+            <!-- <div><div class="item" v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'" @click.self="selectWallet(item.address)"
                 :class="{
                     'duplicate': isDuplicate(item.address),
                     'active': store.account.currentWallet == 'all' || store.account.currentWallet == generateAddress('bostrom', item.address)
                 }"
-            >
-                <div class="tooltip">
-                    {{ $t('message.account_duplicate_ext') }}
+            > -->
+            <div v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'">
+                <div class="item" @click.self="selectWallet(item.address)" :class="{
+                    'duplicate': isDuplicate(item.address),
+                    'active': store.account.currentWallet == 'all' || store.account.currentWallet == generateAddress('bostrom', item.address)
+                }">
+                    <div class="tooltip">
+                        {{ $t('message.account_duplicate_ext') }}
+                    </div>
+
+                    <div class="name">
+                        <span v-if="item.label">{{ item.label }}</span>
+                        <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
+                    </div>
+
+                    <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))">
+                        <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
+                    </button>
+
+                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
+                        <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
+                    </button>
+
+                    <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
+
+                    <EditAddressName :address="item.address" :name="item.label ? item.label : `${item.address.slice(0, 13)}...${item.address.slice(-6)}`"/>
                 </div>
+            </div>
 
-                <div class="name">
-                    <span v-if="item.label">{{ item.label }}</span>
-                    <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
+            <div v-else>
+                <div class="item not_supported">
+                    <div class="tooltip">
+                        {{ $t('message.account_not_supported_ext') }}
+                    </div>
+
+                    <div class="name">
+                        <span>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
+                    </div>
+
+                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
+                        <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
+                    </button>
+
+                    <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
                 </div>
-
-                <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))">
-                    <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
-                </button>
-
-                <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
-                    <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
-                </button>
-
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
-
-                <EditAddressName :address="item.address" :name="item.label ? item.label : `${item.address.slice(0, 13)}...${item.address.slice(-6)}`"/>
-            </div></div>
+            </div>
             </template>
         </div>
 
@@ -137,9 +161,13 @@
 
     // Select wallet
     function selectWallet(address) {
-        address == 'all'
-            ? store.account.currentWallet = address
-            : store.account.currentWallet = generateAddress('bostrom', address)
+        if(address == 'all') {
+            store.account.currentWallet == 'all'
+                ? store.account.currentWallet = store.account.moonPassportOwnerAddress
+                : store.account.currentWallet = address
+        } else {
+            store.account.currentWallet = generateAddress('bostrom', address)
+        }
     }
 
 
@@ -513,8 +541,22 @@
         box-shadow: none;
     }
 
+
+    .connected_addresses .item.not_supported
+    {
+        box-shadow: inset 0 0 0 1px #eb5757;
+    }
+
+    .connected_addresses .item.not_supported .tooltip
+    {
+        right: -31px;
+    }
+
+
     .connected_addresses .item.duplicate > .icon,
-    .connected_addresses .list > *:hover .item.duplicate .tooltip
+    .connected_addresses .list > *:hover .item.duplicate .tooltip,
+    .connected_addresses .item.not_supported > .icon,
+    .connected_addresses .list > *:hover .item.not_supported .tooltip
     {
         display: block;
     }

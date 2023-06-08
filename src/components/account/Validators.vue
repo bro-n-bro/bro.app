@@ -47,12 +47,16 @@
                     <div>{{ store.networks[store.currentNetwork].name }}</div>
                 </div>
 
-                <div class="col_validator" @click.prevent="toggleActiveClass">
+                <div class="col_validator" @click.prevent="toggleActiveClass" v-if="wallet.validators.length">
                     <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
                         <img :src="validator.mintscan_avatar" alt="">
                     </div>
 
                     <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                </div>
+
+                <div class="col_validator empty" v-else>
+                    {{ $t('message.account_validators_empty_text') }}
                 </div>
 
                 <div class="col_percent"></div>
@@ -61,7 +65,7 @@
                     {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
                 </div>
 
-                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validatorsReverse" :key="validators_index">
+                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
                     <div class="col_account_name"></div>
                     <div class="col_network"></div>
 
@@ -197,41 +201,40 @@
         loading.value = true
 
         // Get validators for main wallet
-        try {
-            let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)
+        // try {
+        //     let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)
 
-            await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
-                .then(res => res.json())
-                .then(response => {
-                    let totalTokens = 0
+        //     await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
+        //         .then(res => res.json())
+        //         .then(response => {
+        //             let totalTokens = 0,
+        //                 nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', ownerAddress)).nickname
 
-                    // Calc total totalTokens
-                    response.validators.forEach(validator => totalTokens += validator.coin.amount)
+        //             // Calc total total tokens
+        //             response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
-                    // Sort and set
-                    wallets.push({
-                        address: ownerAddress,
-                        totalTokens,
-                        validators: response.validators.sort((a, b) => {
-                            if (a.coin.amount > b.coin.amount) { return -1 }
-                            if (a.coin.amount < b.coin.amount) { return 1 }
-                            return 0
-                        })
-                    })
+        //             // Sort and set
+        //             wallets.push({
+        //                 nickname,
+        //                 address: ownerAddress,
+        //                 totalTokens,
+        //                 validators: response.validators.sort((a, b) => {
+        //                     if (a.coin.amount > b.coin.amount) { return -1 }
+        //                     if (a.coin.amount < b.coin.amount) { return 1 }
+        //                     return 0
+        //                 })
+        //             })
 
-                    // Math total passport tokens
-                    response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
-
-                    // Hide loader
-                    loading.value = false
-                })
-        } catch (error) {
-            console.log(error)
-        }
+        //             // Math total passport tokens
+        //             response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
+        //         })
+        // } catch (error) {
+        //     console.log(error)
+        // }
 
         // Get validators other wallets
-        if(store.account.moonPassportOwner.extension.addresses) {
-            store.account.moonPassportOwner.extension.addresses.forEach(async address => {
+        // if(store.account.moonPassportOwner.extension.addresses) {
+            store.account.wallets.forEach(async address => {
                 let generatedAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, address.address)
 
                 if(generatedAddress != store.account.moonPassportOwnerAddress && !wallets[generatedAddress]) {
@@ -239,22 +242,42 @@
                         await fetch(`https://rpc.bronbro.io/account/validators/${generatedAddress}`)
                             .then(res => res.json())
                             .then(response => {
+                                let totalTokens = 0,
+                                    tempArray = response.validators,
+                                    nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', generatedAddress)).nickname
+
+                                // Calc total total tokens
+                                response.validators.forEach(validator => totalTokens += validator.coin.amount)
+
                                 // Sort
-                                wallets[generatedAddress] = response.validators.sort((a, b) => {
-                                    if (a.coin.amount > b.coin.amount) { return -1 }
-                                    if (a.coin.amount < b.coin.amount) { return 1 }
-                                    return 0
+                                wallets.push({
+                                    nickname,
+                                    address: generatedAddress,
+                                    totalTokens,
+                                    validators: response.validators.sort((a, b) => {
+                                        if (a.coin.amount > b.coin.amount) { return -1 }
+                                        if (a.coin.amount < b.coin.amount) { return 1 }
+                                        return 0
+                                    }),
+                                    validatorsReverse: tempArray.sort((a, b) => {
+                                        if (a.coin.amount > b.coin.amount) { return 1 }
+                                        if (a.coin.amount < b.coin.amount) { return -1 }
+                                        return 0
+                                    })
                                 })
 
                                 // Math total passport tokens
-                                wallets[generatedAddress].forEach(el => totalPassportTokens += el.coin.amount)
+                                response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
                             })
                     } catch (error) {
                         console.log(error)
                     }
                 }
             })
-        }
+        // }
+
+        // Hide loader
+        loading.value = false
     }
 
 
@@ -461,6 +484,15 @@
         cursor: pointer;
 
         justify-content: flex-end;
+    }
+
+    .validators .item > *.col_validator.empty
+    {
+        color: #555;
+        font-size: 13px;
+        line-height: 17px;
+
+        cursor: default;
     }
 
     .validators .sub_item > *.col_validator
