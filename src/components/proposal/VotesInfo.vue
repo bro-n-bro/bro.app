@@ -61,9 +61,11 @@
                                 </td>
 
                                 <td class="validator_vote">
-                                    <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">Yes</span>
-                                    <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">No</span>
-                                    <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">Abstain</span>
+                                    <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes_btn') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no_btn') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain_btn') }}</span>
+                                    </a>
                                 </td>
 
                                 <td class="most_voted">
@@ -355,11 +357,26 @@
     }
 
 
+    table td a
+    {
+        color: currentColor;
+
+        transition: color .2s linear;
+        text-decoration: none;
+    }
+
+    table td a:hover
+    {
+        color: #950fff;
+    }
+
+
 
     table td.validator
     {
         width: 250px;
         min-width: 250px;
+        max-width: 250px;
 
         table-layout: fixed;
     }
@@ -439,6 +456,7 @@
 
     table td.validator .moniker span
     {
+        display: block;
         overflow: hidden;
 
         text-overflow: ellipsis;

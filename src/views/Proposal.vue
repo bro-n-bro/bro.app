@@ -68,7 +68,7 @@
         loading = ref(true),
         emitter = inject('emitter'),
         proposal = ref({}),
-        activeTab = ref('tab2'),
+        activeTab = ref('tab1'),
         chartDatasets = reactive([]),
         currentVote = reactive({ votes: [] }),
         stakingPool =  ref({})

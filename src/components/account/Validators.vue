@@ -33,7 +33,8 @@
         <div class="items" v-else>
             <!-- <pre>{{ wallets }}</pre> -->
 
-            <div v-for="(wallet, index) in wallets" :key="index" class="item" :class="{'hide': index >= 3 && !showAll}" v-if="wallets.length">
+            <template v-for="(wallet, index) in wallets" :key="index" v-if="wallets.length">
+            <div class="item" :class="{ 'hide': index >= 3 && !showAll }" :style="{ order: wallet.totalTokens * -1 }">
                 <div class="col_account_name">
                     <span v-if="wallet.nickname">{{ wallet.nickname }}</span>
                     <span v-else>{{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}</span>
@@ -65,37 +66,40 @@
                     {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
                 </div>
 
-                <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
-                    <div class="col_account_name"></div>
-                    <div class="col_network"></div>
+                <div class="list">
+                    <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index" :style="{ order: validator.coin.amount * -1 }">
+                        <div class="col_account_name"></div>
+                        <div class="col_network"></div>
 
-                    <div class="col_validator">
-                        <div class="logo">
-                            <img :src="validator.mintscan_avatar" alt="">
-                        </div>
+                        <div class="col_validator">
+                            <div class="logo">
+                                <img :src="validator.mintscan_avatar" alt="">
+                            </div>
 
-                        <div class="name" @click.prevent="openValidatorModal(validator)">
-                            <span>{{ validator.moniker }}</span>
+                            <div class="name" @click.prevent="openValidatorModal(validator)">
+                                <span>{{ validator.moniker }}</span>
 
-                            <div class="tooltip">
-                                {{ validator.moniker }}
+                                <div class="tooltip">
+                                    {{ validator.moniker }}
+                                </div>
+                            </div>
+
+                            <div class="amount">
+                                <span>{{ $filters.toFixed(validator.coin.amount / store.networks[store.currentNetwork].exponent, 3) }}</span> {{ store.networks[store.currentNetwork].token_name }}
                             </div>
                         </div>
 
-                        <div class="amount">
-                            <span>{{ $filters.toFixed(validator.coin.amount / store.networks[store.currentNetwork].exponent, 3) }}</span> {{ store.networks[store.currentNetwork].token_name }}
+                        <div class="col_percent">
+                            {{ $filters.toFixed(validator.coin.amount / wallet.totalTokens * 100, 2) }} %
                         </div>
-                    </div>
 
-                    <div class="col_percent">
-                        {{ $filters.toFixed(validator.coin.amount / wallet.totalTokens * 100, 2) }} %
-                    </div>
-
-                    <div class="col_percent">
-                        {{ $filters.toFixed(validator.coin.amount / totalPassportTokens * 100, 2) }} %
+                        <div class="col_percent">
+                            {{ $filters.toFixed(validator.coin.amount / totalPassportTokens * 100, 2) }} %
+                        </div>
                     </div>
                 </div>
             </div>
+            </template>
 
             <div class="empty_text" v-else>
                 {{ $t('message.account_validators_empty_text') }}
@@ -165,6 +169,9 @@
                         // Calc total totalTokens
                         response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
+                        // Calc total passport tokens
+                        response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
+
                         // Sort and set
                         wallets.push({
                             nickname,
@@ -181,9 +188,6 @@
                                 return 0
                             })
                         })
-
-                        // Math total passport tokens
-                        response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
                     }
 
                     // Hide loader
@@ -200,81 +204,47 @@
         // Set loader
         loading.value = true
 
-        // Get validators for main wallet
-        // try {
-        //     let ownerAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)
-
-        //     await fetch(`https://rpc.bronbro.io/account/validators/${ownerAddress}`)
-        //         .then(res => res.json())
-        //         .then(response => {
-        //             let totalTokens = 0,
-        //                 nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', ownerAddress)).nickname
-
-        //             // Calc total total tokens
-        //             response.validators.forEach(validator => totalTokens += validator.coin.amount)
-
-        //             // Sort and set
-        //             wallets.push({
-        //                 nickname,
-        //                 address: ownerAddress,
-        //                 totalTokens,
-        //                 validators: response.validators.sort((a, b) => {
-        //                     if (a.coin.amount > b.coin.amount) { return -1 }
-        //                     if (a.coin.amount < b.coin.amount) { return 1 }
-        //                     return 0
-        //                 })
-        //             })
-
-        //             // Math total passport tokens
-        //             response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
-        //         })
-        // } catch (error) {
-        //     console.log(error)
-        // }
-
         // Get validators other wallets
-        // if(store.account.moonPassportOwner.extension.addresses) {
-            store.account.wallets.forEach(async address => {
-                let generatedAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, address.address)
+        store.account.wallets.forEach(async address => {
+            let generatedAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, address.address)
 
-                if(generatedAddress != store.account.moonPassportOwnerAddress && !wallets[generatedAddress]) {
-                    try {
-                        await fetch(`https://rpc.bronbro.io/account/validators/${generatedAddress}`)
-                            .then(res => res.json())
-                            .then(response => {
-                                let totalTokens = 0,
-                                    tempArray = response.validators,
-                                    nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', generatedAddress)).nickname
+            if(generatedAddress != store.account.moonPassportOwnerAddress && !wallets[generatedAddress]) {
+                try {
+                    await fetch(`https://rpc.bronbro.io/account/validators/${generatedAddress}`)
+                        .then(res => res.json())
+                        .then(response => {
+                            let totalTokens = 0,
+                                tempArray = response.validators,
+                                nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', generatedAddress)).nickname
 
-                                // Calc total total tokens
-                                response.validators.forEach(validator => totalTokens += validator.coin.amount)
+                            // Calc total total tokens
+                            response.validators.forEach(validator => totalTokens += validator.coin.amount)
 
-                                // Sort
-                                wallets.push({
-                                    nickname,
-                                    address: generatedAddress,
-                                    totalTokens,
-                                    validators: response.validators.sort((a, b) => {
-                                        if (a.coin.amount > b.coin.amount) { return -1 }
-                                        if (a.coin.amount < b.coin.amount) { return 1 }
-                                        return 0
-                                    }),
-                                    validatorsReverse: tempArray.sort((a, b) => {
-                                        if (a.coin.amount > b.coin.amount) { return 1 }
-                                        if (a.coin.amount < b.coin.amount) { return -1 }
-                                        return 0
-                                    })
+                            // Calc total passport tokens
+                            response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
+
+                            // Sort
+                            wallets.push({
+                                nickname,
+                                address: generatedAddress,
+                                totalTokens,
+                                validators: response.validators.sort((a, b) => {
+                                    if (a.coin.amount > b.coin.amount) { return -1 }
+                                    if (a.coin.amount < b.coin.amount) { return 1 }
+                                    return 0
+                                }),
+                                validatorsReverse: tempArray.sort((a, b) => {
+                                    if (a.coin.amount > b.coin.amount) { return 1 }
+                                    if (a.coin.amount < b.coin.amount) { return -1 }
+                                    return 0
                                 })
-
-                                // Math total passport tokens
-                                response.validators.forEach(validator => totalPassportTokens += validator.coin.amount)
                             })
-                    } catch (error) {
-                        console.log(error)
-                    }
+                        })
+                } catch (error) {
+                    console.log(error)
                 }
-            })
-        // }
+            }
+        })
 
         // Hide loader
         loading.value = false
@@ -395,6 +365,19 @@
     }
 
 
+    .validators .items
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .validators .items .hide
+    {
+        display: none;
+    }
+
+
     .validators .items > * + *
     {
         margin-top: 5px;
@@ -428,6 +411,8 @@
 
         display: flex;
 
+        width: 100%;
+
         transition: background .2s linear;
 
         border-radius: 8px;
@@ -448,6 +433,18 @@
         align-items: center;
         align-content: center;
         flex-wrap: nowrap;
+    }
+
+
+    .validators .item .list
+    {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        padding: 0;
+
+        flex-wrap: wrap;
     }
 
 

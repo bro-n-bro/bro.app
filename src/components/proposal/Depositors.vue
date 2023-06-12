@@ -20,7 +20,9 @@
                         <td class="depositor">{{ depositor.depositor_address.slice(0, 8) + '...' + depositor.depositor_address.slice(-8) }}</td>
 
                         <td class="tx_hash">
-                            <span>{{ depositor.tx_hash }}</span>
+                            <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${depositor.tx_hash}`" target="_blank" rel="noopener nofollow">
+                                <span>{{ depositor.tx_hash }}</span>
+                            </a>
                         </td>
 
                         <td class="amount">
@@ -136,6 +138,20 @@
         table-layout: fixed;
 
         white-space: nowrap;
+    }
+
+
+    table td.tx_hash a
+    {
+        color: currentColor;
+
+        transition: color .2s linear;
+        text-decoration: none;
+    }
+
+    table td.tx_hash a:hover
+    {
+        color: #950fff;
     }
 
 

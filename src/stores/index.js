@@ -234,7 +234,7 @@ export const useGlobalStore = defineStore('global', {
             // Get moon passport
             await this.getMoonPassport()
 
-            if (updateOwnerMoonPassport && this.account.moonPassport) {
+            if (updateOwnerMoonPassport && this.account.moonPassport && this.account.moonPassportOwnerAddress != this.account.moonPassport.owner) {
                 // Set owner to localStorage
                 this.account.moonPassportOwnerAddress = this.account.moonPassport.owner
 
