@@ -59,6 +59,7 @@ export default {
             'refresh_btn': 'Refresh',
             'deposit_btn': 'Deposit',
             'use_new_passport_btn': 'Use new passport',
+            'send_btn': 'Send',
 
 
             // Main page
@@ -262,6 +263,12 @@ export default {
             'manage_modal_error_41': "invalid gas limit",
 
             'manage_modal_error_rejected': "The transaction has been rejected",
+
+
+            // Deposit modal
+            'deposit_modal_title': 'Deposit',
+            'deposit_modal_sender_label': 'Sender',
+            'deposit_modal_amount_label': 'Amount available',
 
 
             // Constitution modal

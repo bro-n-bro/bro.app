@@ -8,7 +8,7 @@
         <div class="current_account" v-if="store.account.wallets.length">
             <div class="label">{{ $t('message.proposal_current_account_title') }}</div>
 
-            <button class="btn current" @click.prevent="showAccountDropdown = !showAccountDropdown">
+            <button class="btn current" :class="{ active: showAccountDropdown }" @click.prevent="showAccountDropdown = !showAccountDropdown">
                 <span>{{ getCurrentAccount() }}</span>
                 <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
             </button>
@@ -16,9 +16,11 @@
             <transition name="fadeUp" mode="out-in">
             <div class="dropdown" v-if="showAccountDropdown">
                 <template v-for="(wallet, index) in store.account.wallets" :key="index">
-                <div><button class="btn" v-if="getCurrentAccount() != wallet.nickname" @click.prevent="selectWallet(wallet.address)">
-                    {{ wallet.nickname }}
-                </button></div>
+                <div v-if="getCurrentAccount() != wallet.nickname">
+                    <button class="btn" @click.prevent="selectWallet(wallet.address)">
+                        {{ wallet.nickname }}
+                    </button>
+                </div>
                 </template>
             </div>
             </transition>
@@ -28,7 +30,7 @@
         <div class="current_vote" v-if="props.proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <div class="label">{{ $t('message.proposal_current_vote_title') }}</div>
 
-            <template v-if="props.currentVote.value.votes.length">
+            <template v-if="props.currentVote.value && props.currentVote.value.votes.length">
                 <template v-if="props.currentVote.value.votes[0].option == 'VOTE_OPTION_YES'">
                 <div class="val green">{{ $t('message.proposal_vote_result_yes_label') }}</div>
                 </template>
@@ -74,6 +76,7 @@
 
 
         <div class="deposit_status" v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+        <!-- <div class="deposit_status"> -->
             <div class="title">
                 {{ $t('message.proposal_deposit_status_title') }}
 
@@ -93,10 +96,13 @@
                 <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
             </div>
 
-            <div class="deposit_btn">
-                <span>{{ $t('message.deposit_btn') }}</span>
-                <div class="tooltip">Coming soon</div>
-            </div>
+            <button class="deposit_btn" @click.prevent="showDepositModal = !showDepositModal" :class="{ disabled: store.account.currentWallet != store.wallets.bostrom }">
+                <div class="tooltip" v-if="store.account.currentWallet != store.wallets.bostrom">
+                    {{ $t('message.proposal_add_vote_exp') }}
+                </div>
+
+                {{ $t('message.deposit_btn') }}
+            </button>
         </div>
 
 
@@ -282,6 +288,9 @@
             </div>
         </div>
     </div>
+
+
+    <DepositModal v-if="showDepositModal" :proposal="props.proposal" />
 </template>
 
 
@@ -295,6 +304,9 @@
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
 
+    // Components
+    import DepositModal from '../../components/modal/DepositModal.vue'
+
 
     ChartJS.register(ArcElement)
 
@@ -307,6 +319,7 @@
         loading = ref(false),
         voteLoading = ref(false),
         showAccountDropdown = ref(false),
+        showDepositModal = ref(false),
         userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
         chartOptions = reactive({
             responsive: true,
@@ -532,6 +545,12 @@
         // Hide loader
         loading.value = false
     })
+
+
+    // Event "close Deposit Modal"
+    emitter.on('closeDepositModal', () => {
+        showDepositModal.value = false
+    })
 </script>
 
 
@@ -593,6 +612,13 @@
         width: 16px;
         height: 16px;
         margin: auto;
+
+        transition: transform .2s linear;
+    }
+
+    .current_account .current.active .icon
+    {
+        transform: rotate(180deg);
     }
 
 
@@ -605,21 +631,28 @@
 
         width: 158px;
         max-width: 100%;
-        margin-top: -14px;
+        margin-top: -13px;
+        padding: 4px;
 
         border-radius: 6px;
-        background: #191919;
+        background: #1c1c1c;
     }
+
+    .current_account .dropdown > * + *
+    {
+        margin-top: 4px;
+    }
+
 
     .current_account .dropdown .btn
     {
-        font-size: 14px;
-        line-height: 100%;
+        font-size: 12px;
+        line-height: 15px;
 
         display: block;
 
         width: 100%;
-        padding: 6px;
+        padding: 6px 4px;
 
         transition: background .2s linear;
         text-align: left;
@@ -627,10 +660,9 @@
         border-radius: 6px;
     }
 
-    .current_account .dropdown .btn:hover,
-    .current_account .dropdown .btn.active
+    .current_account .dropdown .btn:hover
     {
-        background: #101010;
+        background: #232323;
     }
 
 
@@ -808,32 +840,37 @@
 
     .deposit_btn
     {
-        position: relative;
-
-        width: 100%;
-    }
-
-    .deposit_btn span
-    {
         font-size: 14px;
         line-height: 100%;
+
+        position: relative;
 
         display: block;
 
         width: 100%;
         margin-top: 16px;
-        padding: 8px;
+        padding: 10px;
 
+        transition: background .2s linear;
         text-align: center;
-        pointer-events: none;
 
-        opacity: .3;
         border-radius: 10px;
         background: #950fff;
     }
 
+    .deposit_btn.disabled
+    {
+        color: rgba(255,255,255,.5);
+
+        cursor: default;
+        pointer-events: none;
+
+        background: rgba(149, 15, 255, .5);
+    }
+
     .deposit_btn .tooltip
     {
+        color: #fff;
         font-size: 12px;
         line-height: 100%;
 
@@ -841,8 +878,6 @@
         z-index: 9;
         bottom: 100%;
         left: 50%;
-
-        display: none;
 
         margin-bottom: 8px;
         padding: 8px;
@@ -873,9 +908,10 @@
         background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
     }
 
-    .deposit_btn:hover .tooltip
+
+    .deposit_btn:hover
     {
-        display: block;
+        background: #7700e1;
     }
 
 

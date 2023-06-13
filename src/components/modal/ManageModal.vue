@@ -277,8 +277,6 @@
         border: 1px solid transparent;
         border-radius: 17px;
         background: #191919;
-
-        font-feature-settings: 'pnum' on, 'lnum' on;
     }
 
     #manage_modal .fields .validator .input
