@@ -365,9 +365,11 @@
 
     // Get current account
     function getCurrentAccount() {
-        let wallet = store.account.wallets.find(wallet => wallet.address == store.account.currentWallet)
+        setTimeout(() => {
+            let { nickname } = store.account.wallets.find(wallet => wallet.address == store.account.currentWallet)
 
-        return wallet.nickname
+            return nickname
+        })
     }
 
 
