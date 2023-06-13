@@ -473,6 +473,7 @@ export default {
 
             // Filter
             'filter_title': 'Filter',
+            'filter_title2': 'Filter',
 
 
             // Feedback
