@@ -340,6 +340,7 @@ export default {
             'proposal_tab1': 'Proposal data',
             'proposal_tab2': 'Votes',
             'proposal_desc_title': 'Description',
+            'proposal_current_account_title': 'Account:',
             'proposal_current_vote_title': 'Your current vote:',
             'proposal_deposit_status_title': 'Deposit status',
             'proposal_details_title': 'Proposal Details',
@@ -350,6 +351,8 @@ export default {
             'proposal_details_submit_label': 'Submit Time',
             'proposal_details_total_label': 'Total Deposit',
             'proposal_details_initial_label': 'Initial Deposit',
+
+            'proposal_add_vote_exp': 'You need to change your Keplr account',
 
             'proposal_vote_info_final_status_label': 'Final Status',
             'proposal_vote_info_current_status_label': 'Current Status',

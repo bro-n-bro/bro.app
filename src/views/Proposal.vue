@@ -111,13 +111,7 @@
 
 
                     // Get user current vote
-                    try {
-                        fetch(`https://rpc.bronbro.io/account/votes/${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}?proposal_id=${proposal.value.id}`)
-                            .then(res => res.json())
-                            .then(vote => currentVote.value = vote)
-                    } catch (error) {
-                        console.log(error)
-                    }
+                    getCurrentVote()
 
 
                     // Get stacking pool
@@ -155,6 +149,18 @@
     }
 
 
+    // Get user current vote
+    async function getCurrentVote() {
+        try {
+            await fetch(`https://rpc.bronbro.io/account/votes/${generateAddress(store.networks[proposal.value.network].address_prefix, store.account.currentWallet)}?proposal_id=${proposal.value.id}`)
+                .then(res => res.json())
+                .then(vote => currentVote.value = vote)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     // Event "refresh Proposal Data"
     emitter.on('refreshProposalData', async () => {
         // Clear data
@@ -165,6 +171,16 @@
 
         // Send "refreshProposalDataFinished" event
         emitter.emit('refreshProposalDataFinished')
+    })
+
+
+    // Event "refresh user current vote"
+    emitter.on('refreshUserCurrentVote', async () => {
+        // Clear data
+        currentVote.value = reactive({ votes: [] })
+
+        // Get proposal data
+        getCurrentVote()
     })
 </script>
 

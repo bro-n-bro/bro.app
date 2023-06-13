@@ -5,23 +5,39 @@
         </div>
 
 
-        <div class="current_vote" v-if="props.proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <div class="loader_wrap" v-if="voteLoading">
-                <div class="loader"><span></span></div>
-            </div>
+        <div class="current_account" v-if="store.account.wallets.length">
+            <div class="label">{{ $t('message.proposal_current_account_title') }}</div>
 
+            <button class="btn current" @click.prevent="showAccountDropdown = !showAccountDropdown">
+                <span>{{ getCurrentAccount() }}</span>
+                <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+            </button>
+
+            <transition name="fadeUp" mode="out-in">
+            <div class="dropdown" v-if="showAccountDropdown">
+                <template v-for="(wallet, index) in store.account.wallets" :key="index">
+                <div><button class="btn" v-if="getCurrentAccount() != wallet.nickname" @click.prevent="selectWallet(wallet.address)">
+                    {{ wallet.nickname }}
+                </button></div>
+                </template>
+            </div>
+            </transition>
+        </div>
+
+
+        <div class="current_vote" v-if="props.proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <div class="label">{{ $t('message.proposal_current_vote_title') }}</div>
 
-            <template v-if="props.currentVote.votes.length">
-                <template v-if="props.currentVote.votes[0].option == 'VOTE_OPTION_YES'">
+            <template v-if="props.currentVote.value.votes.length">
+                <template v-if="props.currentVote.value.votes[0].option == 'VOTE_OPTION_YES'">
                 <div class="val green">{{ $t('message.proposal_vote_result_yes_label') }}</div>
                 </template>
 
-                <template v-if="props.currentVote.votes[0].option == 'VOTE_OPTION_NO'">
+                <template v-if="props.currentVote.value.votes[0].option == 'VOTE_OPTION_NO'">
                     <div class="val yellow">{{ $t('message.proposal_vote_result_no_label') }}</div>
                 </template>
 
-                <template v-if="props.currentVote.votes[0].option == 'VOTE_OPTION_NO_WITH_VETO'">
+                <template v-if="props.currentVote.value.votes[0].option == 'VOTE_OPTION_NO_WITH_VETO'">
                     <div class="val red">{{ $t('message.proposal_vote_result_nwv_label') }}</div>
                 </template>
             </template>
@@ -30,7 +46,11 @@
         </div>
 
 
-        <div class="vote" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        <div class="vote" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" :class="{ disabled: store.account.currentWallet != store.wallets.bostrom }">
+            <div class="loader_wrap" v-if="voteLoading">
+                <div class="loader"><span></span></div>
+            </div>
+
             <button class="btn green" @click.prevent="setVote(1)">
                 {{ $t('message.proposal_vote_yes_btn') }}
             </button>
@@ -47,7 +67,9 @@
                 {{ $t('message.proposal_vote_abstain_btn') }}
             </button>
 
-            <div class="tooltip">Coming soon</div>
+            <div class="tooltip" v-if="store.account.currentWallet != store.wallets.bostrom">
+                {{ $t('message.proposal_add_vote_exp') }}
+            </div>
         </div>
 
 
@@ -284,6 +306,7 @@
         emitter = inject('emitter'),
         loading = ref(false),
         voteLoading = ref(false),
+        showAccountDropdown = ref(false),
         userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
         chartOptions = reactive({
             responsive: true,
@@ -325,6 +348,30 @@
 
         stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
     })
+
+
+    // Get current account
+    function getCurrentAccount() {
+        let { nickname } = store.account.wallets.find(wallet => wallet.address == store.account.currentWallet)
+
+        return nickname
+    }
+
+
+    // Select wallet
+    function selectWallet(address) {
+        // Hide loader
+        voteLoading.value = false
+
+        // Set current wallet
+        store.account.currentWallet = generateAddress('bostrom', address)
+
+        // Refresh user current vote
+        emitter.emit('refreshUserCurrentVote')
+
+        // Hide dropdown
+        showAccountDropdown.value = false
+    }
 
 
     // Date calc
@@ -415,7 +462,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks[props.proposal.network].denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_failed_title'),
                     text: i18n.global.t(`message.manage_modal_error_${result.code}`),
                     type: 'error',
@@ -431,12 +478,12 @@
 
             // Show notification
             notification.notify({
-                group: store.networks[props.proposal.network].denom,
+                group: 'default',
                 clean: true
             })
 
             notification.notify({
-                group: store.networks[props.proposal.network].denom,
+                group: 'default',
                 title: i18n.global.t('message.notification_successful_title'),
                 type: 'success',
                 data: {
@@ -446,14 +493,8 @@
             })
 
 
-            // Update user current vote
-            try {
-                await fetch(`https://rpc.bronbro.io/account/votes/${generateAddress(store.networks[props.proposal.network].address_prefix, store.account.currentWallet)}?proposal_id=${props.proposal.id}`)
-                    .then(res => res.json())
-                    .then(vote => props.currentVote = vote)
-            } catch (error) {
-                console.log(error)
-            }
+            // Refresh user current vote
+            emitter.emit('refreshUserCurrentVote')
 
 
             // Hide loader
@@ -495,6 +536,105 @@
 
 
 <style scoped>
+    .current_account
+    {
+        position: relative;
+
+        display: flex;
+
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+
+        border-bottom: 1px solid rgba(255, 255, 255, .05);
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .current_account .label
+    {
+        font-weight: 500;
+        line-height: 100%;
+    }
+
+
+    .current_account .current
+    {
+        font-size: 14px;
+        line-height: 100%;
+
+        position: relative;
+
+        display: block;
+
+        width: 158px;
+        height: 28px;
+        margin-left: auto;
+        padding: 6px 26px 6px 6px;
+
+        text-align: left;
+
+        border-radius: 6px;
+        background: #191919;
+    }
+
+    .current_account .current .icon
+    {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        bottom: 0;
+
+        display: block;
+
+        width: 16px;
+        height: 16px;
+        margin: auto;
+    }
+
+
+    .current_account .dropdown
+    {
+        position: absolute;
+        z-index: 9;
+        top: 100%;
+        right: 0;
+
+        width: 158px;
+        max-width: 100%;
+        margin-top: -14px;
+
+        border-radius: 6px;
+        background: #191919;
+    }
+
+    .current_account .dropdown .btn
+    {
+        font-size: 14px;
+        line-height: 100%;
+
+        display: block;
+
+        width: 100%;
+        padding: 6px;
+
+        transition: background .2s linear;
+        text-align: left;
+
+        border-radius: 6px;
+    }
+
+    .current_account .dropdown .btn:hover,
+    .current_account .dropdown .btn.active
+    {
+        background: #101010;
+    }
+
+
+
     .current_vote
     {
         font-weight: 500;
@@ -508,6 +648,11 @@
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
+    }
+
+    .current_vote .val::first-letter
+    {
+        text-transform: uppercase;
     }
 
     .current_vote .green
@@ -579,11 +724,6 @@
         background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
     }
 
-    /* .vote:hover .tooltip
-                        {
-                            display: block;
-                        } */
-
 
     .vote .btn
     {
@@ -595,12 +735,17 @@
         margin-left: 8px;
         padding: 8px;
 
-        transition: background .2s linear;
+        transition: .2s linear;
+
+        border-radius: 10px;
+        background: #353535;
+    }
+
+    .vote.disabled .btn
+    {
         pointer-events: none;
 
         opacity: .3;
-        border-radius: 10px;
-        background: #353535;
     }
 
     .vote .btn.green
