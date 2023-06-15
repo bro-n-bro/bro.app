@@ -396,6 +396,7 @@ export default {
             'proposal_votes_filter_no': 'No',
             'proposal_votes_filter_nwv': 'No with veto',
             'proposal_votes_filter_abstain': 'Abstain',
+            'proposal_votes_filter_null': 'Did not vote',
 
             'proposal_votes_th_validator': 'Validator',
             'proposal_votes_th_validator_vote': 'Validator Vote',

@@ -27,7 +27,10 @@
                 </button>
 
                 <!-- <button class="btn" :class="{ active: currentFilter == 'weighted' }" @click.prevent="currentFilter = 'weighted'">Weighted 2</button> -->
-                <!-- <button class="btn" :class="{ active: currentFilter == 'note_vote' }" @click.prevent="currentFilter = 'note_vote'">Did not vote 72</button> -->
+
+                <button class="btn" :class="{ active: currentFilter == 'note_vote' }" @click.prevent="currentFilter = null">
+                    {{ $t('message.proposal_votes_filter_null') }} {{ getFilterCount(null) }}
+                </button>
             </div>
 
             <div class="table_wrap">
@@ -162,6 +165,10 @@
             result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_ABSTAIN')
         }
 
+        if(status == null) {
+            result = validators.value.delegators.filter(el => el.validator_option == null)
+        }
+
         return result.length
     }
 
@@ -187,6 +194,10 @@
 
         if(status == 'Abstain') {
             result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_ABSTAIN')
+        }
+
+        if(status == null) {
+            result = validators.value.delegators.filter(el => el.validator_option == null)
         }
 
         // Sort before return
@@ -651,6 +662,7 @@
     }
 
 
+    table tr:first-child td.validator .moniker .tooltip,
     table tr:first-child td .bar .tooltip
     {
         top: 100%;
@@ -660,6 +672,7 @@
         margin-bottom: 0;
     }
 
+    table tr:first-child td.validator .moniker .tooltip:before,
     table tr:first-child td .bar .tooltip:before
     {
         top: auto;

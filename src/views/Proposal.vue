@@ -20,10 +20,18 @@
                     <HeadInfo :proposal="proposal" />
 
 
-                    <div class="tabs">
+                    <Depositors :depositors="proposal.depositors" :proposal="proposal" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" />
+
+
+                    <div class="tabs" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                         <div class="row">
-                            <button class="btn" :class="{ active: activeTab == 'tab1' }" @click="activeTab = 'tab1'">{{ $t('message.proposal_tab1') }}</button>
-                            <button class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">{{ $t('message.proposal_tab2') }}</button>
+                            <button class="btn" :class="{ active: activeTab == 'tab1' }" @click="activeTab = 'tab1'">
+                                {{ $t('message.proposal_tab1') }}
+                            </button>
+
+                            <button class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">
+                                {{ $t('message.proposal_tab2') }}
+                            </button>
                         </div>
                     </div>
 
@@ -59,6 +67,7 @@
     import HeadInfo from '../components/proposal/HeadInfo.vue'
     import Description from '../components/proposal/DescriptionInfo.vue'
     import VotesInfo from '../components/proposal/VotesInfo.vue'
+    import Depositors from '../components/proposal/Depositors.vue'
     import Info from '../components/proposal/ProposalInfo.vue'
 
 
@@ -97,7 +106,7 @@
                     if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
                         let remnant = store.networks[proposal.value.network].proposal_need - (proposal.value.deposit / store.networks[proposal.value.network].exponent)
 
-                        chartDatasets.push(proposal.valuedeposit / store.networks[proposal.value.network].exponent)
+                        chartDatasets.push(proposal.value.deposit / store.networks[proposal.value.network].exponent)
 
                         if(remnant > 0) {
                             chartDatasets.push(remnant)
@@ -240,6 +249,12 @@
     }
 
 
+    .data .head + .depositors
+    {
+        margin-bottom: 40px;
+    }
+
+
     .data .tabs
     {
         margin-bottom: 32px;
@@ -301,4 +316,5 @@
         border-radius: 20px;
         background: #0d0d0d;
     }
+
 </style>

@@ -1101,8 +1101,8 @@
                         // Set data in network
                         let currentNetworkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
 
-                        currentNetworkInWallet.address = response.address,
-                        currentNetworkInWallet.total = totals,
+                        currentNetworkInWallet.address = response.address
+                        currentNetworkInWallet.total = totals
 
                         currentNetworkInWallet.balance = {
                             liquid: {
@@ -1119,11 +1119,11 @@
                             })
                         }
 
-                        currentNetworkInWallet.totalPrice_usdt = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt,
+                        currentNetworkInWallet.totalPrice_usdt = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_usdt
 
-                        currentNetworkInWallet.totalPrice_atom = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom,
+                        currentNetworkInWallet.totalPrice_atom = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_atom
 
-                        currentNetworkInWallet.totalPrice_eth = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth,
+                        currentNetworkInWallet.totalPrice_eth = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_eth
 
                         currentNetworkInWallet.totalPrice_btc = totals.liquid / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.ibc / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.staked / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.rewards / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc + totals.unbonding / store.networks.cosmoshub.exponent * store.networks.cosmoshub.price_btc
 
