@@ -213,7 +213,6 @@
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
-    // import Loader from '../components/Loader.vue'
 
 
     const store = useGlobalStore(),
@@ -237,9 +236,17 @@
         })
 
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_create_passport')
+
+        if(store.account.tempUserName.length && store.account.tempUserName != 'undefined') {
+            data.nickName = store.account.tempUserName
+
+            data.nickName.length < 8
+                ? data.nickNameError = true
+                : data.nickNameError = false
+        }
     })
 
 
@@ -259,15 +266,11 @@
 
     // Avatar upload
     function avatarUpload () {
-        let formData = new FormData()
-
         // Reset preview
         avatarPreview.src = ''
 
         // File size valdate
-        if(avatar.value.files[0].size / 1024 / 1024 <= 5){
-            formData.append('avatar', avatar.value.files[0])
-
+        if(avatar.value.files[0].size / 1024 / 1024 <= 5) {
             // Get preview
             let reader = new FileReader()
 
@@ -298,6 +301,8 @@
         event.target.value.length < 8
             ? data.nickNameError = true
             : data.nickNameError = false
+
+        store.account.tempUserName = event.target.value
     }
 
 
@@ -425,8 +430,6 @@
 
                 // Send Tx
                 let result = await sendTx(prepareResult)
-
-                console.log(result)
 
                 if (result.code === 0) {
                     // Set TXS

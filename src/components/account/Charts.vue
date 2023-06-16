@@ -946,11 +946,53 @@
         loading.value = true
 
         // Get cosmos hub data
-        for (const wallet of store.account.wallets) {
+        for (let wallet of store.account.wallets) {
             try {
                 await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, wallet.address)}`)
                     .then(res => res.json())
                     .then(response => {
+                        // Clean data
+                        if(response.liquid && response.liquid.native) {
+                            for (let i = response.liquid.native.length - 1; i >= 0; i--) {
+                                if (response.liquid.native[i].symbol === null || response.liquid.native[i].exponent === null || response.liquid.native[i].price === null) {
+                                    response.liquid.native.splice(i, 1)
+                                }
+                            }
+                        }
+
+                        if(response.liquid && response.liquid.ibc) {
+                            for (let i = response.liquid.ibc.length - 1; i >= 0; i--) {
+                                if (response.liquid.ibc[i].symbol === null || response.liquid.ibc[i].exponent === null || response.liquid.ibc[i].price === null) {
+                                    response.liquid.ibc.splice(i, 1)
+                                }
+                            }
+                        }
+
+                        if(response.staked) {
+                            for (let i = response.staked.length - 1; i >= 0; i--) {
+                                if (response.staked[i].symbol === null || response.staked[i].exponent === null || response.staked[i].price === null) {
+                                    response.staked.splice(i, 1)
+                                }
+                            }
+                        }
+
+                        if(response.unbonding) {
+                            for (let i = response.unbonding.length - 1; i >= 0; i--) {
+                                if (response.unbonding[i].symbol === null || response.unbonding[i].exponent === null || response.unbonding[i].price === null) {
+                                    response.unbonding.splice(i, 1)
+                                }
+                            }
+                        }
+
+                        if(response.rewards) {
+                            for (let i = response.rewards.length - 1; i >= 0; i--) {
+                                if (response.rewards[i].symbol === null || response.rewards[i].exponent === null || response.rewards[i].price === null) {
+                                    response.rewards.splice(i, 1)
+                                }
+                            }
+                        }
+
+
                         let totals = {
                             liquid: 0,
                             staked: 0,
@@ -961,19 +1003,6 @@
                             liquid_rewards: 0
                         },
                         groupByDenom = []
-
-                        wallet.networks = [{
-                            name: 'cosmoshub',
-                            color: '#2E314B',
-                            denom: store.networks.cosmoshub.denom,
-                            token_name: store.networks.cosmoshub.token_name,
-                            exponent: store.networks.cosmoshub.exponent,
-                            price: store.prices.find(el => el.symbol == 'ATOM').price,
-                            price_usdt: store.networks.cosmoshub.price_usdt,
-                            price_atom: store.networks.cosmoshub.price_atom,
-                            price_eth: store.networks.cosmoshub.price_eth,
-                            price_btc: store.networks.cosmoshub.price_btc,
-                        }]
 
 
                         // Calc liquid tokens
@@ -1181,10 +1210,8 @@
             currentNetwork.value = currentData.value.networks.find(el => el.name == 'cosmoshub')
 
             // Calc charts totals
-            // totalChartFirst.value = 0
             totalChartFirst.value = currentNetwork.value.total.staked + currentNetwork.value.total.liquid_rewards + currentNetwork.value.total.unbonding
 
-            // totalChartThird.value = 0
             currentNetwork.value.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
 
 
@@ -1241,7 +1268,7 @@
 
 
             // Get current walllet data
-            for (const wallet of store.account.wallets) {
+            for (let wallet of store.account.wallets) {
                 currentData.value.totalPrice_usdt += wallet.totalPrice_usdt,
                 currentData.value.totalPrice_eth += wallet.totalPrice_eth,
                 currentData.value.totalPrice_btc += wallet.totalPrice_btc,
@@ -1253,8 +1280,8 @@
 
 
             // Calc charts totals
-            for (const wallet of store.account.wallets) {
-                for (const network of wallet.networks) {
+            for (let wallet of store.account.wallets) {
+                for (let network of wallet.networks) {
                     if(network.name == 'cosmoshub') {
                         totals.liquid += network.total.liquid,
                         totals.staked += network.total.staked ,
@@ -1275,8 +1302,8 @@
             // Balance
             let i = 0
 
-            for (const wallet of store.account.wallets) {
-                for (const network of wallet.networks) {
+            for (let wallet of store.account.wallets) {
+                for (let network of wallet.networks) {
                     if(network.name == 'cosmoshub') {
                         // Concat ibc
                         if(i && network.balance.liquid.ibc != null) {
@@ -1370,8 +1397,8 @@
                 cosmosHubWalletTotalPrice_btc = 0,
                 cosmosHubWalletTotalPrice_eth = 0
 
-            for (const wallet of store.account.wallets) {
-                for (const network of wallet.networks) {
+            for (let wallet of store.account.wallets) {
+                for (let network of wallet.networks) {
                     if(network.name == 'cosmoshub') {
                         cosmosHubWalletTotalPrice_usdt += network.totalPrice_usdt
                         cosmosHubWalletTotalPrice_atom += network.totalPrice_atom

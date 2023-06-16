@@ -3,6 +3,7 @@ import { useLocalStorage } from '@vueuse/core'
 const account = {
     userName: '',
     avatar: '',
+    tempUserName: useLocalStorage('tempUserName'),
     signature: '',
 
     moonPassport: null,

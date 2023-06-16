@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
 
 import errorLayut from '../layouts/Error.vue'
-import defaultLayut from '../layouts/Default.vue'
+import defaultLayout from '../layouts/Default.vue'
 
 const routes = [
 	{
@@ -46,7 +46,7 @@ const routes = [
 		name: 'Dashboard',
 		component: () => import('../views/Dashboard.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
 		}
 	},
@@ -55,7 +55,7 @@ const routes = [
 		name: 'CreatePassport',
 		component: () => import('../views/CreatePassport.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'with_passport']
 		}
 	},
@@ -64,7 +64,7 @@ const routes = [
 		name: 'Account',
 		component: () => import('../views/Account.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
@@ -73,7 +73,7 @@ const routes = [
 		name: 'Passport',
 		component: () => import('../views/Passport.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
@@ -82,7 +82,7 @@ const routes = [
 		name: 'Proposals',
 		component: () => import('../views/Proposals.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
@@ -91,7 +91,7 @@ const routes = [
 		name: 'Proposal',
 		component: () => import('../views/Proposal.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr', 'not_connected', 'without_passport']
 		}
 	},
@@ -100,7 +100,7 @@ const routes = [
 		name: 'MainPage',
 		component: () => import('../views/MainPage.vue'),
 		meta: {
-			layout: defaultLayut,
+			layout: defaultLayout,
 			accessDenied: ['without_keplr']
 		}
 	}

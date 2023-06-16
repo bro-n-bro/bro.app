@@ -316,6 +316,25 @@ export const useGlobalStore = defineStore('global', {
                             price_atom: this.networks.cosmoshub.price_atom,
                             price_eth: this.networks.cosmoshub.price_eth,
                             price_btc: this.networks.cosmoshub.price_btc,
+                            total: {
+                                liquid: 0,
+                                staked: 0,
+                                unbonding: 0,
+                                rewards: 0,
+                                outside: 0,
+                                ibc: 0,
+                                liquid_rewards: 0
+                            },
+                            balance: {
+                                liquid: {
+                                    native: null,
+                                    ibc: null
+                                },
+                                staked: null,
+                                unbonding: null,
+                                rewards: null,
+                                groupByDenom: []
+                            }
                         }
                     ]
                 })
@@ -343,6 +362,25 @@ export const useGlobalStore = defineStore('global', {
                                             price_atom: this.networks.cosmoshub.price_atom,
                                             price_eth: this.networks.cosmoshub.price_eth,
                                             price_btc: this.networks.cosmoshub.price_btc,
+                                            total: {
+                                                liquid: 0,
+                                                staked: 0,
+                                                unbonding: 0,
+                                                rewards: 0,
+                                                outside: 0,
+                                                ibc: 0,
+                                                liquid_rewards: 0
+                                            },
+                                            balance: {
+                                                liquid: {
+                                                    native: null,
+                                                    ibc: null
+                                                },
+                                                staked: null,
+                                                unbonding: null,
+                                                rewards: null,
+                                                groupByDenom: []
+                                            }
                                         }
                                     ]
                                 })
