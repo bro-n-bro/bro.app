@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="`/proposal/${props.proposal.id}`" class="proposal">
+    <router-link :to="`/${store.currentNetwork}/proposal/${props.proposal.id}`" class="proposal">
         <div class="network_logo">
             <img :src="`/${store.currentNetwork}_logo.png`" alt="">
         </div>

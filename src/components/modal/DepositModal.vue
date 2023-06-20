@@ -12,7 +12,7 @@
                 </div>
 
 
-                <form action="" class="form">
+                <form class="form" @submit.prevent="onSubmit">
                     <div class="line">
                         <div class="label">
                             {{ $t('message.deposit_modal_sender_label') }}
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="number" class="input" v-model="amount" placeholder="0" @input="setAmount">
+                            <input type="text" class="input" v-model="amount" placeholder="0" @input="setAmount">
 
                             <div class="balance">
                                 <Loader v-if="loader" />
@@ -59,13 +59,14 @@
     import { inject, ref, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
-    import { generateAddress } from '@/utils'
+    import { generateAddress, prepareTx, sendTx } from '@/utils'
 
     // Components
     import Loader from '@/components/Loader.vue'
 
 
     const props = defineProps(['proposal']),
+        i18n = inject('i18n'),
         emitter = inject('emitter'),
         store = useGlobalStore(),
         notification = useNotification(),
@@ -85,7 +86,7 @@
         let wallet = store.account.wallets.find(wallet => wallet.address == store.account.currentWallet),
             networkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
 
-        if(networkInWallet.balance) {
+        if(networkInWallet.balance > 0) {
             // Get balance from state
             balance.value = networkInWallet.balance.liquid.native[0].amount / Math.pow(10, networkInWallet.balance.liquid.native[0].exponent)
         } else {
@@ -112,6 +113,112 @@
         if(parseFloat(event.target.value.replace(',', '.')) > balance.value) {
             amount.value = balance.value
         }
+    }
+
+
+    // Submit form
+    async function onSubmit() {// Show notification
+        notification.notify({
+            group: 'default',
+            duration: -100,
+            title: i18n.global.t('message.notification_proposal_deposit_process')
+        })
+
+        try {
+            // Message
+            let msgAny = [{
+                typeUrl: '/cosmos.gov.v1beta1.MsgDeposit',
+                value: {
+                    proposalId: props.proposal.id,
+                    depositor: store.wallets[store.currentNetwork],
+                    amount: {
+                        denom: store.networks[store.currentNetwork].denom,
+                        amount: `${parseFloat(amount.value.replace(',', '.')).toFixed(store.networks[store.currentNetwork].exponent.toString().length - 1) * store.networks[store.currentNetwork].exponent}`
+                    }
+                }
+            }]
+
+            // Prepare Tx
+            let prepareResult = await prepareTx([msgAny], false, props.proposal.network)
+
+            // Send Tx
+            let result = await sendTx(prepareResult)
+
+            if (result.code === 0) {
+                // Set TXS
+                store.lastTXS = result.transactionHash
+
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: 'default',
+                    title: i18n.global.t('message.notification_success_proposal_deposit_title'),
+                    type: 'success',
+                    data: {
+                        chain: store.networks[store.currentNetwork].name,
+                        tx_type: i18n.global.t('message.notification_action_proposal_deposit')
+                    }
+                })
+
+                // Refresh proposal data
+                refreshProposalData()
+            }
+
+            if (result.code) {
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: 'default',
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    type: 'error',
+                    data: {
+                        chain: store.networks[store.currentNetwork].name,
+                        tx_type: i18n.global.t('message.notification_action_address_add')
+                    }
+                })
+
+                // Hide loader
+                loading.value = false
+            }
+        } catch (error) {
+            console.log(error)
+
+            // Show notification
+            notification.notify({
+                group: 'default',
+                clean: true
+            })
+
+            notification.notify({
+                group: 'default',
+                title: i18n.global.t('message.notification_failed_title'),
+                text: i18n.global.t('message.manage_modal_error_rejected'),
+                type: 'error',
+                data: {
+                    chain: store.networks[store.currentNetwork].name,
+                    tx_type: i18n.global.t('message.manage_modal_action_deposit')
+                }
+            })
+        }
+    }
+
+
+    // Refresh proposal data
+    async function refreshProposalData() {
+        // Set loader
+        loading.value = true
+
+        // Send "refreshProposalData" event
+        emitter.emit('refreshProposalData')
     }
 </script>
 

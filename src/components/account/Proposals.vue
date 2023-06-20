@@ -36,13 +36,16 @@
 
         <div class="items" v-else>
             <!-- <pre>{{ data.proposals }}</pre> -->
+
             <template v-for="(proposal, index) in data.proposals" :key="index">
-            <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
+            <!-- <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
+            <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !data.showAll }">
                 <div class="col_network">
                     <template v-if="index < 1">
                     <div class="logo">
                         <img :src="`/${store.currentNetwork}_logo.png`" alt="">
                     </div>
+
                     <div>{{ store.networks[store.currentNetwork].name }}</div>
                     </template>
                 </div>
@@ -67,7 +70,7 @@
             </template>
         </div>
 
-        <button class="spoler_btn" :class="{'active': data.showAll}" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
+        <button class="spoler_btn" :class="{ 'active': data.showAll }" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>

@@ -290,7 +290,7 @@
     </div>
 
 
-    <DepositModal v-if="showDepositModal" :proposal="props.proposal" />
+    <DepositModal v-if="showDepositModal && store.account.currentWallet == store.wallets.bostrom" :proposal="props.proposal" />
 </template>
 
 

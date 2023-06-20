@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <button class="spoler_btn" :class="{'active': showAll}" @click.prevent="showAll = !showAll" v-if="wallets.length > 4">
+        <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="wallets.length > 3">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
@@ -135,7 +135,7 @@
 
     var wallets = reactive([]),
         totalPassportTokens = 0,
-        showAll = false
+        showAll = ref(false)
 
 
     onBeforeMount(async () => {
@@ -731,7 +731,7 @@
     .validators .spoler_btn .icon
     {
         display: block;
-
+transition: transform .2s linear;
         width: 20px;
         height: 20px;
     }
@@ -740,6 +740,11 @@
     .validators .spoler_btn:hover
     {
         background: #950fff;
+    }
+
+    .validators .spoler_btn.active .icon
+    {
+        transform: rotate(180deg);
     }
 
 </style>

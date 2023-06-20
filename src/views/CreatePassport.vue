@@ -44,9 +44,9 @@
                             </div>
                         </div>
 
-                        <div class="line" :class="{'error': data.nickNameError}">
+                        <div class="line" :class="{ 'error': data.nickNameError }">
                             <div class="field">
-                                <input type="text" v-model="data.nickName" @input="validateName" class="input" :placeholder="$t('message.passport_name_placeholder')">
+                                <input type="text" v-model="data.nickName" @input="validateName" maxlength="16" class="input" :placeholder="$t('message.passport_name_placeholder')">
 
                                 <div class="exp">
                                     {{ $t('message.passport_name_exp') }}
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="line">
-                            <div class="constitution_link" @click.prevent="openConstitutionModal">
+                            <div class="constitution_link" @click.prevent="openConstitutionModal()">
                                 <button type="button" class="btn">
                                     <span>{{ $t('message.passport_constitution_link') }}</span><sup>*</sup>
                                 </button>
@@ -240,6 +240,7 @@
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_create_passport')
 
+        // Set nickname from localstorage
         if(store.account.tempUserName.length && store.account.tempUserName != 'undefined') {
             data.nickName = store.account.tempUserName
 
@@ -296,12 +297,13 @@
     }
 
 
-    // Validate name
+    // Validate nickname
     function validateName(event) {
         event.target.value.length < 8
             ? data.nickNameError = true
             : data.nickNameError = false
 
+        // Set in loclstorage
         store.account.tempUserName = event.target.value
     }
 
@@ -384,7 +386,7 @@
     }
 
 
-    // Check nickname
+    // Nickname availability check
     async function checkNickname() {
         try {
             let response = await store.jsCyber.queryContractSmart(

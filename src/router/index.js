@@ -87,7 +87,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/proposal/:proposal_id',
+		path: '/:network/proposal/:proposal_id',
 		name: 'Proposal',
 		component: () => import('../views/Proposal.vue'),
 		meta: {

@@ -87,6 +87,11 @@
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_proposal_page')
 
+        // Reset current wallet if 'all'
+        if(store.account.currentWallet == 'all') {
+            store.account.currentWallet = store.account.moonPassportOwnerAddress
+        }
+
         // Get proposal data
         await getProposalData()
     })

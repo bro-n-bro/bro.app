@@ -154,6 +154,7 @@ export default {
             'manage_modal_action_redelegate': 'Redelegate',
             'manage_modal_action_claim': 'Claim',
             'manage_modal_action_restake': 'Restake',
+            'manage_modal_action_deposit': 'Deposit',
 
             'manage_modal_validator_name': 'Bro_n_Bro',
             'manage_modal_commission': 'Commission',
@@ -526,6 +527,10 @@ export default {
 
             'notification_action_proposal_vote': 'Proposal vote',
             'notification_proposal_vote_process': 'Proposal voiting...',
+
+            'notification_proposal_deposit_process': 'Proposal depositing...',
+            'notification_success_proposal_deposit_title': 'Proposal deposit successful',
+            'notification_action_proposal_deposit': 'Proposal deposit',
 
 
             // Footer

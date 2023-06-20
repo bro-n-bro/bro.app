@@ -45,13 +45,29 @@
                                 </div>
                             </div>
 
-                            <div class="line">
+                            <div class="line" :class="{ 'error': data.nickNameError }">
                                 <div class="field">
                                     <div class="label">
                                         {{ $t('message.passport_name_label') }}
                                     </div>
 
-                                    <input type="text" name="name" v-model="data.nickName" class="input" readonly>
+                                    <input class="input" type="text" name="name" maxlength="16" v-model="data.nickName" @input="validateName" :readonly="!data.editNickname">
+
+                                    <button type="button" class="edit_btn" @click="enableEditNickname()" v-if="!data.editNickname && !data.status">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.57716 3.76801L10.5638 2.78134C10.6876 2.65747 10.8347 2.55921 10.9965 2.49217C11.1583 2.42513 11.3317 2.39062 11.5068 2.39062C11.682 2.39062 11.8554 2.42513 12.0172 2.49217C12.179 2.55921 12.326 2.65747 12.4498 2.78134L13.3925 3.72401C13.6425 3.97404 13.7829 4.31312 13.7829 4.66667C13.7829 5.02023 13.6425 5.3593 13.3925 5.60934L12.4058 6.59601M9.57716 3.76801L3.16649 10.178C2.94515 10.3994 2.80874 10.6915 2.78116 11.0033L2.61983 12.83C2.61116 12.9271 2.6239 13.0249 2.65714 13.1166C2.69039 13.2082 2.74333 13.2915 2.81223 13.3604C2.88114 13.4294 2.96433 13.4824 3.05595 13.5158C3.14757 13.5491 3.24538 13.5619 3.34249 13.5533L5.16916 13.392C5.48144 13.3647 5.77413 13.2283 5.99583 13.0067L12.4058 6.59601M9.57716 3.76801L12.4058 6.59601" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                        </svg>
+                                    </button>
+
+                                    <template v-else>
+                                    <button type="submit" class="submit_btn" @click.prevent="updateNickname()">
+                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                    </button>
+
+                                    <button type="button" class="cancel_btn" @click.prevent="disableEditNickname()">
+                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                                    </button>
+                                    </template>
                                 </div>
                             </div>
 
@@ -91,7 +107,7 @@
                     {{ $t('message.change_image_btn') }}
                 </label>
 
-                <button class="btn update_btn" v-else @click.prevent="updatePassport">
+                <button class="btn update_btn" v-else @click.prevent="updatePassport()">
                     {{ $t('message.update_btn') }}
                 </button>
 
@@ -127,10 +143,12 @@
         data = reactive({
             moonAddress: store.account.moonPassportOwnerAddress,
             nickName: '',
+            nickNameError: false,
             passportImage: '',
             status: false,
             bgGradient: '',
-            showDownloadBtn: false
+            showDownloadBtn: false,
+            editNickname: false
         })
 
 
@@ -169,6 +187,26 @@
             }, delay)
         }
     })
+
+
+    // Enable edit nickname
+    function enableEditNickname() {
+        let input = event.target.closest('.line').querySelector('.input')
+
+        data.editNickname = true
+
+        // Focus on input
+        setTimeout(() => input.focus())
+    }
+
+
+    // Disable edit nickname
+    function disableEditNickname() {
+        data.editNickname = false
+
+        // Set nickName from passport
+        data.nickName = store.account.moonPassportOwner.extension.nickname
+    }
 
 
     // Avatar upload
@@ -309,6 +347,154 @@
 
         data.status = false
     }
+
+
+    // Validate nickname
+    function validateName(event) {
+        event.target.value.length < 8
+            ? data.nickNameError = true
+            : data.nickNameError = false
+
+        // Set in loclstorage
+        store.account.tempUserName = event.target.value
+    }
+
+
+    // Nickname availability check
+    async function checkNickname() {
+        try {
+            let response = await store.jsCyber.queryContractSmart(
+                store.CONTRACT_ADDRESS_PASSPORT,
+                {
+                    passport_by_nickname: {
+                        nickname: data.nickName
+                    }
+                }
+            )
+
+            return response
+        } catch (error) {
+            console.log(error)
+
+            return null
+        }
+    }
+
+
+    // Update nickname
+    async function updateNickname() {
+        if(await checkNickname() == null) {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                duration: -100,
+                title: i18n.global.t('message.notification_passport_update_process')
+            })
+
+            data.status = true
+
+            // Disable edit nickname
+            data.editNickname = false
+
+            try{
+                // Prepare Tx
+                let prepareResult = await preparePassportTx({
+                    update_name: {
+                        new_nickname: data.nickName,
+                        old_nickname: store.account.moonPassportOwner.extension.nickname
+                    }
+                })
+
+                // Send Tx
+                let result = await sendTx(prepareResult)
+
+                if (result.code === 0) {
+                    // Set TXS
+                    store.lastTXS = result.transactionHash
+
+                    // Show notification
+                    notification.notify({
+                        group: 'default',
+                        clean: true
+                    })
+
+                    notification.notify({
+                        group: store.networks.bostrom.denom,
+                        title: i18n.global.t('message.notification_success_update_passport_title'),
+                        type: 'success',
+                        data: {
+                            chain: 'bostrom',
+                            tx_type: i18n.global.t('message.notification_action_update_passport')
+                        }
+                    })
+
+                    // Generate gradient
+                    data.bgGradient = gradient(data.nickName)
+
+                    // Create passport image
+                    htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
+                        .then(dataUrl => data.passportImage = dataUrl)
+                        .catch(error => console.error(error))
+
+                    // Get moon passport
+                    await store.getMoonPassport()
+                    await store.getOwnerMoonPassport()
+                }
+
+                if (result.code) {
+                    // Show notification
+                    notification.notify({
+                        group: 'default',
+                        clean: true
+                    })
+
+                    notification.notify({
+                        duration: -100,
+                        group: store.networks.bostrom.denom,
+                        title: i18n.global.t('message.notification_failed_title'),
+                        text: result?.rawLog.toString(),
+                        type: 'error',
+                        data: {
+                            chain: 'bostrom',
+                            tx_type: i18n.global.t('message.notification_action_update_passport')
+                        }
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    clean: true
+                })
+
+                notification.notify({
+                    group: store.networks.bostrom.denom,
+                    title: i18n.global.t('message.notification_failed_title'),
+                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    type: 'error',
+                    data: {
+                        chain: 'bostrom',
+                        tx_type: i18n.global.t('message.notification_action_update_passport')
+                    }
+                })
+            }
+
+            data.status = false
+        } else {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                durartion: 5000,
+                title: i18n.global.t('message.notification_error_nickName_title'),
+                text: i18n.global.t('message.notification_error_nickName_desc'),
+                type: 'error'
+            })
+
+            data.nickNameError = true
+        }
+    }
 </script>
 
 
@@ -422,9 +608,7 @@
         width: 200%;
         height: 200%;
 
-        -webkit-animation: spin 10s linear infinite;
-           -moz-animation: spin 10s linear infinite;
-                animation: spin 10s linear infinite;
+        animation: spin 10s linear infinite;
         pointer-events: none;
 
         opacity: .8;
@@ -676,61 +860,61 @@
 
 
     /* .create_passport .avatar .icon
-                                    {
-                                        position: relative;
+                                                                        {
+                                                                            position: relative;
 
-                                        width: 18px;
-                                        height: 18px;
-                                        margin: 0 auto 8px;
-                                    }
+                                                                            width: 18px;
+                                                                            height: 18px;
+                                                                            margin: 0 auto 8px;
+                                                                        }
 
-                                    .create_passport .avatar .icon:before,
-                                    .create_passport .avatar .icon:after
-                                    {
-                                        position: absolute;
+                                                                        .create_passport .avatar .icon:before,
+                                                                        .create_passport .avatar .icon:after
+                                                                        {
+                                                                            position: absolute;
 
-                                        display: block;
+                                                                            display: block;
 
-                                        width: 100%;
-                                        height: 2px;
-                                        margin: auto;
+                                                                            width: 100%;
+                                                                            height: 2px;
+                                                                            margin: auto;
 
-                                        content: '';
+                                                                            content: '';
 
-                                        background: #950fff;
+                                                                            background: #950fff;
 
-                                        inset: 0;
-                                    }
+                                                                            inset: 0;
+                                                                        }
 
-                                    .create_passport .avatar .icon:after
-                                    {
-                                        width: 2px;
-                                        height: 100%;
-                                    }
-
-
-                                    .create_passport .avatar .label
-                                    {
-                                        color: #950fff;
-                                        font-family: var(--font_family2);
-                                        font-size: 24px;
-                                        font-weight: 500;
-                                        line-height: 100%;
-
-                                        width: 100%;
-
-                                        text-transform: uppercase;
-                                    }
+                                                                        .create_passport .avatar .icon:after
+                                                                        {
+                                                                            width: 2px;
+                                                                            height: 100%;
+                                                                        }
 
 
-                                    .create_passport .avatar .exp
-                                    {
-                                        color: #4d4d4d;
-                                        line-height: 130%;
+                                                                        .create_passport .avatar .label
+                                                                        {
+                                                                            color: #950fff;
+                                                                            font-family: var(--font_family2);
+                                                                            font-size: 24px;
+                                                                            font-weight: 500;
+                                                                            line-height: 100%;
 
-                                        width: 100%;
-                                        margin-top: 8px;
-                                    } */
+                                                                            width: 100%;
+
+                                                                            text-transform: uppercase;
+                                                                        }
+
+
+                                                                        .create_passport .avatar .exp
+                                                                        {
+                                                                            color: #4d4d4d;
+                                                                            line-height: 130%;
+
+                                                                            width: 100%;
+                                                                            margin-top: 8px;
+                                                                        } */
 
 
     .create_passport .avatar .image
@@ -944,6 +1128,8 @@
 
     .create_passport .info .line
     {
+        position: relative;
+
         margin-bottom: 12px;
         padding: 14px;
 
@@ -952,6 +1138,11 @@
         border-radius: 16px;
         background: rgba(0, 0, 0, .23);
         box-shadow: 0 4px 0 rgba(1, 1, 1, .3);
+    }
+
+    .create_passport .info .line.error
+    {
+        box-shadow: 0 4px 0  #eb5757;
     }
 
 
@@ -971,6 +1162,89 @@
 
         border: none;
         background: none;
+    }
+
+
+    .create_passport .info .edit_btn
+    {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+
+        display: flex;
+
+        width: 24px;
+        height: 24px;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .create_passport .info .edit_btn svg
+    {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+
+        pointer-events: none;
+    }
+
+
+    .create_passport .info .submit_btn
+    {
+        position: absolute;
+        z-index: 3;
+        right: 42px;
+        bottom: 14px;
+
+        display: flex;
+
+        width: 24px;
+        height: 24px;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .create_passport .info .submit_btn .icon
+    {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+    }
+
+
+    .create_passport .info .cancel_btn
+    {
+        position: absolute;
+        z-index: 3;
+        right: 14px;
+        bottom: 14px;
+
+        display: flex;
+
+        width: 24px;
+        height: 24px;
+        margin: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .create_passport .info .cancel_btn .icon
+    {
+        display: block;
+
+        width: 24px;
+        height: 24px;
     }
 
 
@@ -1074,28 +1348,11 @@
 
 
 
-    @-moz-keyframes spin
-    {
-        100%
-        {
-            -moz-transform: rotate(360deg);
-        }
-    }
-
-    @-webkit-keyframes spin
-    {
-        100%
-        {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
     @keyframes spin
     {
         100%
         {
-            -webkit-transform: rotate(360deg);
-                    transform: rotate(360deg);
+            transform: rotate(360deg);
         }
     }
 
