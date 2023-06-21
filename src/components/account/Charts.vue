@@ -196,7 +196,7 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legends empty" v-if="!currentNetwork.totalPrice_usdt">
+                <div class="legends empty" v-if="!currentNetwork.total.liquid && !currentNetwork.total.staked && !currentNetwork.total.unbonding">
                     <div class="legend">
                         <div class="name">
                             <span></span>
@@ -494,9 +494,15 @@
 
                                 <div>
                                     <div class="amount">
-                                        <template v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</template>
-                                        <template v-if="item.symbol == 'BOOT'">{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent) / 1000000, 2) }}</template>
-                                        <template v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</template>
+                                        <template v-if="item.symbol == 'BOOT'">
+                                            <span v-if="(item.amount / Math.pow(10, item.exponent) / 1000000) < 0.01">&lt; 0.01</span>
+                                            <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent) / 1000000, 2) }}</span>
+                                        </template>
+
+                                        <template v-else>
+                                            <span v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</span>
+                                            <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</span>
+                                        </template>
 
                                         <span class="token" v-if="item.symbol == 'BOOT'">M{{ item.symbol }}</span>
                                         <span class="token" v-else>{{ item.symbol }}</span>
@@ -667,7 +673,7 @@
             <div class="legends2" v-if="chartActive == 5">
                 <div v-for="(wallet, index) in store.account.wallets" :key="index" class="legend" :class="{'active': chartFifthActiveLegend == index}" @mouseenter="mouseenterLegend('chartFifth', index)" @mouseleave="mouseleaveLegend('chartFifth')">
                     <div class="address">
-                        <span v-if="wallet.nickname.length">{{ wallet.nickname }}</span>
+                        <span v-if="wallet.nickname">{{ wallet.nickname }}</span>
                         <span v-else>{{ wallet.address.slice(0, 13) + '...' + wallet.address.slice(-6) }}</span>
                     </div>
 
@@ -692,7 +698,9 @@
                         {{ store.currency }}
                         </div>
 
-                        <div class="percents">{{ $filters.toFixed(calcPercentsChart5(wallet.totalPrice_usdt), 2) }}%</div>
+                        <div class="percents">
+                            {{ $filters.toFixed(calcPercentsChart5(wallet.totalPrice_usdt), 2) }}%
+                        </div>
                     </div>
                 </div>
             </div>

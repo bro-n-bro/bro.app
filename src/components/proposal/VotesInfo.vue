@@ -52,7 +52,8 @@
                                 <td class="validator">
                                     <div>
                                         <div class="logo">
-                                            <img :src="`${validator.mintscan_avatar_url}`" alt="">
+                                            <img :src="`${validator.mintscan_avatar_url}`" :alt="validator.moniker" @error="imageLoadError">
+                                            <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
                                             <div class="rank">{{ validator.voting_power_rank }}</div>
                                         </div>
 
@@ -127,12 +128,25 @@
     })
 
 
+    // Replacement of the logo if it is not present
+    function imageLoadError(event) {
+        event.target.classList.add('hide')
+    }
+
+
     // Get proposal data
     async function getVotesData() {
         try {
             await fetch(`https://rpc.bronbro.io/gov/votes/${store.proposal_id}/validators-info`)
                 .then(res => res.json())
                 .then(async response => {
+                    // Clean data
+                    for (let i = response.delegators.length - 1; i >= 0; i--) {
+                        if (response.delegators[i].voting_power_rank > 180) {
+                            response.delegators.splice(i, 1)
+                        }
+                    }
+
                     // Set data
                     validators.value = response
 
@@ -166,7 +180,7 @@
         }
 
         if(status == null) {
-            result = validators.value.delegators.filter(el => el.validator_option == null)
+            result = validators.value.delegators.filter(el => el.validator_option == '')
         }
 
         return result.length
@@ -197,7 +211,7 @@
         }
 
         if(status == null) {
-            result = validators.value.delegators.filter(el => el.validator_option == null)
+            result = validators.value.delegators.filter(el => el.validator_option == '')
         }
 
         // Sort before return
@@ -414,6 +428,7 @@
         height: 30px;
 
         border-radius: 50%;
+        background: #282828;
 
         justify-content: center;
         align-items: center;
@@ -423,12 +438,31 @@
 
     table td.validator .logo img
     {
+        position: absolute;
+        top: 0;
+        left: 0;
+
         display: block;
 
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
 
         border-radius: inherit;
+
+        object-fit: cover;
+    }
+
+    table td.validator .logo img.hide
+    {
+        display: none;
+    }
+
+    table td.validator .logo .icon
+    {
+        display: block;
+
+        width: 18px;
+        height: 18px;
     }
 
 

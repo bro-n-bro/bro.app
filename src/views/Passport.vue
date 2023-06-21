@@ -51,6 +51,10 @@
                                         {{ $t('message.passport_name_label') }}
                                     </div>
 
+                                    <div class="exp" v-if="data.editNickname && !data.status">
+                                        {{ $t('message.passport_name_exp') }}
+                                    </div>
+
                                     <input class="input" type="text" name="name" maxlength="16" v-model="data.nickName" @input="validateName" :readonly="!data.editNickname">
 
                                     <button type="button" class="edit_btn" @click="enableEditNickname()" v-if="!data.editNickname && !data.status">
@@ -351,12 +355,11 @@
 
     // Validate nickname
     function validateName(event) {
-        event.target.value.length < 8
+        let result = /^([a-z0-9-]*)$/g.test(event.target.value)
+
+        event.target.value.length < 8 || event.target.value.length > 16 || !result
             ? data.nickNameError = true
             : data.nickNameError = false
-
-        // Set in loclstorage
-        store.account.tempUserName = event.target.value
     }
 
 
@@ -383,7 +386,26 @@
 
     // Update nickname
     async function updateNickname() {
-        if(await checkNickname() == null) {
+        if(data.nickNameError) {
+            // Show notification
+            notification.notify({
+                group: 'default',
+                clean: true
+            })
+
+            notification.notify({
+                durartion: 5000,
+                group: store.networks.bostrom.denom,
+                title: i18n.global.t('message.passport_error_nickname_title'),
+                text: i18n.global.t('message.passport_name_exp'),
+                type: 'error',
+                data: {
+                    chain: 'bostrom',
+                    tx_type: i18n.global.t('message.notification_action_update_passport')
+                }
+            })
+        } else {
+            if(await checkNickname() == null) {
             // Show notification
             notification.notify({
                 group: 'default',
@@ -493,6 +515,7 @@
             })
 
             data.nickNameError = true
+        }
         }
     }
 </script>
@@ -860,61 +883,61 @@
 
 
     /* .create_passport .avatar .icon
-                                                                        {
-                                                                            position: relative;
+                                                                                    {
+                                                                                        position: relative;
 
-                                                                            width: 18px;
-                                                                            height: 18px;
-                                                                            margin: 0 auto 8px;
-                                                                        }
+                                                                                        width: 18px;
+                                                                                        height: 18px;
+                                                                                        margin: 0 auto 8px;
+                                                                                    }
 
-                                                                        .create_passport .avatar .icon:before,
-                                                                        .create_passport .avatar .icon:after
-                                                                        {
-                                                                            position: absolute;
+                                                                                    .create_passport .avatar .icon:before,
+                                                                                    .create_passport .avatar .icon:after
+                                                                                    {
+                                                                                        position: absolute;
 
-                                                                            display: block;
+                                                                                        display: block;
 
-                                                                            width: 100%;
-                                                                            height: 2px;
-                                                                            margin: auto;
+                                                                                        width: 100%;
+                                                                                        height: 2px;
+                                                                                        margin: auto;
 
-                                                                            content: '';
+                                                                                        content: '';
 
-                                                                            background: #950fff;
+                                                                                        background: #950fff;
 
-                                                                            inset: 0;
-                                                                        }
+                                                                                        inset: 0;
+                                                                                    }
 
-                                                                        .create_passport .avatar .icon:after
-                                                                        {
-                                                                            width: 2px;
-                                                                            height: 100%;
-                                                                        }
-
-
-                                                                        .create_passport .avatar .label
-                                                                        {
-                                                                            color: #950fff;
-                                                                            font-family: var(--font_family2);
-                                                                            font-size: 24px;
-                                                                            font-weight: 500;
-                                                                            line-height: 100%;
-
-                                                                            width: 100%;
-
-                                                                            text-transform: uppercase;
-                                                                        }
+                                                                                    .create_passport .avatar .icon:after
+                                                                                    {
+                                                                                        width: 2px;
+                                                                                        height: 100%;
+                                                                                    }
 
 
-                                                                        .create_passport .avatar .exp
-                                                                        {
-                                                                            color: #4d4d4d;
-                                                                            line-height: 130%;
+                                                                                    .create_passport .avatar .label
+                                                                                    {
+                                                                                        color: #950fff;
+                                                                                        font-family: var(--font_family2);
+                                                                                        font-size: 24px;
+                                                                                        font-weight: 500;
+                                                                                        line-height: 100%;
 
-                                                                            width: 100%;
-                                                                            margin-top: 8px;
-                                                                        } */
+                                                                                        width: 100%;
+
+                                                                                        text-transform: uppercase;
+                                                                                    }
+
+
+                                                                                    .create_passport .avatar .exp
+                                                                                    {
+                                                                                        color: #4d4d4d;
+                                                                                        line-height: 130%;
+
+                                                                                        width: 100%;
+                                                                                        margin-top: 8px;
+                                                                                    } */
 
 
     .create_passport .avatar .image
@@ -1158,8 +1181,6 @@
         width: 100%;
         height: 28px;
 
-        text-transform: lowercase;
-
         border: none;
         background: none;
     }
@@ -1292,6 +1313,20 @@
         line-height: 130%;
 
         margin-bottom: 14px;
+
+        opacity: .4;
+    }
+
+
+    .create_passport .info .exp
+    {
+        font-size: 12px;
+
+        position: absolute;
+        top: 17px;
+        right: 16px;
+
+        white-space: nowrap;
 
         opacity: .4;
     }

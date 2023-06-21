@@ -244,7 +244,10 @@
         if(store.account.tempUserName.length && store.account.tempUserName != 'undefined') {
             data.nickName = store.account.tempUserName
 
-            data.nickName.length < 8
+            // Validate nickname
+            let result = /^([a-z0-9-]*)$/g.test(data.nickName)
+
+            data.nickName.length < 8 || data.nickName.length > 16 || !result
                 ? data.nickNameError = true
                 : data.nickNameError = false
         }
@@ -299,7 +302,9 @@
 
     // Validate nickname
     function validateName(event) {
-        event.target.value.length < 8
+        let result = /^([a-z0-9-]*)$/g.test(event.target.value)
+
+        event.target.value.length < 8 || event.target.value.length > 16 || !result
             ? data.nickNameError = true
             : data.nickNameError = false
 
@@ -459,6 +464,9 @@
                     // Set passport status
                     data.status = true
 
+                    // Update user info
+                    await connectWallet(true, true)
+
                     // Create passport image
                     setTimeout(() => {
                         htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
@@ -468,14 +476,6 @@
                         // Show bottom buttons
                         data.showBottomBtns = true
                     }, 1050)
-
-                    // Get moon passport
-                    await store.getMoonPassport()
-                    await store.getOwnerMoonPassport()
-
-                    // Set avatar
-                    store.account.avatar = avatarPreview.src
-                    store.account.userName = data.nickName
 
                     // Set default notification
                     store.tooltip = i18n.global.t('message.notice_default_create_passport_success')
@@ -1226,8 +1226,6 @@
 
         width: 100%;
         height: 28px;
-
-        text-transform: lowercase;
 
         border: none;
         background: none;

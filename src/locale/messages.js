@@ -85,9 +85,9 @@ export default {
             'passport_citizenship_text': 'Moon<br> citizen',
             'passport_name_placeholder': 'Choose name',
             'passport_address_exp': 'Address',
-            'passport_name_exp': 'Min 8 characters',
+            'passport_name_exp': 'Limit 8-16 characters; only a-z, 0-9, "-"',
             'passport_constitution_exp': 'Creating a passport I confirm reading the Constitution',
-            'passport_activation_label': 'я крутой',
+            'passport_error_nickname_title': 'Nickname misspelled',
 
 
             // Proposals

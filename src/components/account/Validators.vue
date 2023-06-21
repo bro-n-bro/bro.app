@@ -50,7 +50,8 @@
 
                 <div class="col_validator" @click.prevent="toggleActiveClass" v-if="wallet.validators.length">
                     <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
-                        <img :src="validator.mintscan_avatar" alt="">
+                        <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
+                        <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
                     </div>
 
                     <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
@@ -73,7 +74,8 @@
 
                         <div class="col_validator">
                             <div class="logo">
-                                <img :src="validator.mintscan_avatar" alt="">
+                                <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
+                                <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
                             </div>
 
                             <div class="name" @click.prevent="openValidatorModal(validator)">
@@ -147,6 +149,12 @@
             ? await getAllData()
             : await getAddressData()
     })
+
+
+    // Replacement of the logo if it is not present
+    function imageLoadError(event) {
+        event.target.classList.add('hide')
+    }
 
 
     // Get address data
@@ -524,6 +532,7 @@
         position: relative;
         z-index: 1;
 
+        display: flex;
         overflow: hidden;
 
         width: 24px;
@@ -532,7 +541,12 @@
 
         border: 1px solid #0d0d0d;
         border-radius: 50%;
+        background: #282828;
 
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
         order: 2;
     }
 
@@ -570,6 +584,19 @@
         border-radius: inherit;
 
         object-fit: cover;
+    }
+
+    .validators .item .logo img.hide
+    {
+        display: none;
+    }
+
+    .validators .item .logo .icon
+    {
+        display: block;
+
+        width: 18px;
+        height: 18px;
     }
 
 
@@ -731,9 +758,11 @@
     .validators .spoler_btn .icon
     {
         display: block;
-transition: transform .2s linear;
+
         width: 20px;
         height: 20px;
+
+        transition: transform .2s linear;
     }
 
 
