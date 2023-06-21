@@ -196,7 +196,7 @@
 
         <div class="col_main">
             <div class="legends" v-if="chartActive == 1">
-                <div class="legends empty" v-if="!currentNetwork.total.liquid && !currentNetwork.total.staked && !currentNetwork.total.unbonding">
+                <div class="legends empty" v-if="!currentNetwork.total.liquid_rewards && !currentNetwork.total.staked && !currentNetwork.total.unbonding">
                     <div class="legend">
                         <div class="name">
                             <span></span>
@@ -1018,6 +1018,7 @@
                             response.liquid.native.forEach(el => {
                                 // Sum total
                                 totals.liquid += el.amount
+                                totals.liquid_rewards += el.amount
 
                                 // Group by denom
                                 let duplicate = groupByDenom.find(e => e.symbol == el.symbol)
