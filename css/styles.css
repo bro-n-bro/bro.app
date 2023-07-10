@@ -241,6 +241,11 @@ button
     flex: 1 0 auto;
 }
 
+.main.no_pad
+{
+    padding: 0;
+}
+
 
 .cont
 {
