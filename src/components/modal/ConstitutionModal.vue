@@ -3,7 +3,7 @@
         <div class="modal_content" @click.self="closeConstitutionModal">
             <div class="data">
                 <button class="close_btn" @click.prevent="closeConstitutionModal">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
                 <div class="modal_title">
@@ -94,11 +94,11 @@
 
                 <div class="btns">
                     <button type="button" class="btn no_btn" @click.prevent="rejectConstitution">
-                        {{ $t('message.reject_btn') }}
+                        {{ $t('message.btn_reject') }}
                     </button>
 
                     <button type="submit" class="btn yes_btn" @click.prevent="acceptConstitution">
-                        {{ $t('message.agree_sign_btn') }}
+                        {{ $t('message.btn_agree_sign') }}
                     </button>
                 </div>
             </div>
@@ -114,6 +114,7 @@
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { toAscii, toBase64 } from '@cosmjs/encoding'
+    import { generateAddress } from '@/utils'
 
 
     const store = useGlobalStore(),
@@ -140,8 +141,8 @@
 
             let res = await window.keplr.signArbitrary(
                 store.networks.bostrom.chainId,
-                store.wallets.bostrom,
-                `${store.wallets.bostrom}:${store.CONSTITUTION_HASH}`
+                generateAddress('bostrom', store.Keplr.account.address),
+                `${generateAddress('bostrom', store.Keplr.account.address)}:${store.CONSTITUTION_HASH}`
             )
 
             store.account.signature = toBase64(toAscii(JSON.stringify({
@@ -156,9 +157,6 @@
                 type: 'success'
             })
 
-            // Set constitution status
-            store.constitutionStatus = true
-
             // Close modal
             store.showConstitutionModal = false
         } catch (error) {
@@ -169,7 +167,6 @@
 
     // Close constitution modal
     function rejectConstitution() {
-        store.constitutionStatus = false
         store.showConstitutionModal = false
     }
 </script>

@@ -6,7 +6,7 @@
             <div class="title" v-html="$t('message.error_title_404')"></div>
 
             <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/'" class="back_btn">
-                {{ $t('message.back_home_btn') }}
+                {{ $t('message.btn_back_home') }}
             </router-link>
         </div>
     </section>

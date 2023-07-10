@@ -3,7 +3,7 @@
         <div class="modal_content" @click.self="emitter.emit('closeDepositModal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeDepositModal')">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
 
@@ -19,7 +19,7 @@
                         </div>
 
                         <div class="field">
-                            <input type="text" class="input" readonly :value="store.wallets.cosmoshub">
+                            <input type="text" class="input" readonly :value="store.Keplr.account.address">
                         </div>
                     </div>
 
@@ -130,10 +130,10 @@
                 typeUrl: '/cosmos.gov.v1beta1.MsgDeposit',
                 value: {
                     proposalId: props.proposal.id,
-                    depositor: store.wallets[store.currentNetwork],
+                    depositor: store.Keplr.account.address,
                     amount: {
                         denom: store.networks[store.currentNetwork].denom,
-                        amount: `${parseFloat(amount.value.replace(',', '.')).toFixed(store.networks[store.currentNetwork].exponent.toString().length - 1) * store.networks[store.currentNetwork].exponent}`
+                        amount: `${parseFloat(amount.value.replace(',', '.')).toFixed(store.networks[store.currentNetwork].exponent.toString().length - 1) * Math.pow(10, store.networks[store.currentNetwork].exponent)}`
                     }
                 }
             }]

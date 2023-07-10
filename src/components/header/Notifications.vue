@@ -3,7 +3,7 @@
         <div class="cont">
             <div class="data" :class="{ animate: store.tooltipAnimate }">
                 <div class="icon">
-                    <svg><use xlink:href="/sprite.svg#ic_notification"></use></svg>
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_notification"></use></svg>
                 </div>
 
                 <span>{{ store.tooltip }}</span>
@@ -50,8 +50,8 @@
         border-radius: 20px;
         background: #141414;
 
-        align-content: flex-start;
-        align-items: flex-start;
+        align-content: center;
+        align-items: center;
         flex-wrap: wrap;
         justify-content: space-between;
         font-feature-settings: 'pnum' on, 'lnum' on;

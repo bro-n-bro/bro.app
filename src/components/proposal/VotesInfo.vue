@@ -53,7 +53,7 @@
                                     <div>
                                         <div class="logo">
                                             <img :src="`${validator.mintscan_avatar_url}`" :alt="validator.moniker" @error="imageLoadError">
-                                            <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
+                                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                                             <div class="rank">{{ validator.voting_power_rank }}</div>
                                         </div>
 
@@ -112,7 +112,7 @@
     import { useGlobalStore } from '@/stores'
 
     // Components
-    import Depositors from '../../components/proposal/Depositors.vue'
+    import Depositors from './Depositors.vue'
 
 
     const props = defineProps(['depositors', 'proposal']),
@@ -137,7 +137,7 @@
     // Get proposal data
     async function getVotesData() {
         try {
-            await fetch(`https://rpc.bronbro.io/gov/votes/${store.proposal_id}/validators-info`)
+            await fetch(`https://rpc.bronbro.io/gov/votes/${store.currentProposalId}/validators-info`)
                 .then(res => res.json())
                 .then(async response => {
                     // Clean data
@@ -288,7 +288,7 @@
 
     .filter .btn
     {
-        color: #555;
+        color: #fff;
         font-size: 14px;
         line-height: 100%;
 
@@ -319,8 +319,8 @@
 
     .scroll::-webkit-scrollbar
     {
-        width: 2px;
-        height: 2px;
+        width: 6px;
+        height: 6px;
     }
 
 

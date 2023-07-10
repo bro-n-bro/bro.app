@@ -3,7 +3,7 @@
         <div class="title">{{ $t('message.proposal_desc_title') }}</div>
 
         <div class="icon">
-            <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+            <svg><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </div>
 
         <div class="text_block" v-html="parseMarkdown(props.proposal.description)"></div>

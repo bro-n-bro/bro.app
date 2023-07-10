@@ -3,16 +3,16 @@
         <template v-if="store.account.moonPassport">
         <router-link to="/account/cosmoshub" class="account_link">
             <div class="icon">
-                <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
+                <svg><use xlink:href="@/assets/sprite.svg#ic_wallet"></use></svg>
             </div>
 
-            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
+            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">
                 <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </router-link>
 
-        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
         </router-link>
         </template>
@@ -24,13 +24,13 @@
                 <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
             </div>
 
-            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.username_notice'))">
+            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">
                 <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
                 <span v-else>{{ store.account.userName }}</span>
             </div>
         </div>
 
-        <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.avatar_notice'))">
+        <div class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
             <img :src="store.account.avatar" alt="" v-if="store.account.avatar">
         </div>
         </template>

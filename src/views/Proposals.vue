@@ -3,7 +3,7 @@
         <div class="cont middle">
             <div class="back_btn">
                 <router-link to="/account/cosmoshub" class="btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
 
@@ -52,37 +52,33 @@
                         <div class="items" :class="{ lock: lockFilter }">
                             <button class="btn" :class="{'active': !data.filter.length}" @click.prevent="resetFilter">
                                 <span>{{ $t('message.account_proposals_status_all') }}</span>
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                             </button>
 
                             <button class="btn" :class="{'active': data.filter_deposit}" @click.prevent="setFilter('deposit')">
                                 <span>{{ $t('message.account_proposals_status_deposite') }}</span>
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                             </button>
 
                             <button class="btn" :class="{'active': data.filter_passed}" @click.prevent="setFilter('passed')">
                                 <span>{{ $t('message.account_proposals_status_passed') }}</span>
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                             </button>
 
                             <button class="btn" :class="{'active': data.filter_rejected}" @click.prevent="setFilter('rejected')">
                                 <span>{{ $t('message.account_proposals_status_rejected') }}</span>
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                             </button>
 
                             <button class="btn" :class="{'active': data.filter_voting}" @click.prevent="setFilter('voting')">
                                 <span>{{ $t('message.account_proposals_status_voting') }}</span>
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                             </button>
                         </div>
                     </div>
 
                     <!-- Button up -->
-                    <ButtonUp class="btn_up">
-                        <template #default>
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_ver"></use></svg>
-                        </template>
-                    </ButtonUp>
+                    <ButtonUp />
                 </section>
             </div>
         </div>
@@ -98,7 +94,7 @@
     // Components
     import Networks from '../components/account/Networks.vue'
     import ProposalsItem from '../components/account/ProposalsItem.vue'
-    import ButtonUp from 'vue-button-up'
+    import ButtonUp from '../components/ButtonUp.vue'
 
 
     const store = useGlobalStore(),
@@ -518,6 +514,8 @@
         right: auto;
         bottom: 200px;
 
+        display: none;
+
         width: 48px;
         height: 48px;
 
@@ -527,6 +525,11 @@
         opacity: 1;
         border-radius: 16px;
         background: #950fff;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 

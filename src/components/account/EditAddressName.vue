@@ -3,11 +3,11 @@
         <input type="text" v-model="name" class="input" maxlength="16">
 
         <button type="submit" class="submit_btn">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
         </button>
 
         <button type="button" class="cancel_btn" @click.prevent="e => e.target.closest('.item').classList.remove('editing')">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
         </button>
 
         <div class="loader_wrap" v-if="loading">
@@ -143,9 +143,9 @@
         display: block;
 
         width: 100%;
-        height: 42px;
+        height: 100%;
         padding-right: 55px;
-        padding-bottom: 1px;
+        padding-bottom: 21px;
         padding-left: 9px;
 
         border: 1px solid #950fff;

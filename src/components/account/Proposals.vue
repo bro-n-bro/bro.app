@@ -1,11 +1,13 @@
 <template>
     <section class="proposals">
         <div class="head">
-            <div class="title">{{ $t('message.account_proposals_title') }}</div>
+            <div class="title">
+                {{ $t('message.account_proposals_title') }}
+            </div>
 
             <div class="all_link">
                 <router-link :to="`/proposals/${store.currentNetwork}`" class="link">
-                    {{ $t('message.see_more_btn') }} &rarr;
+                    {{ $t('message.btn_see_more') }} &rarr;
                 </router-link>
             </div>
         </div>
@@ -37,9 +39,9 @@
         <div class="items" v-else>
             <!-- <pre>{{ data.proposals }}</pre> -->
 
-            <template v-for="(proposal, index) in data.proposals" :key="index">
+            <template v-for="(proposal, index) in proposals" :key="index">
             <!-- <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
-            <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !data.showAll }">
+            <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !showAll }">
                 <div class="col_network">
                     <template v-if="index < 1">
                     <div class="logo">
@@ -70,7 +72,7 @@
             </template>
         </div>
 
-        <button class="spoler_btn" :class="{ 'active': data.showAll }" @click.prevent="data.showAll = !data.showAll" v-if="data.proposals.length > 5">
+        <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="proposals.length > 5">
             <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>
@@ -78,15 +80,14 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref } from 'vue'
+    import { onBeforeMount, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
+
 
     const store = useGlobalStore(),
         loading = ref(false),
-        data = reactive({
-            proposals: [],
-            showAll: false
-        })
+        proposals = ref([]),
+        showAll = ref(false)
 
 
     onBeforeMount(() => {
@@ -95,7 +96,7 @@
             fetch('https://rpc.bronbro.io/gov/proposals')
                 .then(res => res.json())
                 .then(response => {
-                    data.proposals = response.proposals
+                    proposals.value = response.proposals
 
                     // Hide loader
                     loading.value = true

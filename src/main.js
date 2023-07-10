@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
 import App from './App.vue'
 import router from './router'
 import i18n from './locale'
@@ -7,23 +8,33 @@ import moment from 'moment'
 import Notifications from '@kyvg/vue3-notification'
 import timeago from 'vue-timeago3'
 import VueCountdown from '@chenfengyuan/vue-countdown'
-
-
-// Events
 import mitt from 'mitt'
-const emitter = mitt()
+import VueClipboard from 'vue3-clipboard'
 
 
 // Create App
 const app = createApp(App)
 
 
+// Pinia
+const pinia = createPinia()
+
+
+// Events
+const emitter = mitt()
+
+
 // Vue use
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 app.use(i18n)
 app.use(Notifications)
 app.use(timeago)
+
+app.use(VueClipboard, {
+    autoSetContainer: true,
+    appendToBody: true,
+})
 
 
 // Vue provide

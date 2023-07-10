@@ -4,103 +4,67 @@
 
         <div class="row">
             <div class="item">
-                <div class="label">{{ $t('message.account_APR') }}</div>
-
-                <div class="loader_wrap" v-if="loading">
-                    <div class="loader"><span></span></div>
+                <div class="label">
+                    {{ $t('message.account_APR') }}
                 </div>
-
-                <div class="val" v-else>{{ $filters.toFixed(data.apr * 100, 2) }}%</div>
-            </div>
-
-
-            <div class="item">
-                <div class="label">{{ $t('message.account_rewards') }}</div>
 
                 <div class="loader_wrap" v-if="loading">
                     <div class="loader"><span></span></div>
                 </div>
 
                 <div class="val" v-else>
-                    <template v-if="store.currency == 'USDT'">
-                    {{ '~' + $filters.toFixed(store.account.totalRewards_usdt, 2) }}
-                    </template>
-
-                    <template v-if="store.currency == 'ATOM'">
-                    {{ '~' + $filters.toFixed(store.account.totalRewards_atom, 2) }}
-                    </template>
-
-                    <template v-if="store.currency == 'ETH'">
-                    {{ '~' + $filters.toFixed(store.account.totalRewards_eth, 4) }}
-                    </template>
-
-                    <template v-if="store.currency == 'BTC'">
-                    {{ '~' + $filters.toFixed(store.account.totalRewards_btc, 5) }}
-                    </template>
-
-                    <div class="currency">{{ store.currency }}</div>
+                    {{ $filters.toFixed(APR * 100, 2) }}%
                 </div>
-
-                <!-- <div class="val" v-else>
-                    {{ $filters.toFixed(data.voting_power * 100, 8) }}
-                </div> -->
             </div>
 
 
             <div class="item">
-                <div class="label">{{ $t('message.account_passport_value') }}</div>
+                <div class="label">
+                    {{ $t('message.account_rewards') }}
+                </div>
 
                 <div class="loader_wrap" v-if="loading">
                     <div class="loader"><span></span></div>
                 </div>
 
                 <div class="val" v-else>
-                    <template v-if="store.currency == 'USDT'">
-                    {{ '~' + $filters.toFixed(store.account.totalPrice_usdt, 2) }}
-                    </template>
+                    {{ '~' + $filters.toFixed(currencyСonversion(totalRewardTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
 
-                    <template v-if="store.currency == 'ATOM'">
-                    {{ '~' + $filters.toFixed(store.account.totalPrice_atom, 2) }}
-                    </template>
-
-                    <template v-if="store.currency == 'ETH'">
-                    {{ '~' + $filters.toFixed(store.account.totalPrice_eth, 4) }}
-                    </template>
-
-                    <template v-if="store.currency == 'BTC'">
-                    {{ '~' + $filters.toFixed(store.account.totalPrice_btc, 5) }}
-                    </template>
-
-                    <div class="currency">{{ store.currency }}</div>
+                    <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
             </div>
 
 
             <div class="item">
-                <div class="label">{{ $t('message.account_RPDE') }}</div>
+                <div class="label">
+                    {{ $t('message.account_passport_value') }}
+                </div>
 
                 <div class="loader_wrap" v-if="loading">
                     <div class="loader"><span></span></div>
                 </div>
 
                 <div class="val" v-else>
-                    <template v-if="store.currency == 'USDT'">
-                    {{ '~' + $filters.toFixed(data.RPDE_USDT, 5) }}
-                    </template>
+                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
 
-                    <template v-if="store.currency == 'ATOM'">
-                    {{ '~' + $filters.toFixed(data.RPDE_ATOM, 5) }}
-                    </template>
+                    <div class="currency">{{ store.currentCurrency }}</div>
+                </div>
+            </div>
 
-                    <template v-if="store.currency == 'ETH'">
-                    {{ '~' + $filters.toFixed(data.RPDE_ETH, 7) }}
-                    </template>
 
-                    <template v-if="store.currency == 'BTC'">
-                    {{ '~' + $filters.toFixed(data.RPDE_BTC, 7) }}
-                    </template>
+            <div class="item">
+                <div class="label">
+                    {{ $t('message.account_RPDE') }}
+                </div>
 
-                    <div class="currency">{{ store.currency }}</div>
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
+                <div class="val" v-else>
+                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.RPDE, store.networks[store.currentNetwork].token_name), 2) }}
+
+                    <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
             </div>
         </div>
@@ -111,16 +75,13 @@
 <script setup>
     import { ref, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { generateAddress } from '@/utils'
+    import { generateAddress, currencyСonversion } from '@/utils'
 
     const store = useGlobalStore(),
         loading = ref(true),
-        data = ref({
-            RPDE_USDT: 0,
-            RPDE_BTC: 0,
-            RPDE_ETH: 0,
-            RPDE_ATOM: 0
-        })
+        totalRewardTokens = ref(0),
+        APR = ref(0),
+        RPDE = ref(0)
 
 
     onBeforeMount(async () => {
@@ -148,23 +109,21 @@
                         currentNetworkInWallet.info = response
 
                         // Set current data
-                        data.value.apr = response.apr
+                        APR = response.apr
                     })
 
+                // Sum account rewards
+                for (let wallet of store.account.wallets) {
+                    for (let network of wallet.networks) {
+                        totalRewardTokens.value += network.total.rewards
+                    }
+                }
+
                 // Calc wallet info
-                // wallet.info.voting_power = 0
-                wallet.info.RPDE_USDT = 0
-                wallet.info.RPDE_BTC = 0
-                wallet.info.RPDE_ETH = 0
-                wallet.info.RPDE_ATOM = 0
+                wallet.RPDE = 0
 
                 for (const network of wallet.networks) {
-                    // wallet.info.voting_power += network.info.voting_power
-
-                    wallet.info.RPDE_USDT += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * network.info.rpde.price
-                    wallet.info.RPDE_BTC += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.BTC_price)
-                    wallet.info.RPDE_ETH += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.ETH_price)
-                    wallet.info.RPDE_ATOM += (network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)) * (network.info.rpde.price / store.ATOM_price)
+                    wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
                 }
             } catch (error) {
                 console.log(error)
@@ -173,41 +132,21 @@
 
 
         // Calc account info
-        // store.account.info.voting_power = 0
-        store.account.info.RPDE_USDT = 0
-        store.account.info.RPDE_BTC = 0
-        store.account.info.RPDE_ETH = 0
-        store.account.info.RPDE_ATOM = 0
+        store.account.RPDE = 0
 
         for (const wallet of store.account.wallets) {
-            // store.account.info.voting_power += wallet.voting_power
-
-            store.account.info.RPDE_USDT += wallet.RPDE_USDT
-            store.account.info.RPDE_BTC += wallet.RPDE_BTC
-            store.account.info.RPDE_ETH += wallet.RPDE_ETH
-            store.account.info.RPDE_ATOM += wallet.RPDE_ATOM
+            store.account.info.RPDE_USDT += wallet.RPDE
         }
 
 
         // Set current data
         if(store.account.currentWallet != 'all') {
-            // Data from current wallet
+            // Current wallet
             let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
-            // data.value.voting_power = currentWallet.info.voting_power,
-            data.value.RPDE_USDT = currentWallet.info.RPDE_USDT,
-            data.value.RPDE_BTC = currentWallet.info.RPDE_BTC,
-            data.value.RPDE_ETH = currentWallet.info.RPDE_ETH,
-            data.value.RPDE_ATOM = currentWallet.info.RPDE_ATOM
+            RPDE.value = currentWallet.RPDE
         } else {
-            // Sum from all wallets
-            for (const wallet of store.account.wallets) {
-                // data.value.voting_power = currentWallet.info.voting_power,
-                data.value.RPDE_USDT += wallet.info.RPDE_USDT,
-                data.value.RPDE_BTC += wallet.info.RPDE_BTC,
-                data.value.RPDE_ETH += wallet.info.RPDE_ETH,
-                data.value.RPDE_ATOM += wallet.info.RPDE_ATOM
-            }
+            RPDE.value = store.account.RPDE
         }
 
 

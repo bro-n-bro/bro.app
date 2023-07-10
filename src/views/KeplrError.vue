@@ -8,7 +8,7 @@
             <div class="link">
                 <a href="https://www.keplr.app/download" target="_blank" rel="noopener nofollow" @click="route.push({ name: 'KeplrReload' })">
                     <img src="../assets/images/keplr_logo.png" alt="" class="icon">
-                    <span>{{ $t('message.keplr_install_btn') }}</span>
+                    <span>{{ $t('message.btn_keplr_install') }}</span>
                 </a>
             </div>
         </div>

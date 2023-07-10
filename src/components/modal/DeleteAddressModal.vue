@@ -1,9 +1,9 @@
 <template>
     <section class="modal" id="add_address_modal">
-        <div class="modal_content">
+        <div class="modal_content" @click.self="emitter.emit('closeDeleteAddressModal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeDeleteAddressModal')">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
                 <div class="image">
@@ -14,11 +14,11 @@
 
                 <div class="btns">
                     <button class="btn no_btn" @click.prevent="emitter.emit('closeDeleteAddressModal')">
-                        {{ $t('message.no_btn') }}
+                        {{ $t('message.btn_no') }}
                     </button>
 
                     <button class="btn yes_btn" @click.prevent="deleteAddress()">
-                        {{ $t('message.yes_btn') }}
+                        {{ $t('message.btn_yes') }}
                     </button>
                 </div>
 

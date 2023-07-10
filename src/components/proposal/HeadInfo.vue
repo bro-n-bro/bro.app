@@ -1,27 +1,27 @@
 <template>
     <section class="head">
         <div v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="status violet">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_deposite"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_deposite"></use></svg>
             <span>{{ $t('message.account_proposals_status_deposite') }}</span>
         </div>
 
         <div v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="status blue">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_voting"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_voting"></use></svg>
             <span>{{ $t('message.account_proposals_status_voting') }}</span>
         </div>
 
         <div v-if="props.proposal.status == 'PROPOSAL_STATUS_PASSED'" class="status green">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_passed"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_passed"></use></svg>
             <span>{{ $t('message.account_proposals_status_passed') }}</span>
         </div>
 
         <div v-if="props.proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="status red">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_status_rejected"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_rejected"></use></svg>
             <span>{{ $t('message.account_proposals_status_rejected') }}</span>
         </div>
 
         <div class="type">
-            <svg class="icon"><use :xlink:href="`/sprite.svg#ic_proposal_${props.proposal.proposal_type}`"></use></svg>
+            <svg class="icon"><use :xlink:href="`@/assets/sprite.svg#ic_proposal_${props.proposal.proposal_type}`"></use></svg>
             <span>{{ props.proposal.proposal_type }}</span>
         </div>
 

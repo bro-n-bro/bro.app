@@ -1,16 +1,17 @@
 <template>
     <section class="feedback">
         <button class="btn" @click.prevent="isActive = !isActive" :class="{ active: isActive }">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_bug"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_bug"></use></svg>
         </button>
+
 
         <div class="info">
             <button class="close_btn" @click.prevent="isActive = !isActive">
-                <svg><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                <svg><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
             </button>
 
             <div class="head">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_feedback"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_feedback"></use></svg>
 
                 <div>
                     <div class="title">{{ $t('message.feedback_title') }}</div>
@@ -21,15 +22,19 @@
 
             <div class="links">
                 <div><a href="https://t.me/bro_n_bro_community" target="_blank" rel="noopener nofollow">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_telegram"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_telegram"></use></svg>
+
                     <span>{{ $t('message.feedback_telegram_link') }}</span>
-                    <svg class="arrow"><use xlink:href="/sprite.svg#ic_link_arrow"></use></svg>
+
+                    <svg class="arrow"><use xlink:href="@/assets/sprite.svg#ic_link_arrow"></use></svg>
                 </a></div>
 
                 <div><a href="https://github.com/bro-n-bro/bro.app/issues/new" target="_blank" rel="noopener nofollow">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_github"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_github"></use></svg>
+
                     <span>{{ $t('message.feedback_github_link') }}</span>
-                    <svg class="arrow"><use xlink:href="/sprite.svg#ic_link_arrow"></use></svg>
+
+                    <svg class="arrow"><use xlink:href="@/assets/sprite.svg#ic_link_arrow"></use></svg>
                 </a></div>
             </div>
         </div>
@@ -38,10 +43,9 @@
 
 
 <script setup>
-    import { inject, ref } from 'vue'
+    import { ref } from 'vue'
 
-    const i18n = inject('i18n'),
-        isActive = ref(false)
+    const isActive = ref(false)
 </script>
 
 
@@ -62,9 +66,10 @@
         width: 76px;
         height: 76px;
 
+        transition: background .2s linear;
+
         border-radius: 32px;
         background: #950fff;
-        transition: background .2s linear;
 
         justify-content: center;
         align-items: center;
@@ -83,7 +88,7 @@
 
     .feedback .btn:hover
     {
-        background: #7700E1;
+        background: #7700e1;
     }
 
 
@@ -264,7 +269,6 @@
 
     .feedback .links a:active
     {
-        background: #7700E1;
+        background: #7700e1;
     }
-
 </style>

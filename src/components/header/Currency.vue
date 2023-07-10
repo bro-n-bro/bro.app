@@ -1,19 +1,20 @@
 <template>
-    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.currency_notice'))" v-click-out="clickOut">
-        <button class="btn" :class="{ active: store.showCurrencyDropdown }" @click.prevent="showDropdown = !showDropdown">
-            <span>{{ store.currency }}</span>
-            <svg><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.notice_currency'))" v-click-out="clickOut">
+        <button class="btn" :class="{ active: showDropdown }" @click.prevent="showDropdown = !showDropdown">
+            <span>{{ store.currentCurrency }}</span>
+            <svg><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </button>
+
 
         <transition name="fadeUp" mode="out-in">
         <div class="dropdown" v-show="showDropdown">
-            <div><button class="btn" :class="{ active: store.currency == 'BTC' }" @click.prevent="selectCurrency('BTC')">BTC</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'BTC' }" @click.prevent="selectCurrency('WBTC')">BTC</button></div>
 
-            <div><button class="btn" :class="{ active: store.currency == 'ETH' }" @click.prevent="selectCurrency('ETH')">ETH</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'ETH' }" @click.prevent="selectCurrency('WETH')">ETH</button></div>
 
-            <div><button class="btn" :class="{ active: store.currency == 'ATOM' }" @click.prevent="selectCurrency('ATOM')">ATOM</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'ATOM' }" @click.prevent="selectCurrency('ATOM')">ATOM</button></div>
 
-            <div><button class="btn" :class="{ active: store.currency == 'USDT' }" @click.prevent="selectCurrency('USDT')">USDT</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'USDT' }" @click.prevent="selectCurrency('USDT')">USDT</button></div>
         </div>
         </transition>
     </div>
@@ -24,6 +25,7 @@
     import { inject, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
 
+
     const store = useGlobalStore(),
         emitter = inject('emitter'),
         showDropdown = ref(false)
@@ -32,7 +34,7 @@
     // Select currency
     function selectCurrency(newCurrency) {
         // Set new currency
-        store.currency= newCurrency
+        store.currentCurrency = newCurrency
 
         // Hide dropdown
         showDropdown.value = false

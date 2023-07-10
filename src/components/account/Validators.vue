@@ -42,7 +42,7 @@
 
                 <div class="col_network">
                     <div class="logo">
-                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
+                        <img :src="`@/assets/${store.currentNetwork}_logo.png`" alt="">
                     </div>
 
                     <div>{{ store.networks[store.currentNetwork].name }}</div>
@@ -51,10 +51,10 @@
                 <div class="col_validator" @click.prevent="toggleActiveClass" v-if="wallet.validators.length">
                     <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
                         <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
+                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                     </div>
 
-                    <svg class="arr"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                    <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
                 </div>
 
                 <div class="col_validator empty" v-else>
@@ -75,7 +75,7 @@
                         <div class="col_validator">
                             <div class="logo">
                                 <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                             </div>
 
                             <div class="name" @click.prevent="openValidatorModal(validator)">
@@ -87,7 +87,8 @@
                             </div>
 
                             <div class="amount">
-                                <span>{{ $filters.toFixed(validator.coin.amount / store.networks[store.currentNetwork].exponent, 3) }}</span> {{ store.networks[store.currentNetwork].token_name }}
+                                <span>{{ $filters.toFixed(validator.coin.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), 3) }}</span>
+                                {{ store.networks[store.currentNetwork].token_name }}
                             </div>
                         </div>
 
@@ -109,7 +110,7 @@
         </div>
 
         <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="wallets.length > 3">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </button>
 
 
@@ -128,6 +129,7 @@
 
     // Components
     import ValidatorModal from '@/components/modal/ValidatorModal.vue'
+
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
@@ -171,7 +173,6 @@
                 .then(response => {
                     if(response.validators.length) {
                         let totalTokens = 0,
-                            tempArray = response.validators,
                             nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', currentAddress)).nickname
 
                         // Calc total totalTokens
@@ -186,11 +187,6 @@
                             address: currentAddress,
                             totalTokens,
                             validators: response.validators.sort((a, b) => {
-                                if (a.coin.amount > b.coin.amount) { return 1 }
-                                if (a.coin.amount < b.coin.amount) { return -1 }
-                                return 0
-                            }),
-                            validatorsReverse: tempArray.sort((a, b) => {
                                 if (a.coin.amount > b.coin.amount) { return 1 }
                                 if (a.coin.amount < b.coin.amount) { return -1 }
                                 return 0
@@ -222,7 +218,6 @@
                         .then(res => res.json())
                         .then(response => {
                             let totalTokens = 0,
-                                tempArray = response.validators,
                                 nickname = store.account.wallets.find(wallet => wallet.address == generateAddress('bostrom', generatedAddress)).nickname
 
                             // Calc total total tokens
@@ -239,11 +234,6 @@
                                 validators: response.validators.sort((a, b) => {
                                     if (a.coin.amount > b.coin.amount) { return -1 }
                                     if (a.coin.amount < b.coin.amount) { return 1 }
-                                    return 0
-                                }),
-                                validatorsReverse: tempArray.sort((a, b) => {
-                                    if (a.coin.amount > b.coin.amount) { return 1 }
-                                    if (a.coin.amount < b.coin.amount) { return -1 }
                                     return 0
                                 })
                             })

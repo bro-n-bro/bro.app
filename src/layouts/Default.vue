@@ -3,20 +3,18 @@
         <!-- Header -->
         <Header />
 
+        <!-- Demo notice -->
+        <DemoNotice v-if="store.demo" />
+
         <!-- Router view -->
         <RouterView />
-
-        <!-- Manage modal -->
-        <Suspense>
-        <ManageModal v-if="store.showManageModal" />
-        </Suspense>
-
-        <!-- Feedback -->
-        <Feedback />
     </div>
 
     <!-- Footer -->
     <Footer />
+
+    <!-- Feedback -->
+    <Feedback />
 </template>
 
 
@@ -24,8 +22,8 @@
     import { useGlobalStore } from '@/stores'
 
     // Components
+    import DemoNotice from '../components/DemoNotice.vue'
     import Header from '../components/Header.vue'
-    import ManageModal from '../components/modal/ManageModal.vue'
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'
 

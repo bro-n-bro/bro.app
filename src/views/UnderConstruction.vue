@@ -1,7 +1,7 @@
 <template>
     <section class="error_info">
         <div class="cont">
-            <img src="../assets/images/error_404.svg" alt="" class="img">
+            <img src="@/assets/images/error_404.svg" alt="" class="img">
 
             <div class="title">{{ $t('message.under_construction_title') }}</div>
 

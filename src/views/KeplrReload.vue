@@ -7,7 +7,7 @@
 
             <div class="link">
                 <button class="btn" @click.prevent="reloadPage">
-                    {{ $t('message.reload_btn') }}
+                    {{ $t('message.btn_reload') }}
                 </button>
             </div>
         </div>

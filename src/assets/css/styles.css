@@ -1,24 +1,3 @@
-/* For old browsers */
-@supports (not(--css: variables))
-{
-    .supports_error
-    {
-        display: flex !important;
-    }
-}
-
-/* For IE */
-@media screen and (-ms-high-contrast: active),
-(-ms-high-contrast: none)
-{
-    .supports_error
-    {
-        display: flex !important;
-    }
-}
-
-
-
 /*------------------
     Reset styles
 ------------------*/
@@ -239,11 +218,6 @@ button
     padding-top: 148px;
 
     flex: 1 0 auto;
-}
-
-.main.no_pad
-{
-    padding: 0;
 }
 
 

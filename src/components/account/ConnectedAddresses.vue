@@ -5,16 +5,13 @@
 
             <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses" :class="{ active: store.account.currentWallet == 'all' }" @click.prevent="selectWallet('all')">
                 <div class="check">
-                    <svg><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                 </div>
                 <span>{{ $t('message.account_connected_addresses_all') }}</span>
             </button>
         </div>
 
         <div class="list">
-            <!-- <pre>{{ store.account.moonPassport }}</pre> -->
-            <!-- <pre>{{ store.account.moonPassportOwner }}</pre> -->
-
             <div><div class="item"
                 :class="{'active': store.account.currentWallet == 'all' || store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.account.currentWallet)}"
                 @click.prevent="selectWallet(store.account.moonPassportOwnerAddress)"
@@ -22,15 +19,35 @@
                 <div class="name">
                     {{ store.account.moonPassportOwner.extension.nickname }}
                 </div>
+
+                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="store.account.moonPassportOwnerAddress" v-if="store.currentNetwork == 'all'" v-clipboard:success="onCopy">
+                    <div class="tooltip copy_tooltip">
+                        {{ $t('message.account_copy_tooltip') }}
+                    </div>
+
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
+                </button>
+
+                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)" v-clipboard:success="onCopy" v-else>
+                    <div class="tooltip copy_tooltip">
+                        {{ $t('message.account_copy_tooltip') }}
+                    </div>
+
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
+                </button>
+
+                <div class="address">
+                <template v-if="store.currentNetwork == 'all'">
+                {{ store.account.moonPassportOwnerAddress.slice(0, 13) + '...' + store.account.moonPassportOwnerAddress.slice(-6) }}
+                </template>
+
+                <template v-else>
+                {{ generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress).slice(0, 13) + '...' + generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress).slice(-6) }}
+                </template>
+                </div>
             </div></div>
 
             <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
-            <!-- <div><div class="item" v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'" @click.self="selectWallet(item.address)"
-                :class="{
-                    'duplicate': isDuplicate(item.address),
-                    'active': store.account.currentWallet == 'all' || store.account.currentWallet == generateAddress('bostrom', item.address)
-                }"
-            > -->
             <div v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'">
                 <div class="item" @click.self="selectWallet(item.address)" :class="{
                     'duplicate': isDuplicate(item.address),
@@ -45,17 +62,43 @@
                         <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                     </div>
 
-                    <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))">
-                        <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="item.address" v-if="store.currentNetwork == 'all'">
+                        <div class="tooltip copy_tooltip">
+                            {{ $t('message.account_copy_tooltip') }}
+                        </div>
+
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                     </button>
 
-                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
-                        <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="generateAddress(store.networks[store.currentNetwork].address_prefix, item.address)" v-clipboard:success="onCopy" v-else>
+                        <div class="tooltip copy_tooltip">
+                            {{ $t('message.account_copy_tooltip') }}
+                        </div>
+
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                     </button>
 
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
+                    <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.Keplr.account.address)" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))" v-clipboard:success="onCopy">
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_edit"></use></svg>
+                    </button>
+
+                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.Keplr.account.address)" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_remove"></use></svg>
+                    </button>
+
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_duplicate"></use></svg>
 
                     <EditAddressName :address="item.address" :name="item.label ? item.label : `${item.address.slice(0, 13)}...${item.address.slice(-6)}`"/>
+
+                    <div class="address">
+                        <template v-if="store.currentNetwork == 'all'">
+                        {{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}
+                        </template>
+
+                        <template v-else>
+                        {{ generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress).slice(0, 13) + '...' + generateAddress(store.networks[store.currentNetwork].address_prefix, item.address).slice(-6) }}
+                        </template>
+                    </div>
                 </div>
             </div>
 
@@ -69,19 +112,27 @@
                         <span>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                     </div>
 
-                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == store.wallets.bostrom" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
-                        <svg><use xlink:href="/sprite.svg#ic_remove"></use></svg>
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="item.address" v-clipboard:success="onCopy">
+                        <div class="tooltip copy_tooltip">
+                            {{ $t('message.account_copy_tooltip') }}
+                        </div>
+
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                     </button>
 
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
+                    <button class="remove_btn" @click.prevent="openDeleteAddressModal(item.address)" v-if="store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.Keplr.account.address)" @mouseover="emitter.emit('setNotification', $t('message.notice_delete_address'))">
+                        <svg><use xlink:href="@/assets/sprite.svg#ic_remove"></use></svg>
+                    </button>
+
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_duplicate"></use></svg>
                 </div>
             </div>
             </template>
         </div>
 
         <button class="add_btn" @click.prevent="openAddAddressModal" :class="{'disabled': store.account.moonPassportOwner.extension.addresses && store.account.moonPassportOwner.extension.addresses.length >= 8}">
-            <span>{{ $t('message.add_address_btn') }}</span>
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_plus"></use></svg>
+            <span>{{ $t('message.btn_add_address') }}</span>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_plus"></use></svg>
         </button>
 
 
@@ -196,6 +247,16 @@
         store.showDeleteAddressModal = true
 
         document.body.classList.add('lock')
+    }
+
+
+    // Copy address callback
+    function onCopy() {
+        let _self = event.target
+
+        _self.closest('.item').querySelector('.copy_tooltip').classList.add('show')
+
+        setTimeout(() => _self.closest('.item').querySelector('.copy_tooltip').classList.remove('show'), 2000)
     }
 
 
@@ -345,7 +406,7 @@
         justify-content: space-between;
         align-items: center;
         align-content: center;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
 
     .connected_addresses .item.hide
@@ -374,9 +435,17 @@
         margin-bottom: 8px;
         padding: 8px;
 
+        pointer-events: none;
+
         border-radius: 8px;
         background: #282828;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+
+    .connected_addresses .tooltip.show
+    {
+        display: block;
     }
 
     .connected_addresses .tooltip:before
@@ -405,12 +474,26 @@
 
         overflow: hidden;
 
-        width: 100%;
+        width: calc(100% - 120px);
         margin-right: auto;
         padding-right: 8px;
 
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+
+    .connected_addresses .address
+    {
+        color: #555;
+        font-size: 12px;
+        line-height: 100%;
+
+        position: relative;
+        z-index: 5;
+
+        width: 100%;
+        margin-top: 8px;
     }
 
 
@@ -424,6 +507,55 @@
         min-width: 16px;
         height: 16px;
         margin-left: 8px;
+    }
+
+
+    .connected_addresses .copy_btn
+    {
+        color: #555;
+
+        position: relative;
+
+        display: none;
+
+        width: 16px;
+        min-width: 16px;
+        height: 16px;
+        margin-left: 8px;
+
+        transition: color .2s linear;
+        pointer-events: auto;
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .connected_addresses .copy_btn .tooltip
+    {
+        color: #fff;
+
+        right: auto;
+        left: 50%;
+
+        margin-bottom: 20px;
+
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    .connected_addresses .copy_btn svg
+    {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .connected_addresses .copy_btn:hover
+    {
+        color: #fff;
     }
 
 
@@ -516,7 +648,8 @@
     }
 
     .connected_addresses .list > *:hover .item .remove_btn,
-    .connected_addresses .list > *:hover .item .edit_btn
+    .connected_addresses .list > *:hover .item .edit_btn,
+    .connected_addresses .list > *:hover .item .copy_btn
     {
         display: flex;
     }
@@ -554,9 +687,9 @@
 
 
     .connected_addresses .item.duplicate > .icon,
-    .connected_addresses .list > *:hover .item.duplicate .tooltip,
+    .connected_addresses .list > *:hover .item.duplicate > .tooltip,
     .connected_addresses .item.not_supported > .icon,
-    .connected_addresses .list > *:hover .item.not_supported .tooltip
+    .connected_addresses .list > *:hover .item.not_supported > .tooltip
     {
         display: block;
     }
@@ -575,7 +708,7 @@
 
         transition: background .2s linear;
 
-        border-radius: 10px;
+        border-radius: 14px;
         background: #950fff;
 
         justify-content: center;

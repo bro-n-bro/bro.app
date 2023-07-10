@@ -5,6 +5,7 @@
                 <div class="data">
                     <div class="avatar">
                         <input type="file" id="avatar" ref="avatar" accept="image/png, image/jpeg" @change="avatarUpload">
+
                         <label for="avatar" class="box">
                             <div class="icon" v-if="!avatarPreview.status"></div>
 
@@ -36,7 +37,7 @@
                     <form class="info" @submit.prevent="createPassport">
                         <div class="line">
                             <div class="field">
-                                <input type="text" :value="data.moonAddress.slice(0, 13) + '...' + data.moonAddress.slice(-6)" class="input" readonly>
+                                <input type="text" :value="moonAddress.slice(0, 13) + '...' + moonAddress.slice(-6)" class="input" readonly>
 
                                 <div class="exp">
                                     {{ $t('message.passport_address_exp') }}
@@ -44,9 +45,9 @@
                             </div>
                         </div>
 
-                        <div class="line" :class="{ 'error': data.nickNameError }">
+                        <div class="line" :class="{ 'error': nickNameError }">
                             <div class="field">
-                                <input type="text" v-model="data.nickName" @input="validateName" maxlength="16" class="input" :placeholder="$t('message.passport_name_placeholder')">
+                                <input type="text" v-model="nickName" @input="validateName" maxlength="16" class="input" :placeholder="$t('message.passport_name_placeholder')">
 
                                 <div class="exp">
                                     {{ $t('message.passport_name_exp') }}
@@ -55,14 +56,14 @@
                         </div>
 
                         <div class="line">
-                            <div class="constitution_link" @click.prevent="openConstitutionModal()">
+                            <div class="constitution_link" @click.prevent="store.showConstitutionModal = true">
                                 <button type="button" class="btn">
                                     <span>{{ $t('message.passport_constitution_link') }}</span><sup>*</sup>
                                 </button>
 
-                                <div class="status" :class="{'red': !store.constitutionStatus, 'violet': store.constitutionStatus}" v-if="store.constitutionStatus != null">
-                                    <svg v-if="!store.constitutionStatus"><use xlink:href="/sprite.svg#ic_close"></use></svg>
-                                    <svg v-if="store.constitutionStatus"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <div class="status" :class="{'red': !store.account.signature, 'violet': store.account.signature}" v-if="store.account.signature">
+                                    <svg v-if="!store.account.signature"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
+                                    <svg v-if="store.account.signature"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                                 </div>
                             </div>
 
@@ -71,30 +72,15 @@
                             </div>
                         </div>
 
-                        <!-- <div class="line activation">
-                            <div class="field">
-                                <button type="button" class="btn" @click.prevent="activationHandler" :class="{
-                                    'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8,
-                                    'process': data.activationProcess == 'process',
-                                    'active': data.activationProcess === true
-                                }">
-                                    <div class="check">
-                                        <svg v-if="data.activationProcess != 'process'"><use xlink:href="/sprite.svg#ic_check"></use></svg>
-                                        <Loader v-else />
-                                    </div>
-
-                                    <div>{{ $t('message.passport_activation_label') }}</div>
-                                </button>
-                            </div>
-                        </div> -->
 
                         <div class="btns">
                             <router-link class="btn" to="/dashboard">
-                                {{ $t('message.reject_btn') }}
+                                {{ $t('message.btn_reject') }}
                             </router-link>
 
-                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.constitutionStatus || data.nickName.length < 8 || data.activationProcess != true || !store.node.isOnline}">
-                                {{ $t('message.confirm_btn') }}
+                            <!-- <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.account.signature || nickName.length < 8 || activationProcess != true || !store.IPFSNode.isOnline()}"> -->
+                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.account.signature || nickName.length < 8 || activationProcess != true}">
+                                {{ $t('message.btn_confirm') }}
                             </button>
                         </div>
                     </form>
@@ -113,7 +99,7 @@
                 </div>
 
 
-                <div class="data_hide" :class="{'show': data.status}" id="completed_passport">
+                <div class="data_hide" :class="{ 'show': status }" id="completed_passport">
                     <div class="data active">
                         <div class="avatar">
                             <div class="box">
@@ -140,7 +126,7 @@
                                         {{ $t('message.passport_address_exp') }}
                                     </div>
 
-                                    <input type="text" :value="data.moonAddress.slice(0, 12) + '...' + data.moonAddress.slice(-5)" class="input" readonly>
+                                    <input type="text" :value="moonAddress.slice(0, 12) + '...' + moonAddress.slice(-5)" class="input" readonly>
                                 </div>
                             </div>
 
@@ -150,7 +136,7 @@
                                         {{ $t('message.passport_name_label') }}
                                     </div>
 
-                                    <input type="text" name="name" v-model="data.nickName" class="input" readonly>
+                                    <input type="text" name="name" v-model="nickName" class="input" readonly>
                                 </div>
                             </div>
 
@@ -179,19 +165,19 @@
                         <div class="bg_right"></div>
                         <div class="bg_bottom"></div>
 
-                        <div class="gradient" :style="{ 'background': data.bgGradient }"></div>
+                        <div class="gradient" :style="{ 'background': bgGradient }"></div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="bottom_btns" v-if="data.showBottomBtns">
-                <a :href="data.passportImage" download="my_passport.png" class="btn download_btn">
-                    {{ $t('message.download_png_btn') }}
+            <div class="bottom_btns" v-if="showBottomBtns">
+                <a :href="passportImage" download="my_passport.png" class="btn download_btn">
+                    {{ $t('message.btn_download_png') }}
                 </a>
 
                 <router-link to="/account/cosmoshub" class="btn continue_btn">
-                    {{ $t('message.continue_btn') }}
+                    {{ $t('message.btn_continue') }}
                 </router-link>
             </div>
         </div>
@@ -203,13 +189,12 @@
 
 
 <script setup>
-    import { ref, reactive, computed, inject, onBeforeMount, watchEffect } from 'vue'
+    import { ref, reactive, inject, onBeforeMount, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import * as htmlToImage from 'html-to-image'
-    import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
-    import { preparePassportTx, sendTx } from '@/utils'
+    import { generateAddress, preparePassportTx, sendTx } from '@/utils'
 
     // Components
     import ConstitutionModal from '../components/modal/ConstitutionModal.vue'
@@ -224,48 +209,40 @@
             buffer: '',
             status: false
         }),
-        data = reactive({
-            moonAddress: computed(() => store.wallets.bostrom ? store.wallets.bostrom : ''),
-            nickName: '',
-            nickNameError: false,
-            activationProcess: false,
-            passportImage: '',
-            status: false,
-            showBottomBtns: false,
-            bgGradient: ''
-        })
+        moonAddress = generateAddress('bostrom', store.Keplr.account.address),
+        nickName = ref(''),
+        nickNameError = ref(false),
+        activationProcess = ref(false),
+        passportImage = ref(''),
+        status = ref(false),
+        showBottomBtns = ref(false),
+        bgGradient = ref('')
 
 
     onBeforeMount(async () => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_create_passport')
 
-        // Set nickname from localstorage
-        if(store.account.tempUserName.length && store.account.tempUserName != 'undefined') {
-            data.nickName = store.account.tempUserName
+        // Set nickname from local storage
+        if(store.account.tempUserName != 'undefined') {
+            nickName.value = store.account.tempUserName
 
             // Validate nickname
-            let result = /^([a-z0-9-]*)$/g.test(data.nickName)
+            let result = /^([a-z0-9-]*)$/g.test(nickName.value)
 
-            data.nickName.length < 8 || data.nickName.length > 16 || !result
-                ? data.nickNameError = true
-                : data.nickNameError = false
+            nickName.value.length < 8 || nickName.value.length > 16 || !result
+                ? nickNameError.value = true
+                : nickNameError.value = false
         }
     })
 
 
     watchEffect(async () => {
         // Monitor the constitution status
-        if(store.constitutionStatus) {
+        if(store.account.signature) {
             await activationHandler()
         }
     })
-
-
-    // Open constitution modal
-    function openConstitutionModal() {
-        store.showConstitutionModal = true
-    }
 
 
     // Avatar upload
@@ -305,8 +282,8 @@
         let result = /^([a-z0-9-]*)$/g.test(event.target.value)
 
         event.target.value.length < 8 || event.target.value.length > 16 || !result
-            ? data.nickNameError = true
-            : data.nickNameError = false
+            ? nickNameError.value = true
+            : nickNameError.value = false
 
         // Set in loclstorage
         store.account.tempUserName = event.target.value
@@ -315,7 +292,7 @@
 
     // Activation handler
     async function activationHandler() {
-        let response = await store.jsCyber.getAccount(store.wallets.bostrom)
+        let response = await store.jsCyber.getAccount(generateAddress('bostrom', store.Keplr.account.address))
 
         // Show notification
         notification.notify({
@@ -325,7 +302,7 @@
         })
 
         // Set activation status
-        data.activationProcess = 'process'
+        activationProcess.value = 'process'
 
         if (!response) {
             await fetch('https://titan.cybernode.ai/credit', {
@@ -335,7 +312,7 @@
                 method: 'POST',
                 body: JSON.stringify({
                     denom: 'boot',
-                    address: store.wallets.bostrom
+                    address: generateAddress('bostrom', store.Keplr.account.address)
                 })
             })
                 .then(result => {
@@ -353,7 +330,7 @@
                         })
 
                         // Set activation status
-                        data.activationProcess = true
+                        activationProcess.value = true
                     } else {
                         // Show notification
                         notification.notify({
@@ -369,7 +346,7 @@
                         })
 
                         // Set activation status
-                        data.activationProcess = false
+                        activationProcess.value = false
                     }
             })
         } else {
@@ -386,7 +363,7 @@
             })
 
             // Set activation status
-            data.activationProcess = true
+            activationProcess.value = true
         }
     }
 
@@ -398,7 +375,7 @@
                 store.CONTRACT_ADDRESS_PASSPORT,
                 {
                     passport_by_nickname: {
-                        nickname: data.nickName
+                        nickname: nickName.value
                     }
                 }
             )
@@ -424,13 +401,15 @@
 
             try{
                 // Send avatar to IPFS
-                let avatarIpfs = await store.node.add(avatar.value.files[0])
+                // let avatarCID = await store.unixfs.addFile({
+                //     content: new TextEncoder().encode(avatar.value.files[0])
+                // })
 
                 // Prepare Tx
                 let prepareResult = await preparePassportTx({
                     create_passport: {
-                        avatar: avatarIpfs.path,
-                        nickname: data.nickName,
+                        avatar: '',
+                        nickname: nickName.value,
                         signature: store.account.signature
                     }
                 })
@@ -459,10 +438,10 @@
                     })
 
                     // Generate gradient
-                    data.bgGradient = gradient(data.nickName)
+                    bgGradient.value = gradient(nickName.value)
 
                     // Set passport status
-                    data.status = true
+                    status.value = true
 
                     // Update user info
                     await connectWallet(true, true)
@@ -470,11 +449,11 @@
                     // Create passport image
                     setTimeout(() => {
                         htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
-                            .then(dataUrl => data.passportImage = dataUrl)
+                            .then(dataUrl => passportImage.value = dataUrl)
                             .catch(error => console.error(error))
 
                         // Show bottom buttons
-                        data.showBottomBtns = true
+                        showBottomBtns.value = true
                     }, 1050)
 
                     // Set default notification
@@ -527,7 +506,7 @@
                 type: 'error'
             })
 
-            data.nickNameError = true
+            nickNameError.value = true
         }
     }
 </script>
@@ -1348,96 +1327,6 @@
 
         width: 16px;
         height: 16px;
-    }
-
-
-    .create_passport .info .activation .btn
-    {
-        color: #fff;
-        font-family: var(--font_family2);
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 100%;
-
-        position: relative;
-
-        display: flex;
-
-        min-height: 24px;
-        padding-left: 38px;
-
-        cursor: pointer;
-        text-transform: uppercase;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .create_passport .info .activation .btn.disable
-    {
-        cursor: default;
-        pointer-events: none;
-    }
-
-    .create_passport .info .activation .btn > *
-    {
-        pointer-events: none;
-    }
-
-
-    .create_passport .info .activation .btn .check
-    {
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        display: flex;
-
-        width: 24px;
-        height: 24px;
-
-        transition: background .2s linear;
-
-        border-radius: 10px;
-        background: #353535;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
-    }
-
-    .create_passport .info .activation .btn .check svg
-    {
-        color: #555;
-
-        display: block;
-
-        width: 16px;
-        height: 16px;
-
-        transition: color .2s linear;
-    }
-
-
-    .create_passport .info .activation .btn.active,
-    .create_passport .info .activation .btn.process
-    {
-        pointer-events: none;
-    }
-
-    .create_passport .info .activation .btn.active .check,
-    .create_passport .info .activation .btn.process .check
-    {
-        background: #950fff;
-    }
-
-    .create_passport .info .activation .btn.active .check svg,
-    .create_passport .info .activation .btn.process .check svg
-    {
-        color: #fff;
     }
 
 

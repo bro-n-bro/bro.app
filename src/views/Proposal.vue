@@ -7,7 +7,7 @@
         <div class="cont middle">
             <div class="back_btn">
                 <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all'" class="btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
 
@@ -109,9 +109,9 @@
 
                     // Set chart datasets
                     if(proposal.value.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
-                        let remnant = store.networks[proposal.value.network].proposal_need - (proposal.value.deposit / store.networks[proposal.value.network].exponent)
+                        let remnant = store.networks[proposal.value.network].proposal_need - (proposal.value.deposit / Math.pow(10, store.networks[proposal.value.network].exponent))
 
-                        chartDatasets.push(proposal.value.deposit / store.networks[proposal.value.network].exponent)
+                        chartDatasets.push(proposal.value.deposit / Math.pow(10, store.networks[proposal.value.network].exponent))
 
                         if(remnant > 0) {
                             chartDatasets.push(remnant)
@@ -194,7 +194,7 @@
         currentVote.value = reactive({ votes: [] })
 
         // Get proposal data
-        getCurrentVote()
+        await getCurrentVote()
     })
 </script>
 

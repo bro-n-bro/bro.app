@@ -1,0 +1,630 @@
+<template>
+    <div class="chart_info">
+        <div class="block_title">
+            {{ $t('message.account_chart_liquide_block_title') }}
+        </div>
+
+        <div class="block_desc">
+            {{ $t('message.account_chart_liquide_desc') }}
+        </div>
+
+
+        <div class="chart">
+            <Avatar />
+
+            <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
+        </div>
+
+
+        <div class="legends empty" v-if="!chartTotal">
+            <div class="legend">
+                <div class="name">
+                    <span></span>
+                </div>
+
+                <div class="amount">
+                    <span></span>
+                </div>
+
+                <div class="progress">
+                    <div class="bar"><div></div></div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="name">
+                    <span></span>
+                </div>
+
+                <div class="amount">
+                    <span></span>
+                </div>
+
+                <div class="progress">
+                    <div class="bar"><div></div></div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="name">
+                    <span></span>
+                </div>
+
+                <div class="amount">
+                    <span></span>
+                </div>
+
+                <div class="progress">
+                    <div class="bar"><div></div></div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="name">
+                    <span></span>
+                </div>
+
+                <div class="amount">
+                    <span></span>
+                </div>
+
+                <div class="progress">
+                    <div class="bar"><div></div></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="legends" v-else>
+            <div class="legend" v-if="currentData.total.liquid" :class="{'active': chartActiveLegend == 0}" @mouseenter="mouseenterLegend(0)" @mouseleave="mouseleaveLegend()">
+                <div class="name">
+                    <div class="color" style="background-color: #7879F1;"></div>
+                    <span>{{ $t('message.account_charts_liquid_tokens_label') }}</span>
+                </div>
+
+                <div class="amount">
+                    <template v-if="(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+
+                    {{ store.networks[store.currentNetwork].token_name }}
+
+                    <div class="price">
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ store.currentCurrency }}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="legend" v-if="currentData.total.ibc" :class="{'active': chartActiveLegend == 1}" @mouseenter="mouseenterLegend(1)" @mouseleave="mouseleaveLegend()">
+                <div class="name" @click.prevent="toggleActiveClass">
+                    <div class="color" style="background-color: #EF5DA8;"></div>
+                    <span>{{ $t('message.account_charts_ibc_label') }}</span>
+
+                    <!-- <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg> -->
+                </div>
+
+                <div class="dropdown">
+                    <!-- <pre>{{ currentNetwork.balance.liquid.ibc }}</pre> -->
+
+                    <div class="tokens">
+                        <div v-for="(item, index) in currentData.balance.liquid.ibc" :key="index" class="item">
+                            <div class="logo">
+                                <img :src="`${item.logo}`" alt="">
+
+                                <div class="on_chain_logo">
+                                    <img :src="`/${store.currentNetwork}_logo.png`" alt="">
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="token">{{ item.symbol }}</div>
+
+                                <div class="on_chain">
+                                    {{ $t('message.account_charts_on_chain') }}
+                                    {{ store.networks[store.currentNetwork].name }}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="amount">
+                                    <template v-if="item.symbol == 'BOOT'">
+                                        <span v-if="(item.amount / Math.pow(10, item.exponent) / 1000000) < 0.01">&lt; 0.01</span>
+                                        <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent) / 1000000, 2) }}</span>
+                                    </template>
+
+                                    <template v-else>
+                                        <span v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</span>
+                                        <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</span>
+                                    </template>
+
+                                    <span class="token" v-if="item.symbol == 'BOOT'">M{{ item.symbol }}</span>
+                                    <span class="token" v-else>{{ item.symbol }}</span>
+
+                                    <div class="price">
+                                        {{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol), 2) }}
+                                        {{ store.currentCurrency }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="legend" v-if="currentData.total.rewards" :class="{'active': chartActiveLegend == 2}" @mouseenter="mouseenterLegend(2)" @mouseleave="mouseleaveLegend()">
+                <div class="name">
+                    <div class="color" style="background-color: #1BC562;"></div>
+                    <span>{{ $t('message.account_charts_rewards_label') }}</span>
+                </div>
+
+                <div class="amount">
+                    <template v-if="(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), 5) }}</template>
+
+                    {{ store.networks[store.currentNetwork].token_name }}
+
+                    <div class="price">
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ store.currentCurrency }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script setup>
+    import { onBeforeMount, computed, reactive, ref, inject } from 'vue'
+    import { useGlobalStore } from '@/stores'
+    import { currencyСonversion } from '@/utils'
+
+    import { Chart as ChartJS, ArcElement } from 'chart.js'
+    import { Doughnut } from 'vue-chartjs'
+
+    // Components
+    import Avatar from '@/components/account/charts/Avatar.vue'
+
+    ChartJS.register(ArcElement)
+
+
+    const store = useGlobalStore(),
+        i18n = inject('i18n'),
+        chart = ref(null),
+        chartDatasets = reactive([]),
+        chartActiveLegend = ref(null),
+        chartTotal = ref(0),
+        chartData = computed(() => ({
+            labels: [
+                i18n.global.t('message.account_charts_staked_label'),
+                i18n.global.t('message.account_charts_liquid_tokens_label'),
+                i18n.global.t('message.account_charts_unbonding_label')
+            ],
+            datasets: [{
+                data: chartDatasets,
+                backgroundColor: ['#7879F1', '#EF5DA8', '#1BC562'],
+                borderColor: '#0d0d0d',
+                borderWidth: 4,
+                hoverBackgroundColor: ['#7879F1', '#EF5DA8', '#07B14E'],
+                hoverBorderColor: ['#7879F1', '#EF5DA8', '#07B14E'],
+                borderAlign: 'inner',
+                cutout: '80%'
+            }]
+        })),
+        chartOptions = reactive({
+            responsive: true,
+            plugins: {
+                legend: false,
+                tooltip: false
+            },
+            animation: {
+                duration: 200
+            },
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 200
+                    }
+                }
+            },
+            onHover: (e, item) => {
+                item.length
+                    ? chartActiveLegend.value = item[0].index
+                    : chartActiveLegend.value = null
+            }
+        }),
+        currentWallet = ref({}),
+        currentData = ref({
+            total: {
+                liquid: 0,
+                rewards: 0,
+                ibc: 0,
+            },
+            balance: {
+                liquid: {
+                    ibc: []
+                }
+            }
+        })
+
+
+    onBeforeMount(() => {
+        if(store.account.currentWallet != 'all') {
+            // Get current walllet data
+            currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+            // Get current network data
+            currentData.value = currentWallet.value.networks.find(el => el.name == 'cosmoshub')
+        } else {
+            for (let wallet of store.account.wallets) {
+                for (let network of wallet.networks) {
+                    // Calc totals
+                    currentData.value.total.liquid += network.total.liquid,
+                    currentData.value.total.ibc += network.total.ibc,
+                    currentData.value.total.rewards += network.total.rewards
+
+                    // Balance - Concat ibc tokens
+                    if(network.balance.liquid.ibc != null) {
+                        network.balance.liquid.ibc.forEach(el => {
+                            let duplicate = currentData.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
+
+                            duplicate
+                                ? duplicate.amount += el.amount
+                                : currentData.value.balance.liquid.ibc.push(el)
+                        })
+                    }
+                }
+            }
+        }
+
+        // Set chart data
+        chartDatasets.push(currentData.value.total.liquid)
+        chartDatasets.push(currentData.value.total.ibc)
+        chartDatasets.push(currentData.value.total.rewards)
+
+        // Sum chart total
+        chartTotal.value = currentData.value.total.liquid + currentData.value.total.ibc + currentData.value.total.rewards
+    })
+
+
+    // Mouse enter on legend
+    function mouseenterLegend(dataIndex) {
+        let chartInstance = chart.value.chart
+
+        chartActiveLegend.value = dataIndex
+
+        chartInstance.setActiveElements([{
+            datasetIndex: 0,
+            index: dataIndex
+        }])
+
+        chartInstance.update()
+    }
+
+
+    // Mouse leave from legend
+    function mouseleaveLegend() {
+        let chartInstance = chart.value.chart
+
+        chartActiveLegend.value = null
+
+        chartInstance.setActiveElements([])
+        chartInstance.update()
+    }
+
+
+    // Toggle active class
+    function toggleActiveClass(e) {
+        e.target.closest('.legend').classList.toggle('active')
+    }
+</script>
+
+
+<style scoped>
+    .chart_info
+    {
+        display: flex;
+
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+
+    .block_title
+    {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 24px;
+
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+
+    .block_desc
+    {
+        color: #555;
+        line-height: 110%;
+
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+
+
+    .chart
+    {
+        position: relative;
+
+        width: 291px;
+        max-width: 100%;
+        height: 291px;
+
+        border-radius: 50%;
+        background: #0d0d0d;
+
+        clip-path: circle(50% at 50% 50%);
+    }
+
+    .chart:before
+    {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+
+        border: 14px solid #282828;
+        border-radius: 50%;
+    }
+
+
+
+    .legends
+    {
+        width: calc(100% - 307px);
+        margin-left: auto;
+    }
+
+    .legends > * + *
+    {
+        margin-top: 8px;
+    }
+
+
+    .legends .legend .dropdown
+    {
+        /* display: none; */
+        width: 100%;
+        margin-top: 8px;
+    }
+
+
+    .legends .legend
+    {
+        display: flex;
+
+        padding: 6px 8px;
+
+        transition: background .2s linear;
+
+        border-radius: 10px;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .legends .legend .name
+    {
+        color: #555;
+        font-size: 14px;
+        line-height: 100%;
+
+        display: flex;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .legends .legend .color
+    {
+        width: 10px;
+        height: 10px;
+        margin-right: 4px;
+
+        border-radius: 50%;
+    }
+
+
+    .legends .legend .amount
+    {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 100%;
+
+        margin-left: auto;
+
+        text-align: right;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+
+    .legends .legend .amount .token
+    {
+        margin-left: 4px;
+    }
+
+
+    .legends .legend .price
+    {
+        color: #555;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 100%;
+
+        margin-top: 4px;
+
+        white-space: nowrap;
+    }
+
+
+    .legends .legend .progress
+    {
+        display: flex;
+
+        width: 100%;
+        margin-top: 8px;
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .legends .legend .bar
+    {
+        width: 100%;
+        height: 8px;
+
+        border-radius: 4px;
+        background: #282828;
+    }
+
+    .legends .legend .bar div
+    {
+        width: 0;
+        height: 8px;
+
+        transition: width .4s linear;
+
+        border-radius: 4px;
+    }
+
+
+    .legends .legend .tokens
+    {
+        margin-top: 8px;
+    }
+
+
+    .legends .legend .tokens .item
+    {
+        display: flex;
+
+        padding-top: 8px;
+
+        border-top: 1px solid rgba(255, 255, 255, .05);
+
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .legends .legend .tokens .item + .item
+    {
+        margin-top: 8px;
+    }
+
+
+    .legends .legend .tokens .item > *:last-child
+    {
+        margin-left: auto;
+    }
+
+
+    .legends .legend .tokens .token
+    {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 100%;
+
+        white-space: nowrap;
+    }
+
+
+    .legends .legend .tokens .on_chain
+    {
+        color: #555;
+        font-size: 12px;
+        line-height: 100%;
+
+        margin-top: 4px;
+    }
+
+
+    .legends .legend .tokens .logo
+    {
+        position: relative;
+
+        width: 30px;
+        height: 30px;
+        margin-right: 11px;
+
+        border-radius: 50%;
+    }
+
+    .legends .legend .tokens .logo img
+    {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+    }
+
+
+    .legends .legend .tokens .on_chain_logo
+    {
+        position: absolute;
+        right: -3px;
+        bottom: -5px;
+
+        width: 16px;
+        height: 16px;
+
+        border: 1px solid #141414;
+        border-radius: 50%;
+    }
+
+
+    .legends .legend.active
+    {
+        background: #141414;
+    }
+
+
+
+    .legends.empty .legend .name span,
+    .legends.empty .legend .amount span
+    {
+        display: block;
+
+        width: 80px;
+        height: 14px;
+
+        border-radius: 8px;
+        background: #282828;
+    }
+
+</style>

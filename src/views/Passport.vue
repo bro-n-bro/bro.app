@@ -2,8 +2,8 @@
     <section class="create_passport">
         <div class="cont">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmos'" class="btn">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_arrow_hor"></use></svg>
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmoshub'" class="btn">
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
 
@@ -25,7 +25,7 @@
                             </label>
 
                             <div class="logo">
-                                <img src="../assets/images/black_logo.svg" alt="">
+                                <img src="@/assets/images/black_logo.svg" alt="">
 
                                 <div class="corner corner_top_left"></div>
                                 <div class="corner corner_top_right"></div>
@@ -41,23 +41,23 @@
                                         {{ $t('message.passport_address_exp') }}
                                     </div>
 
-                                    <input type="text" :value="data.moonAddress.slice(0, 13) + '...' + data.moonAddress.slice(-6)" class="input" readonly>
+                                    <input type="text" :value="moonAddress.slice(0, 13) + '...' + moonAddress.slice(-6)" class="input" readonly>
                                 </div>
                             </div>
 
-                            <div class="line" :class="{ 'error': data.nickNameError }">
+                            <div class="line" :class="{ 'error': nickNameError }">
                                 <div class="field">
                                     <div class="label">
                                         {{ $t('message.passport_name_label') }}
                                     </div>
 
-                                    <div class="exp" v-if="data.editNickname && !data.status">
+                                    <div class="exp" v-if="editNickname && !status">
                                         {{ $t('message.passport_name_exp') }}
                                     </div>
 
-                                    <input class="input" type="text" name="name" maxlength="16" v-model="data.nickName" @input="validateName" :readonly="!data.editNickname">
+                                    <input class="input" type="text" name="name" maxlength="16" v-model="nickName" @input="validateName" :readonly="!editNickname">
 
-                                    <button type="button" class="edit_btn" @click="enableEditNickname()" v-if="!data.editNickname && !data.status">
+                                    <button type="button" class="edit_btn" @click="enableEditNickname()" v-if="!editNickname && !status">
                                         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.57716 3.76801L10.5638 2.78134C10.6876 2.65747 10.8347 2.55921 10.9965 2.49217C11.1583 2.42513 11.3317 2.39062 11.5068 2.39062C11.682 2.39062 11.8554 2.42513 12.0172 2.49217C12.179 2.55921 12.326 2.65747 12.4498 2.78134L13.3925 3.72401C13.6425 3.97404 13.7829 4.31312 13.7829 4.66667C13.7829 5.02023 13.6425 5.3593 13.3925 5.60934L12.4058 6.59601M9.57716 3.76801L3.16649 10.178C2.94515 10.3994 2.80874 10.6915 2.78116 11.0033L2.61983 12.83C2.61116 12.9271 2.6239 13.0249 2.65714 13.1166C2.69039 13.2082 2.74333 13.2915 2.81223 13.3604C2.88114 13.4294 2.96433 13.4824 3.05595 13.5158C3.14757 13.5491 3.24538 13.5619 3.34249 13.5533L5.16916 13.392C5.48144 13.3647 5.77413 13.2283 5.99583 13.0067L12.4058 6.59601M9.57716 3.76801L12.4058 6.59601" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                                         </svg>
@@ -65,11 +65,11 @@
 
                                     <template v-else>
                                     <button type="submit" class="submit_btn" @click.prevent="updateNickname()">
-                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                                     </button>
 
                                     <button type="button" class="cancel_btn" @click.prevent="disableEditNickname()">
-                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                                     </button>
                                     </template>
                                 </div>
@@ -83,7 +83,7 @@
 
                                     <div class="text" v-html="$t('message.passport_citizenship_text')"></div>
 
-                                    <img src="../assets/images/passport_citizenship.svg" alt="" class="img">
+                                    <img src="@/assets/images/passport_citizenship.svg" alt="" class="img">
                                 </div>
                             </div>
                         </form>
@@ -100,23 +100,23 @@
                         <div class="bg_right"></div>
                         <div class="bg_bottom"></div>
 
-                        <div class="gradient" :style="{ 'background': data.bgGradient }"></div>
+                        <div class="gradient" :style="{ 'background': bgGradient }"></div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="bottom_btns" v-if="data.showDownloadBtn">
-                <label for="avatar" class="btn change_image_btn" v-if="!avatarPreview.buffer.length || data.status">
-                    {{ $t('message.change_image_btn') }}
+            <div class="bottom_btns" v-if="showBottomBtns">
+                <label for="avatar" class="btn change_image_btn" v-if="!avatarPreview.buffer.length || status">
+                    {{ $t('message.btn_change_image') }}
                 </label>
 
                 <button class="btn update_btn" v-else @click.prevent="updatePassport()">
-                    {{ $t('message.update_btn') }}
+                    {{ $t('message.btn_update') }}
                 </button>
 
-                <a :href="data.passportImage" download="my_passport.png" class="btn download_btn">
-                    {{ $t('message.download_png_btn') }}
+                <a :href="passportImage" download="my_passport.png" class="btn download_btn">
+                    {{ $t('message.btn_download_png') }}
                 </a>
             </div>
         </div>
@@ -130,7 +130,6 @@
     import { useRouter } from 'vue-router'
     import { useNotification } from '@kyvg/vue3-notification'
     import * as htmlToImage from 'html-to-image'
-    import { toJpeg } from 'html-to-image'
     import gradient from 'random-gradient'
     import { preparePassportTx, sendTx } from '@/utils'
 
@@ -144,16 +143,14 @@
             buffer: '',
             status: false
         }),
-        data = reactive({
-            moonAddress: store.account.moonPassportOwnerAddress,
-            nickName: '',
-            nickNameError: false,
-            passportImage: '',
-            status: false,
-            bgGradient: '',
-            showDownloadBtn: false,
-            editNickname: false
-        })
+        moonAddress = store.account.moonPassportOwnerAddress,
+        nickName = ref(store.account.moonPassportOwner.extension.nickname),
+        nickNameError = ref(false),
+        passportImage = ref(''),
+        status = ref(false),
+        showBottomBtns = ref(false),
+        editNickname = ref(false),
+        bgGradient = ref('')
 
 
     onBeforeMount(() => {
@@ -161,16 +158,16 @@
         store.tooltip = i18n.global.t('message.notice_default_account_passport')
 
         // Set data from passport
-        data.nickName = store.account.moonPassportOwner.extension.nickname
+        // nickName.value = store.account.moonPassportOwner.extension.nickname
 
         // Generate gradient
-        data.bgGradient = gradient(data.nickName)
+        bgGradient.value = gradient(nickName.value)
     })
 
 
     watchEffect(() => {
         // Monitor the IPFSStatus
-        if(store.IPFSStatus) {
+        if(store.IPFSNode) {
             let delay = 0
 
             if(!store.account.avatar) {
@@ -184,8 +181,8 @@
                 // Create passport image
                 htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
                     .then(dataUrl => {
-                        data.passportImage = dataUrl
-                        data.showDownloadBtn = true
+                        passportImage.value = dataUrl
+                        showBottomBtns.value = true
                     })
                     .catch(error => console.error(error))
             }, delay)
@@ -197,7 +194,7 @@
     function enableEditNickname() {
         let input = event.target.closest('.line').querySelector('.input')
 
-        data.editNickname = true
+        editNickname.value = true
 
         // Focus on input
         setTimeout(() => input.focus())
@@ -206,10 +203,10 @@
 
     // Disable edit nickname
     function disableEditNickname() {
-        data.editNickname = false
+        editNickname.value = false
 
         // Set nickName from passport
-        data.nickName = store.account.moonPassportOwner.extension.nickname
+        nickName.value = store.account.moonPassportOwner.extension.nickname
     }
 
 
@@ -256,7 +253,7 @@
             title: i18n.global.t('message.notification_passport_update_process')
         })
 
-        data.status = true
+        status.value = true
 
         try{
             // Send avatar to IPFS
@@ -298,12 +295,12 @@
 
                 // Create passport image
                 htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
-                    .then(dataUrl => data.passportImage = dataUrl)
+                    .then(dataUrl => passportImage.value = dataUrl)
                     .catch(error => console.error(error))
 
                 // Get moon passport
-                store.getMoonPassport()
-                store.getOwnerMoonPassport()
+                await store.getMoonPassport()
+                await store.getOwnerMoonPassport()
 
                 // Set avatar
                 store.account.avatar = avatarPreview.src
@@ -358,8 +355,8 @@
         let result = /^([a-z0-9-]*)$/g.test(event.target.value)
 
         event.target.value.length < 8 || event.target.value.length > 16 || !result
-            ? data.nickNameError = true
-            : data.nickNameError = false
+            ? nickNameError.value = true
+            : nickNameError.value = false
     }
 
 
@@ -370,7 +367,7 @@
                 store.CONTRACT_ADDRESS_PASSPORT,
                 {
                     passport_by_nickname: {
-                        nickname: data.nickName
+                        nickname: nickName.value
                     }
                 }
             )
@@ -386,7 +383,7 @@
 
     // Update nickname
     async function updateNickname() {
-        if(data.nickNameError) {
+        if(nickNameError.value) {
             // Show notification
             notification.notify({
                 group: 'default',
@@ -406,64 +403,85 @@
             })
         } else {
             if(await checkNickname() == null) {
-            // Show notification
-            notification.notify({
-                group: 'default',
-                duration: -100,
-                title: i18n.global.t('message.notification_passport_update_process')
-            })
-
-            data.status = true
-
-            // Disable edit nickname
-            data.editNickname = false
-
-            try{
-                // Prepare Tx
-                let prepareResult = await preparePassportTx({
-                    update_name: {
-                        new_nickname: data.nickName,
-                        old_nickname: store.account.moonPassportOwner.extension.nickname
-                    }
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    duration: -100,
+                    title: i18n.global.t('message.notification_passport_update_process')
                 })
 
-                // Send Tx
-                let result = await sendTx(prepareResult)
+                status.value = true
 
-                if (result.code === 0) {
-                    // Set TXS
-                    store.lastTXS = result.transactionHash
+                // Disable edit nickname
+                editNickname.value = false
 
-                    // Show notification
-                    notification.notify({
-                        group: 'default',
-                        clean: true
-                    })
-
-                    notification.notify({
-                        group: store.networks.bostrom.denom,
-                        title: i18n.global.t('message.notification_success_update_passport_title'),
-                        type: 'success',
-                        data: {
-                            chain: 'bostrom',
-                            tx_type: i18n.global.t('message.notification_action_update_passport')
+                try{
+                    // Prepare Tx
+                    let prepareResult = await preparePassportTx({
+                        update_name: {
+                            new_nickname: nickName.value,
+                            old_nickname: store.account.moonPassportOwner.extension.nickname
                         }
                     })
 
-                    // Generate gradient
-                    data.bgGradient = gradient(data.nickName)
+                    // Send Tx
+                    let result = await sendTx(prepareResult)
 
-                    // Create passport image
-                    htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
-                        .then(dataUrl => data.passportImage = dataUrl)
-                        .catch(error => console.error(error))
+                    if (result.code === 0) {
+                        // Set TXS
+                        store.lastTXS = result.transactionHash
 
-                    // Get moon passport
-                    await store.getMoonPassport()
-                    await store.getOwnerMoonPassport()
-                }
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
 
-                if (result.code) {
+                        notification.notify({
+                            group: store.networks.bostrom.denom,
+                            title: i18n.global.t('message.notification_success_update_passport_title'),
+                            type: 'success',
+                            data: {
+                                chain: 'bostrom',
+                                tx_type: i18n.global.t('message.notification_action_update_passport')
+                            }
+                        })
+
+                        // Generate gradient
+                        bgGradient.value = gradient(data.nickName)
+
+                        // Create passport image
+                        htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
+                            .then(dataUrl => passportImage.value = dataUrl)
+                            .catch(error => console.error(error))
+
+                        // Get moon passport
+                        await store.getMoonPassport()
+                        await store.getOwnerMoonPassport()
+                    }
+
+                    if (result.code) {
+                        // Show notification
+                        notification.notify({
+                            group: 'default',
+                            clean: true
+                        })
+
+                        notification.notify({
+                            duration: -100,
+                            group: store.networks.bostrom.denom,
+                            title: i18n.global.t('message.notification_failed_title'),
+                            text: result?.rawLog.toString(),
+                            type: 'error',
+                            data: {
+                                chain: 'bostrom',
+                                tx_type: i18n.global.t('message.notification_action_update_passport')
+                            }
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+
                     // Show notification
                     notification.notify({
                         group: 'default',
@@ -471,10 +489,9 @@
                     })
 
                     notification.notify({
-                        duration: -100,
                         group: store.networks.bostrom.denom,
                         title: i18n.global.t('message.notification_failed_title'),
-                        text: result?.rawLog.toString(),
+                        text: i18n.global.t('message.manage_modal_error_rejected'),
                         type: 'error',
                         data: {
                             chain: 'bostrom',
@@ -482,40 +499,20 @@
                         }
                     })
                 }
-            } catch (error) {
-                console.log(error)
 
+                data.status = false
+            } else {
                 // Show notification
                 notification.notify({
                     group: 'default',
-                    clean: true
+                    durartion: 5000,
+                    title: i18n.global.t('message.notification_error_nickName_title'),
+                    text: i18n.global.t('message.notification_error_nickName_desc'),
+                    type: 'error'
                 })
 
-                notification.notify({
-                    group: store.networks.bostrom.denom,
-                    title: i18n.global.t('message.notification_failed_title'),
-                    text: i18n.global.t('message.manage_modal_error_rejected'),
-                    type: 'error',
-                    data: {
-                        chain: 'bostrom',
-                        tx_type: i18n.global.t('message.notification_action_update_passport')
-                    }
-                })
+                nickNameError.value = true
             }
-
-            data.status = false
-        } else {
-            // Show notification
-            notification.notify({
-                group: 'default',
-                durartion: 5000,
-                title: i18n.global.t('message.notification_error_nickName_title'),
-                text: i18n.global.t('message.notification_error_nickName_desc'),
-                type: 'error'
-            })
-
-            data.nickNameError = true
-        }
         }
     }
 </script>
@@ -883,61 +880,61 @@
 
 
     /* .create_passport .avatar .icon
-                                                                                    {
-                                                                                        position: relative;
+                                                                                        {
+                                                                                            position: relative;
 
-                                                                                        width: 18px;
-                                                                                        height: 18px;
-                                                                                        margin: 0 auto 8px;
-                                                                                    }
+                                                                                            width: 18px;
+                                                                                            height: 18px;
+                                                                                            margin: 0 auto 8px;
+                                                                                        }
 
-                                                                                    .create_passport .avatar .icon:before,
-                                                                                    .create_passport .avatar .icon:after
-                                                                                    {
-                                                                                        position: absolute;
+                                                                                        .create_passport .avatar .icon:before,
+                                                                                        .create_passport .avatar .icon:after
+                                                                                        {
+                                                                                            position: absolute;
 
-                                                                                        display: block;
+                                                                                            display: block;
 
-                                                                                        width: 100%;
-                                                                                        height: 2px;
-                                                                                        margin: auto;
+                                                                                            width: 100%;
+                                                                                            height: 2px;
+                                                                                            margin: auto;
 
-                                                                                        content: '';
+                                                                                            content: '';
 
-                                                                                        background: #950fff;
+                                                                                            background: #950fff;
 
-                                                                                        inset: 0;
-                                                                                    }
+                                                                                            inset: 0;
+                                                                                        }
 
-                                                                                    .create_passport .avatar .icon:after
-                                                                                    {
-                                                                                        width: 2px;
-                                                                                        height: 100%;
-                                                                                    }
-
-
-                                                                                    .create_passport .avatar .label
-                                                                                    {
-                                                                                        color: #950fff;
-                                                                                        font-family: var(--font_family2);
-                                                                                        font-size: 24px;
-                                                                                        font-weight: 500;
-                                                                                        line-height: 100%;
-
-                                                                                        width: 100%;
-
-                                                                                        text-transform: uppercase;
-                                                                                    }
+                                                                                        .create_passport .avatar .icon:after
+                                                                                        {
+                                                                                            width: 2px;
+                                                                                            height: 100%;
+                                                                                        }
 
 
-                                                                                    .create_passport .avatar .exp
-                                                                                    {
-                                                                                        color: #4d4d4d;
-                                                                                        line-height: 130%;
+                                                                                        .create_passport .avatar .label
+                                                                                        {
+                                                                                            color: #950fff;
+                                                                                            font-family: var(--font_family2);
+                                                                                            font-size: 24px;
+                                                                                            font-weight: 500;
+                                                                                            line-height: 100%;
 
-                                                                                        width: 100%;
-                                                                                        margin-top: 8px;
-                                                                                    } */
+                                                                                            width: 100%;
+
+                                                                                            text-transform: uppercase;
+                                                                                        }
+
+
+                                                                                        .create_passport .avatar .exp
+                                                                                        {
+                                                                                            color: #4d4d4d;
+                                                                                            line-height: 130%;
+
+                                                                                            width: 100%;
+                                                                                            margin-top: 8px;
+                                                                                        } */
 
 
     .create_passport .avatar .image
@@ -1192,7 +1189,7 @@
         right: 14px;
         bottom: 14px;
 
-        display: flex;
+        display: none;
 
         width: 24px;
         height: 24px;
@@ -1211,6 +1208,11 @@
         height: 24px;
 
         pointer-events: none;
+    }
+
+    .create_passport .data_hide:hover .info .edit_btn
+    {
+        display: flex;
     }
 
 

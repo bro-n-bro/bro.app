@@ -23,6 +23,10 @@
   <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 37" id="ic_close">
     <path d="M10.1367 26.3639L18.0007 18.5M25.8646 10.636L18.0007 18.5M18.0007 18.5L10.1367 10.636M18.0007 18.5L25.8646 26.3639" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
   </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="ic_copy">
+    <path id="Vector" d="M12.9333 13.3333H6.4C6.29391 13.3333 6.19217 13.2912 6.11716 13.2162C6.04214 13.1412 6 13.0394 6 12.9333V6.4C6 6.29391 6.04214 6.19217 6.11716 6.11716C6.19217 6.04214 6.29391 6 6.4 6H12.9333C13.0394 6 13.1412 6.04214 13.2162 6.11716C13.2912 6.19217 13.3333 6.29391 13.3333 6.4V12.9333C13.3333 13.0394 13.2912 13.1412 13.2162 13.2162C13.1412 13.2912 13.0394 13.3333 12.9333 13.3333Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+    <path id="Vector_2" d="M10.0013 6.00033V3.06699C10.0013 2.96091 9.95916 2.85916 9.88415 2.78415C9.80913 2.70913 9.70739 2.66699 9.6013 2.66699H3.06797C2.96188 2.66699 2.86014 2.70913 2.78513 2.78415C2.71011 2.85916 2.66797 2.96091 2.66797 3.06699V9.60033C2.66797 9.70641 2.71011 9.80815 2.78513 9.88317C2.86014 9.95818 2.96188 10.0003 3.06797 10.0003H6.0013" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  </symbol>
   <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="ic_dislike">
     <path d="M8.33464 7.50033H6.66797M13.3346 7.50033H11.668M15.0013 12.5003H5.0013M1.66797 10.0003C1.66797 14.6028 5.3988 18.3337 10.0013 18.3337C14.6038 18.3337 18.3346 14.6028 18.3346 10.0003C18.3346 5.39783 14.6038 1.66699 10.0013 1.66699C5.3988 1.66699 1.66797 5.39783 1.66797 10.0003Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
   </symbol>
@@ -49,6 +53,9 @@
   </symbol>
   <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 25" id="ic_notice">
     <path d="M12 12V17M12 8.01L12.01 7.999M12 22.5C17.523 22.5 22 18.023 22 12.5C22 6.977 17.523 2.5 12 2.5C6.477 2.5 2 6.977 2 12.5C2 18.023 6.477 22.5 12 22.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17" id="ic_notice2">
+    <path id="Vector" d="M8.49968 5.83301V8.49968M8.49968 11.173L8.50635 11.1657M8.21701 1.44901C8.29201 1.37411 8.39368 1.33203 8.49968 1.33203C8.60568 1.33203 8.70735 1.37411 8.78235 1.44901L15.5503 8.21701C15.6253 8.29201 15.6673 8.39368 15.6673 8.49968C15.6673 8.60568 15.6253 8.70735 15.5503 8.78235L8.78235 15.5503C8.70735 15.6253 8.60568 15.6673 8.49968 15.6673C8.39368 15.6673 8.29201 15.6253 8.21701 15.5503L1.44901 8.78235C1.37411 8.70735 1.33203 8.60568 1.33203 8.49968C1.33203 8.39368 1.37411 8.29201 1.44901 8.21701L8.21701 1.44901Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
   </symbol>
   <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" id="ic_notification">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5804 7.76158C24.5804 4.35574 22.2519 2.99042 18.8994 2.99042H11.0265C7.77703 2.99042 5.3418 4.26265 5.3418 7.53444V25.7639C5.3418 26.6626 6.30869 27.2285 7.09189 26.7892L14.9934 22.3568L22.8266 26.7817C23.611 27.2236 24.5804 26.6576 24.5804 25.7577V7.76158Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>

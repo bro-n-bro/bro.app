@@ -3,7 +3,7 @@
         <div class="modal_content" @click.self="emitter.emit('closeValidatorModal')">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeValidatorModal')">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
                 <div class="modal_title">
@@ -14,11 +14,11 @@
                     <div class="logo">
                         <div class="power">
                             {{ store.validatorInfo.result[0][getValidatorInfo('validator_rank')] }}
-                            <svg><use xlink:href="/sprite.svg#bg_rank"></use></svg>
+                            <svg><use xlink:href="@/assets/sprite.svg#bg_rank"></use></svg>
                         </div>
 
                         <img :src="store.validatorInfo.result[0][getValidatorInfo('logo_path')]" alt="" @error="imageLoadError">
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_user"></use></svg>
+                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                     </div>
 
                     <div class="info">
@@ -29,18 +29,20 @@
                                 {{ $t('message.validator_modal_operator_address_label') }}
                             </div>
 
-                            <div class="val">{{ props.validator.operator_address }}</div>
+                            <div class="val">
+                                {{ props.validator.operator_address }}
+                            </div>
                         </div>
                     </div>
 
                     <div class="active_set" :class="{ green: store.validatorInfo.result[0][getValidatorInfo('is_active_set')] }">
                         <template v-if="store.validatorInfo.result[0][getValidatorInfo('is_active_set')]">
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         <span>{{ $t('message.validator_modal_active_set') }}</span>
                         </template>
 
                         <template v-else>
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_notice"></use></svg>
+                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_notice"></use></svg>
                         <span>{{ $t('message.validator_modal_inactive_set') }}</span>
                         </template>
                     </div>
@@ -48,17 +50,17 @@
 
                 <div class="btns">
                     <a :href="`https://${props.validator.website.replace('https://', '')}`" target="_blank" rel="noopener nofollow" class="link">
-                        <svg class="icon"><use xlink:href="/sprite.svg#ic_website"></use></svg>
+                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_website"></use></svg>
                         <span>{{ $t('message.validator_modal_website_btn') }}</span>
                     </a>
 
                     <a :href="`https://www.mintscan.io/${store.networks[store.currentNetwork].mintscanAlias}/validators/${props.validator.operator_address}`" target="_blank" rel="noopener nofollow" class="link" v-if="store.networks[store.currentNetwork].mintscanAlias">
-                        <img src="/mintscan_logo.png" alt="">
+                        <img src="@/assets/mintscan_logo.png" alt="">
                         <span>{{ $t('message.validator_modal_mintscan_btn') }}</span>
                     </a>
 
                     <a :href="`https://score.bronbro.io/network?network=${store.currentNetwork}`" target="_blank" rel="noopener nofollow" class="link">
-                        <img src="/broscore_logo.svg" alt="">
+                        <img src="@/assets/broscore_logo.svg" alt="">
                         <span>{{ $t('message.validator_modal_broscore_btn') }}</span>
                     </a>
                 </div>
@@ -68,13 +70,17 @@
                         {{ $t('message.validator_modal_details_label') }}
                     </div>
 
-                    <div class="val">{{ props.validator.details }}</div>
+                    <div class="val">
+                        {{ props.validator.details }}
+                    </div>
                 </div>
 
                 <div class="features">
                     <div class="row">
                         <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_greed_notice'))">
-                            <div class="label">{{ $t('message.validator_modal_commission_label') }}</div>
+                            <div class="label">
+                                {{ $t('message.validator_modal_commission_label') }}
+                            </div>
 
                             <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('greed')] * 100, 2) }}%
@@ -96,7 +102,9 @@
                         </div>
 
                         <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_total_delegated_notice'))">
-                            <div class="label">{{ $t('message.validator_modal_total_delegated_label') }}</div>
+                            <div class="label">
+                                {{ $t('message.validator_modal_total_delegated_label') }}
+                            </div>
 
                             <div class="val">
                                 {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
@@ -104,7 +112,9 @@
                         </div>
 
                         <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 2) }))">
-                            <div class="label">{{ $t('message.validator_modal_voted_label') }}</div>
+                            <div class="label">
+                                {{ $t('message.validator_modal_voted_label') }}
+                            </div>
 
                             <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 0) }}
@@ -112,7 +122,9 @@
                         </div>
 
                         <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_blurring_notice'))">
-                            <div class="label">{{ $t('message.validator_modal_blurring_label') }}</div>
+                            <div class="label">
+                                {{ $t('message.validator_modal_blurring_label') }}
+                            </div>
 
                             <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('blurring')] * 100, 2) }}%
@@ -120,17 +132,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <button class="manage_btn" @click.prevent="emitter.emit('openManageModal', {
-                    network: store.currentNetwork,
-                    validator: {
-                        logo: store.validatorInfo.result[0][getValidatorInfo('logo_path')],
-                        moniker: props.validator.moniker,
-                        commission: props.validator.commission
-                    }
-                })">
-                    {{ $t('message.manage_btn') }}
-                </button> -->
             </div>
         </div>
 
@@ -527,34 +528,4 @@
 
         white-space: nowrap;
     }
-
-
-
-    .manage_btn
-    {
-        color: currentColor;
-        font-size: 14px;
-        line-height: 17px;
-
-        display: block;
-
-        width: 163px;
-        max-width: 100%;
-        height: 42px;
-        margin-top: 20px;
-        margin-left: auto;
-
-        transition: background .2s linear;
-        text-align: center;
-        text-decoration: none;
-
-        border-radius: 10px;
-        background: #950fff;
-    }
-
-    .manage_btn:hover
-    {
-        background: #7700e1;
-    }
-
 </style>

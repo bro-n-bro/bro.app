@@ -6,11 +6,13 @@
 
 
         <div class="current_account" v-if="store.account.wallets.length">
-            <div class="label">{{ $t('message.proposal_current_account_title') }}</div>
+            <div class="label">
+                {{ $t('message.proposal_current_account_title') }}
+            </div>
 
             <button class="btn current" :class="{ active: showAccountDropdown }" @click.prevent="showAccountDropdown = !showAccountDropdown">
                 <span>{{ getCurrentAccount() }}</span>
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
             </button>
 
             <transition name="fadeUp" mode="out-in">
@@ -28,7 +30,9 @@
 
 
         <div class="current_vote" v-if="props.proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <div class="label">{{ $t('message.proposal_current_vote_title') }}</div>
+            <div class="label">
+                {{ $t('message.proposal_current_vote_title') }}
+            </div>
 
             <template v-if="props.currentVote.value && props.currentVote.value.votes.length">
                 <template v-if="props.currentVote.value.votes[0].option == 'VOTE_OPTION_YES'">
@@ -48,7 +52,7 @@
         </div>
 
 
-        <div class="vote" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" :class="{ disabled: store.account.currentWallet != store.wallets.bostrom }">
+        <div class="vote" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" :class="{ disabled: store.account.currentWallet != generateAddress('bostrom', store.Keplr.account.address) }">
             <div class="loader_wrap" v-if="voteLoading">
                 <div class="loader"><span></span></div>
             </div>
@@ -69,7 +73,7 @@
                 {{ $t('message.proposal_vote_abstain_btn') }}
             </button>
 
-            <div class="tooltip" v-if="store.account.currentWallet != store.wallets.bostrom">
+            <div class="tooltip" v-if="store.account.currentWallet != generateAddress('bostrom', store.Keplr.account.address)">
                 {{ $t('message.proposal_add_vote_exp') }}
             </div>
         </div>
@@ -81,23 +85,23 @@
                 {{ $t('message.proposal_deposit_status_title') }}
 
                 <button class="refresh_btn" @click.prevent="refreshProposalData">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_refresh"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_refresh"></use></svg>
                     <span>{{ $t('message.refresh_btn') }}</span>
                 </button>
             </div>
 
             <div class="chart">
                 <div class="percents">
-                    <!-- <span v-if="store.networks[props.proposal.network].proposal_need <= (props.proposal.deposit / store.networks[props.proposal.network].exponent)">100%</span>
-                    <span v-else>{{ $filters.toFixed((props.proposal.deposit / store.networks[props.proposal.network].exponent) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%</span> -->
-                    {{ $filters.toFixed((props.proposal.deposit / store.networks[props.proposal.network].exponent) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%
+                    <!-- <span v-if="store.networks[props.proposal.network].proposal_need <= (props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent))">100%</span>
+                    <span v-else>{{ $filters.toFixed((props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent)) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%</span> -->
+                    {{ $filters.toFixed((props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent)) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%
                 </div>
 
                 <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
             </div>
 
-            <button class="deposit_btn" @click.prevent="showDepositModal = !showDepositModal" :class="{ disabled: store.account.currentWallet != store.wallets.bostrom }">
-                <div class="tooltip" v-if="store.account.currentWallet != store.wallets.bostrom">
+            <button class="deposit_btn" @click.prevent="showDepositModal = !showDepositModal" :class="{ disabled: store.account.currentWallet != generateAddress('bostrom', store.Keplr.account.address) }">
+                <div class="tooltip" v-if="store.account.currentWallet != generateAddress('bostrom', store.Keplr.account.address)">
                     {{ $t('message.proposal_add_vote_exp') }}
                 </div>
 
@@ -111,7 +115,9 @@
 
             <div class="row">
                 <div class="item" v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-                    <div class="label">{{ $t('message.proposal_details_deposit_label') }}</div>
+                    <div class="label">
+                        {{ $t('message.proposal_details_deposit_label') }}
+                    </div>
 
                     <div class="val">
                         <vue-countdown :time="dateCalc(props.proposal.deposit_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
@@ -140,7 +146,7 @@
                     <div class="label">{{ $t('message.proposal_details_total_label') }}</div>
 
                     <div class="val">
-                        {{ props.proposal.deposit / store.networks[props.proposal.network].exponent }}
+                        {{ props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent) }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
                 </div>
@@ -149,7 +155,7 @@
                     <div class="label">{{ $t('message.proposal_details_initial_label') }}</div>
 
                     <div class="val">
-                        {{ props.proposal.init_deposit / store.networks[props.proposal.network].exponent }}
+                        {{ props.proposal.init_deposit / Math.pow(10, store.networks[props.proposal.network].exponent) }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
                 </div>
@@ -159,10 +165,12 @@
 
         <div class="vote_info" v-if="props.proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <div class="head">
-                <div class="title">{{ $t('message.proposal_vote_details_title') }}</div>
+                <div class="title">
+                    {{ $t('message.proposal_vote_details_title') }}
+                </div>
 
                 <button class="refresh_btn" @click.prevent="refreshProposalData">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_refresh"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_refresh"></use></svg>
                     <span>{{ $t('message.refresh_btn') }}</span>
                 </button>
             </div>
@@ -228,7 +236,7 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_yes / store.networks[props.proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                        {{ Number($filters.toFixed(props.proposal.tally_yes / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
 
@@ -244,7 +252,7 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_no / store.networks[props.proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                        {{ Number($filters.toFixed(props.proposal.tally_no / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
 
@@ -260,7 +268,7 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_no_with_veto / store.networks[props.proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                        {{ Number($filters.toFixed(props.proposal.tally_no_with_veto / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
 
@@ -276,7 +284,7 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_abstain / store.networks[props.proposal.network].exponent, 2)).toLocaleString('en-US') }}
+                        {{ Number($filters.toFixed(props.proposal.tally_abstain / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
                         {{ store.networks[props.proposal.network].token_name }}
                     </div>
 
@@ -290,7 +298,7 @@
     </div>
 
 
-    <DepositModal v-if="showDepositModal && store.account.currentWallet == store.wallets.bostrom" :proposal="props.proposal" />
+    <DepositModal v-if="showDepositModal && store.account.currentWallet == generateAddress('bostrom', store.Keplr.account.address)" :proposal="props.proposal" />
 </template>
 
 
@@ -453,7 +461,7 @@
                 typeUrl: '/cosmos.gov.v1beta1.MsgVote',
                 value: {
                     proposalId: props.proposal.id,
-                    voter: store.wallets.cosmoshub,
+                    voter: store.Keplr.account.address,
                     option: option
                 }
             }]

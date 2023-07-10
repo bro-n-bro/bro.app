@@ -3,7 +3,7 @@
         <div class="modal_content">
             <div class="data">
                 <button class="close_btn" @click.prevent="emitter.emit('closeAddAddressModal')">
-                    <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
                 <template v-if="duplicateError || store.account.moonPassport && activeStep == 1">
@@ -23,7 +23,7 @@
                     </div>
 
                     <button class="btn" v-if="hasPassportError" @click.prevent="reloadPage()">
-                        {{ $t('message.use_new_passport_btn') }}
+                        {{ $t('message.btn_use_new_passport') }}
                     </button>
 
                     <div class="loader_wrap" v-if="loading">
@@ -42,22 +42,22 @@
                     <div class="names">
                         <div :class="{'active': activeStep == 1, 'completed': activeStep > 1, 'disabled': activeStep == 5}" @click.prevent="activeStep = 1">
                             <span>{{ $t('message.add_address_modal_step1_name') }}</span>
-                            <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         </div>
 
                         <div :class="{'active': activeStep == 2, 'completed': activeStep > 2, 'disabled': activeStep == 5}">
                             <span>{{ $t('message.add_address_modal_step2_name') }}</span>
-                            <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         </div>
 
                         <div :class="{'active': activeStep == 3, 'completed': activeStep > 3, 'disabled': activeStep == 5}" @click.prevent="activeStep = 3">
                             <span>{{ $t('message.add_address_modal_step3_name') }}</span>
-                            <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         </div>
 
                         <div :class="{'active': activeStep == 4, 'completed': activeStep > 4, 'disabled': activeStep == 5}" @click.prevent="activeStep = 4">
                             <span>{{ $t('message.add_address_modal_step4_name') }}</span>
-                            <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                         <div class="current_account" :class="{'editing': editForm, 'error': !tempAddressName.length}">
                             <div class="logo">
                                 <img :src="`/${addedNetwork}_logo.png`" alt="" v-if="!duplicate">
-                                <svg class="icon" v-else><use xlink:href="/sprite.svg#ic_duplicate"></use></svg>
+                                <svg class="icon" v-else><use xlink:href="@/assets/sprite.svg#ic_duplicate"></use></svg>
                             </div>
 
                             <div>
@@ -85,11 +85,11 @@
                                     <input type="text" v-model="tempAddressName" class="input" id="temp_name" maxlength="16">
 
                                     <button type="submit" class="submit_btn">
-                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                                     </button>
 
                                     <button type="button" class="cancel_btn" @click.prevent="cancelEditForm">
-                                        <svg class="icon"><use xlink:href="/sprite.svg#ic_close"></use></svg>
+                                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                                     </button>
                                 </form>
 
@@ -103,12 +103,12 @@
                                     </template>
 
                                     <template v-else>
-                                    {{ generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].address_prefix, store.wallets.cosmoshub).slice(-6) }}
+                                    {{ generateAddress(store.networks[addedNetwork].address_prefix, store.Keplr.account.address).slice(0, 13) + '...' + generateAddress(store.networks[addedNetwork].address_prefix, store.Keplr.account.address).slice(-6) }}
                                     </template>
                                 </div>
 
                                 <button class="edit_btn" @click.prevent="showEditForm">
-                                    <svg><use xlink:href="/sprite.svg#ic_edit"></use></svg>
+                                    <svg><use xlink:href="@/assets/sprite.svg#ic_edit"></use></svg>
                                 </button>
                             </div>
                         </div>
@@ -121,9 +121,11 @@
 
                                 <div>{{ store.networks.cosmoshub.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <!-- <div><button class="network" :class="{'active': addedNetwork == 'desmos'}" @click.prevent="selectNetwork('desmos')">
@@ -145,9 +147,11 @@
 
                                 <div>{{ store.networks.juno.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'stargaze', 'added': checkAddress('stars')}" @click.prevent="selectNetwork('stargaze')">
@@ -157,9 +161,11 @@
 
                                 <div>{{ store.networks.stargaze.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'gravity', 'added': checkAddress('gravity')}" @click.prevent="selectNetwork('gravity')">
@@ -169,9 +175,11 @@
 
                                 <div>{{ store.networks.gravity.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'stride', 'added': checkAddress('stride')}" @click.prevent="selectNetwork('stride')">
@@ -181,9 +189,11 @@
 
                                 <div>{{ store.networks.stride.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'omniflix', 'added': checkAddress('omniflix')}" @click.prevent="selectNetwork('omniflix')">
@@ -193,9 +203,11 @@
 
                                 <div>{{ store.networks.omniflix.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'osmosis', 'added': checkAddress('osmo')}" @click.prevent="selectNetwork('osmosis')">
@@ -205,9 +217,11 @@
 
                                 <div>{{ store.networks.osmosis.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'bostrom', 'added': checkAddress('bostrom')}" @click.prevent="selectNetwork('bostrom')">
@@ -217,9 +231,11 @@
 
                                 <div>{{ store.networks.bostrom.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'crescent', 'added': checkAddress('cre')}" @click.prevent="selectNetwork('crescent')">
@@ -229,9 +245,11 @@
 
                                 <div>{{ store.networks.crescent.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
 
                             <div><button class="network" :class="{'active': addedNetwork == 'emoney', 'added': checkAddress('emoney')}" @click.prevent="selectNetwork('emoney')">
@@ -241,14 +259,16 @@
 
                                 <div>{{ store.networks.emoney.name }}</div>
 
-                                <svg class="icon"><use xlink:href="/sprite.svg#ic_check"></use></svg>
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
 
-                                <div class="added_label">{{ $t('message.add_address_added_label') }}</div>
+                                <div class="added_label">
+                                    {{ $t('message.add_address_added_label') }}
+                                </div>
                             </button></div>
                         </div>
 
                         <button class="btn" :class="{'disabled': duplicate}" @click.prevent="setActiveKeplrAddress">
-                            {{ $t('message.next_btn') }}
+                            {{ $t('message.btn_next') }}
                         </button>
                     </div>
 
@@ -261,7 +281,7 @@
                         <img src="@/assets/images/add_address_step2.svg" alt="" class="img">
 
                         <button class="btn" @click.prevent="createSignature">
-                            {{ $t('message.sign_btn') }}
+                            {{ $t('message.btn_sign') }}
                         </button>
                     </div>
 
@@ -274,7 +294,7 @@
                         <img src="@/assets/images/add_address_step3.svg" alt="" class="img">
 
                         <button class="btn" :class="{'disabled': !ownerAccount}" @click.prevent="activeStep += 1">
-                            {{ $t('message.next_btn') }}
+                            {{ $t('message.btn_next') }}
                         </button>
 
                         <div class="loader_wrap" v-if="loading">
@@ -291,7 +311,7 @@
                         <img src="@/assets/images/add_address_step4.svg" alt="" class="img">
 
                         <button class="btn" @click.prevent="addAddress">
-                            {{ $t('message.sing_broadcast_btn') }}
+                            {{ $t('message.btn_sing_broadcast') }}
                         </button>
 
                         <div class="loader_wrap" v-if="loading">
@@ -308,7 +328,7 @@
                         <img src="@/assets/images/add_address_step5.svg" alt="" class="img">
 
                         <button class="btn" @click.prevent="emitter.emit('closeAddAddressModal')">
-                            {{ $t('message.done_btn') }}
+                            {{ $t('message.btn_done') }}
                         </button>
                     </div>
                 </div>
@@ -333,7 +353,7 @@
         notification = useNotification(),
         emitter = inject('emitter'),
         activeStep = ref(1),
-        activeKeplrAddress = ref(store.activeKeplrAddress),
+        activeKeplrAddress = ref(store.Keplr.account.address),
         addedNetwork = ref(),
         addedAddress = ref(''),
         ownerAccount = ref(false),
@@ -395,7 +415,7 @@
                 addresses.push(el.address)
             })
 
-            return addresses.includes(generateAddress(prefix, store.wallets.cosmoshub))
+            return addresses.includes(generateAddress(prefix, store.Keplr.account.address))
         }
     }
 
@@ -405,10 +425,10 @@
             let addresses = []
 
             store.account.moonPassportOwner.extension.addresses.forEach(el => {
-                addresses.push(generateAddress('cosmos', el.address))
+                addresses.push(generateAddress(store.networks.cosmoshub.address_prefix, el.address))
             })
 
-            return addresses.includes(store.wallets.cosmoshub)
+            return addresses.includes(store.Keplr.account.address)
         }
     }
 
@@ -463,7 +483,7 @@
 
     // Set active Keplr address
     async function setActiveKeplrAddress() {
-        activeKeplrAddress.value = store.activeKeplrAddress
+        activeKeplrAddress.value = store.Keplr.account.address
 
         // Confirm address label
         if(!tempAddressName.value.length) {

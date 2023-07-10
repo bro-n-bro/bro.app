@@ -8,22 +8,22 @@
 
         <div class="status">
             <div v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="violet">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_status_deposite"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_deposite"></use></svg>
                 <span>{{ $t('message.account_proposals_status_deposite') }}</span>
             </div>
 
             <div v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="blue">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_status_voting"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_voting"></use></svg>
                 <span>{{ $t('message.account_proposals_status_voting') }}</span>
             </div>
 
             <div v-if="props.proposal.status == 'PROPOSAL_STATUS_PASSED'" class="green">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_status_passed"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_passed"></use></svg>
                 <span>{{ $t('message.account_proposals_status_passed') }}</span>
             </div>
 
             <div v-if="props.proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">
-                <svg class="icon"><use xlink:href="/sprite.svg#ic_status_rejected"></use></svg>
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_status_rejected"></use></svg>
                 <span>{{ $t('message.account_proposals_status_rejected') }}</span>
             </div>
         </div>
@@ -146,21 +146,18 @@
 
 
 <script setup>
-    import { reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore(),
         props = defineProps(['proposal']),
-        data = reactive({
-            userTimeZone: new Date().getTimezoneOffset() / 60 * -1
-        })
+        userTimeZone = new Date().getTimezoneOffset() / 60 * -1
 
 
     // Date calc
     function dateCalc(date) {
         let currentDate = new Date(date)
 
-        return new Date(currentDate.setHours(currentDate.getHours() + data.userTimeZone))
+        return new Date(currentDate.setHours(currentDate.getHours() + userTimeZone))
     }
 
 

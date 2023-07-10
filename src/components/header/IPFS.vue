@@ -1,5 +1,5 @@
 <template>
-    <div class="ipfs_status" :class="{ green: store.IPFSStatus }" @mouseover="setNotice">
+    <div class="ipfs_status" :class="{ green: store.IPFSNode }" @mouseover="setNotice">
         <div>{{ $t('message.ipfs') }}</div>
     </div>
 </template>
@@ -16,9 +16,9 @@
 
     // Set notice
     function setNotice() {
-        store.IPFSStatus
-            ? emitter.emit('setNotification', i18n.global.t('message.ipfs_active_notice'))
-            : emitter.emit('setNotification', i18n.global.t('message.ipfs_not_active_notice'))
+        store.IPFSNode
+            ? emitter.emit('setNotification', i18n.global.t('message.notice_ipfs_active'))
+            : emitter.emit('setNotification', i18n.global.t('message.notice_ipfs_not_active'))
     }
 </script>
 

@@ -1,13 +1,12 @@
 <template>
-    <button class="connect_btn" @click.prevent="emitter.emit('connectWallet')">
-        {{ $t('message.connect_wallet_btn') }}
+    <button class="connect_btn" @click.prevent="emitter.emit('initApp')">
+        {{ $t('message.btn_connect_wallet') }}
     </button>
 </template>
 
 
 <script setup>
     import { inject } from 'vue'
-
 
     const emitter = inject('emitter')
 </script>
