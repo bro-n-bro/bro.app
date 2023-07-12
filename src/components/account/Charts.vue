@@ -28,9 +28,10 @@
 
 
     <template v-else>
-    <ChartStake v-if="chartActive == 1" />
+    <ChartStakeLiquide v-if="chartActive == 1 || chartActive == 2" :chartActive="chartActive" />
+    <!-- <ChartStake v-if="chartActive == 1" />
 
-    <ChartLiquide v-if="chartActive == 2" />
+    <ChartLiquide v-if="chartActive == 2" /> -->
 
     <ChartAccounts v-if="chartActive == 3" />
 
@@ -47,8 +48,9 @@
     import { generateAddress } from '@/utils'
 
     // Components
-    import ChartStake from '@/components/account/charts/ChartStake.vue'
-    import ChartLiquide from '@/components/account/charts/ChartLiquide.vue'
+    import ChartStakeLiquide from '@/components/account/charts/ChartStakeLiquide.vue'
+    // import ChartStake from '@/components/account/charts/ChartStake.vue'
+    // import ChartLiquide from '@/components/account/charts/ChartLiquide.vue'
     import ChartAccounts from '@/components/account/charts/ChartAccounts.vue'
     import ChartAssets from '@/components/account/charts/ChartAssets.vue'
     import ChartNetworks from '@/components/account/charts/ChartNetworks.vue'
@@ -303,227 +305,8 @@
     }
 
 
-    // Set actual data
-    function setActualData() {
-        if(store.account.currentWallet != 'all') {
-            // Get current walllet data
-            // currentData.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
-
-            // Get current network data
-            // currentNetwork.value = currentData.value.networks.find(el => el.name == 'cosmoshub')
-
-            // Calc charts totals
-            // totalChartFirst.value = currentNetwork.value.total.staked + currentNetwork.value.total.liquid_rewards + currentNetwork.value.total.unbonding
-
-            // currentNetwork.value.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
-
-
-            // Set data for first chart
-            // chartDatasetsFirst.push(currentNetwork.value.total.staked)
-            // chartDatasetsFirst.push(currentNetwork.value.total.liquid_rewards)
-            // chartDatasetsFirst.push(currentNetwork.value.total.unbonding)
-
-
-            // Set data for second chart
-            // chartDatasetsSecond.push(currentNetwork.value.total.liquid)
-            // chartDatasetsSecond.push(currentNetwork.value.total.ibc)
-            // chartDatasetsSecond.push(currentNetwork.value.total.rewards)
-
-
-            // Set data for third chart
-            // currentNetwork.value.balance.groupByDenom.forEach(el => {
-            //     chartDatasetsThird.push(el.amount)
-
-            //     let color = store.networkColors[el.symbol]
-
-            //     if(el.symbol.substring(0, 2) == 'st') {
-            //         color = store.networkColors.STRD
-            //     }
-
-            //     if(el.symbol.substring(0, 3) == 'stk') {
-            //         color = store.networkColors.XPRT
-            //     }
-
-            //     if(el.symbol.substring(0, 1) == 'q') {
-            //         color = store.networkColors.QCK
-            //     }
-
-            //     chartColorsThird.push(color)
-            // })
-
-
-            // Set data for fourth chart
-            // currentData.value.networks.forEach(network => {
-            //     chartDatasetsFourth.push(network.totalPrice_usdt)
-            //     chartColorsFourth.push(network.color)
-            // })
-        } else {
-            let totals = {
-                liquid: 0,
-                staked: 0,
-                unbonding: 0,
-                rewards: 0,
-                outside: 0,
-                ibc: 0,
-                liquid_rewards: 0
-            },
-            allGroupByDenom = []
-
-
-            // Get current walllet data
-            // for (let wallet of store.account.wallets) {
-            //     currentData.value.totalPrice_usdt += wallet.totalPrice_usdt,
-            //     currentData.value.totalPrice_eth += wallet.totalPrice_eth,
-            //     currentData.value.totalPrice_btc += wallet.totalPrice_btc,
-            //     currentData.value.totalPrice_atom += wallet.totalPrice_atom
-            // }
-
-            // Get current network data
-            currentNetwork.value = store.account.wallets[0].networks.find(el => el.name == 'cosmoshub')
-
-
-            // Calc charts totals
-            for (let wallet of store.account.wallets) {
-                for (let network of wallet.networks) {
-                    if(network.name == 'cosmoshub') {
-                        totals.liquid += network.total.liquid,
-                        totals.staked += network.total.staked ,
-                        totals.unbonding += network.total.unbonding,
-                        totals.rewards += network.total.rewards,
-                        totals.outside += network.total.outside,
-                        totals.ibc += network.total.ibc,
-                        totals.liquid_rewards += network.total.liquid_rewards
-
-                        network.balance.groupByDenom.forEach(el => totalChartThird.value += el.amount)
-                    }
-                }
-            }
-
-            // totalChartFirst.value = totals.staked + totals.liquid_rewards + totals.unbonding
-
-
-            // Balance
-            let i = 0
-
-            for (let wallet of store.account.wallets) {
-                for (let network of wallet.networks) {
-                    if(network.name == 'cosmoshub') {
-                        // Concat ibc
-                        if(i && network.balance.liquid.ibc != null) {
-                            network.balance.liquid.ibc.forEach(el => {
-                                if(currentNetwork.value.balance.liquid.ibc != null) {
-                                    let duplicate = currentNetwork.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
-
-                                    duplicate
-                                        ? duplicate.amount += el.amount
-                                        : currentNetwork.value.balance.liquid.ibc.push(el)
-                                } else {
-                                    currentNetwork.value.balance.liquid.ibc = []
-                                    currentNetwork.value.balance.liquid.ibc.push(el)
-                                }
-                            })
-                        }
-
-                        // Group by denom
-                        network.balance.groupByDenom.forEach(el => {
-                            let duplicate = allGroupByDenom.find(e => e.symbol == el.symbol)
-
-                            if(duplicate) {
-                                duplicate.amount += el.amount
-                            } else {
-                                allGroupByDenom.push({
-                                    'amount': el.amount,
-                                    'logo': el.logo,
-                                    'symbol': el.symbol
-                                })
-                            }
-                        })
-
-                        i++
-                    }
-                }
-            }
-
-            allGroupByDenom.sort((a, b) => {
-                if (a.amount > b.amount) { return -1 }
-                if (a.amount < b.amount) { return 1 }
-                return 0
-            })
-
-
-            // Set data for first chart
-            // chartDatasetsFirst.push(totals.staked)
-            // chartDatasetsFirst.push(totals.liquid_rewards)
-            // chartDatasetsFirst.push(totals.unbonding)
-
-
-            // Set data for second chart
-            // chartDatasetsSecond.push(totals.liquid)
-            // chartDatasetsSecond.push(totals.ibc)
-            // chartDatasetsSecond.push(totals.rewards)
-
-
-            // Set data for first/second legends
-            // currentNetwork.value.total = totals
-
-
-            // Set data for third chart
-            allGroupByDenom.forEach(el => {
-                chartDatasetsThird.push(el.amount)
-
-                let color = store.networkColors[el.symbol]
-
-                if(el.symbol.substring(0, 2) == 'st') {
-                    color = store.networkColors.STRD
-                }
-
-                if(el.symbol.substring(0, 3) == 'stk') {
-                    color = store.networkColors.XPRT
-                }
-
-                if(el.symbol.substring(0, 1) == 'q') {
-                    color = store.networkColors.QCK
-                }
-
-                chartColorsThird.push(color)
-            })
-
-
-            // Set data for third legends
-            currentNetwork.value.balance.groupByDenom = allGroupByDenom
-
-
-            // Set data for fourth chart
-            let cosmosHubWalletTotalPrice_usdt = 0,
-                cosmosHubWalletTotalPrice_atom = 0,
-                cosmosHubWalletTotalPrice_btc = 0,
-                cosmosHubWalletTotalPrice_eth = 0
-
-            for (let wallet of store.account.wallets) {
-                for (let network of wallet.networks) {
-                    if(network.name == 'cosmoshub') {
-                        cosmosHubWalletTotalPrice_usdt += network.totalPrice_usdt
-                        cosmosHubWalletTotalPrice_atom += network.totalPrice_atom
-                        cosmosHubWalletTotalPrice_btc += network.totalPrice_ubttc
-                        cosmosHubWalletTotalPrice_eth += network.totalPrice_eth
-                    }
-                }
-            }
-
-            // Set data for fourth legends
-            currentData.value.networks.push({
-                name: 'cosmoshub',
-                totalPrice_usdt: cosmosHubWalletTotalPrice_usdt,
-                totalPrice_eth: cosmosHubWalletTotalPrice_eth,
-                totalPrice_btc: cosmosHubWalletTotalPrice_btc,
-                totalPrice_atom: cosmosHubWalletTotalPrice_atom
-            })
-
-            // Set data to chart
-            chartDatasetsFourth.push(cosmosHubWalletTotalPrice_usdt)
-            chartColorsFourth.push(currentNetwork.value.color)
-        }
-    }
+    // Event "change active chart"
+    emitter.on('changeActiveChart', chartIndex => chartActive.value = chartIndex)
 </script>
 
 

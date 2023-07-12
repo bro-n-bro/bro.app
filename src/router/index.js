@@ -112,9 +112,7 @@ router.beforeResolve(async (to, from, next) => {
 		demo = to.query.demo
 
 	// Demo
-	demo
-		? store.demo = true
-		: store.demo = false
+	demo ? store.demo = true : store.demo = false
 
 	// Referer
 	if(referer) {
