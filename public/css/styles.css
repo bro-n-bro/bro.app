@@ -1087,3 +1087,14 @@ button
     margin-bottom: 4px !important;
     padding: 10px !important;
 }
+
+
+
+/*----------
+    Tour
+----------*/
+.tour_selected
+{
+    position: relative;
+    z-index: 1005;
+}

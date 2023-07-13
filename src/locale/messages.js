@@ -310,6 +310,7 @@ export default {
             'btn_add_address': 'Add address',
             'btn_use_new_passport': 'Use new passport',
             'btn_next': 'Next',
+            'btn_back': 'Back',
             'btn_sign': 'Sign',
             'btn_sing_broadcast': 'Sing and broadcast',
             'btn_done': 'Done',

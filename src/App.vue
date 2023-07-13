@@ -60,6 +60,7 @@
         // Set title
         document.title = i18n.global.t('message.page_title')
 
+
         // Change Keplr account
 		window.addEventListener('keplr_keystorechange', () => {
 			// Reload page

@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" :class="{'tour_show': store.tour}">
         <!-- Header -->
         <Header />
 

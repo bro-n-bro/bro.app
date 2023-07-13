@@ -105,6 +105,11 @@
         transition: padding-top .2s linear, padding-bottom .2s linear;
     }
 
+    .tour_show header
+    {
+        position: absolute;
+    }
+
     .lock header
     {
         padding-right: var(--scroll_width);

@@ -10,9 +10,6 @@
 
                 <section class="col_main">
                     <section class="main_data">
-                        <!-- Contract address -->
-                        <!-- <ContractAddress /> -->
-
                         <!-- Charts -->
                         <Charts :key="chartsKey" />
                     </section>
@@ -36,6 +33,10 @@
             </div>
         </div>
     </section>
+
+
+    <!-- Account Page Tour -->
+    <AccountPageTour v-if="store.demo && store.tour" />
 </template>
 
 
@@ -50,6 +51,7 @@
     import Validators from '../components/account/Validators.vue'
     import Proposals from '../components/account/Proposals.vue'
     import ConnectedAddresses from '../components/account/ConnectedAddresses.vue'
+    import AccountPageTour from '../components/tour/AccountPageTour.vue'
 
 
     const store = useGlobalStore(),
