@@ -10,6 +10,11 @@
 
 
 <script setup>
+    import { useGlobalStore } from '@/stores'
+
     // Components
     import Feedback from '../components/Feedback.vue'
+
+
+    const store = useGlobalStore()
 </script>
