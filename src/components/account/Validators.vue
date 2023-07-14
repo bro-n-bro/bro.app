@@ -133,7 +133,7 @@
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        loading = ref(true),
+        loading = store.demo ? ref(false) : ref(true),
         showValidatorModal = ref(false),
         validatorInfo = ref({})
 
@@ -147,9 +147,11 @@
         wallets = reactive([])
 
         // Get data
-        store.account.currentWallet == 'all'
-            ? await getAllData()
-            : await getAddressData()
+        if(!store.demo) {
+            store.account.currentWallet == 'all'
+                ? await getAllData()
+                : await getAddressData()
+        }
     })
 
 

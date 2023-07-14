@@ -78,7 +78,7 @@
     import { generateAddress, currencyСonversion } from '@/utils'
 
     const store = useGlobalStore(),
-        loading = ref(true),
+        loading = store.demo ? ref(false) : ref(true),
         totalRewardTokens = ref(0),
         APR = ref(0),
         RPDE = ref(0)
@@ -86,7 +86,9 @@
 
     onBeforeMount(async () => {
         // Get data
-        await getData()
+        if(!store.demo) {
+            await getData()
+        }
     })
 
 

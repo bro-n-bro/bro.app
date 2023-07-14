@@ -1,5 +1,5 @@
 <template>
-    <div class="main no_pad" :class="{'tour_show': store.tour}">
+    <div class="main no_pad" :class="{tour_show: store.tour}">
         <!-- Router view -->
         <RouterView />
     </div>

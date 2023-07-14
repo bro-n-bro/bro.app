@@ -58,13 +58,15 @@
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        loading = ref(true),
+        loading = store.demo ? ref(false) : ref(true),
         chartActive = ref(1)
 
 
     onBeforeMount(async () => {
         // Get data
-        await getData()
+        if(!store.demo) {
+            await getData()
+        }
     })
 
 

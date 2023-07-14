@@ -11,10 +11,46 @@ import account from '@/stores/account'
 import cosmoshub from '@/stores/networks/cosmoshub'
 import bostrom from '@/stores/networks/bostrom'
 
+// Demo data
+import DemoAccount from '@/demo/Account.json'
+import DemoKeplr from '@/demo/Keplr.json'
+
 
 const networks = {
     cosmoshub,
-    bostrom
+    bostrom,
+    crescent: {
+        name: 'Crescent hub',
+        address_prefix: 'cre',
+    },
+    evmos: {
+        name: 'Evmos',
+        address_prefix: 'evmos',
+    },
+    gravity: {
+        name: 'G-Bridge',
+        address_prefix: 'gravity',
+    },
+    juno: {
+        name: 'Juno',
+        address_prefix: 'juno',
+    },
+    omniflix: {
+        name: 'OmniFlix Network',
+        address_prefix: 'omniflix',
+    },
+    osmosis: {
+        name: 'Osmosis',
+        address_prefix: 'osmo',
+    },
+    stargaze: {
+        name: 'Stargaze',
+        address_prefix: 'stars',
+    },
+    stride: {
+        name: 'Stride',
+        address_prefix: 'stride',
+    },
 }
 
 window.localStorage.setItem('account', JSON.stringify(account))
@@ -130,6 +166,18 @@ export const useGlobalStore = defineStore('global', {
             } catch (error) {
                 console.log(error)
             }
+        },
+
+
+        // Init demo
+        initDemo() {
+            this.Keplr = DemoKeplr
+            this.account = DemoAccount
+
+            this.isAppFullLoaded = true
+            this.isKeplrConnected = true
+            this.isAuth = true
+            this.IPFSNode = true
         },
 
 

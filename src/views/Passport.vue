@@ -2,7 +2,11 @@
     <section class="create_passport">
         <div class="cont">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmoshub'" class="btn">
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmoshub?demo=true'" class="btn" v-if="store.demo">
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
+                </router-link>
+
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/account/cosmoshub'" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
@@ -148,7 +152,7 @@
         nickNameError = ref(false),
         passportImage = ref(''),
         status = ref(false),
-        showBottomBtns = ref(false),
+        showBottomBtns = store.demo ? ref(true) : ref(false),
         editNickname = ref(false),
         bgGradient = ref('')
 
@@ -156,9 +160,6 @@
     onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_account_passport')
-
-        // Set data from passport
-        // nickName.value = store.account.moonPassportOwner.extension.nickname
 
         // Generate gradient
         bgGradient.value = gradient(nickName.value)
@@ -256,19 +257,23 @@
         status.value = true
 
         try{
-            // Send avatar to IPFS
-            let avatarIpfs = await store.node.add(avatar.value.files[0])
+            if (!store.demo) {
+                // Send avatar to IPFS
+                let avatarIpfs = await store.node.add(avatar.value.files[0])
 
-            // Prepare Tx
-            let prepareResult = await preparePassportTx({
-                update_avatar: {
-                    new_avatar: avatarIpfs.path,
-                    nickname: data.nickName
-                }
-            })
+                // Prepare Tx
+                var prepareResult = await preparePassportTx({
+                    update_avatar: {
+                        new_avatar: avatarIpfs.path,
+                        nickname: nickName.value
+                    }
+                })
 
-            // Send Tx
-            let result = await sendTx(prepareResult)
+                // Send Tx
+                var result = await sendTx(prepareResult)
+            } else {
+                var result = { code: 0 }
+            }
 
             if (result.code === 0) {
                 // Set TXS
@@ -281,7 +286,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_success_update_passport_title'),
                     type: 'success',
                     data: {
@@ -299,8 +304,10 @@
                     .catch(error => console.error(error))
 
                 // Get moon passport
-                await store.getMoonPassport()
-                await store.getOwnerMoonPassport()
+                if (!store.demo) {
+                    await store.getMoonPassport()
+                    await store.getOwnerMoonPassport()
+                }
 
                 // Set avatar
                 store.account.avatar = avatarPreview.src
@@ -315,7 +322,7 @@
 
                 notification.notify({
                     duration: -100,
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_failed_title'),
                     text: result?.rawLog.toString(),
                     type: 'error',
@@ -335,9 +342,9 @@
             })
 
             notification.notify({
-                group: store.networks.bostrom.denom,
+                group: 'default',
                 title: i18n.global.t('message.notification_failed_title'),
-                text: i18n.global.t('message.manage_modal_error_rejected'),
+                text: i18n.global.t('message.notification_tx_error_rejected'),
                 type: 'error',
                 data: {
                     chain: 'bostrom',
@@ -346,7 +353,7 @@
             })
         }
 
-        data.status = false
+        status.value = false
     }
 
 
@@ -392,7 +399,7 @@
 
             notification.notify({
                 durartion: 5000,
-                group: store.networks.bostrom.denom,
+                group: 'default',
                 title: i18n.global.t('message.passport_error_nickname_title'),
                 text: i18n.global.t('message.passport_name_exp'),
                 type: 'error',
@@ -416,16 +423,20 @@
                 editNickname.value = false
 
                 try{
-                    // Prepare Tx
-                    let prepareResult = await preparePassportTx({
-                        update_name: {
-                            new_nickname: nickName.value,
-                            old_nickname: store.account.moonPassportOwner.extension.nickname
-                        }
-                    })
+                    if (!store.demo) {
+                        // Prepare Tx
+                        var prepareResult = await preparePassportTx({
+                            update_name: {
+                                new_nickname: nickName.value,
+                                old_nickname: store.account.moonPassportOwner.extension.nickname
+                            }
+                        })
 
-                    // Send Tx
-                    let result = await sendTx(prepareResult)
+                        // Send Tx
+                        var result = await sendTx(prepareResult)
+                    } else {
+                        var result = { code: 0 }
+                    }
 
                     if (result.code === 0) {
                         // Set TXS
@@ -438,7 +449,7 @@
                         })
 
                         notification.notify({
-                            group: store.networks.bostrom.denom,
+                            group: 'default',
                             title: i18n.global.t('message.notification_success_update_passport_title'),
                             type: 'success',
                             data: {
@@ -448,7 +459,7 @@
                         })
 
                         // Generate gradient
-                        bgGradient.value = gradient(data.nickName)
+                        bgGradient.value = gradient(nickName.value)
 
                         // Create passport image
                         htmlToImage.toJpeg(document.getElementById('completed_passport'), { quality: 1 })
@@ -456,8 +467,10 @@
                             .catch(error => console.error(error))
 
                         // Get moon passport
-                        await store.getMoonPassport()
-                        await store.getOwnerMoonPassport()
+                        if (!store.demo) {
+                            await store.getMoonPassport()
+                            await store.getOwnerMoonPassport()
+                        }
                     }
 
                     if (result.code) {
@@ -469,7 +482,7 @@
 
                         notification.notify({
                             duration: -100,
-                            group: store.networks.bostrom.denom,
+                            group: 'default',
                             title: i18n.global.t('message.notification_failed_title'),
                             text: result?.rawLog.toString(),
                             type: 'error',
@@ -489,9 +502,9 @@
                     })
 
                     notification.notify({
-                        group: store.networks.bostrom.denom,
+                        group: 'default',
                         title: i18n.global.t('message.notification_failed_title'),
-                        text: i18n.global.t('message.manage_modal_error_rejected'),
+                        text: i18n.global.t('message.notification_tx_error_rejected'),
                         type: 'error',
                         data: {
                             chain: 'bostrom',
@@ -500,7 +513,7 @@
                     })
                 }
 
-                data.status = false
+                status.value = false
             } else {
                 // Show notification
                 notification.notify({

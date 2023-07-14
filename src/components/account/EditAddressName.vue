@@ -50,17 +50,21 @@
         })
 
         try{
-            // Prepare Tx
-            let prepareResult = await preparePassportTx({
-                set_address_label: {
-                    address: props.address,
-                    label: name.value,
-                    nickname: store.account.moonPassportOwner.extension.nickname
-                }
-            })
+            if (!store.demo) {
+                // Prepare Tx
+                var prepareResult = await preparePassportTx({
+                    set_address_label: {
+                        address: props.address,
+                        label: name.value,
+                        nickname: store.account.moonPassportOwner.extension.nickname
+                    }
+                })
 
-            // Send Tx
-            let result = await sendTx(prepareResult)
+                // Send Tx
+                var result = await sendTx(prepareResult)
+            } else {
+                var result = { code: 0 }
+            }
 
             if (result.code === 0) {
                 // Set TXS
@@ -73,7 +77,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_success_address_rename_title'),
                     type: 'success',
                     data: {
@@ -83,8 +87,10 @@
                 })
 
                 // Get moon passport
-                await store.getMoonPassport()
-                await store.getOwnerMoonPassport()
+                if (!store.demo) {
+                    await store.getMoonPassport()
+                    await store.getOwnerMoonPassport()
+                }
 
                 // Hide loader
                 loading.value = false
@@ -102,9 +108,9 @@
             })
 
             notification.notify({
-                group: store.networks.bostrom.denom,
+                group: 'default',
                 title: i18n.global.t('message.notification_failed_title'),
-                text: i18n.global.t('message.manage_modal_error_rejected'),
+                text: i18n.global.t('message.notification_tx_error_rejected'),
                 type: 'error',
                 data: {
                     chain: 'bostrom',

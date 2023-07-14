@@ -155,6 +155,7 @@
     import AddAddressModal from '@/components/modal/AddAddressModal.vue'
     import DeleteAddressModal from '@/components/modal/DeleteAddressModal.vue'
     import EditAddressName from '@/components/account/EditAddressName.vue'
+import { setMapStoreSuffix } from 'pinia'
 
     const store = useGlobalStore(),
         emitter = inject('emitter')
@@ -262,7 +263,7 @@
 
     // Event "close add address modal"
     emitter.on('closeAddAddressModal', () => {
-        if(store.needReload) {
+        if(!store.demo && store.needReload) {
             // Reload page
             window.location.reload()
         } else {

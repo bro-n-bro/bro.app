@@ -60,16 +60,20 @@
         })
 
         try{
-            // Prepare Tx
-            let prepareResult = await preparePassportTx({
-                remove_address: {
-                    address: store.currentDeleteAddress,
-                    nickname: store.account.moonPassportOwner.extension.nickname
-                }
-            })
+            if (!store.demo) {
+                // Prepare Tx
+                var prepareResult = await preparePassportTx({
+                    remove_address: {
+                        address: store.currentDeleteAddress,
+                        nickname: store.account.moonPassportOwner.extension.nickname
+                    }
+                })
 
-            // Send Tx
-            let result = await sendTx(prepareResult)
+                // Send Tx
+                var result = await sendTx(prepareResult)
+            } else {
+                var result = { code: 0 }
+            }
 
             if (result.code === 0) {
                 // Set TXS
@@ -82,7 +86,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_success_address_delete_title'),
                     type: 'success',
                     data: {
@@ -91,8 +95,21 @@
                     }
                 })
 
-                // Reload page
-                setTimeout(() => window.location.reload(), 100)
+                if (!store.demo) {
+                    // Reload page
+                    setTimeout(() => window.location.reload(), 100)
+                } else {
+                    setTimeout(() => {
+                        // Hide loader
+                        loading.value = false
+
+                        // Close delete address modal
+                        store.currentDeleteAddress = ''
+                        store.showDeleteAddressModal = false
+
+                        document.body.classList.remove('lock')
+                    }, 200)
+                }
             }
 
             if (result.code) {
@@ -104,7 +121,7 @@
 
                 notification.notify({
                     duration: -100,
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_failed_title'),
                     text: result?.rawLog.toString(),
                     type: 'error',
@@ -127,9 +144,9 @@
             })
 
             notification.notify({
-                group: store.networks.bostrom.denom,
+                group: 'default',
                 title: i18n.global.t('message.notification_failed_title'),
-                text: i18n.global.t('message.manage_modal_error_rejected'),
+                text: i18n.global.t('message.notification_tx_error_rejected'),
                 type: 'error',
                 data: {
                     chain: 'bostrom',

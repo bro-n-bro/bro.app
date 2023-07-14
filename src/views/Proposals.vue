@@ -2,10 +2,15 @@
     <section class="proposals_page">
         <div class="cont middle">
             <div class="back_btn">
-                <router-link to="/account/cosmoshub" class="btn">
+                <router-link to="/account/cosmoshub?demo=true" class="btn" v-if="store.demo">
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
+                </router-link>
+
+                <router-link to="/account/cosmoshub" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
+
 
             <div class="grid row">
                 <section class="col">

@@ -44,7 +44,9 @@
     watchEffect(() => {
         // Monitor the connection of the Keplr
         if(store.isAuth && store.isAppFullLoaded) {
-            route.push('/account/cosmoshub')
+            !store.demo
+                ? route.push('/account/cosmoshub')
+                : route.push('/account/cosmoshub?demo=true')
         }
     })
 </script>

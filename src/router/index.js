@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useGlobalStore } from '@/stores'
 
-import errorLayout from '../layouts/Error.vue'
-import defaultLayout from '../layouts/Default.vue'
-import mainPageLayout from '../layouts/MainPage.vue'
+import errorLayout from '@/layouts/Error.vue'
+import defaultLayout from '@/layouts/Default.vue'
+import mainPageLayout from '@/layouts/MainPage.vue'
 
 
 const routes = [
@@ -132,13 +132,15 @@ router.beforeResolve(async (to, from, next) => {
 
 	// Get currencies price
 	if(!store.prices) {
-		store.getCurrenciesPrice()
+		await store.getCurrenciesPrice()
 	}
 
 
     // Init APP
 	if(!store.isKeplrConnected && window.keplr) {
-        await store.initApp()
+		store.demo
+			? store.initDemo()
+			: await store.initApp()
     }
 
 
@@ -151,36 +153,55 @@ router.beforeResolve(async (to, from, next) => {
 			// Forbidden without keplr
 			if(access.includes('without_keplr') && !window.keplr) {
 				next({ name: 'KeplrError' })
+
 				return false
 			}
 
 			// Forbidden with keplr
 			if(access.includes('with_keplr') && window.keplr) {
-				next({ name: 'MainPage' })
+				// next({ name: 'MainPage' })
+				!store.demo
+					? next('/')
+					: next('/?demo=true')
+
 				return false
 			}
 
 			// Wallet not connected
 			if (access.includes('not_connected') && !store.isKeplrConnected) {
-				next({ name: 'MainPage' })
+				// next({ name: 'MainPage' })
+				!store.demo
+					? next('/')
+					: next('/?demo=true')
+
 				return false
 			}
 
 			// Forbidden with a passport
 			if (access.includes('with_passport') && store.account.moonPassport) {
-				next('/account/cosmoshub')
+				!store.demo
+					? next('/account/cosmoshub')
+					: next('/account/cosmoshub?demo=true')
+
 				return false
 			}
 
 			// Forbidden without a passport
 			if (access.includes('without_passport') && !store.account.moonPassportOwner) {
-				next({ name: 'MainPage' })
+				// next({ name: 'MainPage' })
+				!store.demo
+					? next('/')
+					: next('/?demo=true')
+
 				return false
 			}
 
 			// Forbidden with a global passport
 			if (access.includes('with_global_passport') && store.account.moonPassportOwner && !store.account.moonPassport) {
-				next('/account/cosmoshub')
+				!store.demo
+					? next('/account/cosmoshub')
+					: next('/account/cosmoshub?demo=true')
+
 				return false
 			}
 		}

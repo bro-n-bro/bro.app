@@ -6,7 +6,11 @@
     <section class="proposal_info" v-else>
         <div class="cont middle">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all'" class="btn">
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all?demo=true'" class="btn" v-if="store.demo">
+                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
+                </router-link>
+
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all'" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>

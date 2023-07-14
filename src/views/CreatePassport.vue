@@ -488,7 +488,7 @@
                 notification.notify({
                     group: store.networks.bostrom.denom,
                     title: i18n.global.t('message.notification_failed_title'),
-                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    text: i18n.global.t('message.notification_tx_error_rejected'),
                     type: 'error',
                     data: {
                         chain: 'bostrom',

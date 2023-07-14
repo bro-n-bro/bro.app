@@ -1,0 +1,28 @@
+{
+    "offlineSinger": {
+        "chainId": "cosmoshub-4",
+        "keplr": {
+            "version": "0.12.15",
+            "mode": "extension",
+            "eventListener": {},
+            "enigmaUtils": {
+                "Map(0)": {}
+            },
+            "defaultOptions": {}
+        }
+    },
+    "account": {
+        "address": "cosmos1smtqmvpaa8tp7ykeafm3h39grla54maw4nx935",
+        "algo": "",
+        "pubkey": ""
+    },
+    "key": {
+        "name": "Demo name",
+        "algo": "",
+        "pubKey": "",
+        "address": "",
+        "bech32Address": "cosmos1smtqmvpaa8tp7ykeafm3h39grla54maw4nx935",
+        "isNanoLedger": false,
+        "isKeystone": false
+    }
+}

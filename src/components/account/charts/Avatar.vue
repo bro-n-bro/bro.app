@@ -2,7 +2,14 @@
     <div class="avatar">
         <img :src="store.account.avatar" alt="">
 
-        <router-link to="/account/passport" class="edit_link">
+        <router-link to="/account/passport?demo=true" class="edit_link" v-if="store.demo">
+            <div class="btn">
+                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_settings"></use></svg>
+                <span>{{ $t('message.btn_settings') }}</span>
+            </div>
+        </router-link>
+
+        <router-link to="/account/passport" class="edit_link" v-else>
             <div class="btn">
                 <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_settings"></use></svg>
                 <span>{{ $t('message.btn_settings') }}</span>

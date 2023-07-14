@@ -6,7 +6,11 @@
             </div>
 
             <div class="all_link">
-                <router-link :to="`/proposals/${store.currentNetwork}`" class="link">
+                <router-link :to="`/proposals/${store.currentNetwork}?demo=true`" class="link" v-if="store.demo">
+                    {{ $t('message.btn_see_more') }} &rarr;
+                </router-link>
+
+                <router-link :to="`/proposals/${store.currentNetwork}`" class="link" v-else>
                     {{ $t('message.btn_see_more') }} &rarr;
                 </router-link>
             </div>

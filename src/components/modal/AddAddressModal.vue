@@ -6,7 +6,7 @@
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_close"></use></svg>
                 </button>
 
-                <template v-if="duplicateError || store.account.moonPassport && activeStep == 1">
+                <template v-if="!store.demo && duplicateError || !store.demo && store.account.moonPassport && activeStep == 1">
                 <div class="error">
                     <div class="title">
                         {{ $t('message.add_address_modal_title') }}
@@ -252,7 +252,7 @@
                                 </div>
                             </button></div>
 
-                            <div><button class="network" :class="{'active': addedNetwork == 'emoney', 'added': checkAddress('emoney')}" @click.prevent="selectNetwork('emoney')">
+                            <!-- <div><button class="network" :class="{'active': addedNetwork == 'emoney', 'added': checkAddress('emoney')}" @click.prevent="selectNetwork('emoney')">
                                 <div class="logo">
                                     <img src="/emoney_logo.png" alt="">
                                 </div>
@@ -264,7 +264,7 @@
                                 <div class="added_label">
                                     {{ $t('message.add_address_added_label') }}
                                 </div>
-                            </button></div>
+                            </button></div> -->
                         </div>
 
                         <button class="btn" :class="{'disabled': duplicate}" @click.prevent="setActiveKeplrAddress">
@@ -293,7 +293,7 @@
 
                         <img src="@/assets/images/add_address_step3.svg" alt="" class="img">
 
-                        <button class="btn" :class="{'disabled': !ownerAccount}" @click.prevent="activeStep += 1">
+                        <button class="btn" :class="{'disabled': !store.demo && !ownerAccount}" @click.prevent="activeStep += 1">
                             {{ $t('message.btn_next') }}
                         </button>
 
@@ -342,7 +342,7 @@
 
 
 <script setup>
-    import { ref, inject, onBeforeMount, watchEffect, computed } from 'vue'
+    import { ref, inject, onBeforeMount, watchEffect } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
     import { preparePassportTx, sendTx, generateAddress } from '@/utils'
@@ -358,7 +358,7 @@
         addedAddress = ref(''),
         ownerAccount = ref(false),
         loading = ref(false),
-        signature = ref(''),
+        signature = store.demo ? 'demo:signature' : ref(''),
         duplicate = ref(false),
         editForm = ref(false),
         duplicateError = ref(false),
@@ -453,7 +453,9 @@
         }
 
         // Set new singer
-        await setNewSinger()
+        if (!store.demo) {
+            await setNewSinger()
+        }
     }
 
 
@@ -491,7 +493,9 @@
         }
 
         // Set new singer
-        await setNewSinger()
+        if (!store.demo) {
+            await setNewSinger()
+        }
 
         // Go to next step
         activeStep.value += 1
@@ -511,18 +515,35 @@
 
     // Create signature
     async function createSignature() {
-        try {
-            let res = await window.keplr.signArbitrary(
-                store.networks[addedNetwork.value].chainId,
-                addedAddress.value,
-                `${store.account.moonPassportOwnerAddress}:${store.CONSTITUTION_HASH}`
-            )
+        if (!store.demo) {
+            try {
+                let res = await window.keplr.signArbitrary(
+                    store.networks[addedNetwork.value].chainId,
+                    addedAddress.value,
+                    `${store.account.moonPassportOwnerAddress}:${store.CONSTITUTION_HASH}`
+                )
 
-            signature.value = toBase64(toAscii(JSON.stringify({
-                pub_key: res.pub_key.value,
-                signature: res.signature
-            })))
+                signature.value = toBase64(toAscii(JSON.stringify({
+                    pub_key: res.pub_key.value,
+                    signature: res.signature
+                })))
 
+                // Show notification
+                notification.notify({
+                    group: 'default',
+                    title: i18n.global.t('message.notification_passport_signature'),
+                    type: 'success'
+                })
+
+                // Hide loader
+                loading.value = false
+
+                // Go to next step
+                activeStep.value += 1
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
             // Show notification
             notification.notify({
                 group: 'default',
@@ -535,8 +556,6 @@
 
             // Go to next step
             activeStep.value += 1
-        } catch (error) {
-            console.log(error)
         }
     }
 
@@ -562,26 +581,30 @@
         })
 
         try{
-            // Prepare Tx
-            let prepareResult = await preparePassportTx([
-                {
-                    proof_address: {
-                        address: addedAddress.value,
-                        nickname: store.account.moonPassportOwner.extension.nickname,
-                        signature: signature.value
+            if (!store.demo) {
+                // Prepare Tx
+                var prepareResult = await preparePassportTx([
+                    {
+                        proof_address: {
+                            address: addedAddress.value,
+                            nickname: store.account.moonPassportOwner.extension.nickname,
+                            signature: signature.value
+                        }
+                    },
+                    {
+                        set_address_label: {
+                            address: addedAddress.value,
+                            label: tempAddressName.value,
+                            nickname: store.account.moonPassportOwner.extension.nickname
+                        }
                     }
-                },
-                {
-                    set_address_label: {
-                        address: addedAddress.value,
-                        label: tempAddressName.value,
-                        nickname: store.account.moonPassportOwner.extension.nickname
-                    }
-                }
-            ])
+                ])
 
-            // Send Tx
-            let result = await sendTx(prepareResult)
+                // Send Tx
+                var result = await sendTx(prepareResult)
+            } else {
+                var result = { code: 0 }
+            }
 
             if (result.code === 0) {
                 // Set TXS
@@ -594,7 +617,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_success_address_added_title'),
                     type: 'success',
                     data: {
@@ -609,6 +632,7 @@
                 // Go to next step
                 activeStep.value += 1
 
+                // Need reload page
                 store.needReload = true
             }
 
@@ -620,9 +644,9 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_failed_title'),
-                    text: i18n.global.t('message.manage_modal_error_rejected'),
+                    text: i18n.global.t('message.notification_tx_error_rejected'),
                     type: 'error',
                     data: {
                         chain: 'passport',
@@ -643,9 +667,9 @@
             })
 
             notification.notify({
-                group: store.networks.bostrom.denom,
+                group: 'default',
                 title: i18n.global.t('message.notification_failed_title'),
-                text: i18n.global.t('message.manage_modal_error_rejected'),
+                text: i18n.global.t('message.notification_tx_error_rejected'),
                 type: 'error',
                 data: {
                     chain: 'passport',
@@ -660,70 +684,72 @@
 
 
     // Change Keplr account
-    window.addEventListener('keplr_keystorechange', async () => {
-        // Check account
-        if(store.showAddAddressModal) {
-            // Show loader
-            loading.value = true
+    if (!store.demo) {
+        window.addEventListener('keplr_keystorechange', async () => {
+            // Check account
+            if(store.showAddAddressModal) {
+                // Show loader
+                loading.value = true
 
-            // Set condition
-            ownerAccount.value = false
+                // Set condition
+                ownerAccount.value = false
 
-            // New keplr connect
-            await store.connectWallet(false, false)
+                // New keplr connect
+                await store.connectWallet(false, false)
 
-            // Step 0 and Step 2
-            if (activeStep.value == 1 || activeStep.value == 2) {
-                if(store.account.moonPassport) {
+                // Step 0 and Step 2
+                if (activeStep.value == 1 || activeStep.value == 2) {
+                    if(store.account.moonPassport) {
+                        // Hide loader
+                        loading.value = false
+
+                        // Go to zero step
+                        activeStep.value = 1
+
+                        // Has passport error
+                        hasPassportError.value = true
+                    }
+
+                    // Check duplicate
+                    if(checkAllAddress()) {
+                        // Hide loader
+                        loading.value = false
+
+                        // Go to zero step
+                        activeStep.value = 1
+
+                        // Duplicate error
+                        duplicateError.value = true
+                    }
+                }
+
+                // Step 3
+                if (activeStep.value == 3) {
+                    if(store.wallets.bostrom == store.account.moonPassportOwnerAddress) {
+                        // Set condition
+                        ownerAccount.value = true
+
+                        // Go to next step
+                        activeStep.value += 1
+                    }
+
                     // Hide loader
                     loading.value = false
-
-                    // Go to zero step
-                    activeStep.value = 1
-
-                    // Has passport error
-                    hasPassportError.value = true
                 }
 
-                // Check duplicate
-                if(checkAllAddress()) {
+                // Step 4
+                if (activeStep.value == 4) {
+                    if(store.wallets.bostrom != store.account.moonPassportOwnerAddress) {
+                        // Go to next step
+                        activeStep.value -= 1
+                    }
+
                     // Hide loader
                     loading.value = false
-
-                    // Go to zero step
-                    activeStep.value = 1
-
-                    // Duplicate error
-                    duplicateError.value = true
                 }
             }
-
-            // Step 3
-            if (activeStep.value == 3) {
-                if(store.wallets.bostrom == store.account.moonPassportOwnerAddress) {
-                    // Set condition
-                    ownerAccount.value = true
-
-                    // Go to next step
-                    activeStep.value += 1
-                }
-
-                // Hide loader
-                loading.value = false
-            }
-
-            // Step 4
-            if (activeStep.value == 4) {
-                if(store.wallets.bostrom != store.account.moonPassportOwnerAddress) {
-                    // Go to next step
-                    activeStep.value -= 1
-                }
-
-                // Hide loader
-                loading.value = false
-            }
-        }
-    })
+        })
+    }
 </script>
 
 
