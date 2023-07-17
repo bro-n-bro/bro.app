@@ -301,7 +301,7 @@
 
     .legends .legend + .legend
     {
-        margin-top: 8px;
+        margin-top: 7px;
     }
 
 

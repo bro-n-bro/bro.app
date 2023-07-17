@@ -1,5 +1,5 @@
 <template>
-    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.notice_currency'))" v-click-out="clickOut">
+    <div class="currency" @mouseover="emitter.emit('setNotification', $t('message.notice_currency'))" ref="target">
         <button class="btn" :class="{ active: showDropdown }" @click.prevent="showDropdown = !showDropdown">
             <span>{{ store.currentCurrency }}</span>
             <svg><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
@@ -24,11 +24,13 @@
 <script setup>
     import { inject, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { onClickOutside } from '@vueuse/core'
 
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        showDropdown = ref(false)
+        showDropdown = ref(false),
+        target = ref(null)
 
 
     // Select currency
@@ -40,11 +42,9 @@
         showDropdown.value = false
     }
 
+
     // Сlick element outside
-    function clickOut() {
-        // Hide dropdown
-        showDropdown.value = false
-    }
+    onClickOutside(target, event => showDropdown.value = false)
 </script>
 
 

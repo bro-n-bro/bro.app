@@ -47,18 +47,20 @@
     import { computed, onBeforeMount, inject } from 'vue'
     import { useRoute } from 'vue-router'
     import { useGlobalStore } from '@/stores'
+    import { useTitle } from '@vueuse/core'
 
 
     const route = useRoute(),
         layout = computed(() => route.meta.layout || 'default-layout'),
         store = useGlobalStore(),
         i18n = inject('i18n'),
-        emitter = inject('emitter')
+        emitter = inject('emitter'),
+        title = useTitle()
 
 
     onBeforeMount(() => {
         // Set title
-        document.title = i18n.global.t('message.page_title')
+        title.value = i18n.global.t('message.page_title')
 
 
         // Change Keplr account

@@ -18,7 +18,7 @@
                                 {{ $t('message.passport_avatar_mimetype_size') }}
                             </div>
 
-                            <div class="image" :class="{'show': avatarPreview.src, 'animated': avatarPreview.src}"><div>
+                            <div class="image" :class="{'show': avatarPreview.src, 'animated': avatarPreview.status && avatarPreview.src}"><div>
                                 <img :src="avatarPreview.src" alt="">
                             </div></div>
                         </label>
@@ -78,8 +78,7 @@
                                 {{ $t('message.btn_reject') }}
                             </router-link>
 
-                            <!-- <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.account.signature || nickName.length < 8 || activationProcess != true || !store.IPFSNode.isOnline()}"> -->
-                            <button type="submit" class="btn create" :class="{'disable': !avatarPreview.status || !store.account.signature || nickName.length < 8 || activationProcess != true}">
+                            <button type="submit" class="btn create" :class="{'disable': isValid()}">
                                 {{ $t('message.btn_confirm') }}
                             </button>
                         </div>
@@ -205,7 +204,7 @@
         notification = useNotification(),
         avatar = ref(null),
         avatarPreview = reactive({
-            src: '',
+            src: localStorage.getItem('tempAvatar') ? ref(localStorage.getItem('tempAvatar')) : '',
             buffer: '',
             status: false
         }),
@@ -259,6 +258,9 @@
                 avatarPreview.buffer = Buffer(reader.result)
                 avatarPreview.src = reader.result
                 avatarPreview.status = true
+
+                // Save in localStorage
+                localStorage.setItem('tempAvatar', reader.result)
 
                 setTimeout(() => document.querySelector('.create_passport .avatar .image.animated').classList.remove('animated'), 800)
             }
@@ -389,6 +391,12 @@
     }
 
 
+    // Validate all fields
+    function isValid() {
+        return !avatarPreview.status || !store.account.signature || nickName.value.length < 8 || activationProcess.value != true
+    }
+
+
     // Create passport
     async function createPassport() {
         if(await checkNickname() == null) {
@@ -401,14 +409,12 @@
 
             try{
                 // Send avatar to IPFS
-                // let avatarCID = await store.unixfs.addFile({
-                //     content: new TextEncoder().encode(avatar.value.files[0])
-                // })
+                let avatarIpfs = await store.IPFSNode.add(avatarPreview.src)
 
                 // Prepare Tx
                 let prepareResult = await preparePassportTx({
                     create_passport: {
-                        avatar: '',
+                        avatar: avatarIpfs.path,
                         nickname: nickName.value,
                         signature: store.account.signature
                     }
@@ -428,7 +434,7 @@
                     })
 
                     notification.notify({
-                        group: store.networks.bostrom.denom,
+                        group: 'default',
                         title: i18n.global.t('message.notification_success_create_passport_title'),
                         type: 'success',
                         data: {
@@ -466,7 +472,7 @@
                     })
 
                     notification.notify({
-                        group: store.networks.bostrom.denom,
+                        group: 'default',
                         title: i18n.global.t('message.notification_failed_title'),
                         text: result?.rawLog.toString(),
                         type: 'error',
@@ -486,7 +492,7 @@
                 })
 
                 notification.notify({
-                    group: store.networks.bostrom.denom,
+                    group: 'default',
                     title: i18n.global.t('message.notification_failed_title'),
                     text: i18n.global.t('message.notification_tx_error_rejected'),
                     type: 'error',

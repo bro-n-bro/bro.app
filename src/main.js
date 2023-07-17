@@ -9,7 +9,6 @@ import Notifications from '@kyvg/vue3-notification'
 import timeago from 'vue-timeago3'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import mitt from 'mitt'
-import VueClipboard from 'vue3-clipboard'
 
 
 // Create App
@@ -30,11 +29,6 @@ app.use(router)
 app.use(i18n)
 app.use(Notifications)
 app.use(timeago)
-
-app.use(VueClipboard, {
-    autoSetContainer: true,
-    appendToBody: true,
-})
 
 
 // Vue provide
@@ -60,25 +54,6 @@ app.config.globalProperties.$filters = {
         return moment(date).fromNow()
     }
 }
-
-
-// Сlick element outside
-const clickOutside = {
-    beforeMount: (el, binding) => {
-        el.clickOutsideEvent = event => {
-            if (!(el == event.target || el.contains(event.target))) {
-                binding.value()
-            }
-        }
-
-        document.addEventListener('click', el.clickOutsideEvent)
-    },
-    unmounted: el => document.removeEventListener('click', el.clickOutsideEvent),
-}
-
-
-// Directives
-app.directive('clickOut', clickOutside)
 
 
 // VueCountdown

@@ -20,7 +20,7 @@
                     {{ store.account.moonPassportOwner.extension.nickname }}
                 </div>
 
-                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="store.account.moonPassportOwnerAddress" v-if="store.currentNetwork == 'all'" v-clipboard:success="onCopy">
+                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" @click="onCopy(store.account.moonPassportOwnerAddress)" v-if="store.currentNetwork == 'all'">
                     <div class="tooltip copy_tooltip">
                         {{ $t('message.account_copy_tooltip') }}
                     </div>
@@ -28,7 +28,7 @@
                     <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                 </button>
 
-                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress)" v-clipboard:success="onCopy" v-else>
+                <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" @click="onCopy(generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.moonPassportOwnerAddress))" v-else>
                     <div class="tooltip copy_tooltip">
                         {{ $t('message.account_copy_tooltip') }}
                     </div>
@@ -62,7 +62,7 @@
                         <span v-else>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                     </div>
 
-                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="item.address" v-if="store.currentNetwork == 'all'">
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" @click="onCopy(item.address)" v-if="store.currentNetwork == 'all'">
                         <div class="tooltip copy_tooltip">
                             {{ $t('message.account_copy_tooltip') }}
                         </div>
@@ -70,7 +70,7 @@
                         <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                     </button>
 
-                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="generateAddress(store.networks[store.currentNetwork].address_prefix, item.address)" v-clipboard:success="onCopy" v-else>
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" @click="onCopy(generateAddress(store.networks[store.currentNetwork].address_prefix, item.address))" v-else>
                         <div class="tooltip copy_tooltip">
                             {{ $t('message.account_copy_tooltip') }}
                         </div>
@@ -78,7 +78,7 @@
                         <svg><use xlink:href="@/assets/sprite.svg#ic_copy"></use></svg>
                     </button>
 
-                    <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.Keplr.account.address)" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))" v-clipboard:success="onCopy">
+                    <button class="edit_btn" @click.prevent="showEditForm" v-if="store.account.moonPassportOwnerAddress == generateAddress('bostrom', store.Keplr.account.address)" @mouseover="emitter.emit('setNotification', $t('message.notice_edit_address'))">
                         <svg><use xlink:href="@/assets/sprite.svg#ic_edit"></use></svg>
                     </button>
 
@@ -112,7 +112,7 @@
                         <span>{{ item.address.slice(0, 13) + '...' + item.address.slice(-6) }}</span>
                     </div>
 
-                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" v-clipboard:copy="item.address" v-clipboard:success="onCopy">
+                    <button class="copy_btn" @mouseover="emitter.emit('setNotification', $t('message.notice_copy_address'))" @click="onCopy(item.address)">
                         <div class="tooltip copy_tooltip">
                             {{ $t('message.account_copy_tooltip') }}
                         </div>
@@ -150,15 +150,17 @@
     import { inject, onBeforeMount, onBeforeUpdate } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
+    import { useClipboard } from '@vueuse/core'
 
     // Components
     import AddAddressModal from '@/components/modal/AddAddressModal.vue'
     import DeleteAddressModal from '@/components/modal/DeleteAddressModal.vue'
     import EditAddressName from '@/components/account/EditAddressName.vue'
-import { setMapStoreSuffix } from 'pinia'
+
 
     const store = useGlobalStore(),
-        emitter = inject('emitter')
+        emitter = inject('emitter'),
+        { copy } = useClipboard()
 
     var uniqWallets = []
 
@@ -251,8 +253,12 @@ import { setMapStoreSuffix } from 'pinia'
     }
 
 
-    // Copy address callback
-    function onCopy() {
+    // Copy address
+    function onCopy(address) {
+        // Copy
+        copy(address)
+
+        // Show message
         let _self = event.target
 
         _self.closest('.item').querySelector('.copy_tooltip').classList.add('show')

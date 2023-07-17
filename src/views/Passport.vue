@@ -259,7 +259,7 @@
         try{
             if (!store.demo) {
                 // Send avatar to IPFS
-                let avatarIpfs = await store.node.add(avatar.value.files[0])
+                let avatarIpfs = await store.IPFSNode.add(avatar.value.files[0])
 
                 // Prepare Tx
                 var prepareResult = await preparePassportTx({

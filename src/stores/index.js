@@ -53,8 +53,8 @@ const networks = {
     },
 }
 
-window.localStorage.setItem('account', JSON.stringify(account))
-window.localStorage.setItem('networks', JSON.stringify(networks))
+// window.localStorage.setItem('account', JSON.stringify(account))
+// window.localStorage.setItem('networks', JSON.stringify(networks))
 
 
 export const useGlobalStore = defineStore('global', {
