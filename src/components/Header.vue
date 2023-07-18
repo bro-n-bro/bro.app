@@ -3,7 +3,7 @@
         <div class="cont">
             <div class="info row">
                 <!-- Logo -->
-                <div class="logo" v-click-out="clickOut">
+                <div class="logo" ref="target">
                     <div class="btn" @click.prevent="showDropdown = !showDropdown">
                         <img src="@/assets/logo.svg" alt="">
 
@@ -53,6 +53,7 @@
     import { onMounted, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRoute } from 'vue-router'
+    import { onClickOutside } from '@vueuse/core'
 
     // Components
     import Notifications from '../components/header/Notifications.vue'
@@ -64,7 +65,8 @@
 
     const store = useGlobalStore(),
         route = useRoute(),
-        showDropdown = ref(false)
+        showDropdown = ref(false),
+        target = ref(null)
 
 
     onMounted(() => {
@@ -84,10 +86,7 @@
 
 
     // Сlick element outside
-    function clickOut() {
-        // Hide dropdown
-        showDropdown.value = false
-    }
+    onClickOutside(target, event => showDropdown.value = false)
 </script>
 
 
@@ -108,6 +107,7 @@
     .tour_show header
     {
         position: absolute;
+        z-index: auto;
     }
 
     .lock header
@@ -237,5 +237,12 @@
         padding: 0;
 
         background: var(--bg);
+    }
+
+    .tour_show header.stuck
+    {
+        padding: 20px 0;
+
+        background: none;
     }
 </style>

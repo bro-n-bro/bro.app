@@ -350,6 +350,28 @@ export default {
             'notification_tx_error_rejected': "The transaction has been rejected",
 
 
+            // Tours
+            'tour_header_title_step1': 'Portfolio Currency',
+            'tour_header_title_step2': 'Your Digital Identity',
+
+            'tour_account_page_title_step1': 'Networks',
+            'tour_account_page_title_step2': 'Bundled Wallets',
+            'tour_account_page_title_step3': 'Assets Management',
+            'tour_account_page_title_step4': 'Portfolio Insights',
+            'tour_account_page_title_step5': 'Validators',
+            'tour_account_page_title_step6': 'Governance',
+
+            'tour_header_desc_step1': 'Allows you to conveniently change between different currencies and view portfolio evaluations within the app',
+            'tour_header_desc_step2': 'Allows you to authenticate yourself, securely interact with others, and engage in transactions with confidence',
+
+            'tour_account_page_desc_step1': 'Enables you to view info and seamlessly switch between different blockchain networks',
+            'tour_account_page_desc_step2': 'Allows you to consolidate and manage multiple wallets in one place; it may include dublicates',
+            'tour_account_page_desc_step3': 'Provides detailed view of all your digital assets on different levels',
+            'tour_account_page_desc_step4': 'Offers an overview of key performance indicators and average numbers for your portfolio',
+            'tour_account_page_desc_step5': 'Displays the number of validators you stake with on one or more networks',
+            'tour_account_page_desc_step6': 'Lets you navigate through proposals, view their descriptions, vote and see votes breakdown',
+
+
             // Buttons
             'btn_back_home': 'Back to home',
             'btn_reload': 'Reload',

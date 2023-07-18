@@ -11,39 +11,83 @@
         </button>
 
         <div class="step step0" :class="{'show': currentStep == 0}">
-            <div class="title">Let's get to know each other</div>
+            <div class="title">
+                {{ $t('message.tour_header_title_step1') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_header_desc_step1') }}
+            </div>
         </div>
 
         <div class="step step1" :class="{'show': currentStep == 1}">
-            <div class="title">Let's get to know each other</div>
+            <div class="title">
+                {{ $t('message.tour_header_title_step2') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_header_desc_step2') }}
+            </div>
         </div>
 
         <div class="step step2" :class="{'show': currentStep == 2}">
-            <div class="title">Let's get to know each other</div>
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step1') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step1') }}
+            </div>
         </div>
 
-        <div class="step step2" :class="{'show': currentStep == 3}">
-            <div class="title">Let's get to know each other</div>
+        <div class="step step3" :class="{'show': currentStep == 3}">
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step2') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step2') }}
+            </div>
         </div>
 
-        <div class="step step2" :class="{'show': currentStep == 4}">
-            <div class="title">Let's get to know each other</div>
+        <div class="step step4" :class="{'show': currentStep == 4}">
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step3') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step3') }}
+            </div>
         </div>
 
-        <div class="step step2" :class="{'show': currentStep == 5}">
-            <div class="title">Let's get to know each other</div>
+        <div class="step step5" :class="{'show': currentStep == 5}">
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step4') }}
+            </div>
 
-            <div class="desc">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut al</div>
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step4') }}
+            </div>
+        </div>
+
+        <div class="step step6" :class="{'show': currentStep == 6}">
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step5') }}
+            </div>
+
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step5') }}
+            </div>
+        </div>
+
+        <div class="step step7" :class="{'show': currentStep == 7}">
+            <div class="title">
+                {{ $t('message.tour_account_page_title_step6') }}
+            </div>
+
+            <div class="desc">
+                {{ $t('message.tour_account_page_desc_step6') }}
+            </div>
         </div>
 
         <div class="bullets">
@@ -87,26 +131,42 @@
         }),
         steps = [
             {
+                scrollSelector: '.wrap',
+                selector: 'header .currency',
+                position: 'bottom-end'
+            },
+            {
+                scrollSelector: '.wrap',
+                selector: 'header .user',
+                position: 'bottom-end'
+            },
+            {
+                scrollSelector: '.networks',
                 selector: '.networks',
                 position: 'right-start'
             },
             {
+                scrollSelector: '.connected_addresses',
                 selector: '.connected_addresses',
                 position: 'left-start'
             },
             {
+                scrollSelector: '.main_data',
                 selector: '.main_data',
                 position: 'bottom'
             },
             {
+                scrollSelector: '.stats',
                 selector: '.stats',
                 position: 'bottom'
             },
             {
+                scrollSelector: '.validators',
                 selector: '.validators',
                 position: 'bottom'
             },
             {
+                scrollSelector: '.proposals',
                 selector: '.proposals',
                 position: 'right-start'
             },
@@ -139,7 +199,7 @@
                 tourCoordinates.right = 'auto'
                 tourCoordinates.bottom = 'auto'
                 tourCoordinates.left = blockCoordinates.left + window.scrollX + block.offsetWidth,
-                tourCoordinates.margin = 'auto auto auto 15px'
+                tourCoordinates.margin = '0 0 0 15px'
                 break;
 
             case 'left-start':
@@ -147,15 +207,23 @@
                 tourCoordinates.right = 'auto'
                 tourCoordinates.bottom = 'auto'
                 tourCoordinates.left = blockCoordinates.left + window.scrollX - 280,
-                tourCoordinates.margin = 'auto auto auto -15px'
+                tourCoordinates.margin = '0 0 0 -15px'
                 break;
 
             case 'bottom':
                 tourCoordinates.top = blockCoordinates.top + window.scrollY + block.offsetHeight
-                tourCoordinates.right = 0
+                tourCoordinates.right = 'auto'
                 tourCoordinates.bottom = 'auto'
-                tourCoordinates.left = 0,
-                tourCoordinates.margin = '15px auto auto auto'
+                tourCoordinates.left = blockCoordinates.left + block.offsetWidth/2 + window.scrollX - 140,
+                tourCoordinates.margin = '15px 0 0'
+                break;
+
+            case 'bottom-end':
+                tourCoordinates.top = blockCoordinates.top + window.scrollY + block.offsetHeight
+                tourCoordinates.right = 'auto'
+                tourCoordinates.bottom = 'auto'
+                tourCoordinates.left = blockCoordinates.left + block.offsetWidth - 280,
+                tourCoordinates.margin = '15px 0 0 0'
                 break;
 
             default:
@@ -167,7 +235,7 @@
                 break;
         }
 
-        block.scrollIntoView({
+        document.querySelector(steps[currentStep.value].scrollSelector).scrollIntoView({
             behavior: 'smooth',
             block: 'start'
         })
@@ -182,6 +250,9 @@
         // Hide tour
         store.tour = false
         tourShow.value = false
+
+        // Remove tour_selected class
+        steps.forEach(el => document.querySelector(el.selector).classList.remove('tour_selected'))
 
         // Scroll on top
         document.querySelector('.wrap').scrollIntoView({
@@ -267,6 +338,20 @@
         display: block;
 
         margin-top: -15px;
+
+        transform: rotate(-90deg);
+    }
+
+    .tour.bottom-end:before
+    {
+        top: auto;
+        right: 40px;
+        bottom: 100%;
+        left: auto;
+
+        display: block;
+
+        margin-bottom: -7px;
 
         transform: rotate(-90deg);
     }
