@@ -375,7 +375,7 @@ export default {
             // Buttons
             'btn_back_home': 'Back to home',
             'btn_reload': 'Reload',
-            'btn_connect_wallet': 'Сonnect wallet',
+            'btn_connect_wallet': 'Сonnect Keplr wallet',
             'btn_reject': 'Reject',
             'btn_confirm': 'Confirm',
             'btn_agree_sign': 'Agree & Sign',

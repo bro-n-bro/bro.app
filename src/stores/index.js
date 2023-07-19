@@ -15,7 +15,6 @@ import bostrom from '@/stores/networks/bostrom'
 import DemoAccount from '@/demo/Account.json'
 import DemoKeplr from '@/demo/Keplr.json'
 
-
 const networks = {
     cosmoshub,
     bostrom,
@@ -52,9 +51,6 @@ const networks = {
         address_prefix: 'stride',
     },
 }
-
-// window.localStorage.setItem('account', JSON.stringify(account))
-// window.localStorage.setItem('networks', JSON.stringify(networks))
 
 
 export const useGlobalStore = defineStore('global', {

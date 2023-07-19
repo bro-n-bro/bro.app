@@ -1,5 +1,5 @@
 <template>
-    <div class="main" :class="{tour_show: store.tour}">
+    <div class="main" :class="{'tour_show': store.tour}">
         <!-- Header -->
         <Header />
 
@@ -13,9 +13,14 @@
 
 
 <script setup>
+    import { useGlobalStore } from '@/stores'
+
     // Components
     import Header  from '../components/Header.vue'
     import Feedback  from '../components/Feedback.vue'
+
+
+    const store = useGlobalStore()
 </script>
 
 

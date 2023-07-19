@@ -3,6 +3,7 @@
     "tempUserName": "",
     "avatar": null,
     "signature": null,
+    "demo": true,
 
     "moonPassport": {
         "owner": "bostrom1smtqmvpaa8tp7ykeafm3h39grla54mawkqjk0n",

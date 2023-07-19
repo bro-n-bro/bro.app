@@ -95,7 +95,7 @@
         </div>
 
         <div class="btns">
-            <button class="btn prev_btn" @click.prevent="selectStep(currentStep--)">
+            <button class="btn prev_btn" :class="{'disabled': currentStep == 0}" @click.prevent="selectStep(currentStep--)">
                 {{ $t('message.btn_back') }}
             </button>
 
@@ -482,6 +482,11 @@
         transition: .2s linear;
 
         border-radius: 140px;
+    }
+
+    .tour .btns .btn.disabled
+    {
+        pointer-events: none;
     }
 
 

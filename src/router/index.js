@@ -49,7 +49,7 @@ const routes = [
 		component: () => import('../views/MainPage.vue'),
 		meta: {
 			layout: mainPageLayout,
-			accessDenied: ['without_keplr']
+			accessDenied: []
 		}
 	},
     {
@@ -141,7 +141,11 @@ router.beforeResolve(async (to, from, next) => {
 		store.demo
 			? store.initDemo()
 			: await store.initApp()
-    }
+    } else {
+		if (store.demo) {
+			store.initDemo()
+		}
+	}
 
 
 	// Check page access
@@ -149,7 +153,7 @@ router.beforeResolve(async (to, from, next) => {
 		// Array with prohibitions
 		let access = record.meta.accessDenied
 
-		if(access) {
+		if(access.length && !store.demo) {
 			// Forbidden without keplr
 			if(access.includes('without_keplr') && !window.keplr) {
 				next({ name: 'KeplrError' })
@@ -159,7 +163,6 @@ router.beforeResolve(async (to, from, next) => {
 
 			// Forbidden with keplr
 			if(access.includes('with_keplr') && window.keplr) {
-				// next({ name: 'MainPage' })
 				!store.demo
 					? next('/')
 					: next('/?demo=true')
@@ -169,7 +172,6 @@ router.beforeResolve(async (to, from, next) => {
 
 			// Wallet not connected
 			if (access.includes('not_connected') && !store.isKeplrConnected) {
-				// next({ name: 'MainPage' })
 				!store.demo
 					? next('/')
 					: next('/?demo=true')
@@ -188,7 +190,6 @@ router.beforeResolve(async (to, from, next) => {
 
 			// Forbidden without a passport
 			if (access.includes('without_passport') && !store.account.moonPassportOwner) {
-				// next({ name: 'MainPage' })
 				!store.demo
 					? next('/')
 					: next('/?demo=true')

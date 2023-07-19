@@ -3,7 +3,7 @@
         <div class="cont">
             <div class="title" v-html="$t('message.main_page_title')"></div>
 
-            <button class="btn" @click.prevent="emitter.emit('initApp')">
+            <button class="btn" @click.prevent="connectWallet()">
                 {{ $t('message.btn_connect_wallet') }}
             </button>
 
@@ -26,29 +26,45 @@
 <script setup>
     import { inject, watchEffect, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useRouter } from 'vue-router'
+    import { useRouter, useRoute } from 'vue-router'
 
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
-        route = useRouter(),
+        router = useRouter(),
+        route = useRoute(),
         i18n = inject('i18n')
 
 
     onBeforeMount(() => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_main_page')
+
+        // Reset state if hit the main page
+        if (route.fullPath == '/') {
+            store.$reset()
+
+            store.isAppFullLoaded = true
+        }
     })
 
 
     watchEffect(() => {
         // Monitor the connection of the Keplr
-        if(store.isAuth && store.isAppFullLoaded) {
+        if(store.isAuth && store.isAppFullLoaded && !store.account.demo) {
             !store.demo
-                ? route.push('/account/cosmoshub')
-                : route.push('/account/cosmoshub?demo=true')
+                ? router.push('/account/cosmoshub')
+                : router.push('/account/cosmoshub?demo=true')
         }
     })
+
+
+    // Connect wallet
+    function connectWallet() {
+        window.Keplr
+            ? emitter.emit('initApp')
+            : router.push('/keplr_error')
+    }
 </script>
 
 
@@ -94,7 +110,7 @@
     .main_page .cont
     {
         position: relative;
-        z-index: 3;
+        z-index: 5;
     }
 
 
