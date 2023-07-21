@@ -19,12 +19,13 @@
                         <div class="avatar">
                             <input type="file" id="avatar" ref="avatar" accept="image/png, image/jpeg" @change="avatarUpload">
                             <label for="avatar" class="box hide">
-                                <div class="loader_wrap" v-if="!avatarPreview.status">
+                                <div class="loader_wrap" v-if="!avatarPreview.status && !store.demo">
                                     <div class="loader"><span></span></div>
                                 </div>
 
                                 <div class="image" v-else><div>
-                                    <img :src="avatarPreview.src" alt="">
+                                    <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
+                                    <img :src="avatarPreview.src" alt="" v-else>
                                 </div></div>
                             </label>
 

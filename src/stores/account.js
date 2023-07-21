@@ -5,6 +5,7 @@ const account = {
     tempUserName: useLocalStorage('tempUserName'),
     avatar: null,
     signature: null,
+    demo: false,
 
     moonPassport: null,
     moonPassportOwnerAddress: useLocalStorage('moonPassportOwnerAddress'),

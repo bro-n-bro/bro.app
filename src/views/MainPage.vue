@@ -1,13 +1,20 @@
 <template>
-    <section class="main_page" v-if="!store.isAuth">
+    <template v-if="!route.query.connect">
+    <section class="main_page" v-if="!store.isAuth || store.isAuth && !store.account.moonPassportOwner">
         <div class="cont">
-            <div class="title" v-html="$t('message.main_page_title')"></div>
+            <div class="title">
+                {{ $t('message.main_page_title') }}
+            </div>
 
-            <button class="btn" @click.prevent="connectWallet()">
+            <button class="btn" @click.prevent="emitter.emit('initApp')" v-if="!store.isKeplrConnected">
                 {{ $t('message.btn_connect_wallet') }}
             </button>
 
-            <div class="demo_desc">
+            <router-link class="btn" to="/create_passport" v-else>
+                {{ $t('message.btn_create_passport') }}
+            </router-link>
+
+            <div class="demo_desc" v-if="!store.isKeplrConnected">
                 {{ $t('message.main_page_demo_text') }}
 
                 <router-link to="/account/cosmoshub?demo=true">
@@ -20,51 +27,48 @@
 
         <img src="@/assets/images/bg_main_page.jpg" alt="" class="bg">
     </section>
+    </template>
 </template>
 
 
 <script setup>
-    import { inject, watchEffect, onBeforeMount } from 'vue'
+    import { inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useRouter, useRoute } from 'vue-router'
+    import { useRoute, useRouter } from 'vue-router'
 
 
     const emitter = inject('emitter'),
         store = useGlobalStore(),
-        router = useRouter(),
+        i18n = inject('i18n'),
         route = useRoute(),
-        i18n = inject('i18n')
+        router = useRouter()
 
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
         // Set default notification
         store.tooltip = i18n.global.t('message.notice_default_main_page')
 
         // Reset state if hit the main page
-        if (route.fullPath == '/') {
+        if (store.account.demo) {
             store.$reset()
-
             store.isAppFullLoaded = true
         }
-    })
 
+        // Connect wallet
+        if (route.query.connect) {
+            // Reset state
+            store.$reset()
+            store.isAppFullLoaded = true
 
-    watchEffect(() => {
-        // Monitor the connection of the Keplr
-        if(store.isAuth && store.isAppFullLoaded && !store.account.demo) {
-            !store.demo
+            // Init app
+            await store.initApp()
+
+            // Reload
+            store.account.moonPassport
                 ? router.push('/account/cosmoshub')
-                : router.push('/account/cosmoshub?demo=true')
+                : router.push('/create_passport')
         }
     })
-
-
-    // Connect wallet
-    function connectWallet() {
-        window.Keplr
-            ? emitter.emit('initApp')
-            : router.push('/keplr_error')
-    }
 </script>
 
 
@@ -87,24 +91,24 @@
         flex: 1 0 auto;
     }
 
-    .main_page:after
-    {
-        position: absolute;
-        z-index: 5;
-        bottom: 0;
-        left: 0;
+    /* .main_page:after
+        {
+            position: absolute;
+            z-index: 5;
+            bottom: 0;
+            left: 0;
 
-        display: block;
+            display: block;
 
-        width: 100%;
-        height: 416px;
+            width: 100%;
+            height: 416px;
 
-        content: '';
-        pointer-events: none;
+            content: '';
+            pointer-events: none;
 
-        opacity: .6;
-        background: linear-gradient(180deg, rgba(0, 0, 0, .00) 0%, #000 100%);
-    }
+            opacity: .6;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .00) 0%, #000 100%);
+        } */
 
 
     .main_page .cont
@@ -129,13 +133,18 @@
 
     .main_page .btn
     {
+        color: currentColor;
         font-weight: 600;
+
+        display: inline-block;
 
         min-width: 180px;
         margin-top: 40px;
         padding: 20px;
 
         transition: .2s linear;
+        vertical-align: top;
+        text-decoration: none;
 
         border-radius: 17px;
         background: #950fff;
@@ -153,7 +162,7 @@
         font-weight: 600;
         line-height: 120%;
 
-        margin-top: 20px;
+        margin-top: 28px;
 
         opacity: .7;
     }
@@ -177,7 +186,7 @@
     {
         position: absolute;
         z-index: 3;
-        top: 348px;
+        top: 300px;
         right: 0;
         left: 0;
 

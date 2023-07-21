@@ -63,7 +63,7 @@
                 <div class="col_number">№{{ proposal.id }}</div>
 
                 <div class="col_type">
-                    <svg class="icon"><use :xlink:href="`/sprite.svg#ic_proposal_${proposal.proposal_type}`"></use></svg>
+                    <svg class="icon"><use :xlink:href="`@/assets/sprite.svg#ic_proposal_${proposal.proposal_type}`"></use></svg>
                 </div>
 
                 <div class="col_status">
@@ -77,7 +77,7 @@
         </div>
 
         <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="proposals.length > 5">
-            <svg class="icon"><use xlink:href="/sprite.svg#ic_arr_down"></use></svg>
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </button>
     </section>
 </template>

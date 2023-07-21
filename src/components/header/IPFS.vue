@@ -1,5 +1,5 @@
 <template>
-    <div class="ipfs_status" :class="{ green: store.IPFSNode }" @mouseover="setNotice">
+    <div class="ipfs_status" :class="{ green: store.IPFSNode || store.demo }" @mouseover="setNotice">
         <div>{{ $t('message.ipfs') }}</div>
     </div>
 </template>

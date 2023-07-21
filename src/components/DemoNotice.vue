@@ -6,11 +6,29 @@
 
         <div class="sep">—</div>
 
-        <router-link to="/create_passport">
-            {{ $t('message.demo_notice_link') }}
-        </router-link>
+        <button class="btn" @click.prevent="connectWallet()">
+            {{ $t('message.btn_connect_wallet') }}
+        </button>
     </div>
 </template>
+
+
+<script setup>
+    import { inject } from 'vue'
+    import { useRouter } from 'vue-router'
+
+
+    const emitter = inject('emitter'),
+        router = useRouter()
+
+
+    // Connect wallet
+    function connectWallet() {
+        window.keplr
+            ? emitter.emit('initApp')
+            : router.push('/keplr_error')
+    }
+</script>
 
 
 <style scoped>
@@ -52,13 +70,9 @@
     }
 
 
-    .demo_notice a
+    .demo_notice .btn
     {
-        color: currentColor;
-
         margin-left: 6px;
-
-        text-decoration: none;
 
         border-bottom: 1px solid;
     }

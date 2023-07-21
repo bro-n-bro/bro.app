@@ -47,6 +47,7 @@
     import { computed, onBeforeMount, inject } from 'vue'
     import { useRoute } from 'vue-router'
     import { useGlobalStore } from '@/stores'
+    import { useRouter } from 'vue-router'
     import { useTitle } from '@vueuse/core'
 
 
@@ -54,6 +55,7 @@
         layout = computed(() => route.meta.layout || 'default-layout'),
         store = useGlobalStore(),
         i18n = inject('i18n'),
+        router = useRouter(),
         emitter = inject('emitter'),
         title = useTitle()
 
@@ -74,7 +76,11 @@
 
 
     // Event "init APP"
-    emitter.on('initApp', async () => await store.initApp())
+    emitter.on('initApp', async () => {
+        window.keplr
+            ? router.push('/?connect=true')
+            : router.push('/keplr_error')
+    })
 
 
     // Event "set notification"

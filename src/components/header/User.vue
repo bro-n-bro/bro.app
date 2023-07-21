@@ -21,7 +21,7 @@
         <template v-else>
         <div class="account_link">
             <div class="icon">
-                <svg><use xlink:href="/sprite.svg#ic_wallet"></use></svg>
+                <svg><use xlink:href="@/assets/sprite.svg#ic_wallet"></use></svg>
             </div>
 
             <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">

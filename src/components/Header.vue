@@ -42,7 +42,7 @@
                 <!-- User info -->
                 <User v-if="store.isAuth" />
 
-                <ConnectBtn v-if="!store.isAuth && route.name != 'KeplrError' && route.name != 'KeplrReload'" />
+                <!-- <ConnectBtn v-if="!store.isAuth && route.name != 'KeplrError' && route.name != 'KeplrReload'" /> -->
             </div>
         </div>
     </header>
@@ -60,7 +60,7 @@
     import IPFS from '../components/header/IPFS.vue'
     import Currency from '../components/header/Currency.vue'
     import User from '../components/header/User.vue'
-    import ConnectBtn from '../components/header/ConnectBtn.vue'
+    // import ConnectBtn from '../components/header/ConnectBtn.vue'
 
 
     const store = useGlobalStore(),

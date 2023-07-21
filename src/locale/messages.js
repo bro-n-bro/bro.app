@@ -16,7 +16,7 @@ export default {
 
 
             // Main page
-            'main_page_title': 'Create your passport, to unlock the full potential of the features available?',
+            'main_page_title': 'Manage all your crypto in a single place',
             'main_page_demo_text': 'For a brief set of instructions, please refer to the',
             'main_page_demo_link': 'Demo',
 
@@ -178,7 +178,6 @@ export default {
 
             // Demo notice
             'demo_notice_text': 'Demo Mode',
-            'demo_notice_link': 'Create passport',
 
 
             // Footer
@@ -395,6 +394,7 @@ export default {
             'btn_update': 'Update',
             'btn_change_image': 'Change image',
             'btn_settings': 'Setting',
+            'btn_create_passport': 'Create passport',
         }
     }
 }

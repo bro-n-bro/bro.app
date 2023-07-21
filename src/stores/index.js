@@ -173,7 +173,6 @@ export const useGlobalStore = defineStore('global', {
             this.isAppFullLoaded = true
             this.isKeplrConnected = true
             this.isAuth = true
-            this.IPFSNode = true
         },
 
 
@@ -181,6 +180,8 @@ export const useGlobalStore = defineStore('global', {
         async initApp(updateOwnerMoonPassport = true, updateAvatar = true) {
             // Keplr connect
             await createKeplrOfflineSinger('cosmoshub-4')
+
+            this.isKeplrConnected = true
 
             // Set jsCyber
             let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)

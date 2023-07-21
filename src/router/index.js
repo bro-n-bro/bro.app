@@ -13,7 +13,7 @@ const routes = [
         component: () => import('../views/Error404.vue'),
         meta: {
             layout: errorLayout,
-            accessDenied: ['without_keplr']
+            accessDenied: []
         }
     },
     {
@@ -115,35 +115,33 @@ router.beforeResolve(async (to, from, next) => {
 	demo ? store.demo = true : store.demo = false
 
 	// Referer
-	if(referer) {
+	if (referer) {
 		store.referer = referer
 	}
 
 	// Current network from url
-	if(to.params.network) {
+	if (to.params.network) {
 		store.currentNetwork = to.params.network
 	}
 
 	// Current proposal from url
-	if(to.params.proposal_id) {
+	if (to.params.proposal_id) {
 		store.currentProposalId = to.params.proposal_id
 	}
 
 
 	// Get currencies price
-	if(!store.prices) {
+	if (!store.prices) {
 		await store.getCurrenciesPrice()
 	}
 
 
     // Init APP
-	if(!store.isKeplrConnected && window.keplr) {
-		store.demo
-			? store.initDemo()
-			: await store.initApp()
-    } else {
-		if (store.demo) {
-			store.initDemo()
+	if (to.fullPath != '/' && to.fullPath != '/keplr_error' && to.fullPath != '/keplr_reload' && to.fullPath != '/under_construction') {
+		if(!store.isAuth) {
+			store.demo
+				? store.initDemo()
+				: await store.initApp()
 		}
 	}
 
@@ -153,7 +151,7 @@ router.beforeResolve(async (to, from, next) => {
 		// Array with prohibitions
 		let access = record.meta.accessDenied
 
-		if(access.length && !store.demo) {
+		if(access.length && !store.account.demo) {
 			// Forbidden without keplr
 			if(access.includes('without_keplr') && !window.keplr) {
 				next({ name: 'KeplrError' })
@@ -163,15 +161,6 @@ router.beforeResolve(async (to, from, next) => {
 
 			// Forbidden with keplr
 			if(access.includes('with_keplr') && window.keplr) {
-				!store.demo
-					? next('/')
-					: next('/?demo=true')
-
-				return false
-			}
-
-			// Wallet not connected
-			if (access.includes('not_connected') && !store.isKeplrConnected) {
 				!store.demo
 					? next('/')
 					: next('/?demo=true')
@@ -198,10 +187,19 @@ router.beforeResolve(async (to, from, next) => {
 			}
 
 			// Forbidden with a global passport
-			if (access.includes('with_global_passport') && store.account.moonPassportOwner && !store.account.moonPassport) {
+			// if (access.includes('with_global_passport') && store.account.moonPassportOwner && !store.account.moonPassport) {
+			// 	!store.demo
+			// 		? next('/account/cosmoshub')
+			// 		: next('/account/cosmoshub?demo=true')
+
+			// 	return false
+			// }
+
+			// Wallet not connected
+			if (access.includes('not_connected') && !store.isKeplrConnected) {
 				!store.demo
-					? next('/account/cosmoshub')
-					: next('/account/cosmoshub?demo=true')
+					? next('/')
+					: next('/?demo=true')
 
 				return false
 			}
