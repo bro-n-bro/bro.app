@@ -414,5 +414,12 @@ export const useGlobalStore = defineStore('global', {
                 }
             }
         },
+
+
+        // Reset
+        customReset() {
+            this.account = account
+            this.Keplr = {}
+        }
     }
 })

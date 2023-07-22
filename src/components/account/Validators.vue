@@ -42,7 +42,7 @@
 
                 <div class="col_network">
                     <div class="logo">
-                        <img :src="`@/assets/${store.currentNetwork}_logo.png`" alt="">
+                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
                     </div>
 
                     <div>{{ store.networks[store.currentNetwork].name }}</div>

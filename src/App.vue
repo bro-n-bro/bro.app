@@ -78,7 +78,7 @@
     // Event "init APP"
     emitter.on('initApp', async () => {
         window.keplr
-            ? router.push('/?connect=true')
+            ? router.push('/')
             : router.push('/keplr_error')
     })
 

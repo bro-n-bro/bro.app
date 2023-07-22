@@ -6,7 +6,7 @@
 
         <div class="sep">—</div>
 
-        <button class="btn" @click.prevent="connectWallet()">
+        <button class="btn" @click.prevent="emitter.emit('initApp')">
             {{ $t('message.btn_connect_wallet') }}
         </button>
     </div>
@@ -15,19 +15,8 @@
 
 <script setup>
     import { inject } from 'vue'
-    import { useRouter } from 'vue-router'
 
-
-    const emitter = inject('emitter'),
-        router = useRouter()
-
-
-    // Connect wallet
-    function connectWallet() {
-        window.keplr
-            ? emitter.emit('initApp')
-            : router.push('/keplr_error')
-    }
+    const emitter = inject('emitter')
 </script>
 
 

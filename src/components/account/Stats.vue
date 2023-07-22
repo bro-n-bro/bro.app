@@ -111,7 +111,7 @@
                         currentNetworkInWallet.info = response
 
                         // Set current data
-                        APR = response.apr
+                        APR.value = response.apr
                     })
 
                 // Sum account rewards
