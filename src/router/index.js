@@ -152,14 +152,12 @@ router.beforeResolve(async (to, from, next) => {
 				? store.initDemo()
 				: await store.initApp()
 		} else{
-			if (window.keplr) {
-				if (!store.account.demo && store.demo) {
-					store.customReset()
-					store.initDemo()
-				} else if (!store.account.moonPassport && !store.isKeplrConnected){
-					store.customReset()
-					await store.initApp()
-				}
+			if (!store.account.demo && store.demo) {
+				store.customReset()
+				store.initDemo()
+			} else if (!store.account.moonPassport && !store.isKeplrConnected){
+				store.customReset()
+				await store.initApp()
 			}
 		}
 	}

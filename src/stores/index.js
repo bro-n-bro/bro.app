@@ -178,37 +178,39 @@ export const useGlobalStore = defineStore('global', {
 
         // Init APP
         async initApp(updateOwnerMoonPassport = true, updateAvatar = true) {
-            // Keplr connect
-            await createKeplrOfflineSinger('cosmoshub-4')
+            if (window.keplr) {
+                // Keplr connect
+                await createKeplrOfflineSinger('cosmoshub-4')
 
-            this.isKeplrConnected = true
+                this.isKeplrConnected = true
 
-            // Set jsCyber
-            let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
+                // Set jsCyber
+                let tendermintClient = await Tendermint34Client.connect(this.networks.bostrom.rpc_api)
 
-            this.jsCyber = new CyberClient(tendermintClient)
+                this.jsCyber = new CyberClient(tendermintClient)
 
-            // Get moon passport
-            await this.getMoonPassport()
+                // Get moon passport
+                await this.getMoonPassport()
 
-            if (updateOwnerMoonPassport && this.account.moonPassport && this.account.moonPassportOwnerAddress != this.account.moonPassport.owner) {
-                // Set owner to localStorage
-                this.account.moonPassportOwnerAddress = this.account.moonPassport.owner
+                if (updateOwnerMoonPassport && this.account.moonPassport && this.account.moonPassportOwnerAddress != this.account.moonPassport.owner) {
+                    // Set owner to localStorage
+                    this.account.moonPassportOwnerAddress = this.account.moonPassport.owner
 
-                // Set current wallet
-                this.account.currentWallet = this.account.moonPassportOwnerAddress
+                    // Set current wallet
+                    this.account.currentWallet = this.account.moonPassportOwnerAddress
 
-                // Set owner moon passport
-                this.account.moonPassportOwner = this.account.moonPassport
+                    // Set owner moon passport
+                    this.account.moonPassportOwner = this.account.moonPassport
+                }
+
+                // Get owner moon passport
+                if (updateOwnerMoonPassport && this.account.moonPassportOwnerAddress) {
+                    await this.getOwnerMoonPassport()
+                }
+
+                // Set user info
+                this.setUserInfo(updateAvatar)
             }
-
-            // Get owner moon passport
-            if (updateOwnerMoonPassport && this.account.moonPassportOwnerAddress) {
-                await this.getOwnerMoonPassport()
-            }
-
-            // Set user info
-            this.setUserInfo(updateAvatar)
         },
 
 
