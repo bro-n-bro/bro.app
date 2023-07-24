@@ -418,10 +418,16 @@ export const useGlobalStore = defineStore('global', {
         },
 
 
-        // Reset
-        customReset() {
+        // Reset state
+        async reset() {
+            this.$reset()
+
+            // Currencies price
+            await this.getCurrenciesPrice()
+
+            // Default account and networks info
             this.account = account
-            this.Keplr = {}
+            this.networks = networks
         }
     }
 })

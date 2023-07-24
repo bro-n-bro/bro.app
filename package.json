@@ -18,6 +18,7 @@
 		"@vueuse/core": "^10.2.1",
 		"chart.js": "^4.2.1",
 		"core-js": "^3.8.3",
+		"detect.js": "^2.2.3",
 		"gh-pages": "^4.0.0",
 		"hc-sticky": "^2.2.7",
 		"html-to-image": "^1.11.11",

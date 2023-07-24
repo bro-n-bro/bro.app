@@ -3,10 +3,12 @@
         <div class="cont">
             <img src="@/assets/images/error_404.svg" alt="" class="img">
 
-            <div class="title">{{ $t('message.under_construction_title') }}</div>
+            <div class="title">
+                {{ $t('message.under_construction_title') }}
+            </div>
 
             <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/'" class="back_btn">
-                {{ $t('message.back_home_btn') }}
+                {{ $t('message.btn_back_home') }}
             </router-link>
         </div>
     </section>

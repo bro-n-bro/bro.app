@@ -1,4 +1,8 @@
 <template>
+    <MobilePlug v-if="ua.device.type != 'Desktop'" />
+
+
+    <template v-else>
     <div class="loader_wrap" v-if="!store.isAppFullLoaded">
         <div class="loader"><span></span></div>
     </div>
@@ -40,6 +44,7 @@
             </div>
         </template>
     </notifications>
+    </template>
 </template>
 
 
@@ -50,6 +55,11 @@
     import { useRouter } from 'vue-router'
     import { useTitle } from '@vueuse/core'
 
+    import detect from 'detect.js'
+
+    // Components
+    import MobilePlug from '@/components/MobilePlug.vue'
+
 
     const route = useRoute(),
         layout = computed(() => route.meta.layout || 'default-layout'),
@@ -57,12 +67,19 @@
         i18n = inject('i18n'),
         router = useRouter(),
         emitter = inject('emitter'),
-        title = useTitle()
+        title = useTitle(),
+        ua = detect.parse(navigator.userAgent)
 
 
     onBeforeMount(() => {
         // Set title
         title.value = i18n.global.t('message.page_title')
+
+
+        // Set min. width
+        if (ua.device.type == 'Desktop') {
+            document.querySelector('.wrap').classList.add('desktop')
+        }
 
 
         // Change Keplr account

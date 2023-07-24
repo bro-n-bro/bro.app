@@ -1,5 +1,5 @@
 const network = {
-    name: 'Cosmos hub',
+    name: 'Cosmos Hub',
     lcd_api: 'https://lcd.cosmoshub-4.bronbro.io',
     rpc_api: 'https://rpc.cosmoshub-4.bronbro.io/',
 

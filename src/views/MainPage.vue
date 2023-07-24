@@ -21,15 +21,9 @@
         if (!window.keplr) {
             router.push('/welcome')
         } else {
-            // Reset
-            if (store.account.demo) {
-                store.customReset()
-
-                await store.initApp()
-            }
-
-            // Init app
-            if (!store.isAuth) {
+            // Reset/Init app
+            if (store.account.demo || !store.isAuth) {
+                store.reset()
                 await store.initApp()
             }
 

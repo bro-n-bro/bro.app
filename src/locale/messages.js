@@ -192,6 +192,15 @@ export default {
             'feedback_github_link': 'Github',
 
 
+            // Under construction page
+            'under_construction_title': 'This part of site is under construction',
+
+
+            // Mobile plug
+            'mobile_plug_title': 'Oops!',
+            'mobile_plug_desc': "Bro App not yet supported on mobile devices. Please use a desktop or laptop. We're working on it! Thank you for your patience.",
+
+
             // Notofications
             'notice_default_main_page': 'Welcome to the best Cosmos managing tool.',
             'notice_default_create_passport': 'To create your passport, please ensure that you upload the information correctly. Then you will be asked to sign the transaction.',

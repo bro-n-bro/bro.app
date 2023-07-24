@@ -115,6 +115,15 @@ const router = createRouter({
 })
 
 
+const urlsExceptions = [
+	'/',
+	'/welcome',
+	'/keplr_error',
+	'/keplr_reload',
+	'/under_construction'
+]
+
+
 router.beforeResolve(async (to, from, next) => {
 	let store = useGlobalStore(),
 		referer = to.query.ref,
@@ -146,17 +155,17 @@ router.beforeResolve(async (to, from, next) => {
 
 
     // Init APP
-	if (to.fullPath != '/' && to.fullPath != '/welcome' && to.fullPath != '/keplr_error' && to.fullPath != '/keplr_reload' && to.fullPath != '/under_construction') {
+	if (!urlsExceptions.includes(to.fullPath)) {
 		if (!store.isAuth) {
 			store.demo
 				? store.initDemo()
 				: await store.initApp()
 		} else{
 			if (!store.account.demo && store.demo) {
-				store.customReset()
+				store.reset()
 				store.initDemo()
 			} else if (!store.account.moonPassport && !store.isKeplrConnected){
-				store.customReset()
+				store.reset()
 				await store.initApp()
 			}
 		}

@@ -47,6 +47,7 @@
                 </div>
             </div></div>
 
+
             <template v-for="(item, index) in store.account.moonPassportOwner.extension.addresses" :key="index" v-if="store.account.moonPassportOwner.extension.addresses">
             <div v-if="item.address.substring(0, 2) != '0x' && item.address.substring(0, 5) != 'terra'">
                 <div class="item" @click.self="selectWallet(item.address)" :class="{
@@ -101,6 +102,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div v-else>
                 <div class="item not_supported">
@@ -656,7 +658,7 @@
 
     .connected_addresses .list > *:hover .item .remove_btn,
     .connected_addresses .list > *:hover .item .edit_btn,
-    .connected_addresses .list > *:hover .item .copy_btn
+    .connected_addresses .list > *:hover .item:not(.duplicate) .copy_btn
     {
         display: flex;
     }
