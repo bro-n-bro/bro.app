@@ -124,7 +124,7 @@
                 // Calc wallet info
                 wallet.RPDE = 0
 
-                for (const network of wallet.networks) {
+                for (let network of wallet.networks) {
                     wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
                 }
             } catch (error) {
@@ -136,7 +136,7 @@
         // Calc account info
         store.account.RPDE = 0
 
-        for (const wallet of store.account.wallets) {
+        for (let wallet of store.account.wallets) {
             store.account.info.RPDE += wallet.RPDE
         }
 
@@ -148,7 +148,7 @@
 
             RPDE.value = currentWallet.RPDE
         } else {
-            RPDE.value = store.account.RPDE
+            RPDE.value = store.account.info.RPDE
         }
 
 
