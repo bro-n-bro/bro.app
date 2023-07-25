@@ -188,7 +188,7 @@ export const currencyСonversion = (amount, currency) => {
         toPrice = 1
 
     if (store.currency != 'USDT') {
-        toPrice = store.prices.find(el => el.symbol == store.currentCurrency).price
+        toPrice = store.prices.find(el => el.symbol == currency).price
     }
 
     return amount * (tokenPrice / toPrice)
