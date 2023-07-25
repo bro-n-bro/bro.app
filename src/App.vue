@@ -50,9 +50,8 @@
 
 <script setup>
     import { computed, onBeforeMount, inject } from 'vue'
-    import { useRoute } from 'vue-router'
     import { useGlobalStore } from '@/stores'
-    import { useRouter } from 'vue-router'
+    import { useRouter, useRoute } from 'vue-router'
     import { useTitle } from '@vueuse/core'
 
     import detect from 'detect.js'
@@ -61,14 +60,14 @@
     import MobilePlug from '@/components/MobilePlug.vue'
 
 
-    const route = useRoute(),
-        layout = computed(() => route.meta.layout || 'default-layout'),
-        store = useGlobalStore(),
+    const store = useGlobalStore(),
         i18n = inject('i18n'),
+        route = useRoute(),
         router = useRouter(),
         emitter = inject('emitter'),
         title = useTitle(),
-        ua = detect.parse(navigator.userAgent)
+        ua = detect.parse(navigator.userAgent),
+        layout = computed(() => route.meta.layout || 'default-layout')
 
 
     onBeforeMount(() => {

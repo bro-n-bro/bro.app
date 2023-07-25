@@ -63,7 +63,9 @@
 
     onBeforeMount(() => {
         // Set default notification
-        store.tooltip = i18n.global.t('message.notice_default_account_page')
+        store.demo
+            ? store.tooltip = i18n.global.t('message.notice_demo_default_account_page')
+            : store.tooltip = i18n.global.t('message.notice_default_account_page')
     })
 
 

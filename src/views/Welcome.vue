@@ -39,6 +39,9 @@
 
 
         onBeforeMount(() => {
+            // Delete min. width
+            document.querySelector('.wrap').classList.remove('desktop')
+
             // Reset state if hit the main page
             if (store.account.demo) {
                 store.$reset()

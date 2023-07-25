@@ -19,15 +19,18 @@
 
         // Route
         if (!window.keplr) {
+            // Redirect
             router.push('/welcome')
         } else {
-            // Reset/Init app
             if (store.account.demo || !store.isAuth) {
+                // Reset
                 store.reset()
+
+                // Init app
                 await store.initApp()
             }
 
-            // Reload
+            // Redirect
             store.account.moonPassport
                 ? router.push('/account/cosmoshub')
                 : router.push('/welcome')

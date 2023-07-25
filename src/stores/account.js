@@ -24,9 +24,6 @@ const account = {
         ibc: 0,
     },
     totalTokens: 0,
-
-    personal_APR: 0,
-    delegations_price: 0
 }
 
 export default account

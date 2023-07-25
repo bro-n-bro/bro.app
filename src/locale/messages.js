@@ -177,7 +177,7 @@ export default {
 
 
             // Demo notice
-            'demo_notice_text': 'Demo Mode',
+            'demo_notice_text': 'Finish Demo session',
 
 
             // Footer
@@ -210,6 +210,8 @@ export default {
             'notice_default_proposals_page': 'All proposals including proposals in Deposit period can be found on this page.',
             'notice_default_account_page': 'Welcome to our portfolio management tool. Take control of your investments and optimize your portfolio for maximum returns.',
             'notice_default_proposal_page': 'Detailed overview for the selected proposal.',
+
+            'notice_demo_default_account_page': 'Provides valuable information regarding your interactions inside the app.',
 
             'notice_ipfs_active': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is green because the IPFS node is active and resolves the content.",
             'notice_ipfs_not_active': "The IPFS node is built in right in your browser. It helps store and resolves the content from the distributed storage. NFTs, moon passports, ENS, with contents address, can be resolved right here. It is red because the IPFS node is inactive and not resolves the content.",
@@ -383,7 +385,7 @@ export default {
             // Buttons
             'btn_back_home': 'Back to home',
             'btn_reload': 'Reload',
-            'btn_connect_wallet': 'Сonnect Keplr wallet',
+            'btn_connect_wallet': 'Connect Keplr wallet',
             'btn_reject': 'Reject',
             'btn_confirm': 'Confirm',
             'btn_agree_sign': 'Agree & Sign',

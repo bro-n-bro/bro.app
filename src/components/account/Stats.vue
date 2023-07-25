@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.RPDE, store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.info.RPDE, store.networks[store.currentNetwork].token_name), 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -79,9 +79,9 @@
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
-        totalRewardTokens = ref(0),
-        APR = ref(0),
-        RPDE = ref(0)
+        totalRewardTokens = !store.demo ? ref(0) : ref(40000000),
+        APR = !store.demo ? ref(0) : ref(0.2241),
+        RPDE = !store.demo ? ref(0) : ref(40000000)
 
 
     onBeforeMount(async () => {
@@ -137,7 +137,7 @@
         store.account.RPDE = 0
 
         for (const wallet of store.account.wallets) {
-            store.account.info.RPDE_USDT += wallet.RPDE
+            store.account.info.RPDE += wallet.RPDE
         }
 
 
