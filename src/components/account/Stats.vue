@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.info.RPDE, store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(currencyСonversion(RPDE, store.networks[store.currentNetwork].token_name), 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
