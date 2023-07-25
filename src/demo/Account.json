@@ -331,7 +331,7 @@
         },
         "apr": 0.21256309934412376,
         "rpde": {
-            "amount": 516175.1263657009,
+            "amount": 51.61751263657009,
             "denom": "uatom",
             "exponent": 6,
             "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",

@@ -8,9 +8,9 @@
 
         <transition name="fadeUp" mode="out-in">
         <div class="dropdown" v-show="showDropdown">
-            <div><button class="btn" :class="{ active: store.currentCurrency == 'BTC' }" @click.prevent="selectCurrency('WBTC')">BTC</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'BTC' }" @click.prevent="selectCurrency('BTC')">BTC</button></div>
 
-            <div><button class="btn" :class="{ active: store.currentCurrency == 'ETH' }" @click.prevent="selectCurrency('WETH')">ETH</button></div>
+            <div><button class="btn" :class="{ active: store.currentCurrency == 'ETH' }" @click.prevent="selectCurrency('ETH')">ETH</button></div>
 
             <div><button class="btn" :class="{ active: store.currentCurrency == 'ATOM' }" @click.prevent="selectCurrency('ATOM')">ATOM</button></div>
 
