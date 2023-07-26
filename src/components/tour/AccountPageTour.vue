@@ -12,6 +12,16 @@
 
         <div class="step step0" :class="{'show': currentStep == 0}">
             <div class="title">
+                {{ $t('message.tour_header_title_step0') }}
+            </div>
+
+            <div class="desc">
+                {{ $t('message.tour_header_desc_step0') }}
+            </div>
+        </div>
+
+        <div class="step step1" :class="{'show': currentStep == 1}">
+            <div class="title">
                 {{ $t('message.tour_header_title_step1') }}
             </div>
 
@@ -20,7 +30,7 @@
             </div>
         </div>
 
-        <div class="step step1" :class="{'show': currentStep == 1}">
+        <div class="step step2" :class="{'show': currentStep == 2}">
             <div class="title">
                 {{ $t('message.tour_header_title_step2') }}
             </div>
@@ -30,7 +40,7 @@
             </div>
         </div>
 
-        <div class="step step2" :class="{'show': currentStep == 2}">
+        <div class="step step3" :class="{'show': currentStep == 3}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step1') }}
             </div>
@@ -40,7 +50,7 @@
             </div>
         </div>
 
-        <div class="step step3" :class="{'show': currentStep == 3}">
+        <div class="step step4" :class="{'show': currentStep == 4}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step2') }}
             </div>
@@ -50,7 +60,7 @@
             </div>
         </div>
 
-        <div class="step step4" :class="{'show': currentStep == 4}">
+        <div class="step step5" :class="{'show': currentStep == 5}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step3') }}
             </div>
@@ -60,7 +70,7 @@
             </div>
         </div>
 
-        <div class="step step5" :class="{'show': currentStep == 5}">
+        <div class="step step6" :class="{'show': currentStep == 6}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step4') }}
             </div>
@@ -70,7 +80,7 @@
             </div>
         </div>
 
-        <div class="step step6" :class="{'show': currentStep == 6}">
+        <div class="step step7" :class="{'show': currentStep == 7}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step5') }}
             </div>
@@ -80,7 +90,7 @@
             </div>
         </div>
 
-        <div class="step step7" :class="{'show': currentStep == 7}">
+        <div class="step step8" :class="{'show': currentStep == 8}">
             <div class="title">
                 {{ $t('message.tour_account_page_title_step6') }}
             </div>
@@ -130,6 +140,11 @@
             margin: 'auto',
         }),
         steps = [
+            {
+                scrollSelector: '.wrap',
+                selector: 'header .notifications',
+                position: 'bottom'
+            },
             {
                 scrollSelector: '.wrap',
                 selector: 'header .currency',
@@ -216,6 +231,14 @@
                 tourCoordinates.bottom = 'auto'
                 tourCoordinates.left = blockCoordinates.left + block.offsetWidth/2 + window.scrollX - 140,
                 tourCoordinates.margin = '15px 0 0'
+                break;
+
+            case 'bottom-start':
+                tourCoordinates.top = blockCoordinates.top + window.scrollY + block.offsetHeight
+                tourCoordinates.right = 'auto'
+                tourCoordinates.bottom = 'auto'
+                tourCoordinates.left = blockCoordinates.left,
+                tourCoordinates.margin = '15px 0 0 0'
                 break;
 
             case 'bottom-end':

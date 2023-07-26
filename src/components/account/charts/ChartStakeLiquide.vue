@@ -130,7 +130,7 @@
             </div>
 
 
-            <div class="legend" v-if="currentData.total.unbonding" :class="{'active': chartFirstActiveLegendStake == 2}" @mouseenter="mouseenterLegendStake(2)" @mouseleave="mouseleaveLegendStake()">
+            <div class="legend" v-if="currentData.total.unbonding" :class="{'active': chartActiveLegendStake == 2}" @mouseenter="mouseenterLegendStake(2)" @mouseleave="mouseleaveLegendStake()">
                 <div class="name">
                     <div class="color" style="background-color: #EB5757;"></div>
                     <span>{{ $t('message.account_charts_unbonding_label') }}</span>

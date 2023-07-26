@@ -161,7 +161,7 @@
 
                 <div class="amount">
                     <template v-if="(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), 5) }}</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 

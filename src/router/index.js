@@ -125,16 +125,14 @@ const urlsExceptions = [
 
 
 router.beforeResolve(async (to, from, next) => {
-	let store = useGlobalStore(),
-		referer = to.query.ref,
-		demo = to.query.demo
+	let store = useGlobalStore()
 
 	// Demo
-	demo ? store.demo = true : store.demo = false
+	to.query.demo ? store.demo = true : store.demo = false
 
 	// Referer
-	if (referer) {
-		store.referer = referer
+	if (to.query.ref) {
+		store.referer = to.query.ref
 	}
 
 	// Current network from url
@@ -162,10 +160,16 @@ router.beforeResolve(async (to, from, next) => {
 				: await store.initApp()
 		} else{
 			if (!store.account.demo && store.demo) {
+				// Reset
 				store.reset()
+
+				// Set demo
 				store.initDemo()
 			} else if (!store.account.moonPassport && !store.isKeplrConnected){
+				// Reset
 				store.reset()
+
+				// Init APP
 				await store.initApp()
 			}
 		}

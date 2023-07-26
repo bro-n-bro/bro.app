@@ -81,7 +81,7 @@
         loading = store.demo ? ref(false) : ref(true),
         totalRewardTokens = !store.demo ? ref(0) : ref(40000000),
         APR = !store.demo ? ref(0) : ref(0.2241),
-        RPDE = !store.demo ? ref(0) : ref(40000000)
+        RPDE = !store.demo ? ref(0) : ref(400)
 
 
     onBeforeMount(async () => {

@@ -12,32 +12,32 @@
         "extension": {
             "addresses": [
                 {
-                  "label": "Stride address",
-                  "address": "stride15p6m8taywua86afxqwu25fx9wu3mpx0d757nz0"
+                    "label": "Stride",
+                    "address": "stride17ld6vnfumezwtw36pt37l0xyuknzxghajxevaw"
                 },
                 {
-                  "label": "Omni address",
-                  "address": "omniflix15p6m8taywua86afxqwu25fx9wu3mpx0dqp0kpa"
+                    "label": "Airdrops",
+                    "address": "osmo1qj56cf2k8pwtd0yp50r85frsl4yvwew04qm7nw"
                 },
                 {
-                  "label": "Juno address",
-                  "address": "juno15p6m8taywua86afxqwu25fx9wu3mpx0dtda53l"
+                    "label": "Main",
+                    "address": "juno1rkhrfuq7k2k68k0hctrmv8efyxul6tgn8hny6y"
                 },
                 {
-                  "label": "Cosmos address",
-                  "address": "cosmos15p6m8taywua86afxqwu25fx9wu3mpx0dal70kr"
+                    "label": "Flix",
+                    "address": "omniflix15p6m8taywua86afxqwu25fx9wu3mpx0dqp0kpa"
                 },
                 {
-                  "label": "Test for APP",
-                  "address": "stars15p6m8taywua86afxqwu25fx9wu3mpx0dfrfjaj"
+                    "label": "Pools",
+                    "address": "cosmos1qj56cf2k8pwtd0yp50r85frsl4yvwew0amgw9u"
                 },
                 {
-                  "label": null,
-                  "address": "0x12fd21763b661d55b322a07b6ab251fd62c6d9a0"
+                    "label": null,
+                    "address": "0x12fd21763b661d55b322a07b6ab251fd62c6d9a0"
                 }
             ],
-            "avatar": "QmcX4evCxpG9gFHsZwG9nN5yrUh5JdMkKVs8cpJmtsz3LM",
-            "nickname": "Demo passport name",
+            "avatar": "QmeNYiTMBrMzvuyL26NUuothAestC6dEwGVn5VrpbqS2nw",
+            "nickname": "Demo Bro",
             "data": null,
             "particle": null
         }
@@ -50,24 +50,24 @@
         "extension": {
             "addresses": [
                 {
-                    "label": "Stride address",
-                    "address": "stride15p6m8taywua86afxqwu25fx9wu3mpx0d757nz0"
+                    "label": "Stride",
+                    "address": "stride17ld6vnfumezwtw36pt37l0xyuknzxghajxevaw"
                 },
                 {
-                    "label": "Omni address",
+                    "label": "Airdrops",
+                    "address": "osmo1qj56cf2k8pwtd0yp50r85frsl4yvwew04qm7nw"
+                },
+                {
+                    "label": "Main",
+                    "address": "juno1rkhrfuq7k2k68k0hctrmv8efyxul6tgn8hny6y"
+                },
+                {
+                    "label": "Flix",
                     "address": "omniflix15p6m8taywua86afxqwu25fx9wu3mpx0dqp0kpa"
                 },
                 {
-                    "label": "Juno address",
-                    "address": "juno15p6m8taywua86afxqwu25fx9wu3mpx0dtda53l"
-                },
-                {
-                    "label": "Cosmos address",
-                    "address": "cosmos15p6m8taywua86afxqwu25fx9wu3mpx0dal70kr"
-                },
-                {
-                    "label": "Test for APP",
-                    "address": "stars15p6m8taywua86afxqwu25fx9wu3mpx0dfrfjaj"
+                    "label": "Pools",
+                    "address": "cosmos1qj56cf2k8pwtd0yp50r85frsl4yvwew0amgw9u"
                 },
                 {
                     "label": null,
@@ -75,7 +75,7 @@
                 }
             ],
             "avatar": "QmeNYiTMBrMzvuyL26NUuothAestC6dEwGVn5VrpbqS2nw",
-            "nickname": "Demo passport name",
+            "nickname": "Demo Bro",
             "data": null,
             "particle": null
         }
@@ -85,7 +85,7 @@
     "wallets": [
         {
             "address": "bostrom1smtqmvpaa8tp7ykeafm3h39grla54mawkqjk0n",
-            "nickname": "prevetal666",
+            "nickname": "Demo Bro",
             "info": {},
             "totalTokens": 1321003086.5751326,
             "networks": [
@@ -94,10 +94,10 @@
                     "color": "#2E314B",
                     "price": 9.3723069171,
                     "total": {
-                        "liquid": 29600000,
+                        "liquid": 32300000,
                         "staked": 935380000,
-                        "unbonding": 0,
-                        "rewards": 59496042.3178232,
+                        "unbonding": 50000000,
+                        "rewards": 9500000,
                         "outside": 0,
                         "ibc": 296527044.2573095,
                         "liquid_rewards": 89096042.3178232
@@ -105,9 +105,40 @@
                     "totalTokens": 1321003086.5751326,
                     "balance": {
                         "liquid": {
-                        "native": [
+                            "native": [
+                                {
+                                    "amount": 32300000,
+                                    "denom": "uatom",
+                                    "exponent": 6,
+                                    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+                                    "price": 9.3723069171,
+                                    "symbol": "ATOM"
+                                }
+                            ],
+                            "ibc": [
+                                {
+                                    "amount": 10000000000,
+                                    "denom": "boot",
+                                    "exponent": 0,
+                                    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
+                                    "price": 1.41e-8,
+                                    "symbol": "BOOT",
+                                    "amountCurrentDenom": 15.044321664577811
+                                },
+                                {
+                                    "amount": 1128000000,
+                                    "denom": "ujuno",
+                                    "exponent": 6,
+                                    "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
+                                    "price": 0.2638142468,
+                                    "symbol": "JUNO",
+                                    "amountCurrentDenom": 281.4827225927317
+                                }
+                            ]
+                        },
+                        "staked": [
                             {
-                                "amount": 29600000,
+                                "amount": 935380000,
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
@@ -115,116 +146,92 @@
                                 "symbol": "ATOM"
                             }
                         ],
-                        "ibc": [
+                        "unbonding": {
+                            "amount": 50000000,
+                            "denom": "uatom",
+                            "exponent": 6,
+                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+                            "price": 9.3723069171,
+                            "symbol": "ATOM"
+                        },
+                        "rewards": [
                             {
-                                "amount": 10000000000,
-                                "denom": "boot",
-                                "exponent": 0,
-                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                "price": 1.41e-8,
-                                "symbol": "BOOT",
-                                "amountCurrentDenom": 15.044321664577811
+                                "amount": 1070.9993344144209,
+                                "denom": "untrn",
+                                "exponent": 6,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
+                                "price": 0.402942,
+                                "symbol": "NTRN",
+                                "amountCurrentDenom": 46045.292543743e-9
                             },
                             {
-                                "amount": 10000000000,
-                                "denom": "ujuno",
+                                "amount": 9.55988110093,
+                                "denom": "stuatom",
                                 "exponent": 6,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
+                                "price": 10.6976349036,
+                                "symbol": "stATOM",
+                                "amountCurrentDenom": 10911.73375393673e-9
+                            },
+                            {
+                                "amount": 0.01141964818,
+                                "denom": "uumee",
+                                "exponent": 6,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
+                                "price": 0.004358374,
+                                "symbol": "UMEE",
+                                "amountCurrentDenom": 53104.4257908912e-16
+                            },
+                            {
+                                "amount": 9495985.36079159,
+                                "denom": "uatom",
+                                "exponent": 6,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+                                "price": 9.3723069171,
+                                "symbol": "ATOM",
+                                "amountCurrentDenom": 59.49598536079159
+                            }
+                        ],
+                        "groupByDenom": [
+                            {
+                                "amount": 1024475985.3607915,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+                                "symbol": "ATOM"
+                            },
+                            {
+                                "amount": 281482722.5927317,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                "price": 0.2638142468,
-                                "symbol": "JUNO",
-                                "amountCurrentDenom": 281.4827225927317
+                                "symbol": "JUNO"
+                            },
+                            {
+                                "amount": 15044321.664577812,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
+                                "symbol": "BOOT"
+                            },
+                            {
+                                "amount": 46.045292543743,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
+                                "symbol": "NTRN"
+                            },
+                            {
+                                "amount": 10.91173375393673,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
+                                "symbol": "stATOM"
+                            },
+                            {
+                                "amount": 53104.4257908912e-10,
+                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
+                                "symbol": "UMEE"
                             }
                         ]
                     },
-                    "staked": [
-                        {
-                            "amount": 935380000,
-                            "denom": "uatom",
-                            "exponent": 6,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                            "price": 9.3723069171,
-                            "symbol": "ATOM"
-                        }
-                    ],
-                    "unbonding": null,
-                    "rewards": [
-                        {
-                            "amount": 1070.9993344144209,
-                            "denom": "untrn",
-                            "exponent": 6,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                            "price": 0.402942,
-                            "symbol": "NTRN",
-                            "amountCurrentDenom": 46045.292543743e-9
-                        },
-                        {
-                            "amount": 9.55988110093,
-                            "denom": "stuatom",
-                            "exponent": 6,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                            "price": 10.6976349036,
-                            "symbol": "stATOM",
-                            "amountCurrentDenom": 10911.73375393673e-9
-                        },
-                        {
-                            "amount": 0.01141964818,
-                            "denom": "uumee",
-                            "exponent": 6,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                            "price": 0.004358374,
-                            "symbol": "UMEE",
-                            "amountCurrentDenom": 53104.4257908912e-16
-                        },
-                        {
-                            "amount": 59495985.36079159,
-                            "denom": "uatom",
-                            "exponent": 6,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                            "price": 9.3723069171,
-                            "symbol": "ATOM",
-                            "amountCurrentDenom": 59.49598536079159
-                        }
-                    ],
-                    "groupByDenom": [
-                        {
-                            "amount": 1024475985.3607915,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                            "symbol": "ATOM"
-                        },
-                        {
-                            "amount": 281482722.5927317,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                            "symbol": "JUNO"
-                        },
-                        {
-                            "amount": 15044321.664577812,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                            "symbol": "BOOT"
-                        },
-                        {
-                            "amount": 46.045292543743,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                            "symbol": "NTRN"
-                        },
-                        {
-                            "amount": 10.91173375393673,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                            "symbol": "stATOM"
-                        },
-                        {
-                            "amount": 53104.4257908912e-10,
-                            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                            "symbol": "UMEE"
-                        }
-                    ]
-                },
-                "address": "cosmos1smtqmvpaa8tp7ykeafm3h39grla54maw4nx935"
-            }
-          ]
+                    "address": "cosmos1smtqmvpaa8tp7ykeafm3h39grla54maw4nx935"
+                }
+            ]
         },
         {
             "address": "bostrom15p6m8taywua86afxqwu25fx9wu3mpx0d7v2ugy",
-            "nickname": "Stride address",
+            "nickname": "Stride",
             "info": {},
             "totalTokens": 1420594841.1846888,
             "networks": [
@@ -235,7 +242,7 @@
                     "total": {
                         "liquid": 576440000,
                         "staked": 300000000,
-                        "unbonding": 0,
+                        "unbonding": 50000000,
                         "rewards": 6292290.951453108,
                         "outside": 0,
                         "ibc": 537862550.2332357,

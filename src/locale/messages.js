@@ -168,7 +168,7 @@ export default {
             'account_passport_value': 'Passport Value',
 
             'account_copy_tooltip': 'Address copied',
-            'account_duplicate_ext': 'Duplicate address',
+            'account_duplicate_ext': 'Duplicated address',
             'account_not_supported_ext': 'Not supported',
 
 
@@ -361,6 +361,7 @@ export default {
 
 
             // Tours
+            'tour_header_title_step0': 'Tooltip',
             'tour_header_title_step1': 'Portfolio Currency',
             'tour_header_title_step2': 'Your Digital Identity',
 
@@ -371,6 +372,7 @@ export default {
             'tour_account_page_title_step5': 'Validators',
             'tour_account_page_title_step6': 'Governance',
 
+            'tour_header_desc_step0': 'Provides valuable information regarding your interactions inside the app',
             'tour_header_desc_step1': 'Allows you to conveniently change between different currencies and view portfolio evaluations within the app',
             'tour_header_desc_step2': 'Allows you to authenticate yourself, securely interact with others, and engage in transactions with confidence',
 

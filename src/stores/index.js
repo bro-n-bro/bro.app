@@ -420,14 +420,13 @@ export const useGlobalStore = defineStore('global', {
 
         // Reset state
         async reset() {
-            this.$reset()
-
-            // Currencies price
-            await this.getCurrenciesPrice()
-
-            // Default account and networks info
+            this.Keplr = {}
             this.account = account
             this.networks = networks
+
+            this.isAppFullLoaded = false
+            this.isKeplrConnected = false
+            this.isAuth = false
         }
     }
 })
