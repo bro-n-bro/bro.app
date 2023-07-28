@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div class="tour_overlay" @click.prevent="closeTour()"></div>
+    <div class="tour_overlay"></div>
 </template>
 
 
@@ -143,7 +143,7 @@
             {
                 scrollSelector: '.wrap',
                 selector: 'header .notifications',
-                position: 'bottom'
+                position: 'bottom-start'
             },
             {
                 scrollSelector: '.wrap',
@@ -190,7 +190,7 @@
 
     onMounted(() => {
         // Start tour
-        selectStep()
+        setTimeout(() => selectStep(), 100)
     })
 
 
@@ -361,6 +361,20 @@
         display: block;
 
         margin-top: -15px;
+
+        transform: rotate(-90deg);
+    }
+
+    .tour.bottom-start:before
+    {
+        top: auto;
+        right: auto;
+        bottom: 100%;
+        left: 40px;
+
+        display: block;
+
+        margin-bottom: -7px;
 
         transform: rotate(-90deg);
     }

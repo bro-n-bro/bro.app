@@ -268,6 +268,32 @@ export default {
             'add_address_duplicated_label': 'Duplicated',
 
 
+            // Validator modal
+            'validator_modal_title': 'Validator details',
+
+            'validator_modal_website_btn': 'Website',
+            'validator_modal_mintscan_btn': 'Mintscan',
+            'validator_modal_broscore_btn': 'Bro Score',
+
+            'validator_modal_active_set': 'Active',
+            'validator_modal_inactive_set': 'Inactive',
+
+            'validator_modal_operator_address_label': 'Operator Address',
+            'validator_modal_details_label': 'Details',
+
+            'validator_modal_commission_label': 'Commission',
+            'validator_modal_ownership_label': 'Self Bonded/<br>Ownership',
+            'validator_modal_total_delegated_label': 'Total delegated amount',
+            'validator_modal_voted_label': 'Props voted',
+            'validator_modal_blurring_label': 'Tokens blurring',
+
+            'validator_modal_col_commission_notice': "The percentage of validator's commision.",
+            'validator_modal_col_self_bonded_ownership_notice': 'The number of tokens delegated to yourself. The ratio of the number of tokens delegated to yourself to the total number of delegations.',
+            'validator_modal_col_voted_notice': 'This criterion is about the number of votes ({voted}) for the last 5 ended proposals.',
+            'validator_modal_col_total_delegated_notice': 'Total amount of tokens delegated to the validator',
+            'validator_modal_col_blurring_notice': 'This criterion shows how many tokens were lost by the validator on the slashing in fractions.',
+
+
             // Notofications
             'notification_progress_title': 'Transaction is in progress',
             'notification_successful_title': 'Transaction successful',

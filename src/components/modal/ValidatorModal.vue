@@ -10,19 +10,26 @@
                     {{ $t('message.validator_modal_title') }}
                 </div>
 
+
+                <div class="loader_wrap" v-if="loading">
+                    <div class="loader"><span></span></div>
+                </div>
+
+
+                <template v-else>
                 <div class="row">
                     <div class="logo">
                         <div class="power">
-                            {{ store.validatorInfo.result[0][getValidatorInfo('validator_rank')] }}
+                            {{ store.validatorInfo.voting_power_rank }}
                             <svg><use xlink:href="@/assets/sprite.svg#bg_rank"></use></svg>
                         </div>
 
-                        <img :src="store.validatorInfo.result[0][getValidatorInfo('logo_path')]" alt="" @error="imageLoadError">
+                        <img :src="store.validatorInfo.mintscan_avatar_url" alt="" @error="imageLoadError">
                         <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                     </div>
 
                     <div class="info">
-                        <div class="name">{{ props.validator.moniker }}</div>
+                        <div class="name">{{ store.validatorInfo.moniker }}</div>
 
                         <div class="operator_address">
                             <div class="label">
@@ -30,13 +37,13 @@
                             </div>
 
                             <div class="val">
-                                {{ props.validator.operator_address }}
+                                {{ store.validatorInfo.operator_address }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="active_set" :class="{ green: store.validatorInfo.result[0][getValidatorInfo('is_active_set')] }">
-                        <template v-if="store.validatorInfo.result[0][getValidatorInfo('is_active_set')]">
+                    <div class="active_set" :class="{ green: store.validatorInfo.is_active }">
+                        <template v-if="store.validatorInfo.is_active">
                         <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
                         <span>{{ $t('message.validator_modal_active_set') }}</span>
                         </template>
@@ -49,12 +56,12 @@
                 </div>
 
                 <div class="btns">
-                    <a :href="`https://${props.validator.website.replace('https://', '')}`" target="_blank" rel="noopener nofollow" class="link">
+                    <a :href="`https://${store.validatorInfo.website.replace('https://', '')}`" target="_blank" rel="noopener nofollow" class="link">
                         <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_website"></use></svg>
                         <span>{{ $t('message.validator_modal_website_btn') }}</span>
                     </a>
 
-                    <a :href="`https://www.mintscan.io/${store.networks[store.currentNetwork].mintscanAlias}/validators/${props.validator.operator_address}`" target="_blank" rel="noopener nofollow" class="link" v-if="store.networks[store.currentNetwork].mintscanAlias">
+                    <a :href="`https://www.mintscan.io/${store.networks[store.currentNetwork].mintscanAlias}/validators/${store.validatorInfo.operator_address}`" target="_blank" rel="noopener nofollow" class="link" v-if="store.networks[store.currentNetwork].mintscanAlias">
                         <img src="@/assets/mintscan_logo.png" alt="">
                         <span>{{ $t('message.validator_modal_mintscan_btn') }}</span>
                     </a>
@@ -71,19 +78,19 @@
                     </div>
 
                     <div class="val">
-                        {{ props.validator.details }}
+                        {{ store.validatorInfo.details }}
                     </div>
                 </div>
 
                 <div class="features">
                     <div class="row">
-                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_greed_notice'))">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_commission_notice'))">
                             <div class="label">
                                 {{ $t('message.validator_modal_commission_label') }}
                             </div>
 
                             <div class="val">
-                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('greed')] * 100, 2) }}%
+                                {{ $filters.toFixed(store.validatorInfo.commission * 100, 2) }}%
                             </div>
                         </div>
 
@@ -92,11 +99,11 @@
 
                             <div class="val">
                                 <span>
-                                    {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
+                                    {{ new Number($filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }}
                                 </span>
                                 /
                                 <span>
-                                    {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('ownership')] * 100, 2) }}%
+                                    <!-- {{ $filters.toFixed(store.validatorInfo.ownership')] * 100, 2) }}% -->
                                 </span>
                             </div>
                         </div>
@@ -107,17 +114,17 @@
                             </div>
 
                             <div class="val">
-                                {{ new Number($filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('staked')] / store.networks[store.currentNetwork].exponent, 0)).toLocaleString() }}
+                                <!-- {{ new Number($filters.toFixed(store.validatorInfo.staked / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }} -->
                             </div>
                         </div>
 
-                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 2) }))">
+                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_voted_notice', { voted: $filters.toFixed(store.validatorInfo.proposals_voted_amount, 2) }))">
                             <div class="label">
                                 {{ $t('message.validator_modal_voted_label') }}
                             </div>
 
                             <div class="val">
-                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('voted')], 0) }}
+                                {{ $filters.toFixed(store.validatorInfo.proposals_voted_amount, 0) }}
                             </div>
                         </div>
 
@@ -127,11 +134,12 @@
                             </div>
 
                             <div class="val">
-                                {{ $filters.toFixed(store.validatorInfo.result[0][getValidatorInfo('blurring')] * 100, 2) }}%
+                                <!-- {{ $filters.toFixed(store.validatorInfo.staked / store.validatorInfo.delegator_shares * 100, 2) }}% -->
                             </div>
                         </div>
                     </div>
                 </div>
+                </template>
             </div>
         </div>
 
@@ -141,25 +149,26 @@
 
 
 <script setup>
-    import { inject } from 'vue'
+    import { inject, onBeforeMount, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
+
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        props = defineProps(['validator'])
+        loading = store.demo ? ref(false) : ref(true)
 
-    await fetch(`https://rpc.bronbro.io/bro_score/?network=${store.currentNetwork}&validator=${props.validator.operator_address}`)
-        .then(res => res.json())
-        .then(response => {
-            store.validatorInfo = response
 
-            // Add blurring
-            store.validatorInfo.schema.push('blurring')
+    onBeforeMount(async () => {
+        await fetch(`https://rpc.bronbro.io/validators/${store.validatorInfo.operator_address}`)
+            .then(res => res.json())
+            .then(response => {
+                // Set data
+                store.validatorInfo = response
 
-            store.validatorInfo.result.forEach(el => {
-                el.push(el[store.validatorInfo.schema.indexOf('staked')] / el[store.validatorInfo.schema.indexOf('delegator_shares')])
+                // Hide loader
+                loading.value = false
             })
-        })
+    })
 
 
     // Replacement of the logo if it is not present
@@ -167,12 +176,6 @@
         event.target.classList.add('hide')
 
         event.target.closest('.logo').style.backgroundColor = store.colors[Math.floor((Math.random()*store.colors.length))]
-    }
-
-
-    // Get validator data from shema
-    function getValidatorInfo(columnName) {
-        return store.validatorInfo.schema.indexOf(columnName)
     }
 </script>
 
@@ -528,4 +531,16 @@
 
         white-space: nowrap;
     }
+
+
+    .loader_wrap
+    {
+        position: relative;
+
+        height: auto;
+        padding: 0;
+
+        background: none;
+    }
+
 </style>

@@ -78,7 +78,7 @@
                                 <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
                             </div>
 
-                            <div class="name" @click.prevent="openValidatorModal(validator)">
+                            <div class="name" @click.prevent="openValidatorModal(validator.operator_address)">
                                 <span>{{ validator.moniker }}</span>
 
                                 <div class="tooltip">
@@ -115,9 +115,7 @@
 
 
         <!-- Validator modal -->
-        <Suspense>
-        <ValidatorModal v-if="showValidatorModal" :validator="validatorInfo" />
-        </Suspense>
+        <ValidatorModal v-if="showValidatorModal" />
     </section>
 </template>
 
@@ -134,8 +132,7 @@
     const store = useGlobalStore(),
         emitter = inject('emitter'),
         loading = store.demo ? ref(false) : ref(true),
-        showValidatorModal = ref(false),
-        validatorInfo = ref({})
+        showValidatorModal = ref(false)
 
     var wallets = reactive([]),
         totalPassportTokens = 0,
@@ -258,8 +255,8 @@
 
 
     // Open validator modal
-    function openValidatorModal(validator) {
-        validatorInfo.value = validator
+    function openValidatorModal(operator_address) {
+        store.validatorInfo.operator_address = operator_address
         showValidatorModal.value = true
 
         document.body.classList.add('lock')

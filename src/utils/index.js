@@ -176,18 +176,20 @@ export const sendTx = async ({ txRaw, client }) => {
 export const currencyСonversion = (amount, currency) => {
     let store = useGlobalStore()
 
-    if (currency == 'ETH') {
-        currency = 'WETH'
-    }
-
-    if (currency == 'BTC') {
-        currency = 'WBTC'
-    }
-
     let tokenPrice = store.prices.find(el => el.symbol == currency).price,
         toPrice = 1
 
     if (store.currency != 'USDT') {
+        currency = store.currentCurrency
+
+        if (currency == 'ETH') {
+            currency = 'WETH'
+        }
+
+        if (currency == 'BTC') {
+            currency = 'WBTC'
+        }
+
         toPrice = store.prices.find(el => el.symbol == currency).price
     }
 

@@ -134,7 +134,7 @@
 
 
         // Calc account info
-        store.account.RPDE = 0
+        store.account.info.RPDE = 0
 
         for (let wallet of store.account.wallets) {
             store.account.info.RPDE += wallet.RPDE

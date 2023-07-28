@@ -1,13 +1,11 @@
 <template>
     <section class="notifications" v-if="store.tooltip">
-        <div class="cont">
-            <div class="data" :class="{ animate: store.tooltipAnimate }">
-                <div class="icon">
-                    <svg><use xlink:href="@/assets/sprite.svg#ic_notification"></use></svg>
-                </div>
-
-                <span>{{ store.tooltip }}</span>
+        <div class="data" :class="{ animate: store.tooltipAnimate }">
+            <div class="icon">
+                <svg><use xlink:href="@/assets/sprite.svg#ic_notification"></use></svg>
             </div>
+
+            <span>{{ store.tooltip }}</span>
         </div>
     </section>
 </template>

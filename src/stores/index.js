@@ -64,7 +64,7 @@ export const useGlobalStore = defineStore('global', {
 
         referer: null,
         demo: false,
-        tour: true,
+        tour: false,
 
         currentNetwork: null,
         currentProposalId: null,
@@ -86,7 +86,9 @@ export const useGlobalStore = defineStore('global', {
 
         prices: null,
         lastTXS: null,
-        validatorInfo: null,
+        validatorInfo: {
+            operator_address: null
+        },
         needReload: false,
 
         networkColors: {
@@ -281,7 +283,9 @@ export const useGlobalStore = defineStore('global', {
                 this.account.wallets.push({
                     address: this.account.moonPassportOwner.owner,
                     nickname: this.account.moonPassportOwner.extension.nickname,
-                    info: {},
+                    info: {
+                        RPDE: 0
+                    },
                     totalTokens: 0,
                     networks: [
                         {
@@ -322,7 +326,9 @@ export const useGlobalStore = defineStore('global', {
                                 this.account.wallets.push({
                                     address: generateAddress('bostrom', address.address),
                                     nickname: address.label,
-                                    info: {},
+                                    info: {
+                                        RPDE: 0
+                                    },
                                     totalTokens: 0,
                                     networks: [
                                         {

@@ -13,7 +13,9 @@ const account = {
 
     currentWallet: useLocalStorage('currentWallet'),
     wallets: [],
-    info: {},
+    info: {
+        RPDE: 0
+    },
 
     total: {
         liquid: 0,

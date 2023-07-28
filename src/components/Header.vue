@@ -26,23 +26,17 @@
                     </div>
                 </div>
 
-
                 <!-- Notifications -->
                 <Notifications v-if="route.name != 'KeplrError' && route.name != 'KeplrReload'" />
-
 
                 <!-- IPFS -->
                 <IPFS v-if="route.name != 'KeplrError' && route.name != 'KeplrReload'" />
 
-
                 <!-- Currency -->
                 <Currency v-if="store.isAuth" />
 
-
                 <!-- User info -->
                 <User v-if="store.isAuth" />
-
-                <!-- <ConnectBtn v-if="!store.isAuth && route.name != 'KeplrError' && route.name != 'KeplrReload'" /> -->
             </div>
         </div>
     </header>
@@ -60,7 +54,6 @@
     import IPFS from '../components/header/IPFS.vue'
     import Currency from '../components/header/Currency.vue'
     import User from '../components/header/User.vue'
-    // import ConnectBtn from '../components/header/ConnectBtn.vue'
 
 
     const store = useGlobalStore(),

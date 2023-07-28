@@ -1,21 +1,42 @@
 <template>
     <div class="user">
         <template v-if="store.account.moonPassport">
-        <router-link to="/account/cosmoshub" class="account_link">
-            <div class="icon">
-                <svg><use xlink:href="@/assets/sprite.svg#ic_wallet"></use></svg>
-            </div>
+            <template v-if="!store.demo">
+            <router-link to="/account/cosmoshub" class="account_link">
+                <div class="icon">
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_wallet"></use></svg>
+                </div>
 
-            <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">
-                <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
-                <span v-else>{{ store.account.userName }}</span>
-            </div>
-        </router-link>
+                <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">
+                    <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
+                    <span v-else>{{ store.account.userName }}</span>
+                </div>
+            </router-link>
 
-        <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
-            <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
-            <img :src="store.account.avatar" alt="" v-else>
-        </router-link>
+            <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
+                <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
+                <img :src="store.account.avatar" alt="" v-else>
+            </router-link>
+            </template>
+
+
+            <template v-else>
+            <router-link to="/account/cosmoshub?demo=true" class="account_link">
+                <div class="icon">
+                    <svg><use xlink:href="@/assets/sprite.svg#ic_wallet"></use></svg>
+                </div>
+
+                <div class="name" @mouseover="emitter.emit('setNotification', $t('message.notice_username'))">
+                    <span v-if="store.account.moonPassportOwner">{{ store.account.moonPassportOwner.extension.nickname }}</span>
+                    <span v-else>{{ store.account.userName }}</span>
+                </div>
+            </router-link>
+
+            <router-link to="/account/passport?demo=true" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
+                <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
+                <img :src="store.account.avatar" alt="" v-else>
+            </router-link>
+        </template>
         </template>
 
 
