@@ -1082,4 +1082,6 @@ button
 {
     position: relative;
     z-index: 1005;
+
+    pointer-events: none;
 }
