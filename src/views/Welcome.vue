@@ -5,11 +5,11 @@
                 {{ $t('message.main_page_title') }}
             </div>
 
-            <button class="btn" @click.prevent="emitter.emit('initApp')" v-if="!store.isKeplrConnected">
+            <button class="btn" :class="{disabled: ua.device.type != 'Desktop'}" @click.prevent="emitter.emit('initApp')" v-if="!store.isKeplrConnected">
                 {{ $t('message.btn_connect_wallet') }}
             </button>
 
-            <router-link class="btn" to="/create_passport" v-else>
+            <router-link class="btn" :class="{disabled: ua.device.type != 'Desktop'}" to="/create_passport" v-else>
                 {{ $t('message.btn_create_passport') }}
             </router-link>
 
@@ -33,21 +33,21 @@
     import { inject, onBeforeMount } from 'vue'
     import { useGlobalStore } from '@/stores'
 
+    import detect from 'detect.js'
+
 
     const emitter = inject('emitter'),
-        store = useGlobalStore()
+        store = useGlobalStore(),
+        ua = detect.parse(navigator.userAgent)
 
 
-        onBeforeMount(() => {
-            // Delete min. width
-            document.querySelector('.wrap').classList.remove('desktop')
-
-            // Reset state if hit the main page
-            if (store.account.demo) {
-                store.$reset()
-                store.isAppFullLoaded = true
-            }
-        })
+    onBeforeMount(() => {
+        // Reset state if hit the main page
+        if (store.account.demo) {
+            store.$reset()
+            store.isAppFullLoaded = true
+        }
+    })
 </script>
 
 
@@ -108,6 +108,14 @@
 
         border-radius: 17px;
         background: #950fff;
+    }
+
+    .main_page .btn.disabled
+    {
+        cursor: default;
+        pointer-events: none;
+
+        opacity: .5;
     }
 
     .main_page .btn:hover
@@ -174,6 +182,44 @@
 
 
 
+    @media print, (max-width: 1599px)
+    {
+        .main_page
+        {
+            padding-top: 32px;
+        }
+
+
+        .main_page .title
+        {
+            font-size: 34px;
+        }
+
+        .main_page .btn
+        {
+            margin-top: 30px;
+            padding: 16px 20px;
+        }
+
+
+        .main_page .demo_desc
+        {
+            font-size: 15px;
+
+            margin-top: 24px;
+        }
+
+
+        .main_page .img
+        {
+            top: 236px;
+
+            max-width: 75%;
+        }
+    }
+
+
+
     @media print, (max-width: 1439px)
     {
         .main_page
@@ -184,7 +230,7 @@
 
         .main_page .title
         {
-            font-size: 36px;
+            font-size: 34px;
         }
 
         .main_page .btn
@@ -207,6 +253,165 @@
             top: 236px;
 
             max-width: 70%;
+        }
+    }
+
+
+
+    @media print, (max-width: 1359px)
+    {
+        .main_page .title
+        {
+            font-size: 32px;
+        }
+
+
+        .main_page .btn
+        {
+            margin-top: 28px;
+        }
+
+
+        .main_page .demo_desc
+        {
+            font-size: 14px;
+
+            margin-top: 20px;
+        }
+
+
+        .main_page .img
+        {
+            top: 224px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .main_page .title
+        {
+            font-size: 30px;
+        }
+
+
+        .main_page .btn
+        {
+            margin-top: 28px;
+        }
+
+
+        .main_page .demo_desc
+        {
+            font-size: 14px;
+
+            margin-top: 20px;
+        }
+
+
+        .main_page .img
+        {
+            top: 224px;
+        }
+
+
+        .main_page .img
+        {
+            max-width: 90%;
+        }
+    }
+
+
+    @media print, (max-width: 1023px)
+    {
+        .main_page
+        {
+            padding-top: 60px;
+        }
+
+
+        .main_page .title
+        {
+            font-size: 32px;
+        }
+
+
+        .main_page .btn
+        {
+            margin-top: 40px;
+        }
+
+
+        .main_page .demo_desc
+        {
+            font-size: var(--font_size);
+
+            margin-top: 28px;
+        }
+
+
+        .main_page .img
+        {
+            top: 324px;
+
+            max-width: 95%;
+        }
+    }
+
+
+    @media print, (max-width: 767px)
+    {
+        .main_page
+        {
+            padding-top: 40px;
+        }
+
+
+        .main_page .title
+        {
+            font-size: 28px;
+        }
+
+
+        .main_page .btn
+        {
+            margin-top: 28px;
+        }
+
+
+        .main_page .demo_desc
+        {
+            font-weight: 400;
+
+            margin-top: 24px;
+        }
+
+
+        .main_page .img
+        {
+            top: 268px;
+        }
+    }
+
+
+    @media print, (max-width: 479px)
+    {
+        .main_page .title
+        {
+            font-size: 26px;
+        }
+
+
+        .main_page .btn
+        {
+            margin-top: 40px;
+        }
+
+
+        .main_page .img
+        {
+            top: 280px;
         }
     }
 

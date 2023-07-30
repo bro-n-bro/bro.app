@@ -1,7 +1,9 @@
 <template>
     <section class="networks">
-        <div class="title">
-            {{ $t('message.account_networks_title') }}
+        <div class="title" @click.prevent="toggleActiveClass">
+            <span>{{ $t('message.account_networks_title') }}</span>
+
+            <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </div>
 
         <div class="list">
@@ -24,6 +26,12 @@
     import { useGlobalStore } from '@/stores'
 
     const store = useGlobalStore()
+
+
+    // Toggle active class
+    function toggleActiveClass(e) {
+        e.target.classList.toggle('active')
+    }
 </script>
 
 
@@ -44,7 +52,38 @@
         font-weight: 600;
         line-height: 36px;
 
+        display: flex;
+
         margin-bottom: 20px;
+
+        pointer-events: none;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .networks .title > *
+    {
+        pointer-events: none;
+    }
+
+
+    .networks .title .arr
+    {
+        display: none;
+
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
+
+        transition: transform .2s linear;
+    }
+
+    .networks .title.active .arr
+    {
+        transform: rotate(180deg);
     }
 
 
@@ -144,6 +183,107 @@
         {
             font-size: 27px;
             line-height: 33px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .networks .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+
+
+        .networks .name
+        {
+            font-size: 17px;
+        }
+
+        .networks .token
+        {
+            margin-top: 4px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .networks .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+        .networks .name
+        {
+            font-size: 16px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .networks
+        {
+            margin-bottom: 24px;
+        }
+
+
+        .networks .title
+        {
+            margin: 0;
+
+            pointer-events: auto;
+        }
+
+        .networks .title .arr
+        {
+            display: block;
+        }
+
+
+        .networks .list
+        {
+            display: none;
+
+            padding-top: 20px;
+        }
+
+        .networks .title.active ~ .list
+        {
+            display: block;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .networks .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+    }
+
+
+    @media print, (max-width: 767px)
+    {
+        .networks
+        {
+            margin-bottom: 20px;
+        }
+
+
+        .networks .title
+        {
+            font-size: 20px;
+            line-height: 26px;
         }
     }
 

@@ -122,4 +122,55 @@
         color: #7700e1;
     }
 
+
+
+    @media print, (max-width: 1279px)
+    {
+        footer .text
+        {
+            font-size: 16px;
+            line-height: 20px;
+        }
+
+
+        footer .socials
+        {
+            margin-right: 92px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        footer
+        {
+            padding-bottom: 28px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        footer
+        {
+            padding-bottom: 20px;
+        }
+
+
+        footer .text
+        {
+            font-size: 14px;
+        }
+
+
+        footer .socials
+        {
+            width: 100%;
+            margin-top: 20px;
+            margin-right: 0;
+        }
+    }
+
 </style>

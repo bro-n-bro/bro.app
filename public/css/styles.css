@@ -205,14 +205,10 @@ button
     overflow: hidden;
     flex-direction: column;
 
+    min-width: 360px;
     min-height: 100%;
 
     background: var(--bg);
-}
-
-.wrap.desktop
-{
-    min-width: 1512px;
 }
 
 
@@ -613,23 +609,23 @@ button
 ---------------*/
 .fade-enter-active
 {
-    animation: .3s linear fade;
+    animation: .2s linear fade;
 }
 
 .fade-leave-active
 {
-    animation: .3s linear fadeReverse;
+    animation: .2s linear fadeReverse;
 }
 
 
 .fadeUp-enter-active
 {
-    animation: .3s linear fadeUp;
+    animation: .2s linear fadeUp;
 }
 
 .fadeUp-leave-active
 {
-    animation: .3s linear fadeUpReverse;
+    animation: .2s linear fadeUpReverse;
 }
 
 
@@ -1084,4 +1080,52 @@ button
     z-index: 1005;
 
     pointer-events: none;
+}
+
+
+
+@media print, (max-width: 1599px)
+{
+    :root
+    {
+        --font_size: 15px;
+    }
+
+
+    .cont
+    {
+        padding: 0 24px;
+    }
+}
+
+
+
+@media print, (max-width: 1279px)
+{
+    .main
+    {
+        padding-top: 118px;
+    }
+}
+
+
+
+@media print, (max-width: 767px)
+{
+    :root
+    {
+        --font_size: 14px;
+    }
+
+
+    .cont
+    {
+        padding: 0 20px;
+    }
+
+
+    .main
+    {
+        padding-top: 92px;
+    }
 }

@@ -128,4 +128,30 @@
     {
         background: #191919;
     }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .currency
+        {
+            margin-left: 32px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .currency
+        {
+            margin-left: auto;
+        }
+
+
+        .currency .btn
+        {
+            font-size: 14px;
+        }
+    }
 </style>

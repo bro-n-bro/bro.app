@@ -30,9 +30,10 @@
         font-size: 15px;
         font-weight: 500;
         line-height: 18px;
-        margin-left: auto;
+
         position: relative;
 
+        margin-left: auto;
         padding-left: 21px;
     }
 
@@ -61,4 +62,25 @@
         background: currentColor;
     }
 
+
+
+    @media print, (max-width: 1599px)
+    {
+        .ipfs_status
+        {
+            font-size: 14px;
+
+            padding-left: 20px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .ipfs_status
+        {
+            display: none;
+        }
+    }
 </style>

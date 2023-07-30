@@ -119,4 +119,13 @@
         opacity: 1;
     }
 
+
+
+    @media print, (max-width: 767px)
+    {
+        .avatar .edit_link
+        {
+            font-size: 13px;
+        }
+    }
 </style>

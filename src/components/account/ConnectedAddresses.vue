@@ -1,15 +1,19 @@
 <template>
     <section class="connected_addresses">
-        <div class="title">
+        <div class="title" @click.prevent="toggleActiveClass">
             <span>{{ $t('message.account_connected_addresses_title') }}</span>
 
-            <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses" :class="{ active: store.account.currentWallet == 'all' }" @click.prevent="selectWallet('all')">
-                <div class="check">
-                    <svg><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
-                </div>
-                <span>{{ $t('message.account_connected_addresses_all') }}</span>
-            </button>
+            <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
         </div>
+
+
+        <button class="all_btn" v-if="store.account.moonPassportOwner.extension.addresses" :class="{ active: store.account.currentWallet == 'all' }" @click.prevent="selectWallet('all')">
+            <div class="check">
+                <svg><use xlink:href="@/assets/sprite.svg#ic_check"></use></svg>
+            </div>
+            <span>{{ $t('message.account_connected_addresses_all') }}</span>
+        </button>
+
 
         <div class="list">
             <div><div class="item"
@@ -288,6 +292,12 @@
 
         document.body.classList.remove('lock')
     })
+
+
+    // Toggle active class
+    function toggleActiveClass(e) {
+        e.target.classList.toggle('active')
+    }
 </script>
 
 
@@ -313,10 +323,32 @@
 
         margin-bottom: 20px;
 
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         align-content: center;
         flex-wrap: wrap;
+    }
+
+    .connected_addresses .title > *
+    {
+        pointer-events: none;
+    }
+
+
+    .connected_addresses .title .arr
+    {
+        display: none;
+
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
+
+        transition: transform .2s linear;
+    }
+
+    .connected_addresses .title.active .arr
+    {
+        transform: rotate(180deg);
     }
 
 
@@ -325,9 +357,12 @@
         font-size: 14px;
         line-height: 17px;
 
-        display: flex;
+        position: absolute;
+        z-index: 3;
+        top: 21px;
+        right: 14px;
 
-        margin-left: auto;
+        display: flex;
 
         justify-content: flex-start;
         align-items: center;
@@ -755,6 +790,115 @@
         {
             font-size: 27px;
             line-height: 33px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .connected_addresses .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .connected_addresses .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+
+        .connected_addresses .all_btn
+        {
+            top: 18px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .connected_addresses
+        {
+            margin-bottom: 24px;
+            padding: 14px;
+        }
+
+
+        .connected_addresses .title
+        {
+            margin: 0;
+
+            pointer-events: auto;
+        }
+
+        .connected_addresses .title .arr
+        {
+            display: block;
+        }
+
+
+        .connected_addresses .list
+        {
+            display: none;
+
+            padding-top: 20px;
+        }
+
+        .connected_addresses .title.active ~ .list
+        {
+            display: block;
+        }
+
+
+        .connected_addresses .add_btn
+        {
+            display: none;
+        }
+
+        .connected_addresses .title.active ~ .add_btn
+        {
+            display: flex;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .connected_addresses .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+    }
+
+
+    @media print, (max-width: 767px)
+    {
+        .connected_addresses
+        {
+            margin-bottom: 20px;
+        }
+
+
+        .connected_addresses .title
+        {
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+
+        .connected_addresses .all_btn
+        {
+            font-size: 13px;
         }
     }
 

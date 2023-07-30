@@ -443,4 +443,59 @@
         transform: rotate(180deg);
     }
 
+
+
+    @media print, (max-width: 1899px)
+    {
+        .proposals .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .proposals .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .proposals .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .proposals .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .proposals .title
+        {
+            font-size: 20px;
+            line-height: 26px;
+        }
+    }
+
 </style>

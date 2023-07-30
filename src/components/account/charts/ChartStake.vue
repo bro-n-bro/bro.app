@@ -494,4 +494,15 @@
         background: #282828;
     }
 
+
+
+    @media print, (max-width: 1599px)
+    {
+        .block_title
+        {
+            font-size: 19px;
+            line-height: 23px;
+        }
+    }
+
 </style>

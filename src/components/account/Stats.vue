@@ -211,7 +211,7 @@
     .val .currency
     {
         color: #555;
-        font-size: 16px;
+        font-size: var(--font_size);
         font-weight: 400;
         line-height: 100%;
 
@@ -224,15 +224,72 @@
         position: relative;
 
         height: auto;
-        margin: 8px auto -4px;
+        margin: 20px auto 4px;
 
         background: none;
     }
 
     .loader
     {
-        width: 23px;
-        height: 23px;
+        width: 24px;
+        height: 24px;
     }
 
+
+
+    @media print, (max-width: 1599px)
+    {
+        .row
+        {
+            margin-bottom: -12px;
+            margin-left: -12px;
+        }
+
+        .row > *
+        {
+            width: calc(25% - 12px);
+            margin-bottom: 12px;
+            margin-left: 12px;
+        }
+
+
+        .val
+        {
+            font-size: 22px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .val
+        {
+            font-size: 20px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .row
+        {
+            margin-bottom: -10px;
+            margin-left: -10px;
+        }
+
+        .row > *
+        {
+            width: calc(50% - 10px);
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
+
+
+        .val
+        {
+            font-size: 22px;
+        }
+    }
 </style>

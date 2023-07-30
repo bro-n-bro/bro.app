@@ -75,12 +75,6 @@
         title.value = i18n.global.t('message.page_title')
 
 
-        // Set min. width
-        if (ua.device.type == 'Desktop') {
-            document.querySelector('.wrap').classList.add('desktop')
-        }
-
-
         // Change Keplr account
 		window.addEventListener('keplr_keystorechange', () => {
 			// Reload page

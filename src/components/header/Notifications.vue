@@ -18,7 +18,7 @@
 </script>
 
 
-<style>
+<style scoped>
     .notifications
     {
         width: calc(100% - 720px);
@@ -100,10 +100,10 @@
 
 
     /* .notifications .data.animate
-        {
-            animation-name: pulseShadow;
-            animation-duration: 1s;
-        } */
+                {
+                    animation-name: pulseShadow;
+                    animation-duration: 1s;
+                } */
 
 
     .notifications .data:before
@@ -185,6 +185,37 @@
         100%
         {
             transform: rotate(0deg);
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .notifications
+        {
+            width: calc(100% - 690px);
+        }
+
+
+        .notifications .data
+        {
+            font-size: 13px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .notifications
+        {
+            display: none;
+
+            width: 100%;
+            margin-top: 12px;
+
+            order: 3;
         }
     }
 </style>

@@ -4,108 +4,110 @@
             {{ $t('message.account_validators_title') }}
         </div>
 
-        <div class="titles">
-            <div class="col_account_name">
-                {{ $t('message.account_validators_col_account_name') }}
-            </div>
-
-            <div class="col_network">
-                {{ $t('message.account_validators_col_network') }}
-            </div>
-
-            <div class="col_validator">
-                {{ $t('message.account_validators_col_validator') }}
-            </div>
-
-            <div class="col_percent">
-                {{ $t('message.account_validators_col_account_percent') }}
-            </div>
-
-            <div class="col_percent">
-                {{ $t('message.account_validators_col_passport_percent') }}
-            </div>
-        </div>
-
-        <div class="loader_wrap" v-if="loading">
-            <div class="loader"><span></span></div>
-        </div>
-
-        <div class="items" v-else>
-            <!-- <pre>{{ wallets }}</pre> -->
-
-            <template v-for="(wallet, index) in wallets" :key="index" v-if="wallets.length">
-            <div class="item" :class="{ 'hide': index >= 3 && !showAll }" :style="{ order: wallet.totalTokens * -1 }">
+        <div class="scroll">
+            <div class="titles">
                 <div class="col_account_name">
-                    <span v-if="wallet.nickname">{{ wallet.nickname }}</span>
-                    <span v-else>{{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}</span>
+                    {{ $t('message.account_validators_col_account_name') }}
                 </div>
 
                 <div class="col_network">
-                    <div class="logo">
-                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                    </div>
-
-                    <div>{{ store.networks[store.currentNetwork].name }}</div>
+                    {{ $t('message.account_validators_col_network') }}
                 </div>
 
-                <div class="col_validator" @click.prevent="toggleActiveClass" v-if="wallet.validators.length">
-                    <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
-                        <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
-                        <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
-                    </div>
-
-                    <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
+                <div class="col_validator">
+                    {{ $t('message.account_validators_col_validator') }}
                 </div>
-
-                <div class="col_validator empty" v-else>
-                    {{ $t('message.account_validators_empty_text') }}
-                </div>
-
-                <div class="col_percent"></div>
 
                 <div class="col_percent">
-                    {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
+                    {{ $t('message.account_validators_col_account_percent') }}
                 </div>
 
-                <div class="list">
-                    <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index" :style="{ order: validator.coin.amount * -1 }">
-                        <div class="col_account_name"></div>
-                        <div class="col_network"></div>
+                <div class="col_percent">
+                    {{ $t('message.account_validators_col_passport_percent') }}
+                </div>
+            </div>
 
-                        <div class="col_validator">
-                            <div class="logo">
-                                <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
-                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
-                            </div>
+            <div class="loader_wrap" v-if="loading">
+                <div class="loader"><span></span></div>
+            </div>
 
-                            <div class="name" @click.prevent="openValidatorModal(validator.operator_address)">
-                                <span>{{ validator.moniker }}</span>
+            <div class="items" v-else>
+                <!-- <pre>{{ wallets }}</pre> -->
 
-                                <div class="tooltip">
-                                    {{ validator.moniker }}
+                <template v-for="(wallet, index) in wallets" :key="index" v-if="wallets.length">
+                <div class="item" :class="{ 'hide': index >= 3 && !showAll }" :style="{ order: wallet.totalTokens * -1 }">
+                    <div class="col_account_name">
+                        <span v-if="wallet.nickname">{{ wallet.nickname }}</span>
+                        <span v-else>{{ wallet.address.slice(0, 8) + '...' + wallet.address.slice(-5) }}</span>
+                    </div>
+
+                    <div class="col_network">
+                        <div class="logo">
+                            <img :src="`/${store.currentNetwork}_logo.png`" alt="">
+                        </div>
+
+                        <div>{{ store.networks[store.currentNetwork].name }}</div>
+                    </div>
+
+                    <div class="col_validator" @click.prevent="toggleActiveClass" v-if="wallet.validators.length">
+                        <div class="logo" v-for="(validator, validators_index) in wallet.validators" :key="validators_index">
+                            <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
+                        </div>
+
+                        <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
+                    </div>
+
+                    <div class="col_validator empty" v-else>
+                        {{ $t('message.account_validators_empty_text') }}
+                    </div>
+
+                    <div class="col_percent"></div>
+
+                    <div class="col_percent">
+                        {{ $filters.toFixed(wallet.totalTokens / totalPassportTokens * 100, 2) }} %
+                    </div>
+
+                    <div class="list">
+                        <div class="item sub_item" v-for="(validator, validators_index) in wallet.validators" :key="validators_index" :style="{ order: validator.coin.amount * -1 }">
+                            <div class="col_account_name"></div>
+                            <div class="col_network"></div>
+
+                            <div class="col_validator">
+                                <div class="logo">
+                                    <img :src="validator.mintscan_avatar" :alt="validator.moniker" @error="imageLoadError">
+                                    <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
+                                </div>
+
+                                <div class="name" @click.prevent="openValidatorModal(validator.operator_address)">
+                                    <span>{{ validator.moniker }}</span>
+
+                                    <div class="tooltip">
+                                        {{ validator.moniker }}
+                                    </div>
+                                </div>
+
+                                <div class="amount">
+                                    <span>{{ $filters.toFixed(validator.coin.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), 3) }}</span>
+                                    {{ store.networks[store.currentNetwork].token_name }}
                                 </div>
                             </div>
 
-                            <div class="amount">
-                                <span>{{ $filters.toFixed(validator.coin.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), 3) }}</span>
-                                {{ store.networks[store.currentNetwork].token_name }}
+                            <div class="col_percent">
+                                {{ $filters.toFixed(validator.coin.amount / wallet.totalTokens * 100, 2) }} %
                             </div>
-                        </div>
 
-                        <div class="col_percent">
-                            {{ $filters.toFixed(validator.coin.amount / wallet.totalTokens * 100, 2) }} %
-                        </div>
-
-                        <div class="col_percent">
-                            {{ $filters.toFixed(validator.coin.amount / totalPassportTokens * 100, 2) }} %
+                            <div class="col_percent">
+                                {{ $filters.toFixed(validator.coin.amount / totalPassportTokens * 100, 2) }} %
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </template>
+                </template>
 
-            <div class="empty_text" v-else>
-                {{ $t('message.account_validators_empty_text') }}
+                <div class="empty_text" v-else>
+                    {{ $t('message.account_validators_empty_text') }}
+                </div>
             </div>
         </div>
 
@@ -765,4 +767,133 @@
         transform: rotate(180deg);
     }
 
+
+
+    @media print, (max-width: 1899px)
+    {
+        .validators .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .validators .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+
+
+        .validators .item .name[data-v-4232bd9a]
+        {
+            width: calc(100% - 120px);
+        }
+
+
+        .validators .item .amount
+        {
+            width: 80px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .validators .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+
+        .validators .scroll
+        {
+            overflow: auto;
+
+            width: 100%;
+            padding-bottom: 8px;
+
+            scrollbar-color: #950fff var(--bg);
+            scrollbar-width: thin;
+        }
+
+        .validators .scroll::-webkit-scrollbar
+        {
+            width: 4px;
+            height: 4px;
+
+            background-color: var(--bg);
+        }
+
+        .validators .scroll::-webkit-scrollbar-thumb
+        {
+            border-radius: 5px;
+            background-color: #950fff;
+        }
+
+
+        .validators .titles,
+        .validators .items
+        {
+            width: 700px;
+        }
+
+
+        .validators .loader_wrap
+        {
+            padding-top: 16px;
+        }
+
+        .loader
+        {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .validators .titles,
+        .validators .items
+        {
+            width: 100%;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .validators .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .validators .title
+        {
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+
+        .validators .titles,
+        .validators .items
+        {
+            width: 700px;
+        }
+    }
 </style>

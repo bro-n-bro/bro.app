@@ -330,7 +330,6 @@
     .tabs .btn
     {
         color: #555;
-        font-size: 16px;
         line-height: 100%;
 
         display: block;
@@ -368,4 +367,70 @@
         background: none;
     }
 
+
+
+    @media print, (max-width: 1599px)
+    {
+        .tabs .btn
+        {
+            min-height: 56px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .tabs .btn
+        {
+            min-height: 52px;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .tabs
+        {
+            display: block;
+            overflow: auto;
+
+            width: calc(100% + 28px);
+            margin: 0 -14px 20px;
+            padding: 0 14px;
+
+            white-space: nowrap;
+
+            scrollbar-color: transparent transparent !important;
+            scrollbar-width: thin !important;
+        }
+
+        .tabs::-webkit-scrollbar
+        {
+            display: none;
+
+            width: 0 !important;
+            height: 0 !important;
+
+            background-color: transparent !important;
+        }
+
+        .tabs::-webkit-scrollbar-thumb
+        {
+            background-color: transparent !important;
+        }
+
+
+        .tabs .btn
+        {
+            display: inline-block;
+
+            width: 120px;
+            max-width: none;
+            margin: 0;
+
+            vertical-align: top;
+        }
+    }
 </style>

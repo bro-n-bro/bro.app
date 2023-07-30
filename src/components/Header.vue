@@ -138,6 +138,7 @@
     header .logo
     {
         position: relative;
+        z-index: 5;
 
         margin-right: auto;
     }
@@ -237,5 +238,122 @@
         padding: 20px 0;
 
         background: none;
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        header
+        {
+            padding: 12px 0;
+        }
+
+
+        header .cont
+        {
+            padding: 0 24px;
+        }
+
+
+        header .info
+        {
+            min-height: 83px;
+            padding: 12px 0;
+
+            border-radius: 0;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        header .info
+        {
+            min-height: 0;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        header .logo .btn img
+        {
+            height: 60px;
+        }
+
+
+        header .logo .arr
+        {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+
+        header .logo .mini_modal
+        {
+            width: 200px;
+            padding: 4px;
+        }
+
+        header .logo .mini_modal > * + *
+        {
+            margin-top: 4px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        header
+        {
+            padding: 10px 0;
+        }
+
+
+        header .info
+        {
+            padding: 10px 0;
+        }
+
+
+        header .logo .btn img
+        {
+            height: 52px;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        header .logo .btn img
+        {
+            height: 48px;
+        }
+
+
+        header .logo .arr
+        {
+            width: 18px;
+            height: 18px;
+            margin-left: 8px;
+        }
+
+
+        header .logo .mini_modal
+        {
+            width: 180px;
+        }
+
+
+        header .logo .mini_modal img
+        {
+            height: 44px;
+        }
     }
 </style>
