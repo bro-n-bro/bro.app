@@ -23,6 +23,7 @@
         </div>
 
         <img src="@/assets/images/main_page.png" alt="" class="img">
+        <img src="@/assets/images/tablet_main_page.png" alt="" class="tablet_img">
 
         <img src="@/assets/images/bg_main_page.jpg" alt="" class="bg">
     </section>
@@ -115,7 +116,7 @@
         cursor: default;
         pointer-events: none;
 
-        opacity: .5;
+        background: #353535;
     }
 
     .main_page .btn:hover
@@ -150,7 +151,8 @@
 
 
 
-    .main_page .img
+    .main_page .img,
+    .main_page .tablet_img
     {
         position: absolute;
         z-index: 3;
@@ -162,6 +164,16 @@
 
         max-width: 80%;
         margin: 0 auto;
+    }
+
+    .main_page .tablet_img
+    {
+        top: 280px;
+        left: 14px;
+
+        display: none;
+
+        max-width: none;
     }
 
 
@@ -355,7 +367,20 @@
         {
             top: 324px;
 
+            display: none;
+
             max-width: 95%;
+        }
+
+        .main_page .tablet_img
+        {
+            display: block;
+        }
+
+
+        .main_page .bg
+        {
+            height: 120%;
         }
     }
 
@@ -388,9 +413,11 @@
         }
 
 
-        .main_page .img
+        .main_page .tablet_img
         {
             top: 268px;
+
+            max-width: 100%;
         }
     }
 
@@ -409,9 +436,15 @@
         }
 
 
-        .main_page .img
+        .main_page .demo_desc
         {
-            top: 280px;
+            padding: 0 20px;
+        }
+
+
+        .main_page .tablet_img
+        {
+            top: 288px;
         }
     }
 
