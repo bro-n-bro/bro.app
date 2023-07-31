@@ -14,8 +14,10 @@
             </router-link>
 
             <router-link to="/account/passport" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
+                <template v-if="store.account.avatar">
                 <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
                 <img :src="store.account.avatar" alt="" v-else>
+                </template>
             </router-link>
             </template>
 
@@ -32,9 +34,11 @@
                 </div>
             </router-link>
 
-            <router-link to="/account/passport?demo=true" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))">
+            <router-link to="/account/passport?demo=true" class="photo" @mouseover="emitter.emit('setNotification', $t('message.notice_avatar'))" v-if="store.account.avatar">
+                <template v-if="store.account.avatar">
                 <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
                 <img :src="store.account.avatar" alt="" v-else>
+                </template>
             </router-link>
         </template>
         </template>

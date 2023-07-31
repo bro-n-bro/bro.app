@@ -374,32 +374,32 @@
 
     watchEffect(() => {
         // Set tooltip
-        if(activeStep.value == 0) {
+        if (activeStep.value == 0) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_step1')
         }
 
-        if(activeStep.value == 1) {
+        if (activeStep.value == 1) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_step2')
         }
 
-        if(activeStep.value == 2) {
+        if (activeStep.value == 2) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_step3')
         }
 
-        if(activeStep.value == 3) {
+        if (activeStep.value == 3) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_step4')
         }
 
-        if(activeStep.value == 4) {
+        if (activeStep.value == 4) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_step5')
         }
 
-        if(activeStep.value == 5) {
+        if (activeStep.value == 5) {
             // Set notification
             store.tooltip = i18n.global.t('message.notice_add_address_success')
         }
@@ -408,12 +408,10 @@
 
     // Checking if the address was previously added
     function checkAddress(prefix) {
-        if(store.account.moonPassportOwner.extension.addresses) {
+        if (store.account.moonPassportOwner.extension.addresses) {
             let addresses = []
 
-            store.account.moonPassportOwner.extension.addresses.forEach(el => {
-                addresses.push(el.address)
-            })
+            store.account.moonPassportOwner.extension.addresses.forEach(el => addresses.push(el.address))
 
             return addresses.includes(generateAddress(prefix, store.Keplr.account.address))
         }
@@ -421,11 +419,13 @@
 
     // Checking if the wallet was previously added
     function checkAllAddress() {
-        if(store.account.moonPassportOwner.extension.addresses) {
+        if (store.account.moonPassportOwner.extension.addresses) {
             let addresses = []
 
             store.account.moonPassportOwner.extension.addresses.forEach(el => {
-                addresses.push(generateAddress(store.networks.cosmoshub.address_prefix, el.address))
+                if (el.address.substring(0, 2) != '0x' && el.address.substring(0, 5) != 'terra') {
+                    addresses.push(generateAddress(store.networks.cosmoshub.address_prefix, el.address))
+                }
             })
 
             return addresses.includes(store.Keplr.account.address)
@@ -440,7 +440,7 @@
         // Checking if the address was previously added
         let result = checkAddress(store.networks[network].address_prefix)
 
-        if(result) {
+        if (result) {
             duplicate.value = true
 
             // Set notification
@@ -695,7 +695,7 @@
                 ownerAccount.value = false
 
                 // New keplr connect
-                await store.connectWallet(false, false)
+                await store.initApp(false, false)
 
                 // Step 0 and Step 2
                 if (activeStep.value == 1 || activeStep.value == 2) {
@@ -725,7 +725,7 @@
 
                 // Step 3
                 if (activeStep.value == 3) {
-                    if(store.wallets.bostrom == store.account.moonPassportOwnerAddress) {
+                    if(generateAddress('bostrom', store.Keplr.account.address) == store.account.moonPassportOwnerAddress) {
                         // Set condition
                         ownerAccount.value = true
 
@@ -739,7 +739,7 @@
 
                 // Step 4
                 if (activeStep.value == 4) {
-                    if(store.wallets.bostrom != store.account.moonPassportOwnerAddress) {
+                    if(generateAddress('bostrom', store.Keplr.account.address) != store.account.moonPassportOwnerAddress) {
                         // Go to next step
                         activeStep.value -= 1
                     }
@@ -1349,6 +1349,102 @@
     .btn:hover
     {
         background: #7700e1;
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .error .desc
+        {
+            font-size: 22px;
+        }
+
+
+        .step .title
+        {
+            font-size: 22px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .error .desc
+        {
+            font-size: 20px;
+        }
+
+
+        .step .title
+        {
+            font-size: 20px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .title
+        {
+            line-height: 32px;
+        }
+
+
+        .error img
+        {
+            width: 160px;
+        }
+
+
+        .error .desc
+        {
+            font-size: 18px;
+        }
+
+
+        .step .title
+        {
+            font-size: 18px;
+        }
+
+
+
+        .step1 .networks > *
+        {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .error img
+        {
+            margin-bottom: 20px;
+        }
+
+
+        .names > *
+        {
+            font-size: 13px;
+        }
+
+        .names .icon
+        {
+            width: 16px;
+            height: 16px;
+        }
+
+
+        .step .img
+        {
+            height: 140px;
+        }
     }
 
 </style>

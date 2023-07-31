@@ -10,6 +10,13 @@ import account from '@/stores/account'
 // Networks
 import cosmoshub from '@/stores/networks/cosmoshub'
 import bostrom from '@/stores/networks/bostrom'
+import crescent from '@/stores/networks/crescent'
+import gravity from '@/stores/networks/gravity'
+import juno from '@/stores/networks/juno'
+import omniflix from '@/stores/networks/omniflix'
+import osmosis from '@/stores/networks/osmosis'
+import stargaze from '@/stores/networks/stargaze'
+import stride from '@/stores/networks/stride'
 
 // Demo data
 import DemoAccount from '@/demo/Account.json'
@@ -18,38 +25,13 @@ import DemoKeplr from '@/demo/Keplr.json'
 const networks = {
     cosmoshub,
     bostrom,
-    crescent: {
-        name: 'Crescent hub',
-        address_prefix: 'cre',
-    },
-    evmos: {
-        name: 'Evmos',
-        address_prefix: 'evmos',
-    },
-    gravity: {
-        name: 'G-Bridge',
-        address_prefix: 'gravity',
-    },
-    juno: {
-        name: 'Juno',
-        address_prefix: 'juno',
-    },
-    omniflix: {
-        name: 'OmniFlix Network',
-        address_prefix: 'omniflix',
-    },
-    osmosis: {
-        name: 'Osmosis',
-        address_prefix: 'osmo',
-    },
-    stargaze: {
-        name: 'Stargaze',
-        address_prefix: 'stars',
-    },
-    stride: {
-        name: 'Stride',
-        address_prefix: 'stride',
-    },
+    crescent,
+    gravity,
+    juno,
+    omniflix,
+    osmosis,
+    stargaze,
+    stride,
 }
 
 
@@ -374,11 +356,6 @@ export const useGlobalStore = defineStore('global', {
             this.isAuth = true
 
             if (updateAvatar) {
-                // Set robohash avatar
-                this.account.moonPassportOwner
-                    ? this.account.avatar = `https://robohash.org/${this.account.moonPassportOwner.extension.nickname.toLowerCase()}?set=set4`
-                    : this.account.avatar = `https://robohash.org/${this.account.userName.toLowerCase()}?set=set4`
-
                 // Start IPFS
                 if (!this.IPFSNode) {
                     this.IPFSNode = await Ipfs.create()
@@ -396,7 +373,7 @@ export const useGlobalStore = defineStore('global', {
         // Avatar
         async getAvatar() {
             let avatarStatus = false,
-                delay = 5000
+                delay = 3000
 
             // Getting avatar from gateway
             setTimeout(() => {
@@ -408,19 +385,19 @@ export const useGlobalStore = defineStore('global', {
             }, delay)
 
             // Getting avatar from ipfs node
-            if(this.account.moonPassportOwner) {
-                let content = []
+            // if(this.account.moonPassportOwner) {
+            //     let content = []
 
-                for await (let chunk of this.IPFSNode.cat(this.account.moonPassportOwner.extension.avatar)) {
-                    content.push(chunk)
-                }
+            //     for await (let chunk of this.IPFSNode.cat(this.account.moonPassportOwner.extension.avatar)) {
+            //         content.push(chunk)
+            //     }
 
-                if (content.length) {
-                    this.account.avatar = URL.createObjectURL(new Blob(content, { type: 'image/jpeg' }))
+            //     if (content.length) {
+            //         this.account.avatar = URL.createObjectURL(new Blob(content, { type: 'image/jpeg' }))
 
-                    avatarStatus = true
-                }
-            }
+            //         avatarStatus = true
+            //     }
+            // }
         },
 
 

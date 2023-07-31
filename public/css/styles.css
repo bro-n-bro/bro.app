@@ -1100,11 +1100,33 @@ button
 
 
 
+@media print, (max-width: 1359px)
+{
+    .modal_content .modal_title
+    {
+        font-size: 28px;
+    }
+}
+
+
+
 @media print, (max-width: 1279px)
 {
     .main
     {
         padding-top: 118px;
+    }
+
+
+    .modal_content
+    {
+        padding: 32px;
+    }
+
+
+    .modal_content .modal_title
+    {
+        font-size: 26px;
     }
 }
 
@@ -1127,5 +1149,34 @@ button
     .main
     {
         padding-top: 92px;
+    }
+
+
+
+    .modal_content
+    {
+        padding: 24px;
+    }
+
+
+    .modal_content .data > .close_btn
+    {
+        top: 20px;
+    }
+
+
+    .modal_content .modal_title
+    {
+        font-size: 22px;
+    }
+}
+
+
+
+@media print, (max-width: 479px)
+{
+    .modal_content
+    {
+        padding: 12px;
     }
 }

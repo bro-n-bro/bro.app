@@ -1,7 +1,13 @@
 <template>
     <div class="avatar">
+        <div class="loader_wrap" v-if="!store.account.avatar">
+            <div class="loader"><span></span></div>
+        </div>
+
+        <template v-else>
         <img src="/demo_avatar.jpg" alt="" v-if="store.demo">
         <img :src="store.account.avatar" alt="" v-else>
+        </template>
 
         <router-link to="/account/passport?demo=true" class="edit_link" v-if="store.demo">
             <div class="btn">
@@ -121,6 +127,14 @@
 
 
 
+    .loader_wrap
+    {
+        border-radius: 50%;
+        background: none;
+    }
+
+
+
     @media print, (max-width: 767px)
     {
         .avatar .edit_link
@@ -128,4 +142,5 @@
             font-size: 13px;
         }
     }
+
 </style>

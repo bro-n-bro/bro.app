@@ -198,6 +198,8 @@
 
     .data > .row
     {
+        position: relative;
+
         flex-wrap: nowrap;
     }
 
@@ -541,6 +543,164 @@
         padding: 0;
 
         background: none;
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .info .name
+        {
+            font-size: 28px;
+        }
+
+
+
+        .features .row
+        {
+            margin-bottom: -20px;
+            margin-left: -20px;
+        }
+
+        .features .row > *
+        {
+            width: calc(20% - 20px);
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+
+        .features .label
+        {
+            min-height: 48px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .info .name
+        {
+            font-size: 26px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .features .row > *
+        {
+            width: calc(25% - 20px);
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .data > .row
+        {
+            flex-wrap: wrap;
+        }
+
+
+        .logo
+        {
+            padding: 10px;
+        }
+
+
+        .info
+        {
+            width: calc(100% - 120px);
+        }
+
+
+        .info .name
+        {
+            font-size: 20px;
+            line-height: normal;
+
+            min-height: 0;
+        }
+
+
+        .active_set
+        {
+            margin-top: 10px;
+            margin-left: 120px;
+        }
+
+
+
+        .features .row
+        {
+            margin-bottom: -12px;
+            margin-left: -12px;
+        }
+
+        .features .row > *
+        {
+            width: calc(50% - 12px);
+            margin-bottom: 12px;
+            margin-left: 12px;
+        }
+
+
+        .features .label
+        {
+            min-height: 40px;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .modal_content .data
+        {
+            padding: 20px;
+        }
+
+
+        .info
+        {
+            width: 100%;
+            margin-top: 12px;
+            margin-left: 0;
+        }
+
+
+        .active_set
+        {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            margin: 0;
+        }
+
+
+        .btns .link
+        {
+            font-size: 13px;
+        }
+
+        .btns .link .icon
+        {
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+        }
+
+        .btns .link img
+        {
+            width: 20px;
+            height: 17px;
+            margin-right: 6px;
+        }
     }
 
 </style>

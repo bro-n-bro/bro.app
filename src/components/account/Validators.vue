@@ -506,7 +506,7 @@
 
     .validators .sub_item > *.col_validator > *
     {
-        cursor: default;
+        pointer-events: none;
 
         order: 0 !important;
     }
@@ -614,6 +614,7 @@
 
         cursor: pointer;
         transition: color .2s linear;
+        pointer-events: auto;
     }
 
     .validators .item .name span
@@ -896,4 +897,5 @@
             width: 700px;
         }
     }
+
 </style>
