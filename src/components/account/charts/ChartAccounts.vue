@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="percents">
-                        {{ $filters.toFixed(calcPercents(wallet.totalPrice), 2) }}%
+                        {{ $filters.toFixed(calcPercents(wallet.totalTokens), 2) }}%
                     </div>
                 </div>
             </div>
@@ -136,8 +136,8 @@
     function calcPercents(price) {
         let result = 0
 
-        if(store.account.totalPrice) {
-            result = price / store.account.totalPrice * 100
+        if(store.account.totalTokens) {
+            result = price / store.account.totalTokens * 100
         }
 
         return result

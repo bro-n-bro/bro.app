@@ -14,8 +14,7 @@
                 </div>
 
                 <div class="price">
-                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
-                    <span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
             </div>
         </div>

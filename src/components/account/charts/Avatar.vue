@@ -1,6 +1,6 @@
 <template>
     <div class="avatar">
-        <div class="loader_wrap" v-if="!store.account.avatar">
+        <div class="loader_wrap" v-if="!store.account.avatar && !store.demo">
             <div class="loader"><span></span></div>
         </div>
 
