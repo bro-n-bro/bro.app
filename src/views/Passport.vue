@@ -334,7 +334,7 @@
                 })
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             // Show notification
             notification.notify({
@@ -382,7 +382,7 @@
 
             return response
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             return null
         }
@@ -494,7 +494,7 @@
                         })
                     }
                 } catch (error) {
-                    console.log(error)
+                    console.error(error)
 
                     // Show notification
                     notification.notify({
@@ -893,64 +893,6 @@
     }
 
 
-    /* .create_passport .avatar .icon
-                                                                                        {
-                                                                                            position: relative;
-
-                                                                                            width: 18px;
-                                                                                            height: 18px;
-                                                                                            margin: 0 auto 8px;
-                                                                                        }
-
-                                                                                        .create_passport .avatar .icon:before,
-                                                                                        .create_passport .avatar .icon:after
-                                                                                        {
-                                                                                            position: absolute;
-
-                                                                                            display: block;
-
-                                                                                            width: 100%;
-                                                                                            height: 2px;
-                                                                                            margin: auto;
-
-                                                                                            content: '';
-
-                                                                                            background: #950fff;
-
-                                                                                            inset: 0;
-                                                                                        }
-
-                                                                                        .create_passport .avatar .icon:after
-                                                                                        {
-                                                                                            width: 2px;
-                                                                                            height: 100%;
-                                                                                        }
-
-
-                                                                                        .create_passport .avatar .label
-                                                                                        {
-                                                                                            color: #950fff;
-                                                                                            font-family: var(--font_family2);
-                                                                                            font-size: 24px;
-                                                                                            font-weight: 500;
-                                                                                            line-height: 100%;
-
-                                                                                            width: 100%;
-
-                                                                                            text-transform: uppercase;
-                                                                                        }
-
-
-                                                                                        .create_passport .avatar .exp
-                                                                                        {
-                                                                                            color: #4d4d4d;
-                                                                                            line-height: 130%;
-
-                                                                                            width: 100%;
-                                                                                            margin-top: 8px;
-                                                                                        } */
-
-
     .create_passport .avatar .image
     {
         position: absolute;
@@ -987,8 +929,8 @@
 
         display: block;
 
-        width: 342px;
-        height: 342px;
+        width: 100%;
+        height: 100%;
 
         object-fit: cover;
     }
@@ -1315,7 +1257,7 @@
 
         display: block;
 
-        width: 212px;
+        width: auto;
         max-width: 100%;
         height: 256px;
         max-height: calc(100% - 19px);
@@ -1404,6 +1346,349 @@
         100%
         {
             transform: rotate(360deg);
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .create_passport
+        {
+            padding-bottom: 20px;
+        }
+
+
+        .create_passport .back_btn
+        {
+            margin-bottom: 20px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1024px)
+    {
+        .create_passport
+        {
+            padding-bottom: 0;
+        }
+
+
+        .create_passport .data
+        {
+            padding: 40px 80px;
+        }
+
+
+        .create_passport .avatar
+        {
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+
+        .create_passport .data
+        {
+            height: auto;
+        }
+
+        .create_passport .data .bg_line
+        {
+            width: calc(50% - 196px);
+        }
+
+
+        .create_passport .avatar .logo:after
+        {
+            border-radius: 0 0 15px 15px;
+        }
+
+        .create_passport .avatar .logo .corner_bottom_left,
+        .create_passport .avatar .logo .corner_bottom_right
+        {
+            display: none;
+        }
+
+
+        .create_passport .info
+        {
+            width: 100%;
+            min-height: 0;
+            margin-top: 101px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .create_passport .data
+        {
+            padding: 28px 60px 40px;
+        }
+
+
+        .create_passport .data .bg_line
+        {
+            top: 66px;
+
+            width: calc(50% - 165px);
+        }
+
+
+        .create_passport .data .bg_bottom
+        {
+            right: 36px;
+        }
+
+
+        .create_passport .avatar
+        {
+            width: 300px;
+            height: 300px;
+            margin-top: 20px;
+            margin-bottom: 100px;
+        }
+
+        .create_passport .avatar:before
+        {
+            top: -20px;
+            left: -20px;
+
+            width: calc(100% + 40px);
+            height: calc(100% + 40px);
+
+            border-radius: 48px;
+        }
+
+
+        .create_passport .avatar .logo
+        {
+            width: 124px;
+            height: 116px;
+            margin-top: 24px;
+            padding: 16px;
+
+            border-radius: 40px;
+        }
+
+        .create_passport .avatar .logo:before
+        {
+            border-radius: 40px;
+        }
+
+        .create_passport .avatar .logo:after
+        {
+            top: -11px;
+            left: -12px;
+
+            width: calc(100% + 24px);
+            height: calc(100% + 24px);
+        }
+
+        .create_passport .avatar .image img
+        {
+            object-fit: cover;
+        }
+
+        .create_passport .avatar .logo .corner_top_right
+        {
+            top: -4px;
+
+            margin-left: 12px;
+        }
+
+        .create_passport .avatar .logo .corner_top_left
+        {
+            top: -4px;
+
+            margin-right: 12px;
+        }
+
+
+        .create_passport .info
+        {
+            width: calc(100% + 40px);
+            max-width: calc(100% + 40px);
+            margin: 88px -20px 0;
+        }
+
+
+        .create_passport .info .label
+        {
+            margin-bottom: 8px;
+        }
+
+
+        .create_passport .info .input
+        {
+            font-size: 20px;
+        }
+
+
+        .create_passport .info .citizenship .text
+        {
+            font-size: 20px;
+
+            margin-top: 100px;
+        }
+
+
+        .create_passport .bottom_btns
+        {
+            height: auto;
+        }
+
+        .create_passport .bottom_btns .btn
+        {
+            font-size: 20px;
+            line-height: 60px;
+        }
+
+
+        .create_passport .data .gradient
+        {
+            top: -70%;
+            left: -70%;
+
+            width: 240%;
+            height: 240%;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .create_passport .data
+        {
+            padding: 24px 40px;
+        }
+
+
+        .create_passport .data .bg_line
+        {
+            top: 60px;
+
+            width: 32px;
+        }
+
+        .create_passport .data .bg_right
+        {
+            top: 240px;
+            right: -28px;
+        }
+
+        .create_passport .data .bg_left
+        {
+            bottom: 120px;
+            left: -28px;
+        }
+
+        .create_passport .data .bg_bottom
+        {
+            right: 24px;
+        }
+
+
+        .create_passport .avatar
+        {
+            width: 100%;
+            height: 220px;
+            margin-bottom: 60px;
+        }
+
+        .create_passport .avatar:before
+        {
+            top: -16px;
+            left: -16px;
+
+            width: calc(100% + 32px);
+            height: calc(100% + 32px);
+
+            border-radius: 48px;
+        }
+
+
+        .create_passport .avatar .logo
+        {
+            width: 92px;
+            height: 88px;
+            margin-top: 16px;
+            padding: 12px;
+
+            border-radius: 28px;
+        }
+
+        .create_passport .avatar .logo:before
+        {
+            border-radius: 28px;
+        }
+
+        .create_passport .avatar .logo .corner_top_right
+        {
+            top: 0;
+        }
+
+        .create_passport .avatar .logo .corner_top_left
+        {
+            top: 0;
+        }
+
+
+        .create_passport .info
+        {
+            width: calc(100% + 32px);
+            max-width: calc(100% + 32px);
+            margin: 80px -16px 0;
+        }
+
+
+        .create_passport .info .label
+        {
+            margin-bottom: 4px;
+        }
+
+
+        .create_passport .info .input
+        {
+            font-size: 18px;
+        }
+
+
+        .create_passport .info .citizenship .text
+        {
+            font-size: 18px;
+
+            margin-top: 80px;
+        }
+
+
+        .create_passport .bottom_btns .btn
+        {
+            font-size: 18px;
+            line-height: 52px;
+
+            width: 100%;
+
+            text-align: center;
+        }
+
+        .create_passport .bottom_btns > * + *
+        {
+            margin-top: 16px;
+            margin-left: 0;
+        }
+
+
+        .create_passport .data .gradient
+        {
+            top: -100%;
+            left: -100%;
+
+            width: 300%;
+            height: 300%;
         }
     }
 

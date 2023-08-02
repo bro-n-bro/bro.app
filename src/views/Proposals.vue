@@ -126,7 +126,7 @@
         try {
             await getProposals()
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
 
         // Sticky element

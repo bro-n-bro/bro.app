@@ -99,7 +99,7 @@
                 document.querySelectorAll('.connected_addresses .item').forEach(el => el.classList.remove('editing'))
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             // Show notification
             notification.notify({

@@ -659,35 +659,7 @@
             ]
         }
     ],
-    "info": {
-        "annual_provision": {
-            "amount": 188558773.66139055,
-            "denom": "uatom",
-            "exponent": 6,
-            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-            "price": 9.3723069171,
-            "symbol": "ATOM"
-        },
-        "apr": 0.21256309934412376,
-        "rpde": {
-            "amount": 51.61751263657009,
-            "denom": "uatom",
-            "exponent": 6,
-            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-            "price": 9.3723069171,
-            "symbol": "ATOM"
-        },
-        "staked": {
-            "amount": 935380000,
-            "denom": "uatom",
-            "exponent": 6,
-            "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-            "price": 9.3723069171,
-            "symbol": "ATOM"
-        },
-        "voting_power": 3.776872500510435e-10,
-        "RPDE": 51.61751263657009
-    },
+    "info": {},
 
     "total": {
         "liquid": 0,

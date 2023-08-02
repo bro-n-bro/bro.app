@@ -521,7 +521,7 @@
             // Hide loader
             voteLoading.value = false
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
 
             // Show notification

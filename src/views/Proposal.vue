@@ -139,7 +139,7 @@
                                 .then(res => res.json())
                                 .then(data => stakingPool.value = data)
                         } catch (error) {
-                            console.log(error)
+                            console.error(error)
                         }
                     }
 
@@ -153,7 +153,7 @@
                                 .then(res => res.json())
                                 .then(validator => proposal.value.moniker = validator.moniker)
                         } catch (error) {
-                            console.log(error)
+                            console.error(error)
                         }
                     }
 
@@ -162,7 +162,7 @@
                     loading.value = false
                 })
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -174,7 +174,7 @@
                 .then(res => res.json())
                 .then(vote => currentVote.value = vote)
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 

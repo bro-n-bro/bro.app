@@ -99,7 +99,7 @@
                         balance.value = response.liquid.native[0].amount / Math.pow(10, response.liquid.native[0].exponent)
                     })
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         }
 
@@ -190,7 +190,7 @@
                 loading.value = false
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             // Show notification
             notification.notify({

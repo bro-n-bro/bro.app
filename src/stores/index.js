@@ -144,7 +144,7 @@ export const useGlobalStore = defineStore('global', {
                     .then(response => response.json())
                     .then(data => this.prices = data)
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         },
 
@@ -211,7 +211,7 @@ export const useGlobalStore = defineStore('global', {
                     }
                 )
             } catch (error) {
-                console.log(error)
+                console.error(error)
 
                 // Clear passport
                 this.account.moonPassport = null
@@ -345,7 +345,7 @@ export const useGlobalStore = defineStore('global', {
                     })
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         },
 

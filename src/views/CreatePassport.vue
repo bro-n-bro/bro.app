@@ -384,7 +384,7 @@
 
             return response
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             return null
         }
@@ -483,7 +483,7 @@
                     })
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
 
                 // Show notification
                 notification.notify({

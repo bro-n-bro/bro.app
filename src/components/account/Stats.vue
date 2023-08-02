@@ -79,9 +79,9 @@
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
-        totalRewardTokens = !store.demo ? ref(0) : ref(40000000),
-        APR = !store.demo ? ref(0) : ref(0.2241),
-        RPDE = !store.demo ? ref(0) : ref(400)
+        totalRewardTokens = !store.demo ? ref(0) : ref(10016000),
+        APR = !store.demo ? ref(0) : ref(0.2125),
+        RPDE = !store.demo ? ref(0) : ref(0.4)
 
 
     onBeforeMount(async () => {
@@ -128,7 +128,7 @@
                     wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         }
 

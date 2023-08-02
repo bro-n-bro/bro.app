@@ -114,7 +114,7 @@
                             </div>
 
                             <div class="val">
-                                <!-- {{ new Number($filters.toFixed(store.validatorInfo.staked / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }} -->
+                                {{ new Number($filters.toFixed(store.validatorInfo.voting_power / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }}
                             </div>
                         </div>
 
@@ -134,7 +134,7 @@
                             </div>
 
                             <div class="val">
-                                <!-- {{ $filters.toFixed(store.validatorInfo.staked / store.validatorInfo.delegator_shares * 100, 2) }}% -->
+                                {{ $filters.toFixed(store.validatorInfo.voting_power / store.validatorInfo.delegator_shares * 100, 2) }}%
                             </div>
                         </div>
                     </div>
@@ -155,10 +155,11 @@
 
     const store = useGlobalStore(),
         emitter = inject('emitter'),
-        loading = store.demo ? ref(false) : ref(true)
+        loading = ref(true)
 
 
     onBeforeMount(async () => {
+        // Get validator data
         await fetch(`https://rpc.bronbro.io/validators/${store.validatorInfo.operator_address}`)
             .then(res => res.json())
             .then(response => {

@@ -541,7 +541,7 @@
                 // Go to next step
                 activeStep.value += 1
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         } else {
             // Show notification
@@ -658,7 +658,7 @@
                 loading.value = false
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
 
             // Show notification
             notification.notify({

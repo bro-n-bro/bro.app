@@ -127,6 +127,9 @@
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
+    // Demo data
+    import DemoAccountValidators from '@/demo/AccountValidators.json'
+
     // Components
     import ValidatorModal from '@/components/modal/ValidatorModal.vue'
 
@@ -136,14 +139,14 @@
         loading = store.demo ? ref(false) : ref(true),
         showValidatorModal = ref(false)
 
-    var wallets = reactive([]),
-        totalPassportTokens = 0,
+    var wallets = store.demo ? DemoAccountValidators : reactive([]),
+        totalPassportTokens = store.demo ? 1313694797.6590698 : 0,
         showAll = ref(false)
 
 
     onBeforeMount(async () => {
         // Clear data
-        wallets = reactive([])
+        wallets = store.demo ? DemoAccountValidators : reactive([])
 
         // Get data
         if(!store.demo) {
@@ -199,7 +202,7 @@
                     loading.value = false
                 })
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -240,7 +243,7 @@
                             })
                         })
                 } catch (error) {
-                    console.log(error)
+                    console.error(error)
                 }
             }
         })
@@ -257,10 +260,19 @@
 
 
     // Open validator modal
-    function openValidatorModal(operator_address) {
-        store.validatorInfo.operator_address = operator_address
+    function openValidatorModal(operatorAddress) {
+        // Reset previous validator data
+        store.validatorInfo = {
+            operator_address: null
+        }
+
+        // Set new validator address
+        store.validatorInfo.operator_address = operatorAddress
+
+        // Show Validator modal
         showValidatorModal.value = true
 
+        // Disable page scroll
         document.body.classList.add('lock')
     }
 

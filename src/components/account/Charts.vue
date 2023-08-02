@@ -176,7 +176,7 @@
                         setDataInNetwork(wallet, response)
                     })
             } catch (error) {
-                console.log(error)
+                console.error(error)
             }
         }
 
@@ -370,7 +370,6 @@
     function setDataInNetwork(wallet, response) {
         let currentNetworkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
 
-        console.log(totals)
         currentNetworkInWallet.address = response.address
         currentNetworkInWallet.total = totals
 

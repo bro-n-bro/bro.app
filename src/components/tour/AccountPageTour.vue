@@ -561,4 +561,35 @@
         box-shadow: 2px 5px 15px rgba(149, 15, 255, .45);
     }
 
+
+
+    @media print, (max-width: 1279px)
+    {
+        .tour
+        {
+            position: fixed;
+            top: auto !important;
+            right: 0 !important;
+            bottom: 24px !important;
+            left: 0 !important;
+
+            margin: auto !important;
+        }
+
+        .tour:before
+        {
+            display: none !important;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .tour
+        {
+            width: calc(100% - 40px);
+        }
+    }
+
 </style>

@@ -160,7 +160,7 @@
             // Close modal
             store.showConstitutionModal = false
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
