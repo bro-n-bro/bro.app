@@ -16,64 +16,70 @@
             </div>
         </div>
 
-        <div class="titles">
-            <div class="col_network">
-                {{ $t('message.account_proposals_col_network') }}
-            </div>
-
-            <div class="col_name">
-                {{ $t('message.account_proposals_col_name') }}
-            </div>
-
-            <div class="col_number"></div>
-
-            <div class="col_type">
-                {{ $t('message.account_proposals_col_type') }}
-            </div>
-
-            <div class="col_status">
-                {{ $t('message.account_proposals_col_status') }}
-            </div>
-        </div>
-
-        <div class="loader_wrap" v-if="!loading">
-            <div class="loader"><span></span></div>
-        </div>
-
-        <div class="items" v-else>
-            <!-- <pre>{{ data.proposals }}</pre> -->
-
-            <template v-for="(proposal, index) in proposals" :key="index">
-            <!-- <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
-            <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !showAll }">
+        <div class="scroll">
+            <div class="titles">
                 <div class="col_network">
-                    <template v-if="index < 1">
-                    <div class="logo">
-                        <img :src="`/${store.currentNetwork}_logo.png`" alt="">
-                    </div>
-
-                    <div>{{ store.networks[store.currentNetwork].name }}</div>
-                    </template>
+                    {{ $t('message.account_proposals_col_network') }}
                 </div>
 
                 <div class="col_name">
-                    <div class="name">{{ proposal.title }}</div>
+                    {{ $t('message.account_proposals_col_name') }}
                 </div>
 
-                <div class="col_number">№{{ proposal.id }}</div>
+                <div class="col_number"></div>
 
                 <div class="col_type">
-                    <svg class="icon"><use :xlink:href="`@/assets/sprite.svg#ic_proposal_${proposal.proposal_type}`"></use></svg>
+                    {{ $t('message.account_proposals_col_type') }}
                 </div>
 
                 <div class="col_status">
-                    <span v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ $t('message.account_proposals_status_deposite') }}</span>
-                    <span v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="blue">{{ $t('message.account_proposals_status_voting') }}</span>
-                    <span v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'" class="green">{{ $t('message.account_proposals_status_passed') }}</span>
-                    <span v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">{{ $t('message.account_proposals_status_rejected') }}</span>
+                    {{ $t('message.account_proposals_col_status') }}
                 </div>
-            </router-link>
-            </template>
+            </div>
+
+            <div class="loader_wrap" v-if="!loading">
+                <div class="loader"><span></span></div>
+            </div>
+
+            <div class="items" v-else>
+                <!-- <pre>{{ data.proposals }}</pre> -->
+
+                <template v-for="(proposal, index) in proposals" :key="index">
+                <!-- <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
+                <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !showAll }">
+                    <div class="col_network">
+                        <template v-if="index < 1">
+                        <div class="logo">
+                            <img :src="`/${store.currentNetwork}_logo.png`" alt="">
+                        </div>
+
+                        <div>{{ store.networks[store.currentNetwork].name }}</div>
+                        </template>
+                    </div>
+
+                    <div class="col_name">
+                        <div class="name">{{ proposal.title }}</div>
+                    </div>
+
+                    <div class="col_number">№{{ proposal.id }}</div>
+
+                    <div class="col_type">
+                        <svg class="icon" v-if="proposal.proposal_type == 'Text'"><use xlink:href="@/assets/sprite.svg#ic_proposal_Text"></use></svg>
+                        <svg class="icon" v-if="proposal.proposal_type == 'CommunityPoolSpend'"><use xlink:href="@/assets/sprite.svg#ic_proposal_CommunityPoolSpend"></use></svg>
+                        <svg class="icon" v-if="proposal.proposal_type == 'UpdateSmartContract'"><use xlink:href="@/assets/sprite.svg#ic_proposal_UpdateSmartContract"></use></svg>
+                        <svg class="icon" v-if="proposal.proposal_type == 'SoftwareUpgrade'"><use xlink:href="@/assets/sprite.svg#ic_proposal_SoftwareUpgrade"></use></svg>
+                        <svg class="icon" v-if="proposal.proposal_type == 'ParameterChange'"><use xlink:href="@/assets/sprite.svg#ic_proposal_ParameterChange"></use></svg>
+                    </div>
+
+                    <div class="col_status">
+                        <span v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ $t('message.account_proposals_status_deposite') }}</span>
+                        <span v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="blue">{{ $t('message.account_proposals_status_voting') }}</span>
+                        <span v-if="proposal.status == 'PROPOSAL_STATUS_PASSED'" class="green">{{ $t('message.account_proposals_status_passed') }}</span>
+                        <span v-if="proposal.status == 'PROPOSAL_STATUS_REJECTED'" class="red">{{ $t('message.account_proposals_status_rejected') }}</span>
+                    </div>
+                </router-link>
+                </template>
+            </div>
         </div>
 
         <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="proposals.length > 5">
@@ -495,6 +501,39 @@
         {
             font-size: 20px;
             line-height: 26px;
+        }
+
+
+        .proposals .scroll
+        {
+            overflow: auto;
+
+            width: 100%;
+            padding-bottom: 8px;
+
+            scrollbar-color: #950fff var(--bg);
+            scrollbar-width: thin;
+        }
+
+        .proposals .scroll::-webkit-scrollbar
+        {
+            width: 4px;
+            height: 4px;
+
+            background-color: var(--bg);
+        }
+
+        .proposals .scroll::-webkit-scrollbar-thumb
+        {
+            border-radius: 5px;
+            background-color: #950fff;
+        }
+
+
+        .proposals .titles,
+        .proposals .items
+        {
+            width: 700px;
         }
     }
 

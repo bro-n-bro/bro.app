@@ -50,8 +50,10 @@
                 <section class="col">
                     <!-- Filter -->
                     <div class="filter sticky">
-                        <div class="title">
-                            {{ $t('message.filter_title') }}
+                        <div class="title" @click.prevent="toggleActiveClass">
+                            <span>{{ $t('message.filter_title') }}</span>
+
+                            <svg class="arr"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
                         </div>
 
                         <div class="items" :class="{ lock: lockFilter }">
@@ -130,9 +132,11 @@
         }
 
         // Sticky element
-        let stickyElements = document.querySelectorAll('.sticky')
+        if(window.innerWidth > 1279) {
+            let stickyElements = document.querySelectorAll('.sticky')
 
-        stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
+            stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
+        }
     })
 
 
@@ -260,6 +264,12 @@
     var observer = new IntersectionObserver(scrollTracking, {
         threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     })
+
+
+    // Toggle active class
+    function toggleActiveClass(e) {
+        e.target.classList.toggle('active')
+    }
 </script>
 
 
@@ -438,12 +448,43 @@
         font-weight: 600;
         line-height: 36px;
 
-        margin-bottom: 24px;
+        display: flex;
+
+        pointer-events: none;
+
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .filter .title > *
+    {
+        pointer-events: none;
+    }
+
+
+    .filter .title .arr
+    {
+        display: none;
+
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
+
+        transition: transform .2s linear;
+    }
+
+    .filter .title.active .arr
+    {
+        transform: rotate(180deg);
     }
 
 
     .filter .items
     {
+        padding-top: 24%;
+
         transition: opacity .2s linear;
     }
 
@@ -551,6 +592,215 @@
     .btn_up:hover
     {
         background: #7700e1;
+    }
+
+
+
+    @media print, (max-width: 1899px)
+    {
+        .filter .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
+
+
+        .head .title
+        {
+            font-size: 27px;
+            line-height: 33px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1599px)
+    {
+        .col
+        {
+            width: 324px;
+        }
+
+        .col_main
+        {
+            width: calc(100% - 696px);
+        }
+
+
+        .head .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+
+
+        .filter .title
+        {
+            font-size: 26px;
+            line-height: 32px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .col
+        {
+            width: 300px;
+        }
+
+        .col_main
+        {
+            width: calc(100% - 648px);
+        }
+
+
+        .head .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+
+        .filter .title
+        {
+            font-size: 24px;
+            line-height: 30px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1359px)
+    {
+        .col
+        {
+            width: 280px;
+        }
+
+        .col_main
+        {
+            width: calc(100% - 600px);
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .col,
+        .col_main
+        {
+            width: 100%;
+        }
+
+        .col_main
+        {
+            order: 3;
+        }
+
+
+        .head
+        {
+            margin-top: 0;
+            padding: 20px 0;
+
+            background: none;
+        }
+
+
+        .filter
+        {
+            padding: 14px;
+        }
+
+
+        .filter .title
+        {
+            margin: 0;
+
+            pointer-events: auto;
+        }
+
+        .filter .title .arr
+        {
+            display: block;
+        }
+
+
+        .filter .items
+        {
+            display: none;
+
+            padding-top: 20px;
+        }
+
+        .filter .title.active ~ .items
+        {
+            display: block;
+        }
+
+
+        .btn_up
+        {
+            display: none !important;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .head .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+
+
+        .filter .title
+        {
+            font-size: 22px;
+            line-height: 28px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .main_data
+        {
+            padding: 14px;
+        }
+
+
+        .head .title
+        {
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+
+        .filter .title
+        {
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+
+        .proposals
+        {
+            margin-left: 0;
+        }
+
+
+        .proposals > *
+        {
+            width: 100%;
+            margin-left: 0;
+        }
     }
 
 </style>

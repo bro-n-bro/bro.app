@@ -1,15 +1,13 @@
 <template>
-    <MobilePlug v-if="ua.device.type != 'Desktop'" />
-
-
-    <template v-else>
     <div class="loader_wrap" v-if="!store.isAppFullLoaded">
         <div class="loader"><span></span></div>
     </div>
 
+    <template v-else>
+    <MobilePlug v-if="!store.demo && route.path != '/welcome' && ua.device.type != 'Desktop'" />
 
-    <component :is="layout" v-else />
-
+    <template v-else>
+    <component :is="layout" />
 
     <notifications width="280px" group="default">
         <template #body="props">
@@ -44,6 +42,7 @@
             </div>
         </template>
     </notifications>
+    </template>
     </template>
 </template>
 

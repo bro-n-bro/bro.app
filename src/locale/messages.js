@@ -36,6 +36,16 @@ export default {
             'passport_error_nickname_title': 'Nickname misspelled',
 
 
+            // Proposals page
+            'proposal_date_label_default': 'Voting ended:',
+            'proposal_deposite_label_collected': 'Collected funds:',
+            'proposal_deposite_label_necessary': 'Necessary funds:',
+            'proposal_voting_label_yes': 'Yes',
+            'proposal_voting_label_no': 'No',
+            'proposal_voting_label_nwv': 'NWV',
+            'proposal_voting_label_abstain': 'Abstain',
+
+
             // Proposal page
             'proposal_proposer_label': 'Proposer',
             'proposal_tab1': 'Proposal data',
@@ -183,6 +193,7 @@ export default {
             // Footer
             'footer_contact': 'Contact',
             'footer_support': 'Support',
+            'footer_powered': 'Powered by the Spacebox Index',
 
 
             // Feedback

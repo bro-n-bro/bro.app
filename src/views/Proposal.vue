@@ -104,7 +104,7 @@
     // Get proposal data
     async function getProposalData() {
         try {
-            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.proposal_id}`)
+            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.currentProposalId}`)
                 .then(res => res.json())
                 .then(async response => {
                     // Set data

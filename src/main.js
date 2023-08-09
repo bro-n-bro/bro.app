@@ -4,9 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import i18n from './locale'
-import moment from 'moment'
 import Notifications from '@kyvg/vue3-notification'
-import timeago from 'vue-timeago3'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import mitt from 'mitt'
 
@@ -28,7 +26,6 @@ app.use(pinia)
 app.use(router)
 app.use(i18n)
 app.use(Notifications)
-app.use(timeago)
 
 
 // Vue provide
@@ -47,11 +44,6 @@ app.config.globalProperties.$filters = {
             : newValue = value
 
         return newValue
-    },
-
-    // Time age
-    timeAgo(date) {
-        return moment(date).fromNow()
     }
 }
 

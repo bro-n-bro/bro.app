@@ -10,6 +10,12 @@
             </div>
 
 
+            <a href="https://github.com/bro-n-bro/spacebox" target="_blank" rel="noopener nofollow" class="powered">
+                <img src="@/assets/spacebox_logo.svg" alt="">
+                <span>{{ $t('message.footer_powered') }}</span>
+            </a>
+
+
             <div class="socials">
                 <a href="https://github.com/bro-n-bro" target="_blank" rel="noopener nofollow">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_social_github"></use></svg>
@@ -40,7 +46,7 @@
     footer
     {
         margin-top: 60px;
-        padding: 20px 0 40px;
+        padding: 23px 0 24px;
 
         border-top: 1px solid rgba(255, 255, 255, .1);
     }
@@ -53,6 +59,7 @@
 
         display: flex;
 
+        align-self: center;
         justify-content: flex-start;
         align-items: center;
         align-content: center;
@@ -72,12 +79,39 @@
 
 
 
+    footer .powered
+    {
+        color: currentColor;
+        font-size: 18px;
+
+        display: flex;
+
+        margin: 0 auto;
+
+        align-self: center;
+        text-decoration-line: underline;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    footer .powered img
+    {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+
+
+
     footer .socials
     {
         display: flex;
 
         margin-right: 100px;
-        margin-left: auto;
 
         justify-content: flex-start;
         align-items: center;
@@ -124,12 +158,28 @@
 
 
 
+    @media print, (max-width: 1439px)
+    {
+        footer .powered
+        {
+            font-size: 16px;
+        }
+    }
+
+
+
     @media print, (max-width: 1279px)
     {
         footer .text
         {
             font-size: 16px;
             line-height: 20px;
+        }
+
+
+        footer .powered
+        {
+            font-size: 14px;
         }
 
 
@@ -146,6 +196,22 @@
         footer
         {
             padding-bottom: 28px;
+        }
+
+
+        footer .powered
+        {
+            width: 100%;
+            margin-top: 10%;
+
+            justify-content: flex-start;
+            order: 3;
+        }
+
+
+        footer .socials
+        {
+            margin-left: auto;
         }
     }
 
@@ -170,6 +236,12 @@
             width: 100%;
             margin-top: 20px;
             margin-right: 0;
+        }
+
+
+        footer .powered
+        {
+            margin-top: 20px;
         }
     }
 

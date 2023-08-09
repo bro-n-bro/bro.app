@@ -40,9 +40,9 @@
             </vue-countdown>
         </div>
 
-        <div class="date" v-if="props.proposal.status == 'PROPOSAL_STATUS_PASSED' || proposal.status == 'PROPOSAL_STATUS_REJECTED'">
+        <div class="date" v-if="props.proposal.status == 'PROPOSAL_STATUS_PASSED' || props.proposal.status == 'PROPOSAL_STATUS_REJECTED'">
             <div>{{ $t('message.proposal_date_label_default') }}</div>
-            <div><timeago :datetime="dateCalc(proposal.voting_end_time)" autoUpdate /></div>
+            <div>{{ timeAgo }}</div>
         </div>
 
         <div class="name">#{{ props.proposal.id }} {{ props.proposal.title }}</div>
@@ -147,10 +147,12 @@
 
 <script setup>
     import { useGlobalStore } from '@/stores'
+    import { formatTimeAgo } from '@vueuse/core'
 
     const store = useGlobalStore(),
         props = defineProps(['proposal']),
-        userTimeZone = new Date().getTimezoneOffset() / 60 * -1
+        userTimeZone = new Date().getTimezoneOffset() / 60 * -1,
+        timeAgo = formatTimeAgo(dateCalc(props.proposal.voting_end_time))
 
 
     // Date calc
@@ -195,8 +197,8 @@
         background: #0d0d0d;
 
         justify-content: flex-start;
-        align-items: center;
-        align-content: center;
+        align-items: flex-start;
+        align-content: flex-start;
         flex-wrap: wrap;
     }
 
@@ -296,6 +298,7 @@
         margin-bottom: 16px;
         margin-left: auto;
 
+        align-self: center;
         justify-content: flex-start;
         align-items: center;
         align-content: center;
@@ -574,6 +577,27 @@
     .proposal:hover
     {
         border-color: #950fff;
+    }
+
+
+
+    @media print, (max-width: 1359px)
+    {
+        .proposal .name
+        {
+            font-size: 18px;
+        }
+
+
+        .proposal .date
+        {
+            display: block;
+        }
+
+        .proposal .date > * + *
+        {
+            margin-left: 0;
+        }
     }
 
 </style>

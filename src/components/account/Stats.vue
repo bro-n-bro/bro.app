@@ -183,15 +183,14 @@
         text-align: center;
 
         border-radius: 20px;
-        background: #0d0d0d;
+        background: #171717;
     }
 
 
     .label
     {
-        color: #555;
+        color: #F2F2F2;
         font-size: 14px;
-        line-height: 17px;
 
         width: 100%;
         margin-bottom: 8px;
@@ -215,7 +214,7 @@
         font-weight: 400;
         line-height: 100%;
 
-        margin-top: 4px;
+        margin-top: 8px;
     }
 
 
