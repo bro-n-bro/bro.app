@@ -20,10 +20,18 @@
             <span>{{ $t('message.account_proposals_status_rejected') }}</span>
         </div>
 
+
         <div class="type">
-            <svg class="icon"><use :xlink:href="`@/assets/sprite.svg#ic_proposal_${props.proposal.proposal_type}`"></use></svg>
+            <svg class="icon" v-if="props.proposal.proposal_type == 'Text'"><use xlink:href="@/assets/sprite.svg#ic_proposal_Text"></use></svg>
+            <svg class="icon" v-if="props.proposal.proposal_type == 'CommunityPoolSpend'"><use xlink:href="@/assets/sprite.svg#ic_proposal_CommunityPoolSpend"></use></svg>
+            <svg class="icon" v-if="props.proposal.proposal_type == 'SoftwareUpgrade'"><use xlink:href="@/assets/sprite.svg#ic_proposal_SoftwareUpgrade"></use></svg>
+            <svg class="icon" v-if="props.proposal.proposal_type == 'ParameterChange'"><use xlink:href="@/assets/sprite.svg#ic_proposal_ParameterChange"></use></svg>
+
+            <svg class="icon" v-if="props.proposal.proposal_type != 'Text' && props.proposal.proposal_type != 'CommunityPoolSpend' && props.proposal.proposal_type != 'SoftwareUpgrade' && props.proposal.proposal_type != 'ParameterChange'"><use xlink:href="@/assets/sprite.svg#ic_proposal_UpdateSmartContract"></use></svg>
+
             <span>{{ props.proposal.proposal_type }}</span>
         </div>
+
 
         <div class="name">
             <div class="logo">
@@ -34,6 +42,7 @@
 
             <div>{{ props.proposal.title }}</div>
         </div>
+
 
         <div class="proposer">
             <span>{{ $t('message.proposal_proposer_label') }}:</span>
@@ -243,4 +252,104 @@
 
         white-space: nowrap;
     }
+
+
+
+    @media print, (max-width: 1359px)
+    {
+        .head .name
+        {
+            font-size: 30px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .head .name .logo
+        {
+            width: 32px;
+            min-width: 32px;
+            height: 32px;
+        }
+
+
+        .head .name
+        {
+            font-size: 27px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .head
+        {
+            margin-bottom: 24px;
+        }
+
+
+        .head .name
+        {
+            font-size: 24px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .head .name .number + *
+        {
+            width: 100%;
+            margin-top: 4px;
+            margin-left: 0;
+        }
+
+
+        .head .proposer span
+        {
+            width: 100%;
+        }
+
+        .head .proposer a
+        {
+            margin-left: 0;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .head .name
+        {
+            font-size: 22px;
+        }
+
+
+        .head .name .logo
+        {
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+        }
+
+
+        .head .proposer
+        {
+            margin-top: 12px;
+        }
+
+        .head .proposer a
+        {
+            display: block;
+            overflow: hidden;
+
+            width: 307px;
+
+            text-overflow: ellipsis;
+        }
+    }
+
 </style>

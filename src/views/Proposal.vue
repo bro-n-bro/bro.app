@@ -6,11 +6,11 @@
     <section class="proposal_info" v-else>
         <div class="cont middle">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all?demo=true'" class="btn" v-if="store.demo">
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/cosmoshub?demo=true'" class="btn" v-if="store.demo">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
 
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/all'" class="btn" v-else>
+                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/cosmoshub'" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
@@ -41,7 +41,7 @@
 
 
                     <div v-if="activeTab == 'tab1'">
-                        <Description :proposal="proposal" />
+                        <!-- <Description :proposal="proposal" /> -->
                     </div>
 
 
@@ -324,6 +324,73 @@
 
         border-radius: 20px;
         background: #0d0d0d;
+    }
+
+
+
+    @media print, (max-width: 1439px)
+    {
+        .data
+        {
+            width: calc(100% - 344px);
+            padding: 24px;
+        }
+
+
+        .info
+        {
+            width: 320px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .data
+        {
+            width: 100%;
+        }
+
+
+        .info
+        {
+            width: 100%;
+            margin-top: 24px;
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .data
+        {
+            padding: 14px;
+        }
+
+
+        .data .tabs
+        {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+        }
+
+
+        .data .tabs .btn
+        {
+            font-size: 13px;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .data .tabs .btn
+        {
+            width: calc(50% - 8px);
+        }
     }
 
 </style>

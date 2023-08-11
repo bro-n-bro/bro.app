@@ -86,7 +86,7 @@
 
                 <button class="refresh_btn" @click.prevent="refreshProposalData">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_refresh"></use></svg>
-                    <span>{{ $t('message.refresh_btn') }}</span>
+                    <span>{{ $t('message.btn_refresh') }}</span>
                 </button>
             </div>
 
@@ -105,7 +105,7 @@
                     {{ $t('message.proposal_add_vote_exp') }}
                 </div>
 
-                {{ $t('message.deposit_btn') }}
+                {{ $t('message.btn_deposit') }}
             </button>
         </div>
 
@@ -171,7 +171,7 @@
 
                 <button class="refresh_btn" @click.prevent="refreshProposalData">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_refresh"></use></svg>
-                    <span>{{ $t('message.refresh_btn') }}</span>
+                    <span>{{ $t('message.btn_refresh') }}</span>
                 </button>
             </div>
 
@@ -1178,6 +1178,7 @@
     {
         margin-top: 16px;
         padding-top: 16px;
+        padding-bottom: 14px;
 
         border-top: 1px solid rgba(255, 255, 255, .05);
     }
@@ -1238,6 +1239,59 @@
     .vote_result .item .red
     {
         color: #eb5757;
+    }
+
+
+
+
+    @media print, (max-width: 1359px)
+    {
+        .details .val
+        {
+            font-size: 13px;
+        }
+
+
+        .chart .final_status .val,
+        .chart .percents
+        {
+            font-size: 30px;
+        }
+    }
+
+
+
+    @media print, (max-width: 1279px)
+    {
+        .vote .btn,
+        .details .row > *,
+        .vote_result .row > *
+        {
+            width: calc(25% - 8px);
+        }
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .vote .btn,
+        .details .row > *,
+        .vote_result .row > *
+        {
+            width: calc(50% - 8px);
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .chart .final_status .val,
+        .chart .percents
+        {
+            font-size: 28px;
+        }
     }
 
 </style>

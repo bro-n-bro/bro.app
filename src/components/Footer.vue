@@ -202,7 +202,7 @@
         footer .powered
         {
             width: 100%;
-            margin-top: 10%;
+            margin-top: 10px;
 
             justify-content: flex-start;
             order: 3;

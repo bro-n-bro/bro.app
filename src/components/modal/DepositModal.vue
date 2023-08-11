@@ -43,7 +43,7 @@
 
                     <div class="submit">
                         <button type="submit" class="submit_btn">
-                            {{ $t('message.send_btn') }}
+                            {{ $t('message.btn_send') }}
                         </button>
                     </div>
                 </form>

@@ -75,15 +75,6 @@
     }
 
 
-
-    .table_wrap
-    {
-        overflow: auto;
-
-        max-width: 100%;
-    }
-
-
     table
     {
         width: 100%;
@@ -207,6 +198,42 @@
         line-height: 100%;
 
         margin-bottom: 6px;
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .table_wrap
+        {
+            overflow: auto;
+
+            max-width: 100%;
+            padding-bottom: 8px;
+
+            scrollbar-color: #950fff var(--bg);
+            scrollbar-width: thin;
+        }
+
+        .table_wrap::-webkit-scrollbar
+        {
+            width: 4px;
+            height: 4px;
+
+            background-color: var(--bg);
+        }
+
+        .table_wrap::-webkit-scrollbar-thumb
+        {
+            border-radius: 5px;
+            background-color: #950fff;
+        }
+
+
+        table
+        {
+            width: 860px;
+        }
     }
 
 </style>

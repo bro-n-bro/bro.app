@@ -258,6 +258,12 @@ export default {
             'constitution_modal_title': 'Constitution',
 
 
+            // Deposit modal
+            'deposit_modal_title': 'Deposit',
+            'deposit_modal_sender_label': 'Sender',
+            'deposit_modal_amount_label': 'Amount available',
+
+
             // Add address modal
             'add_address_modal_title': 'Add new account',
             'add_address_modal_error_desc': 'To add a new address — select a different Keplr account',
@@ -445,6 +451,9 @@ export default {
             'btn_change_image': 'Change image',
             'btn_settings': 'Setting',
             'btn_create_passport': 'Create passport',
+            'btn_refresh': 'Refresh',
+            'btn_deposit': 'Deposit',
+            'btn_send': 'Send',
         }
     }
 }

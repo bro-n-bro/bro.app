@@ -483,7 +483,7 @@
 
     .filter .items
     {
-        padding-top: 24%;
+        padding-top: 24px;
 
         transition: opacity .2s linear;
     }

@@ -37,15 +37,14 @@
                 </div>
             </div>
 
+
             <div class="loader_wrap" v-if="!loading">
                 <div class="loader"><span></span></div>
             </div>
 
-            <div class="items" v-else>
-                <!-- <pre>{{ data.proposals }}</pre> -->
 
+            <div class="items" v-else>
                 <template v-for="(proposal, index) in proposals" :key="index">
-                <!-- <router-link :to="`/proposal/${proposal.id}`" class="item" :class="{'hide': index >= 5 && !data.showAll}" v-if="proposal.id != '796' || proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
                 <router-link :to="`/${store.currentNetwork}/proposal/${proposal.id}`" class="item" :class="{ 'hide': index >= 5 && !showAll }">
                     <div class="col_network">
                         <template v-if="index < 1">
@@ -66,9 +65,10 @@
                     <div class="col_type">
                         <svg class="icon" v-if="proposal.proposal_type == 'Text'"><use xlink:href="@/assets/sprite.svg#ic_proposal_Text"></use></svg>
                         <svg class="icon" v-if="proposal.proposal_type == 'CommunityPoolSpend'"><use xlink:href="@/assets/sprite.svg#ic_proposal_CommunityPoolSpend"></use></svg>
-                        <svg class="icon" v-if="proposal.proposal_type == 'UpdateSmartContract'"><use xlink:href="@/assets/sprite.svg#ic_proposal_UpdateSmartContract"></use></svg>
                         <svg class="icon" v-if="proposal.proposal_type == 'SoftwareUpgrade'"><use xlink:href="@/assets/sprite.svg#ic_proposal_SoftwareUpgrade"></use></svg>
                         <svg class="icon" v-if="proposal.proposal_type == 'ParameterChange'"><use xlink:href="@/assets/sprite.svg#ic_proposal_ParameterChange"></use></svg>
+
+                        <svg class="icon" v-if="proposal.proposal_type != 'Text' && proposal.proposal_type != 'CommunityPoolSpend' && proposal.proposal_type != 'SoftwareUpgrade' && proposal.proposal_type != 'ParameterChange'"><use xlink:href="@/assets/sprite.svg#ic_proposal_UpdateSmartContract"></use></svg>
                     </div>
 
                     <div class="col_status">
@@ -81,6 +81,7 @@
                 </template>
             </div>
         </div>
+
 
         <button class="spoler_btn" :class="{ 'active': showAll }" @click.prevent="showAll = !showAll" v-if="proposals.length > 5">
             <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arr_down"></use></svg>
