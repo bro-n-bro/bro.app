@@ -38,12 +38,19 @@ export default {
 
             // Proposals page
             'proposal_date_label_default': 'Voting ended:',
+
             'proposal_deposite_label_collected': 'Collected funds:',
             'proposal_deposite_label_necessary': 'Necessary funds:',
+
             'proposal_voting_label_yes': 'Yes',
             'proposal_voting_label_no': 'No',
             'proposal_voting_label_nwv': 'NWV',
             'proposal_voting_label_abstain': 'Abstain',
+
+            'proposal_vote_yes': 'Yes',
+            'proposal_vote_no': 'No',
+            'proposal_vote_nwv': 'No with veto',
+            'proposal_vote_abstain': 'Abstain',
 
 
             // Proposal page
@@ -251,7 +258,7 @@ export default {
 
 
             // IPFS
-            'ipfs': 'Ipfs node',
+            'ipfs': 'IPFS node',
 
 
             // Constitution modal

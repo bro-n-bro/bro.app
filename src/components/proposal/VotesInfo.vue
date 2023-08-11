@@ -45,6 +45,8 @@
                     </thead>
                 </table>
 
+                <!-- <pre>{{ filterValidators(currentFilter) }}</pre> -->
+
                 <div class="scroll">
                     <table>
                         <tbody>
@@ -66,30 +68,60 @@
 
                                 <td class="validator_vote">
                                     <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes_btn') }}</span>
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no_btn') }}</span>
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain_btn') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
+                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
+                                        <span v-if="!validator.validator_option.length">&mdash;</span>
                                     </a>
                                 </td>
 
                                 <td class="most_voted">
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_YES'">Yes</span>
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_NO'">No</span>
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'">Abstain</span>
+                                    <span v-if="validator.most_voted == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
+                                    <span v-if="validator.most_voted == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
+                                    <span v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
+                                    <span v-if="validator.most_voted == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
+                                    <span v-if="!validator.most_voted.length">&mdash;</span>
                                 </td>
 
                                 <td class="community_votes">
                                     <div class="bar">
-                                        <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')">
-                                            <div class="tooltip">{{ $filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) }}% — No with veto</div>
-                                        </div>
+                                        <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')"></div>
 
-                                        <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')">
-                                            <div class="tooltip">{{ $filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) }}% — Yes</div>
-                                        </div>
+                                        <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')"></div>
 
-                                        <div class="no" :style="`width: ${calcPercents(validator.operator_address, 'No')}%;`" v-if="calcPercents(validator.operator_address, 'No')">
-                                            <div class="tooltip">{{ $filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) }}% — No</div>
+                                        <div class="no" :style="`width: ${calcPercents(validator.operator_address, 'No')}%;`" v-if="calcPercents(validator.operator_address, 'No')"></div>
+
+                                        <div class="tooltip">
+                                            <div class="yes">
+                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) < 1">
+                                                &lt;1% — {{ $t('message.proposal_vote_yes') }};
+                                                </template>
+
+                                                <template v-else>
+                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) }}% — {{ $t('message.proposal_vote_yes') }};
+                                                </template>
+                                            </div>
+
+                                            <div class="no">
+                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) < 1">
+                                                &lt;1% — {{ $t('message.proposal_vote_no') }};
+                                                </template>
+
+                                                <template v-else>
+                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) }}% — {{ $t('message.proposal_vote_no') }};
+                                                </template>
+                                            </div>
+
+                                            <div class="nwv">
+                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) < 1">
+                                                &lt;1% — {{ $t('message.proposal_vote_nwv') }};
+                                                </template>
+
+                                                <template v-else>
+                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) }}% — {{ $t('message.proposal_vote_nwv') }};
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -314,7 +346,7 @@
     {
         overflow: auto;
 
-        max-height: 388px;
+        max-height: 601px;
     }
 
     .scroll::-webkit-scrollbar
@@ -373,7 +405,8 @@
         font-weight: 500;
         line-height: 17px;
 
-        padding: 6px 8px;
+        height: 60px;
+        padding: 8px;
 
         text-align: left;
         vertical-align: middle;
@@ -492,8 +525,8 @@
 
         display: inline-block;
 
-        max-width: calc(100% - 38px);
-        margin-left: 8px;
+        max-width: calc(100% - 46px);
+        margin-left: 16px;
 
         vertical-align: middle;
         white-space: nowrap;
@@ -588,12 +621,9 @@
 
     table td .bar
     {
+        position: relative;
+
         display: flex;
-
-        height: 8px;
-
-        border-radius: 8px;
-        background: #282828;
 
         justify-content: flex-start;
         align-items: center;
@@ -604,21 +634,16 @@
     table td .bar > *
     {
         position: relative;
-        /* min-width: 20px; */
 
         height: 8px;
+        /* min-width: 20px; */
+
+        border-radius: 8px;
     }
 
-    table td .bar > *:first-child
+    table td .bar > * + *
     {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
-
-    table td .bar > *:last-child
-    {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
+        margin-left: 4px;
     }
 
 
@@ -652,7 +677,8 @@
 
         display: none;
 
-        margin-bottom: 8px;
+        height: auto;
+        margin-bottom: 18px;
         padding: 8px;
 
         transform: translateX(-50%);
@@ -661,6 +687,11 @@
         border-radius: 8px;
         background: #282828;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: nowrap;
     }
 
 
@@ -682,19 +713,6 @@
         background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
     }
 
-    table td .bar > *.no .tooltip
-    {
-        right: 0;
-        left: auto;
-
-        transform: none;
-    }
-
-    table td .bar > *.no .tooltip:before
-    {
-        margin-right: 0;
-    }
-
 
     table tr:first-child td.validator .moniker .tooltip,
     table tr:first-child td .bar .tooltip
@@ -702,7 +720,7 @@
         top: 100%;
         bottom: auto;
 
-        margin-top: 8px;
+        margin-top: 18px;
         margin-bottom: 0;
     }
 
@@ -716,9 +734,61 @@
     }
 
 
-    table td .bar > *:hover .tooltip
+    table td .bar .tooltip > *
     {
+        position: relative;
+
+        padding-left: 10px;
+
+        background: none;
+    }
+
+
+    table td .bar .tooltip > *:before
+    {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+
         display: block;
+
+        width: 6px;
+        height: 6px;
+        margin: auto;
+
+        content: '';
+
+        border-radius: 50%;
+    }
+
+    table td .bar .tooltip > *.nwv:before
+    {
+        background: #eb5757;
+    }
+
+
+    table td .bar .tooltip > *.yes:before
+    {
+        background: #1bc562;
+    }
+
+
+    table td .bar .tooltip > *.no:before
+    {
+        background: #c5811b;
+    }
+
+
+    table td .bar .tooltip > * + *
+    {
+        margin-left: 8px;
+    }
+
+
+    table .community_votes:hover .tooltip
+    {
+        display: flex;
     }
 
 </style>
