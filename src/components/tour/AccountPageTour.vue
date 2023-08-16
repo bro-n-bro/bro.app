@@ -1,5 +1,5 @@
 <template>
-    <div class="tour" v-if="tourShow" :class="[tourPosition]" :style="{
+    <div class="tour" v-if="store.tour" :class="[tourPosition]" :style="{
         top: tourCoordinates.top + 'px',
         right: tourCoordinates.right + 'px',
         bottom: tourCoordinates.bottom + 'px',
@@ -130,7 +130,6 @@
 
     const store = useGlobalStore(),
         currentStep = ref(0),
-        tourShow = ref(false),
         tourPosition = ref(''),
         tourCoordinates = reactive({
             top: 'auto',
@@ -262,9 +261,6 @@
             behavior: 'smooth',
             block: 'start'
         })
-
-        // Show tour block
-        tourShow.value = true
     }
 
 
@@ -272,7 +268,6 @@
     function closeTour() {
         // Hide tour
         store.tour = false
-        tourShow.value = false
 
         // Remove tour_selected class
         steps.forEach(el => document.querySelector(el.selector).classList.remove('tour_selected'))

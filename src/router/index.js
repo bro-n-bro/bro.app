@@ -128,13 +128,9 @@ router.beforeResolve(async (to, from, next) => {
 	let store = useGlobalStore()
 
 	// Demo
-	if(to.query.demo) {
-		store.demo = true
-		store.tour = true
-	} else {
-		store.demo = false
-		store.tour = false
-	}
+	to.query.demo
+		? store.demo = true
+		: store.demo = false
 
 	// Referer
 	if (to.query.ref) {

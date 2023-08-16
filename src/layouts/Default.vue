@@ -13,6 +13,9 @@
     <!-- Footer -->
     <Footer />
 
+    <!-- Tour button -->
+    <TourButton />
+
     <!-- Feedback -->
     <Feedback />
 </template>
@@ -24,6 +27,7 @@
     // Components
     import DemoNotice from '../components/DemoNotice.vue'
     import Header from '../components/Header.vue'
+    import TourButton from '../components/TourButton.vue'
     import Feedback from '../components/Feedback.vue'
     import Footer from '../components/Footer.vue'
 

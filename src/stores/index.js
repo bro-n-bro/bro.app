@@ -46,7 +46,7 @@ export const useGlobalStore = defineStore('global', {
 
         referer: null,
         demo: false,
-        tour: false,
+        tour: useLocalStorage('tour', true),
 
         currentNetwork: null,
         currentProposalId: null,

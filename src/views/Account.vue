@@ -36,7 +36,7 @@
 
 
     <!-- Account Page Tour -->
-    <AccountPageTour v-if="store.demo && store.tour" />
+    <AccountPageTour v-if="store.tour" />
 </template>
 
 
