@@ -34,102 +34,94 @@
             </div>
 
             <div class="table_wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="validator">{{ $t('message.proposal_votes_th_validator') }}</th>
-                            <th class="validator_vote">{{ $t('message.proposal_votes_th_validator_vote') }}</th>
-                            <th class="most_voted">{{ $t('message.proposal_votes_th_most_voted') }}</th>
-                            <th class="community_votes">{{ $t('message.proposal_votes_th_community_votes') }}</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div class="titles">
+                    <div class="validator">{{ $t('message.proposal_votes_th_validator') }}</div>
+                    <div class="validator_vote">{{ $t('message.proposal_votes_th_validator_vote') }}</div>
+                    <div class="most_voted">{{ $t('message.proposal_votes_th_most_voted') }}</div>
+                    <div class="community_votes">{{ $t('message.proposal_votes_th_community_votes') }}</div>
+                </div>
 
-                <div class="scroll">
-                    <table>
-                        <tbody>
-                            <tr v-for="(validator, index) in filterValidators(currentFilter)" :key="index">
-                                <td class="validator">
-                                    <div>
-                                        <div class="logo">
-                                            <img :src="`${validator.mintscan_avatar_url}`" :alt="validator.moniker" @error="imageLoadError">
-                                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
-                                            <div class="rank">{{ validator.voting_power_rank }}</div>
-                                        </div>
+                <div class="scroll" :class="{ with_your_validator: walletValidators.length }">
+                    <div class="item" v-for="(validator, index) in filterValidators(currentFilter)" :key="index" :class="{ first: checkValidator(validator.operator_address) }">
+                        <div class="validator">
+                            <div class="logo">
+                                <img :src="`${validator.mintscan_avatar_url}`" :alt="validator.moniker" @error="imageLoadError">
+                                <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
+                                <div class="rank">{{ validator.voting_power_rank }}</div>
+                            </div>
 
-                                        <div>
-                                            <div class="moniker">
-                                                <span>{{ validator.moniker }}</span>
-                                                <div class="tooltip">{{ validator.moniker }}</div>
-                                            </div>
+                            <div>
+                                <div><div class="moniker">
+                                    <span>{{ validator.moniker }}</span>
+                                    <div class="tooltip">{{ validator.moniker }}</div>
+                                </div></div>
 
-                                            <!-- <div class="sticker">Your Validator</div> -->
-                                        </div>
+                                <div class="sticker" v-if="checkValidator(validator.operator_address)">
+                                    {{ $t('message.proposal_votes_validator_sticker') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="validator_vote">
+                            <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
+                                <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
+                                <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
+                                <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
+                                <span v-if="validator.validator_option == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
+                                <span v-if="!validator.validator_option.length">&mdash;</span>
+                            </a>
+                        </div>
+
+                        <div class="most_voted">
+                            <span v-if="validator.most_voted == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
+                            <span v-if="validator.most_voted == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
+                            <span v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
+                            <span v-if="validator.most_voted == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
+                            <span v-if="!validator.most_voted.length">&mdash;</span>
+                        </div>
+
+                        <div class="community_votes">
+                            <div class="bar">
+                                <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')"></div>
+
+                                <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')"></div>
+
+                                <div class="no" :style="`width: ${calcPercents(validator.operator_address, 'No')}%;`" v-if="calcPercents(validator.operator_address, 'No')"></div>
+
+                                <div class="tooltip">
+                                    <div class="yes">
+                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) < 1">
+                                        &lt;1% — {{ $t('message.proposal_vote_yes') }};
+                                        </template>
+
+                                        <template v-else>
+                                        {{ $filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) }}% — {{ $t('message.proposal_vote_yes') }};
+                                        </template>
                                     </div>
-                                </td>
 
-                                <td class="validator_vote">
-                                    <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
-                                        <span v-if="validator.validator_option == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
-                                        <span v-if="!validator.validator_option.length">&mdash;</span>
-                                    </a>
-                                </td>
+                                    <div class="no">
+                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) < 1">
+                                        &lt;1% — {{ $t('message.proposal_vote_no') }};
+                                        </template>
 
-                                <td class="most_voted">
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
-                                    <span v-if="validator.most_voted == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
-                                    <span v-if="!validator.most_voted.length">&mdash;</span>
-                                </td>
-
-                                <td class="community_votes">
-                                    <div class="bar">
-                                        <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')"></div>
-
-                                        <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')"></div>
-
-                                        <div class="no" :style="`width: ${calcPercents(validator.operator_address, 'No')}%;`" v-if="calcPercents(validator.operator_address, 'No')"></div>
-
-                                        <div class="tooltip">
-                                            <div class="yes">
-                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) < 1">
-                                                &lt;1% — {{ $t('message.proposal_vote_yes') }};
-                                                </template>
-
-                                                <template v-else>
-                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) }}% — {{ $t('message.proposal_vote_yes') }};
-                                                </template>
-                                            </div>
-
-                                            <div class="no">
-                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) < 1">
-                                                &lt;1% — {{ $t('message.proposal_vote_no') }};
-                                                </template>
-
-                                                <template v-else>
-                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) }}% — {{ $t('message.proposal_vote_no') }};
-                                                </template>
-                                            </div>
-
-                                            <div class="nwv">
-                                                <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) < 1">
-                                                &lt;1% — {{ $t('message.proposal_vote_nwv') }};
-                                                </template>
-
-                                                <template v-else>
-                                                {{ $filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) }}% — {{ $t('message.proposal_vote_nwv') }};
-                                                </template>
-                                            </div>
-                                        </div>
+                                        <template v-else>
+                                        {{ $filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) }}% — {{ $t('message.proposal_vote_no') }};
+                                        </template>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                                    <div class="nwv">
+                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) < 1">
+                                        &lt;1% — {{ $t('message.proposal_vote_nwv') }};
+                                        </template>
+
+                                        <template v-else>
+                                        {{ $filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) }}% — {{ $t('message.proposal_vote_nwv') }};
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,12 +130,14 @@
     </section>
 
     <!-- <pre>{{ validators }}</pre> -->
+    <!-- <pre>{{ walletValidators }}</pre> -->
 </template>
 
 
 <script setup>
     import { onBeforeMount, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { generateAddress } from '@/utils'
 
     // Components
     import Depositors from './Depositors.vue'
@@ -152,13 +146,17 @@
     const props = defineProps(['depositors', 'proposal']),
         store = useGlobalStore(),
         loading = ref(true),
-        validators = ref({}),
+        validators = ref([]),
+        walletValidators = ref([]),
         currentFilter = ref('All')
 
 
     onBeforeMount(async () => {
         // Get proposal votes data
         await getVotesData()
+
+        // Get validators for current wallet
+        await getValidatorsWallet()
     })
 
 
@@ -190,6 +188,34 @@
         } catch (error) {
             console.error(error)
         }
+    }
+
+
+    // Get validators for current wallet
+    async function getValidatorsWallet() {
+        try {
+            let currentAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)
+
+            await fetch(`https://rpc.bronbro.io/account/validators/${currentAddress}`)
+                .then(res => res.json())
+                .then(response => {
+                    console.log(response)
+                    if(response.validators.length) {
+                        // Set data
+                        walletValidators.value = response.validators
+                    }
+                })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
+    // Check validator in current wallet
+    function checkValidator(operator_address) {
+        let result = walletValidators.value.find(el => el.operator_address == operator_address)
+
+        return result
     }
 
 
@@ -346,7 +372,9 @@
 
     .scroll
     {
+        display: flex;
         overflow: auto;
+        flex-direction: column;
 
         width: 100%;
         max-height: 609px;
@@ -376,66 +404,84 @@
     }
 
 
-
-    .table_wrap
-    {
-        overflow: auto;
-
-        max-width: 100%;
-    }
-
-
-    table
-    {
-        width: 100%;
-
-        border-spacing: 0;
-        border-collapse: collapse;
-    }
-
-
-    table th
+    .titles
     {
         color: #555;
         font-size: 14px;
         line-height: 17px;
 
+        display: flex;
+
+        padding-right: 6px;
+
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        flex-wrap: nowrap;
+    }
+
+    .titles > *
+    {
         padding: 10px 8px 18px;
 
         text-align: center;
-        vertical-align: middle;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
     }
 
-    table th:first-child
+    .titles > *:first-child
     {
         text-align: left;
     }
 
-    table th:last-child
+    .titles > *:last-child
     {
         padding-right: 10px;
     }
 
 
-    table td
+    .item
     {
         font-size: 14px;
         font-weight: 500;
         line-height: 17px;
 
-        height: 60px;
-        padding: 8px;
+        display: flex;
 
-        text-align: left;
-        vertical-align: middle;
+        width: 100%;
 
-        border-bottom: 1px solid rgba(255, 255, 255, .05);
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        flex-wrap: nowrap;
+        order: 3;
+    }
+
+    .item.first
+    {
+        order: 1;
     }
 
 
-    table td a
+    .item > *
+    {
+        display: flex;
+
+        min-height: 60px;
+        padding: 8px;
+
+        text-align: center;
+
+        border-bottom: 1px solid rgba(255, 255, 255, .05);
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .item a
     {
         color: currentColor;
 
@@ -443,35 +489,30 @@
         text-decoration: none;
     }
 
-    table td a:hover
+    .item a:hover
     {
         color: #950fff;
     }
 
 
 
-    table td.validator
+    .table_wrap .validator
     {
         width: 250px;
         min-width: 250px;
         max-width: 250px;
-
-        table-layout: fixed;
     }
 
 
-    table td.validator > div
+    .item .validator
     {
-        display: flex;
+        text-align: left;
 
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
 
-    table td.validator .logo
+    .item .validator .logo
     {
         position: relative;
 
@@ -489,7 +530,7 @@
         flex-wrap: wrap;
     }
 
-    table td.validator .logo img
+    .item .validator .logo img
     {
         position: absolute;
         top: 0;
@@ -505,12 +546,12 @@
         object-fit: cover;
     }
 
-    table td.validator .logo img.hide
+    .item .validator .logo img.hide
     {
         display: none;
     }
 
-    table td.validator .logo .icon
+    .item .validator .logo .icon
     {
         display: block;
 
@@ -518,14 +559,13 @@
         height: 18px;
     }
 
-    table td.validator .logo + *
+    .item .validator .logo + *
     {
-        max-width: calc(100% - 46px);
-        margin-left: 16px;
+        width: calc(100% - 46px);
     }
 
 
-    table td.validator .rank
+    .item .validator .rank
     {
         color: #fff;
         font-size: 10px;
@@ -545,17 +585,17 @@
     }
 
 
-    table td.validator .moniker
+    .item .validator .moniker
     {
         position: relative;
 
         display: inline-block;
 
-        vertical-align: middle;
+        vertical-align: top;
         white-space: nowrap;
     }
 
-    table td.validator .moniker span
+    .item .validator .moniker span
     {
         display: block;
         overflow: hidden;
@@ -564,7 +604,7 @@
     }
 
 
-    table td.validator .sticker
+    .item .validator .sticker
     {
         font-size: 10px;
         line-height: 100%;
@@ -581,7 +621,7 @@
     }
 
 
-    table td.validator .moniker .tooltip
+    .item .validator .moniker .tooltip
     {
         font-size: 12px;
         line-height: 100%;
@@ -603,7 +643,7 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
     }
 
-    table td.validator .moniker .tooltip:before
+    .item .validator .moniker .tooltip:before
     {
         position: absolute;
         top: 100%;
@@ -622,48 +662,43 @@
     }
 
 
-    table td.validator .moniker:hover .tooltip
+    .item .validator .moniker:hover .tooltip
     {
         display: block;
     }
 
 
-    table .validator_vote
+    .table_wrap .validator_vote
     {
         width: 140px;
         min-width: 140px;
 
-        table-layout: fixed;
-
         text-align: center;
     }
 
 
-    table .most_voted
+    .table_wrap .most_voted
     {
         width: 191px;
         min-width: 191px;
 
-        table-layout: fixed;
-
         text-align: center;
     }
 
 
-    table .community_votes
+    .table_wrap .community_votes
     {
-        width: 435px;
-        min-width: 435px;
-
-        table-layout: fixed;
+        width: 100%;
     }
 
 
-    table td .bar
+    .item .bar
     {
         position: relative;
 
         display: flex;
+
+        width: 100%;
 
         justify-content: flex-start;
         align-items: center;
@@ -671,7 +706,7 @@
         flex-wrap: nowrap;
     }
 
-    table td .bar > *
+    .item .bar > *
     {
         position: relative;
 
@@ -681,31 +716,31 @@
         border-radius: 8px;
     }
 
-    table td .bar > * + *
+    .item .bar > * + *
     {
         margin-left: 4px;
     }
 
 
-    table td .bar .nwv
+    .item .bar .nwv
     {
         background: #eb5757;
     }
 
 
-    table td .bar .yes
+    .item .bar .yes
     {
         background: #1bc562;
     }
 
 
-    table td .bar .no
+    .item .bar .no
     {
         background: #c5811b;
     }
 
 
-    table td .bar .tooltip
+    .item .bar .tooltip
     {
         font-size: 12px;
         line-height: 100%;
@@ -735,7 +770,7 @@
     }
 
 
-    table td .bar .tooltip:before
+    .item .bar .tooltip:before
     {
         position: absolute;
         top: 100%;
@@ -754,18 +789,22 @@
     }
 
 
-    table tr:first-child td.validator .moniker .tooltip,
-    table tr:first-child td .bar .tooltip
+    .scroll:not(.with_your_validator) .item:first-child .validator .moniker .tooltip,
+    .scroll:not(.with_your_validator) .item:first-child .bar .tooltip,
+    .item.first .validator .moniker .tooltip,
+    .item.first .bar .tooltip
     {
         top: 100%;
         bottom: auto;
 
-        margin-top: 18px;
+        margin-top: 8px;
         margin-bottom: 0;
     }
 
-    table tr:first-child td.validator .moniker .tooltip:before,
-    table tr:first-child td .bar .tooltip:before
+    .scroll:not(.with_your_validator) .item:first-child .validator .moniker .tooltip:before,
+    .scroll:not(.with_your_validator) .item:first-child .bar .tooltip:before,
+    .item.first .validator .moniker .tooltip:before,
+    .item.first .bar .tooltip:before
     {
         top: auto;
         bottom: 100%;
@@ -774,7 +813,7 @@
     }
 
 
-    table td .bar .tooltip > *
+    .item .bar .tooltip > *
     {
         position: relative;
 
@@ -784,7 +823,7 @@
     }
 
 
-    table td .bar .tooltip > *:before
+    .item .bar .tooltip > *:before
     {
         position: absolute;
         top: 0;
@@ -802,33 +841,44 @@
         border-radius: 50%;
     }
 
-    table td .bar .tooltip > *.nwv:before
+    .item .bar .tooltip > *.nwv:before
     {
         background: #eb5757;
     }
 
 
-    table td .bar .tooltip > *.yes:before
+    .item .bar .tooltip > *.yes:before
     {
         background: #1bc562;
     }
 
 
-    table td .bar .tooltip > *.no:before
+    .item .bar .tooltip > *.no:before
     {
         background: #c5811b;
     }
 
 
-    table td .bar .tooltip > * + *
+    .item .bar .tooltip > * + *
     {
         margin-left: 8px;
     }
 
 
-    table .community_votes:hover .tooltip
+    .table_wrap .community_votes:hover .tooltip
     {
         display: flex;
+    }
+
+
+
+    @media print, (max-width: 1023px)
+    {
+        .titles,
+        .item
+        {
+            width: 960px;
+        }
     }
 
 

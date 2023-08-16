@@ -114,6 +114,8 @@ export default {
             'proposal_votes_th_most_voted': 'Most voted on',
             'proposal_votes_th_community_votes': 'Community Votes',
 
+            'proposal_votes_validator_sticker': 'Your Validator',
+
             'proposal_depositors_title': 'Depositors',
             'proposal_depositors_th_depositor': 'Depositor',
             'proposal_depositors_th_tx_hash': 'TxHash',
