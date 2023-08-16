@@ -22,6 +22,7 @@ html
     -moz-osx-font-smoothing: grayscale;
         -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none;
 }
 
 body
@@ -209,6 +210,8 @@ button
     min-height: 100%;
 
     background: var(--bg);
+
+    overscroll-behavior: none;
 }
 
 
@@ -221,6 +224,7 @@ button
 
     padding-top: 148px;
 
+    overscroll-behavior: none;
     flex: 1 0 auto;
 }
 
