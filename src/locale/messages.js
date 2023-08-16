@@ -352,7 +352,7 @@ export default {
             'notification_success_address_delete_title': 'Address deleted successfully',
 
             'notification_action_address_add': 'Address add',
-            'notification_address_adding_process': 'Address adding to passport...',
+            'notification_address_adding_process': 'Processing...',
             'notification_success_address_added_title': 'Address added successfully',
 
             'notification_action_address_rename': 'Address rename',
@@ -447,7 +447,7 @@ export default {
             'btn_next': 'Next',
             'btn_back': 'Back',
             'btn_sign': 'Sign',
-            'btn_sing_broadcast': 'Sing and broadcast',
+            'btn_sing_broadcast': 'Sign and Broadcast',
             'btn_done': 'Done',
             'btn_see_more': 'See more',
             'btn_no': 'No',

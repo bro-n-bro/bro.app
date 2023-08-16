@@ -45,8 +45,6 @@
                     </thead>
                 </table>
 
-                <!-- <pre>{{ filterValidators(currentFilter) }}</pre> -->
-
                 <div class="scroll">
                     <table>
                         <tbody>
@@ -59,9 +57,13 @@
                                             <div class="rank">{{ validator.voting_power_rank }}</div>
                                         </div>
 
-                                        <div class="moniker">
-                                            <span>{{ validator.moniker }}</span>
-                                            <div class="tooltip">{{ validator.moniker }}</div>
+                                        <div>
+                                            <div class="moniker">
+                                                <span>{{ validator.moniker }}</span>
+                                                <div class="tooltip">{{ validator.moniker }}</div>
+                                            </div>
+
+                                            <!-- <div class="sticker">Your Validator</div> -->
                                         </div>
                                     </div>
                                 </td>
@@ -498,6 +500,12 @@
         height: 18px;
     }
 
+    table td.validator .logo + *
+    {
+        max-width: calc(100% - 46px);
+        margin-left: 16px;
+    }
+
 
     table td.validator .rank
     {
@@ -525,9 +533,6 @@
 
         display: inline-block;
 
-        max-width: calc(100% - 46px);
-        margin-left: 16px;
-
         vertical-align: middle;
         white-space: nowrap;
     }
@@ -538,6 +543,23 @@
         overflow: hidden;
 
         text-overflow: ellipsis;
+    }
+
+
+    table td.validator .sticker
+    {
+        font-size: 10px;
+        line-height: 100%;
+
+        display: inline-block;
+
+        margin-top: 4px;
+        padding: 4px;
+
+        vertical-align: top;
+
+        border: 1px solid #950fff;
+        border-radius: 10px;
     }
 
 

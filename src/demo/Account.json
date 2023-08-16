@@ -110,7 +110,6 @@
                                     "denom": "uatom",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                    "price": 9.3723069171,
                                     "symbol": "ATOM"
                                 }
                             ],
@@ -120,7 +119,6 @@
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                    "price": 1.41e-8,
                                     "symbol": "BOOT",
                                     "amountCurrentDenom": 0
                                 },
@@ -129,7 +127,6 @@
                                     "denom": "ujuno",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                    "price": 0.2638142468,
                                     "symbol": "JUNO",
                                     "amountCurrentDenom": 0
                                 }
@@ -141,7 +138,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -151,7 +147,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -161,7 +156,6 @@
                                 "denom": "untrn",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                                "price": 0.402942,
                                 "symbol": "NTRN",
                                 "amountCurrentDenom": 0
                             },
@@ -170,7 +164,6 @@
                                 "denom": "stuatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                                "price": 10.6976349036,
                                 "symbol": "stATOM",
                                 "amountCurrentDenom": 0
                             },
@@ -179,7 +172,6 @@
                                 "denom": "uumee",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                                "price": 0.004358374,
                                 "symbol": "UMEE",
                                 "amountCurrentDenom": 0
                             },
@@ -188,7 +180,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM",
                                 "amountCurrentDenom": 0
                             }
@@ -225,7 +216,6 @@
                                     "denom": "uatom",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                    "price": 9.3723069171,
                                     "symbol": "ATOM"
                                 }
                             ],
@@ -235,7 +225,6 @@
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                    "price": 1.41e-8,
                                     "symbol": "BOOT",
                                     "amountCurrentDenom": 0
                                 },
@@ -244,7 +233,6 @@
                                     "denom": "ujuno",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                    "price": 0.2638142468,
                                     "symbol": "JUNO",
                                     "amountCurrentDenom": 0
                                 }
@@ -256,7 +244,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -266,7 +253,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -276,7 +262,6 @@
                                 "denom": "untrn",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                                "price": 0.402942,
                                 "symbol": "NTRN",
                                 "amountCurrentDenom": 0
                             },
@@ -285,7 +270,6 @@
                                 "denom": "stuatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                                "price": 10.6976349036,
                                 "symbol": "stATOM",
                                 "amountCurrentDenom": 0
                             },
@@ -294,7 +278,6 @@
                                 "denom": "uumee",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                                "price": 0.004358374,
                                 "symbol": "UMEE",
                                 "amountCurrentDenom": 0
                             },
@@ -303,7 +286,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM",
                                 "amountCurrentDenom": 0
                             }
@@ -340,7 +322,6 @@
                                     "denom": "uatom",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                    "price": 9.3723069171,
                                     "symbol": "ATOM"
                                 }
                             ],
@@ -350,7 +331,6 @@
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                    "price": 1.41e-8,
                                     "symbol": "BOOT",
                                     "amountCurrentDenom": 0
                                 },
@@ -359,7 +339,6 @@
                                     "denom": "ujuno",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                    "price": 0.2638142468,
                                     "symbol": "JUNO",
                                     "amountCurrentDenom": 0
                                 }
@@ -371,7 +350,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -381,7 +359,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -391,7 +368,6 @@
                                 "denom": "untrn",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                                "price": 0.402942,
                                 "symbol": "NTRN",
                                 "amountCurrentDenom": 0
                             },
@@ -400,7 +376,6 @@
                                 "denom": "stuatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                                "price": 10.6976349036,
                                 "symbol": "stATOM",
                                 "amountCurrentDenom": 0
                             },
@@ -409,7 +384,6 @@
                                 "denom": "uumee",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                                "price": 0.004358374,
                                 "symbol": "UMEE",
                                 "amountCurrentDenom": 0
                             },
@@ -418,7 +392,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM",
                                 "amountCurrentDenom": 0
                             }
@@ -455,7 +428,6 @@
                                     "denom": "uatom",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                    "price": 9.3723069171,
                                     "symbol": "ATOM"
                                 }
                             ],
@@ -465,7 +437,6 @@
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                    "price": 1.41e-8,
                                     "symbol": "BOOT",
                                     "amountCurrentDenom": 0
                                 },
@@ -474,7 +445,6 @@
                                     "denom": "ujuno",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                    "price": 0.2638142468,
                                     "symbol": "JUNO",
                                     "amountCurrentDenom": 0
                                 }
@@ -486,7 +456,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -496,7 +465,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -506,7 +474,6 @@
                                 "denom": "untrn",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                                "price": 0.402942,
                                 "symbol": "NTRN",
                                 "amountCurrentDenom": 0
                             },
@@ -515,7 +482,6 @@
                                 "denom": "stuatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                                "price": 10.6976349036,
                                 "symbol": "stATOM",
                                 "amountCurrentDenom": 0
                             },
@@ -524,7 +490,6 @@
                                 "denom": "uumee",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                                "price": 0.004358374,
                                 "symbol": "UMEE",
                                 "amountCurrentDenom": 0
                             },
@@ -533,7 +498,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM",
                                 "amountCurrentDenom": 0
                             }
@@ -570,7 +534,6 @@
                                     "denom": "uatom",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                    "price": 9.3723069171,
                                     "symbol": "ATOM"
                                 }
                             ],
@@ -580,7 +543,6 @@
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                    "price": 1.41e-8,
                                     "symbol": "BOOT",
                                     "amountCurrentDenom": 0
                                 },
@@ -589,7 +551,6 @@
                                     "denom": "ujuno",
                                     "exponent": 6,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg",
-                                    "price": 0.2638142468,
                                     "symbol": "JUNO",
                                     "amountCurrentDenom": 0
                                 }
@@ -601,7 +562,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -611,7 +571,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM"
                             }
                         ],
@@ -621,7 +580,6 @@
                                 "denom": "untrn",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/ntrn.svg",
-                                "price": 0.402942,
                                 "symbol": "NTRN",
                                 "amountCurrentDenom": 0
                             },
@@ -630,7 +588,6 @@
                                 "denom": "stuatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/statom.svg",
-                                "price": 10.6976349036,
                                 "symbol": "stATOM",
                                 "amountCurrentDenom": 0
                             },
@@ -639,7 +596,6 @@
                                 "denom": "uumee",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg",
-                                "price": 0.004358374,
                                 "symbol": "UMEE",
                                 "amountCurrentDenom": 0
                             },
@@ -648,7 +604,6 @@
                                 "denom": "uatom",
                                 "exponent": 6,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-                                "price": 9.3723069171,
                                 "symbol": "ATOM",
                                 "amountCurrentDenom": 0
                             }

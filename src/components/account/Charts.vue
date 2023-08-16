@@ -296,7 +296,7 @@
     function calcIBCTokens(tokens) {
         tokens.forEach(el => {
             // Convert to current denom
-            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.prices.find(el => el.symbol == 'ATOM').price)
+            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == 'ATOM').price)
 
             // Sum total
             totals.ibc += parseFloat(el.amountCurrentDenom * Math.pow(10, store.networks.cosmoshub.exponent))
@@ -335,7 +335,7 @@
     function calcRewardsTokens(tokens) {
         tokens.forEach(el => {
             // Convert to current denom
-            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (el.price / store.prices.find(el => el.symbol == 'ATOM').price)
+            el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == 'ATOM').price)
 
             // Sum total
             if(el.amount * Math.pow(10, el.exponent) >= 1) {
@@ -355,10 +355,10 @@
         let duplicate = groupByDenom.value.find(e => e.symbol == el.symbol)
 
         if(duplicate) {
-            duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (el.price / store.prices.find(el => el.symbol == 'ATOM').price)) * Math.pow(10, store.networks.cosmoshub.exponent)
+            duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == 'ATOM').price)) * Math.pow(10, store.networks.cosmoshub.exponent)
         } else {
             groupByDenom.value.push({
-                'amount': (el.amount / Math.pow(10, el.exponent) * (el.price / store.prices.find(el => el.symbol == 'ATOM').price)) * Math.pow(10, store.networks.cosmoshub.exponent),
+                'amount': (el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == 'ATOM').price)) * Math.pow(10, store.networks.cosmoshub.exponent),
                 'logo': el.logo,
                 'symbol': el.symbol
             })
