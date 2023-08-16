@@ -41,7 +41,7 @@
 
 
                     <div v-if="activeTab == 'tab1'">
-                        <!-- <Description :proposal="proposal" /> -->
+                        <Description :proposal="proposal" />
                     </div>
 
 

@@ -348,13 +348,31 @@
     {
         overflow: auto;
 
-        max-height: 601px;
+        width: 100%;
+        max-height: 609px;
+        padding-bottom: 8px;
+
+        scrollbar-color: #950fff var(--bg);
+        scrollbar-width: thin;
     }
 
     .scroll::-webkit-scrollbar
     {
         width: 6px;
         height: 6px;
+    }
+    .scroll::-webkit-scrollbar
+    {
+        width: 4px;
+        height: 4px;
+
+        background-color: var(--bg);
+    }
+
+    .scroll::-webkit-scrollbar-thumb
+    {
+        border-radius: 5px;
+        background-color: #950fff;
     }
 
 
@@ -811,6 +829,24 @@
     table .community_votes:hover .tooltip
     {
         display: flex;
+    }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .filter .btn
+        {
+            font-size: 13px;
+
+            padding: 8px;
+        }
+
+
+        .scroll
+        {
+            max-height: 304px;
+        }
     }
 
 </style>

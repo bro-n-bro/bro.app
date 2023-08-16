@@ -35,19 +35,19 @@
                 <div class="val">{{ props.proposal.content.plan.time }}</div>
             </div>
 
-            <div v-if="props.proposal.content.changes.length && props.proposal.content.changes[0].key">
+            <div v-if="props.proposal.content.changes && props.proposal.content.changes.length && props.proposal.content.changes[0].key">
                 <div class="label">{{ $t('message.proposal_feature_changes_key_label') }}</div>
 
                 <div class="val">{{ props.proposal.content.changes[0].key }}</div>
             </div>
 
-            <div v-if="props.proposal.content.changes.length && props.proposal.content.changes[0].subspace">
+            <div v-if="props.proposal.content.changes && props.proposal.content.changes.length && props.proposal.content.changes[0].subspace">
                 <div class="label">{{ $t('message.proposal_feature_changes_subspace_label') }}</div>
 
                 <div class="val">{{ props.proposal.content.changes[0].subspace }}</div>
             </div>
 
-            <div v-if="props.proposal.content.changes.length && props.proposal.content.changes[0].value">
+            <div v-if="props.proposal.content.changes && props.proposal.content.changes.length && props.proposal.content.changes[0].value">
                 <div class="label">{{ $t('message.proposal_feature_changes_value_label') }}</div>
 
                 <div class="val">{{ props.proposal.content.changes[0].value }}</div>
@@ -148,7 +148,7 @@
     .description .features .label
     {
         width: 168px;
-        padding-right: 16%;
+        padding-right: 16px;
     }
 
     .description .features .val
@@ -233,4 +233,34 @@
     {
         transform: rotate(-180deg);
     }
+
+
+
+    @media print, (max-width: 767px)
+    {
+        .description .icon
+        {
+            top: 10px;
+            bottom: auto;
+        }
+
+
+        .description .text_block
+        {
+            width: 100%;
+        }
+
+
+        .description .features .label
+        {
+            width: 120px;
+            padding-right: 12px;
+        }
+
+        .description .features .val
+        {
+            width: calc(100% - 120px);
+        }
+    }
+
 </style>
