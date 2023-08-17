@@ -311,13 +311,11 @@ export default {
             'validator_modal_ownership_label': 'Self Bonded/<br>Ownership',
             'validator_modal_total_delegated_label': 'Total delegated amount',
             'validator_modal_voted_label': 'Props voted',
-            'validator_modal_blurring_label': 'Tokens blurring',
 
             'validator_modal_col_commission_notice': "The percentage of validator's commision.",
             'validator_modal_col_self_bonded_ownership_notice': 'The number of tokens delegated to yourself. The ratio of the number of tokens delegated to yourself to the total number of delegations.',
             'validator_modal_col_voted_notice': 'This criterion is about the number of votes ({voted}) for the last 5 ended proposals.',
             'validator_modal_col_total_delegated_notice': 'Total amount of tokens delegated to the validator',
-            'validator_modal_col_blurring_notice': 'This criterion shows how many tokens were lost by the validator on the slashing in fractions.',
 
 
             // Notofications

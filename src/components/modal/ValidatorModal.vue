@@ -102,9 +102,7 @@
                                     {{ new Number($filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }}
                                 </span>
                                 /
-                                <span>
-                                    <!-- {{ $filters.toFixed(store.validatorInfo.ownership')] * 100, 2) }}% -->
-                                </span>
+                                <span>{{ $filters.toFixed(store.validatorInfo.self_bonded.amount / store.validatorInfo.voting_power * 100, 2) }}%</span>
                             </div>
                         </div>
 
@@ -125,16 +123,6 @@
 
                             <div class="val">
                                 {{ $filters.toFixed(store.validatorInfo.proposals_voted_amount, 0) }}
-                            </div>
-                        </div>
-
-                        <div class="feature" @mouseover="emitter.emit('setNotification', $t('message.validator_modal_col_blurring_notice'))">
-                            <div class="label">
-                                {{ $t('message.validator_modal_blurring_label') }}
-                            </div>
-
-                            <div class="val">
-                                {{ $filters.toFixed(store.validatorInfo.voting_power / store.validatorInfo.delegator_shares * 100, 2) }}%
                             </div>
                         </div>
                     </div>
