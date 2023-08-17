@@ -76,7 +76,7 @@
                             <div>
                                 <div class="name" :class="{'error': duplicate}">
                                     <template v-if="tempAddressName.length">{{ tempAddressName }}</template>
-                                    <template v-else>{{ store.account.userName }}</template>
+                                    <template v-else>{{ store.account.userName.substr(0, 16) }}</template>
 
                                     <span v-if="duplicate">{{ $t('message.add_address_duplicated_label') }}</span>
                                 </div>
@@ -489,7 +489,7 @@
 
         // Confirm address label
         if(!tempAddressName.value.length) {
-            tempAddressName.value = store.account.userName
+            tempAddressName.value = store.account.userName.substr(0, 16)
         }
 
         // Set new singer
