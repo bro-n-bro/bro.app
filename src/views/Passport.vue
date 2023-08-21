@@ -262,6 +262,16 @@
                 // Send avatar to IPFS
                 let avatarIpfs = await store.IPFSNode.add(avatar.value.files[0])
 
+                // Pin avatar
+                let pinAvatar = new FormData()
+
+                pinAvatar.append('file', avatar.value.files[0])
+
+                fetch('https://io.cybernode.ai/add?stream-channels=false&raw-leaves=true&cid-version=0', {
+                    method: 'POST',
+                    body: pinAvatar
+                })
+
                 // Prepare Tx
                 var prepareResult = await preparePassportTx({
                     update_avatar: {
