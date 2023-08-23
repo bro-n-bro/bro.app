@@ -82,6 +82,9 @@
 
                         <div class="community_votes">
                             <div class="bar">
+                                <div class="empty" v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'"></div>
+
+                                <template v-else>
                                 <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')"></div>
 
                                 <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')"></div>
@@ -90,7 +93,7 @@
 
                                 <div class="tooltip">
                                     <div class="yes">
-                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'Yes'), 2) < 1">
+                                        <template v-if="calcPercents(validator.operator_address, 'Yes') < 1 && calcPercents(validator.operator_address, 'Yes') > 0">
                                         &lt;1% — {{ $t('message.proposal_vote_yes') }};
                                         </template>
 
@@ -100,7 +103,7 @@
                                     </div>
 
                                     <div class="no">
-                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'No'), 2) < 1">
+                                        <template v-if="calcPercents(validator.operator_address, 'No') < 1 && calcPercents(validator.operator_address, 'No') > 0">
                                         &lt;1% — {{ $t('message.proposal_vote_no') }};
                                         </template>
 
@@ -110,7 +113,7 @@
                                     </div>
 
                                     <div class="nwv">
-                                        <template v-if="$filters.toFixed(calcPercents(validator.operator_address, 'NWM'), 2) < 1">
+                                        <template v-if="calcPercents(validator.operator_address, 'NWM') < 1 && calcPercents(validator.operator_address, 'NWM') > 0">
                                         &lt;1% — {{ $t('message.proposal_vote_nwv') }};
                                         </template>
 
@@ -119,6 +122,7 @@
                                         </template>
                                     </div>
                                 </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -289,16 +293,18 @@
             validator = validators.value.delegators.find(el => el.operator_address == operator_address),
             sum = validator.delegators_shares_option_yes + validator.delegators_shares_option_nwv + validator.delegators_shares_option_no
 
-        if(status == 'Yes') {
-            result = validator.delegators_shares_option_yes / sum * 100
-        }
+        if(sum) {
+            if(status == 'Yes') {
+                result = validator.delegators_shares_option_yes / sum * 100
+            }
 
-        if(status == 'NWM') {
-            result = validator.delegators_shares_option_nwv / sum * 100
-        }
+            if(status == 'NWM') {
+                result = validator.delegators_shares_option_nwv / sum * 100
+            }
 
-        if(status == 'No') {
-            result = validator.delegators_shares_option_no / sum * 100
+            if(status == 'No') {
+                result = validator.delegators_shares_option_no / sum * 100
+            }
         }
 
         return result
@@ -591,6 +597,8 @@
 
         display: inline-block;
 
+        max-width: 100%;
+
         vertical-align: top;
         white-space: nowrap;
     }
@@ -714,6 +722,11 @@
         /* min-width: 20px; */
 
         border-radius: 8px;
+    }
+
+    .item .bar > *.empty
+    {
+        background: rgba(255, 255, 255, .05);
     }
 
     .item .bar > * + *
