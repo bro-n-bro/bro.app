@@ -97,6 +97,7 @@
     import { onBeforeMount, reactive, ref, inject } from 'vue'
     import { useGlobalStore } from '@/stores'
     import hcSticky from 'hc-sticky'
+    import { useUrlSearchParams } from '@vueuse/core'
 
     // Components
     import Networks from '../components/account/Networks.vue'
@@ -108,6 +109,7 @@
         i18n = inject('i18n'),
         loading = ref(false),
         lockFilter = ref(false),
+        urlParams = useUrlSearchParams('history'),
         data = reactive({
             loading: false,
             allReceived: false,
@@ -126,7 +128,9 @@
 
         // Get proposals
         try {
-            await getProposals()
+            store.proposalsFilter
+                ? await setFilter(store.proposalsFilter)
+                : await getProposals()
         } catch (error) {
             console.error(error)
         }
@@ -152,39 +156,51 @@
 
     // Set filter
     async function setFilter(status) {
-        if(status == 'deposit') {
-            data.filter_deposit = !data.filter_deposit
-        }
+        let urlFilter = '',
+            statuses = status.split('-')
 
-        if(status == 'voting') {
-            data.filter_voting = !data.filter_voting
-        }
+        for (status of statuses) {
+            if(status == 'deposit') {
+                data.filter_deposit = !data.filter_deposit
+            }
 
-        if(status == 'passed') {
-            data.filter_passed = !data.filter_passed
-        }
+            if(status == 'voting') {
+                data.filter_voting = !data.filter_voting
+            }
 
-        if(status == 'rejected') {
-            data.filter_rejected = !data.filter_rejected
+            if(status == 'passed') {
+                data.filter_passed = !data.filter_passed
+            }
+
+            if(status == 'rejected') {
+                data.filter_rejected = !data.filter_rejected
+            }
         }
 
         data.filter = ''
 
         if(data.filter_deposit) {
+            urlFilter += 'deposit'
             data.filter += ',PROPOSAL_STATUS_DEPOSIT_PERIOD'
         }
 
         if(data.filter_voting) {
+            urlFilter += '-voting'
             data.filter += ',PROPOSAL_STATUS_VOTING_PERIOD'
         }
 
         if(data.filter_passed) {
+            urlFilter += '-passed'
             data.filter += ',PROPOSAL_STATUS_PASSED'
         }
 
         if(data.filter_rejected) {
+            urlFilter += '-rejected'
             data.filter += ',PROPOSAL_STATUS_REJECTED'
         }
+
+        // Set params to URL
+        urlParams.filter = urlFilter
 
         data.allReceived = false
 
@@ -235,7 +251,11 @@
                     ? data.proposals = data.proposals.concat(response.proposals)
                     : data.allReceived = true
 
-                if(!loadMore) {
+                if (response.proposals.length < data.limit) {
+                    data.allReceived = true
+                }
+
+                if (!loadMore) {
                     // Hide loader
                     loading.value = true
                 } else {

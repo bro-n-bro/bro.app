@@ -147,6 +147,11 @@ router.beforeResolve(async (to, from, next) => {
 		store.currentProposalId = to.params.proposal_id
 	}
 
+	// Referer
+	if (to.query.filter) {
+		store.proposalsFilter = to.query.filter
+	}
+
 
 	// Get currencies price
 	if (!store.prices) {

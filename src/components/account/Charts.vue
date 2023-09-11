@@ -104,10 +104,13 @@
                         groupByDenom = ref([])
 
 
+                        console.log(response)
+
+
                         // Clean data
                         if(response.liquid && response.liquid.native) {
                             for (let i = response.liquid.native.length - 1; i >= 0; i--) {
-                                if (response.liquid.native[i].symbol === null || response.liquid.native[i].exponent === null || response.liquid.native[i].price === null) {
+                                if (response.liquid.native[i].symbol === null || !response.liquid.native[i].exponent || !response.liquid.native[i].price) {
                                     response.liquid.native.splice(i, 1)
                                 }
                             }
@@ -115,7 +118,7 @@
 
                         if(response.liquid && response.liquid.ibc) {
                             for (let i = response.liquid.ibc.length - 1; i >= 0; i--) {
-                                if (response.liquid.ibc[i].symbol === null || response.liquid.ibc[i].exponent === null || response.liquid.ibc[i].price === null) {
+                                if (response.liquid.ibc[i].symbol === null || !response.liquid.ibc[i].exponent || !response.liquid.ibc[i].price) {
                                     response.liquid.ibc.splice(i, 1)
                                 }
                             }
@@ -123,7 +126,7 @@
 
                         if(response.staked) {
                             for (let i = response.staked.length - 1; i >= 0; i--) {
-                                if (response.staked[i].symbol === null || response.staked[i].exponent === null || response.staked[i].price === null) {
+                                if (response.staked[i].symbol === null || !response.staked[i].exponent || !response.staked[i].price) {
                                     response.staked.splice(i, 1)
                                 }
                             }
@@ -131,7 +134,7 @@
 
                         if(response.unbonding) {
                             for (let i = response.unbonding.length - 1; i >= 0; i--) {
-                                if (response.unbonding[i].symbol === null || response.unbonding[i].exponent === null || response.unbonding[i].price === null) {
+                                if (response.unbonding[i].symbol === null || !response.unbonding[i].exponent || !response.unbonding[i].price) {
                                     response.unbonding.splice(i, 1)
                                 }
                             }
@@ -139,7 +142,7 @@
 
                         if(response.rewards) {
                             for (let i = response.rewards.length - 1; i >= 0; i--) {
-                                if (response.rewards[i].symbol === null || response.rewards[i].exponent === null || response.rewards[i].price === null) {
+                                if (response.rewards[i].symbol === null || !response.rewards[i].exponent || !response.rewards[i].price) {
                                     response.rewards.splice(i, 1)
                                 }
                             }

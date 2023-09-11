@@ -52,6 +52,7 @@ export const useGlobalStore = defineStore('global', {
         currentProposalId: null,
         currentDeleteAddress: null,
         currentCurrency: useLocalStorage('currency', 'USDT'),
+        proposalsFilter: null,
 
         tooltip: null,
         tooltipAnimate: false,
