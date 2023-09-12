@@ -33,13 +33,26 @@
                 </button>
             </div>
 
+
             <div class="table_wrap">
                 <div class="titles">
                     <div class="validator">{{ $t('message.proposal_votes_th_validator') }}</div>
                     <div class="validator_vote">{{ $t('message.proposal_votes_th_validator_vote') }}</div>
                     <div class="most_voted">{{ $t('message.proposal_votes_th_most_voted') }}</div>
-                    <div class="community_votes">{{ $t('message.proposal_votes_th_community_votes') }}</div>
+
+                    <div class="community_votes">
+                        {{ $t('message.proposal_votes_th_community_votes') }}
+
+                        <div class="tooltip">
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_notice"></use></svg>
+
+                            <div class="text">
+                                {{ $t('message.proposal_votes_community_votes_tooltip') }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
 
                 <div class="scroll" :class="{ with_your_validator: walletValidators.length }">
                     <div class="item" v-for="(validator, index) in filterValidators(currentFilter)" :key="index" :class="{ first: checkValidator(validator.operator_address) }">
@@ -428,21 +441,99 @@
 
     .titles > *
     {
+        display: flex;
+
         padding: 10px 8px 18px;
 
         text-align: center;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
+
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
     .titles > *:first-child
     {
         text-align: left;
+
+        justify-content: flex-start;
     }
 
     .titles > *:last-child
     {
         padding-right: 10px;
+    }
+
+
+    .titles .tooltip
+    {
+        position: relative;
+
+        margin-left: 8px;
+    }
+
+
+    .titles .tooltip .icon
+    {
+        color: #fff;
+
+        display: block;
+
+        width: 14px;
+        height: 14px;
+    }
+
+
+    .titles .tooltip .text
+    {
+        color: #fff;
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        bottom: 100%;
+        left: 50%;
+
+        display: none;
+
+        width: 164px;
+        margin-bottom: 8px;
+        padding: 8px;
+
+        transform: translateX(-50%);
+        text-align: center;
+        pointer-events: none;
+
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .titles .tooltip .text:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+    .titles .tooltip:hover .text
+    {
+        display: block;
     }
 
 

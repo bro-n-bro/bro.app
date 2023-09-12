@@ -16,7 +16,7 @@ export default {
 
 
             // Main page
-            'main_page_title': 'Manage all your crypto in a single place',
+            'main_page_title': 'Advance Your Asset Management',
             'main_page_demo_text': 'For a brief set of instructions, please refer to the',
             'main_page_demo_link': 'Demo',
 
@@ -113,6 +113,8 @@ export default {
             'proposal_votes_th_validator_vote': 'Validator Vote',
             'proposal_votes_th_most_voted': 'Most voted on',
             'proposal_votes_th_community_votes': 'Community Votes',
+
+            'proposal_votes_community_votes_tooltip': 'The ratio of specific votes to the total votes cast',
 
             'proposal_votes_validator_sticker': 'Your Validator',
 
