@@ -37,6 +37,13 @@
                     </div>
 
 
+                    <div class="empty" v-if="loading && !data.proposals.length">
+                        <img src="@/assets/images/empty_proposals.svg" alt="">
+
+                        <div class="title">{{ $t('message.proposals_empty_title') }}</div>
+                    </div>
+
+
                     <template v-if="data.proposals.length">
                     <div class="loader_wrap" v-if="data.loading">
                         <div class="loader"><span></span></div>
@@ -180,22 +187,26 @@
         data.filter = ''
 
         if(data.filter_deposit) {
+            if(urlFilter.length) { urlFilter += '-' }
             urlFilter += 'deposit'
             data.filter += ',PROPOSAL_STATUS_DEPOSIT_PERIOD'
         }
 
         if(data.filter_voting) {
-            urlFilter += '-voting'
+            if(urlFilter.length) { urlFilter += '-' }
+            urlFilter += 'voting'
             data.filter += ',PROPOSAL_STATUS_VOTING_PERIOD'
         }
 
         if(data.filter_passed) {
-            urlFilter += '-passed'
+            if(urlFilter.length) { urlFilter += '-' }
+            urlFilter += 'passed'
             data.filter += ',PROPOSAL_STATUS_PASSED'
         }
 
         if(data.filter_rejected) {
-            urlFilter += '-rejected'
+            if(urlFilter.length) { urlFilter += '-' }
+            urlFilter += 'rejected'
             data.filter += ',PROPOSAL_STATUS_REJECTED'
         }
 
@@ -445,6 +456,35 @@
 
 
 
+    .empty
+    {
+        padding: 36px 68px;
+
+        text-align: center;
+    }
+
+
+    .empty img
+    {
+        display: block;
+
+        max-width: 50%;
+        margin: 0 auto 24px;
+    }
+
+
+    .empty .title
+    {
+        font-size: 30px;
+        font-weight: 600;
+
+        width: 553px;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+
+
     .load_more_area
     {
         width: 100%;
@@ -618,14 +658,9 @@
 
     @media print, (max-width: 1899px)
     {
-        .filter .title
-        {
-            font-size: 27px;
-            line-height: 33px;
-        }
-
-
-        .head .title
+        .filter .title,
+        .head .title,
+        .empty .title
         {
             font-size: 27px;
             line-height: 33px;
@@ -647,14 +682,9 @@
         }
 
 
-        .head .title
-        {
-            font-size: 26px;
-            line-height: 32px;
-        }
-
-
-        .filter .title
+        .filter .title,
+        .head .title,
+        .empty .title
         {
             font-size: 26px;
             line-height: 32px;
@@ -676,14 +706,9 @@
         }
 
 
-        .head .title
-        {
-            font-size: 24px;
-            line-height: 30px;
-        }
-
-
-        .filter .title
+        .filter .title,
+        .head .title,
+        .empty .title
         {
             font-size: 24px;
             line-height: 30px;
@@ -772,14 +797,9 @@
 
     @media print, (max-width: 1023px)
     {
-        .head .title
-        {
-            font-size: 22px;
-            line-height: 28px;
-        }
-
-
-        .filter .title
+        .filter .title,
+        .head .title,
+        .empty .title
         {
             font-size: 22px;
             line-height: 28px;
@@ -796,14 +816,9 @@
         }
 
 
-        .head .title
-        {
-            font-size: 20px;
-            line-height: 26px;
-        }
-
-
-        .filter .title
+        .filter .title,
+        .head .title,
+        .empty .title
         {
             font-size: 20px;
             line-height: 26px;
@@ -820,6 +835,22 @@
         {
             width: 100%;
             margin-left: 0;
+        }
+
+
+        .empty
+        {
+            padding: 36px;
+        }
+    }
+
+
+
+    @media print, (max-width: 479px)
+    {
+        .empty
+        {
+            padding: 40px 0;
         }
     }
 

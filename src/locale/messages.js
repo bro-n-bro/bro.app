@@ -37,6 +37,8 @@ export default {
 
 
             // Proposals page
+            'proposals_empty_title': "The governor's desk is proposal-free, no action needed!",
+
             'proposal_date_label_default': 'Voting ended:',
 
             'proposal_deposite_label_collected': 'Collected funds:',
