@@ -29,7 +29,7 @@
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_social_twitter"></use></svg>
                 </a>
 
-                <a href="https://keybase.io/bro_n_bro" target="_blank" rel="noopener nofollow">
+                <a href="https://keybase.io/bronbroio" target="_blank" rel="noopener nofollow">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_social_keybase"></use></svg>
                 </a>
 

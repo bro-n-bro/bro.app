@@ -173,7 +173,7 @@
 
     onBeforeMount(() => {
         // Create uniq wallets array
-        createUniwWalletsArray()
+        createUniqWalletsArray()
     })
 
 
@@ -182,12 +182,12 @@
         uniqWallets = []
 
         // Create uniq wallets array
-        createUniwWalletsArray()
+        createUniqWalletsArray()
     })
 
 
     // Create uniq wallets array
-    function createUniwWalletsArray() {
+    function createUniqWalletsArray() {
         uniqWallets[store.account.moonPassportOwnerAddress] = true
 
         if(store.account.moonPassportOwner.extension.addresses) {
