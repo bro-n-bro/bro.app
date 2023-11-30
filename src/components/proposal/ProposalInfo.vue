@@ -423,7 +423,7 @@
     function isQuorum() {
         let result = ''
 
-        calcTurnout() > 40 && [props.proposal.tally_no, props.proposal.tally_no_with_veto].every(el => props.proposal.tally_yes > el)
+        calcTurnout() > 40 && (props.proposal.tally_no_with_veto / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto) > 0.334 && (props.proposal.tally_yes / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto)) > 0.5) 
             ? result = true
             : result = false
 
@@ -473,6 +473,8 @@
 
             // Send Tx
             let result = await sendTx(prepareResult)
+
+            console.log(result)
 
 
             if(result.code != 0){

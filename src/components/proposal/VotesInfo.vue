@@ -76,13 +76,14 @@
                         </div>
 
                         <div class="validator_vote">
-                            <a :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
+                            <a v-if="validator.validator_option.length" :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
                                 <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
                                 <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
                                 <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
                                 <span v-if="validator.validator_option == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
-                                <span v-if="!validator.validator_option.length">&mdash;</span>
                             </a>
+
+                            <span v-else>&mdash;</span>
                         </div>
 
                         <div class="most_voted">
@@ -769,8 +770,8 @@
 
     .table_wrap .validator_vote
     {
-        width: 140px;
-        min-width: 140px;
+        width: 120px;
+        min-width: 120px;
 
         text-align: center;
     }
@@ -778,8 +779,8 @@
 
     .table_wrap .most_voted
     {
-        width: 191px;
-        min-width: 191px;
+        width: 120px;
+        min-width: 120px;
 
         text-align: center;
     }

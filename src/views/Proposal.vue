@@ -24,7 +24,7 @@
                     <HeadInfo :proposal="proposal" />
 
 
-                    <Depositors :depositors="proposal.depositors" :proposal="proposal" v-if="proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" />
+                    <Depositors :depositors="proposal.depositors" :proposal="proposal" v-if="proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'" />
 
 
                     <div class="tabs" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -33,7 +33,7 @@
                                 {{ $t('message.proposal_tab1') }}
                             </button>
 
-                            <button class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">
+                            <button v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">
                                 {{ $t('message.proposal_tab2') }}
                             </button>
                         </div>

@@ -115,7 +115,7 @@ export const preparePassportTx = async params => {
 
 
 // Prepare Tx
-export const prepareTx = async (msg, gasSimulate = true, chain = store.networkManageModal) => {
+export const prepareTx = async (msg, gasSimulate = true, chain = store.currentNetwork) => {
     let store = useGlobalStore()
 
     // Create request
@@ -133,11 +133,7 @@ export const prepareTx = async (msg, gasSimulate = true, chain = store.networkMa
 
     // Simulate gas
     if (gasSimulate) {
-        var gasUsed = chain != 'emoney' ? '0' : store.networks.emoney.gas
-
-        if (chain != 'emoney') {
-            gasUsed = await client.simulate(store.wallets[chain], msg)
-        }
+        gasUsed = await client.simulate(generateAddress(store.networks[chain].address_prefix, store.account.currentWallet), msg)
     }
 
     let fee = {
@@ -152,7 +148,7 @@ export const prepareTx = async (msg, gasSimulate = true, chain = store.networkMa
     let memo = store.ref ? `bro.${store.ref}` : 'bro.app'
 
     // Sign transaction
-    let txRaw = await client.sign(store.wallets[chain], msg, fee, memo)
+    let txRaw = await client.sign(generateAddress(store.networks[chain].address_prefix, store.account.currentWallet), msg, fee, memo)
 
     return { txRaw, client }
 }
