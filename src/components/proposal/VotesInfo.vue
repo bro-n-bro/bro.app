@@ -51,16 +51,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="percents">
+                        {{ $t('message.proposal_votes_th_percents') }}
+                    </div>
                 </div>
 
 
                 <div class="scroll" :class="{ with_your_validator: walletValidators.length }">
-                    <div class="item" v-for="(validator, index) in filterValidators(currentFilter)" :key="index" :class="{ first: checkValidator(validator.operator_address) }">
+                    <div class="item" v-for="(validator, index) in filterValidators(currentFilter)" :key="index" :class="{ first: checkValidator(validator.operator_address), last: !validator.voting_power_rank }">
                         <div class="validator">
                             <div class="logo">
                                 <img :src="`${validator.mintscan_avatar_url}`" :alt="validator.moniker" @error="imageLoadError">
+
                                 <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_user"></use></svg>
-                                <div class="rank">{{ validator.voting_power_rank }}</div>
+
+                                <div class="rank">
+                                    <span v-if="!validator.voting_power_rank">{{ $t('message.proposal_votes_validator_no_active') }}</span>
+                                    <span v-else>{{ validator.voting_power_rank }}</span>
+                                </div>
                             </div>
 
                             <div>
@@ -91,14 +100,15 @@
                             <span v-if="validator.most_voted == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
                             <span v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
                             <span v-if="validator.most_voted == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
-                            <span v-if="!validator.most_voted.length">&mdash;</span>
+                            <span v-if="validator.most_voted == 'DID_NOT_VOTE'">&mdash;</span>
                         </div>
 
                         <div class="community_votes">
-                            <div class="bar">
-                                <div class="empty" v-if="validator.most_voted == 'VOTE_OPTION_ABSTAIN'"></div>
+                            <div class="empty" v-if="validator.most_voted == 'DID_NOT_VOTE'">
+                                {{ $t('message.proposal_vote_did_not_vote') }}
+                            </div>
 
-                                <template v-else>
+                            <div class="bar" v-else>
                                 <div class="nwv" :style="`width: ${calcPercents(validator.operator_address, 'NWM')}%;`" v-if="calcPercents(validator.operator_address, 'NWM')"></div>
 
                                 <div class="yes" :style="`width: ${calcPercents(validator.operator_address, 'Yes')}%;`" v-if="calcPercents(validator.operator_address, 'Yes')"></div>
@@ -136,8 +146,16 @@
                                         </template>
                                     </div>
                                 </div>
-                                </template>
                             </div>
+                        </div>
+
+                        <div class="percents">
+                            <span v-if="validator.voting_power > 0">
+                                <template v-if="calcCommunityPercents(validator) < 0.01">&lt;0.01%</template>
+                                <template v-else>{{ $filters.toFixed(calcCommunityPercents(validator), 2) }}%</template>
+                            </span>
+
+                            <span v-else>0%</span>
                         </div>
                     </div>
                 </div>
@@ -323,6 +341,11 @@
 
         return result
     }
+
+
+    function calcCommunityPercents(validator) {
+        return (validator.delegators_shares_option_abstain + validator.delegators_shares_option_no + validator.delegators_shares_option_nwv + validator.delegators_shares_option_yes) / Math.pow(10, store.networks[store.currentNetwork].exponent) / validator.voting_power * 100
+    }
 </script>
 
 
@@ -349,14 +372,13 @@
     .filter
     {
         display: flex;
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-bottom: 8px;
         margin-left: -8px;
-
-        justify-content: flex-start;
-        align-items: flex-start;
-        align-content: flex-start;
-        flex-wrap: wrap;
     }
 
     .filter > *
@@ -368,7 +390,6 @@
 
     .filter .btn
     {
-        color: #fff;
         font-size: 14px;
         line-height: 100%;
 
@@ -376,6 +397,7 @@
 
         transition: .2s linear;
 
+        color: #fff;
         border-radius: 10px;
         background: #282828;
     }
@@ -384,7 +406,6 @@
     .filter .btn.active
     {
         color: #fff;
-
         background: #950fff;
     }
 
@@ -426,41 +447,40 @@
 
     .titles
     {
-        color: #555;
         font-size: 14px;
         line-height: 17px;
 
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         padding-right: 6px;
 
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: nowrap;
+        color: #555;
     }
 
     .titles > *
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         padding: 10px 8px 18px;
 
         text-align: center;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .titles > *:first-child
     {
-        text-align: left;
-
         justify-content: flex-start;
+
+        text-align: left;
     }
 
     .titles > *:last-child
@@ -479,18 +499,17 @@
 
     .titles .tooltip .icon
     {
-        color: #fff;
-
         display: block;
 
         width: 14px;
         height: 14px;
+
+        color: #fff;
     }
 
 
     .titles .tooltip .text
     {
-        color: #fff;
         font-size: 12px;
         line-height: 100%;
 
@@ -509,6 +528,7 @@
         text-align: center;
         pointer-events: none;
 
+        color: #fff;
         border-radius: 8px;
         background: #282828;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
@@ -545,14 +565,13 @@
         line-height: 17px;
 
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        order: 3;
 
         width: 100%;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: nowrap;
-        order: 3;
     }
 
     .item.first
@@ -560,10 +579,19 @@
         order: 1;
     }
 
+    .item.last
+    {
+        order: 5;
+    }
+
 
     .item > *
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         min-height: 60px;
         padding: 8px;
@@ -571,20 +599,15 @@
         text-align: center;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
     .item a
     {
-        color: currentColor;
-
         transition: color .2s linear;
         text-decoration: none;
+
+        color: currentColor;
     }
 
     .item a:hover
@@ -604,9 +627,9 @@
 
     .item .validator
     {
-        text-align: left;
-
         justify-content: space-between;
+
+        text-align: left;
     }
 
 
@@ -615,17 +638,16 @@
         position: relative;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 30px;
         height: 30px;
 
         border-radius: 50%;
         background: #282828;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .item .validator .logo img
@@ -665,19 +687,21 @@
 
     .item .validator .rank
     {
-        color: #fff;
         font-size: 10px;
         line-height: 14px;
 
         position: absolute;
         top: -5px;
-        right: -8px;
+        left: 18px;
 
-        width: 22px;
+        min-width: 22px;
         height: 14px;
+        padding: 0 4px;
 
         text-align: center;
+        white-space: nowrap;
 
+        color: #fff;
         border-radius: 10px;
         background: #950fff;
     }
@@ -792,18 +816,32 @@
     }
 
 
+    .table_wrap .percents
+    {
+        justify-content: flex-start;
+
+        width: 100px;
+        min-width: 100px;
+    }
+
+
+    .table_wrap .community_votes .empty
+    {
+        text-align: center;
+    }
+
+
     .item .bar
     {
         position: relative;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         width: 100%;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: nowrap;
     }
 
     .item .bar > *
@@ -811,14 +849,8 @@
         position: relative;
 
         height: 8px;
-        /* min-width: 20px; */
 
         border-radius: 8px;
-    }
-
-    .item .bar > *.empty
-    {
-        background: rgba(255, 255, 255, .05);
     }
 
     .item .bar > * + *
@@ -856,6 +888,10 @@
         left: 50%;
 
         display: none;
+        align-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: center;
 
         height: auto;
         margin-bottom: 18px;
@@ -867,11 +903,6 @@
         border-radius: 8px;
         background: #282828;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: nowrap;
     }
 
 
@@ -1003,5 +1034,4 @@
             max-height: 304px;
         }
     }
-
 </style>

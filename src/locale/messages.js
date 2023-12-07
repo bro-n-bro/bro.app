@@ -53,6 +53,7 @@ export default {
             'proposal_vote_no': 'No',
             'proposal_vote_nwv': 'No with veto',
             'proposal_vote_abstain': 'Abstain',
+            'proposal_vote_did_not_vote': "Didn't vote",
 
 
             // Proposal page
@@ -115,9 +116,11 @@ export default {
             'proposal_votes_th_validator_vote': 'Validator Vote',
             'proposal_votes_th_most_voted': 'Most voted on',
             'proposal_votes_th_community_votes': 'Community Votes',
+            'proposal_votes_th_percents': '% Text ',
 
             'proposal_votes_community_votes_tooltip': 'The ratio of specific votes to the total votes cast',
 
+            'proposal_votes_validator_no_active': 'no active',
             'proposal_votes_validator_sticker': 'Your Validator',
 
             'proposal_depositors_title': 'Depositors',
