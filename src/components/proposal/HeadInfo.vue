@@ -38,9 +38,7 @@
                 <img :src="`/${props.proposal.network}_logo.png`" alt="">
             </div>
 
-            <div class="number">#{{ props.proposal.id }}</div>
-
-            <div>{{ props.proposal.title }}</div>
+            <div>#{{ props.proposal.id }} {{ props.proposal.title }}</div>
         </div>
 
 
@@ -72,13 +70,12 @@
     .head
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-bottom: 32px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -88,43 +85,38 @@
         line-height: 130%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         padding: 7px 5px;
 
         border: 1px solid;
         border-radius: 10px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .head .status.green
     {
         color: #1bc562;
-
         background: rgba(27, 197, 98, .05);
     }
 
     .head .status.blue
     {
         color: #0343e8;
-
         background: rgba(3, 67, 232, .05);
     }
 
     .head .status.violet
     {
         color: #950fff;
-
         background: rgba(149, 15, 255, .05);
     }
 
     .head .status.red
     {
         color: #eb5757;
-
         background: rgba(235, 87, 87, .05);
     }
 
@@ -144,17 +136,16 @@
         line-height: 130%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-left: 8px;
         padding: 7px 5px;
 
         border: 1px solid;
         border-radius: 10px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .head .type .icon
@@ -174,14 +165,13 @@
         line-height: 120%;
 
         display: flex;
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         width: 100%;
         margin-top: 24px;
-
-        justify-content: flex-start;
-        align-items: flex-start;
-        align-content: flex-start;
-        flex-wrap: nowrap;
     }
 
     .head .name .logo
@@ -213,14 +203,7 @@
         object-fit: cover;
     }
 
-    .head .name .number
-    {
-        margin-left: 8px;
-
-        white-space: nowrap;
-    }
-
-    .head .name .number + *
+    .head .name .logo + *
     {
         width: 100%;
         margin-left: 8px;
@@ -229,28 +212,28 @@
 
     .head .proposer
     {
-        color: #555;
         font-size: 14px;
         font-weight: 500;
         line-height: 17px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-top: 8px;
 
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        color: #555;
     }
 
     .head .proposer a
     {
-        color: #950fff;
-
         margin-left: 8px;
 
         white-space: nowrap;
+
+        color: #950fff;
     }
 
 
@@ -351,5 +334,4 @@
             text-overflow: ellipsis;
         }
     }
-
 </style>
