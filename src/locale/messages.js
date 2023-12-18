@@ -434,7 +434,7 @@ export default {
             'tour_header_desc_step2': 'Allows you to authenticate yourself, securely interact with others, and engage in transactions with confidence',
 
             'tour_account_page_desc_step1': 'Enables you to view info and seamlessly switch between different blockchain networks',
-            'tour_account_page_desc_step2': 'Allows you to consolidate and manage multiple wallets in one place; it may include dublicates',
+            'tour_account_page_desc_step2': 'Allows you to consolidate and manage multiple wallets in one place; it may include duplicates',
             'tour_account_page_desc_step3': 'Provides detailed view of all your digital assets on different levels',
             'tour_account_page_desc_step4': 'Offers an overview of key performance indicators and average numbers for your portfolio',
             'tour_account_page_desc_step5': 'Displays the number of validators you stake with on one or more networks',
