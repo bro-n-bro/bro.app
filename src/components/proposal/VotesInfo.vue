@@ -10,25 +10,27 @@
                     {{ $t('message.proposal_votes_filter_all') }} {{ validators.delegators.length }}
                 </button>
 
-                <button class="btn" :class="{ active: currentFilter == 'Yes' }" @click.prevent="currentFilter = 'Yes'">
+                <button class="btn" :class="{ active: currentFilter == 'Yes', disabled: !getFilterCount('Yes') }" @click.prevent="currentFilter = 'Yes'">
                     {{ $t('message.proposal_votes_filter_yes') }} {{ getFilterCount('Yes') }}
                 </button>
 
-                <button class="btn" :class="{ active: currentFilter == 'No' }" @click.prevent="currentFilter = 'No'">
+                <button class="btn" :class="{ active: currentFilter == 'No', disabled: !getFilterCount('No') }" @click.prevent="currentFilter = 'No'">
                     {{ $t('message.proposal_votes_filter_no') }} {{ getFilterCount('No') }}
                 </button>
 
-                <button class="btn" :class="{ active: currentFilter == 'NWV' }" @click.prevent="currentFilter = 'NWV'">
+                <button class="btn" :class="{ active: currentFilter == 'NWV', disabled: !getFilterCount('NWV') }" @click.prevent="currentFilter = 'NWV'">
                     {{ $t('message.proposal_votes_filter_nwv') }} {{ getFilterCount('NWV') }}
                 </button>
 
-                <button class="btn" :class="{ active: currentFilter == 'Abstain' }" @click.prevent="currentFilter = 'Abstain'">
+                <button class="btn" :class="{ active: currentFilter == 'Abstain', disabled: !getFilterCount('Abstain') }" @click.prevent="currentFilter = 'Abstain'">
                     {{ $t('message.proposal_votes_filter_abstain') }} {{ getFilterCount('Abstain') }}
                 </button>
 
-                <!-- <button class="btn" :class="{ active: currentFilter == 'weighted' }" @click.prevent="currentFilter = 'weighted'">Weighted 2</button> -->
+                <button class="btn" :class="{ active: currentFilter == 'weighted', disabled: !getFilterCount('Weighted') }" @click.prevent="currentFilter = 'weighted'">
+                    {{ $t('message.proposal_votes_filter_weighted') }} {{ getFilterCount('Weighted') }}
+                </button>
 
-                <button class="btn" :class="{ active: currentFilter == 'note_vote' }" @click.prevent="currentFilter = null">
+                <button class="btn" :class="{ active: currentFilter == 'note_vote', disabled: !getFilterCount(null) }" @click.prevent="currentFilter = null">
                     {{ $t('message.proposal_votes_filter_null') }} {{ getFilterCount(null) }}
                 </button>
             </div>
@@ -85,11 +87,11 @@
                         </div>
 
                         <div class="validator_vote">
-                            <a v-if="validator.validator_option.length" :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
-                                <span v-if="validator.validator_option == 'VOTE_OPTION_YES'">{{ $t('message.proposal_vote_yes') }}</span>
-                                <span v-if="validator.validator_option == 'VOTE_OPTION_NO'">{{ $t('message.proposal_vote_no') }}</span>
-                                <span v-if="validator.validator_option == 'VOTE_OPTION_ABSTAIN'">{{ $t('message.proposal_vote_abstain') }}</span>
-                                <span v-if="validator.validator_option == 'VOTE_OPTION_NO_WITH_VETO'">{{ $t('message.proposal_vote_nwv') }}</span>
+                            <a v-if="Object.keys(validator.validator_option).length" :href="`https://www.mintscan.io/${store.networks[props.proposal.network].mintscanAlias}/txs/${validator.vote_tx_hash}`" target="_blank" rel="noopener nofollow">
+                                <span v-if="validator.validator_option.VOTE_OPTION_YES">{{ $t('message.proposal_vote_yes') }}</span>
+                                <span v-if="validator.validator_option.VOTE_OPTION_NO">{{ $t('message.proposal_vote_no') }}</span>
+                                <span v-if="validator.validator_option.VOTE_OPTION_ABSTAIN">{{ $t('message.proposal_vote_abstain') }}</span>
+                                <span v-if="validator.validator_option.VOTE_OPTION_NO_WITH_VETO">{{ $t('message.proposal_vote_nwv') }}</span>
                             </a>
 
                             <span v-else>&mdash;</span>
@@ -235,7 +237,6 @@
             await fetch(`https://rpc.bronbro.io/account/validators/${currentAddress}`)
                 .then(res => res.json())
                 .then(response => {
-                    console.log(response)
                     if(response.validators.length) {
                         // Set data
                         walletValidators.value = response.validators
@@ -260,23 +261,27 @@
         let result = []
 
         if(status == 'Yes') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_YES')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_YES)
         }
 
         if(status == 'No') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_NO')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_NO)
         }
 
         if(status == 'NWV') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_NWV')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_NO_WITH_VETO)
         }
 
         if(status == 'Abstain') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_ABSTAIN')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_ABSTAIN)
+        }
+
+        if(status == 'Weighted') {
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_WEIGHTED)
         }
 
         if(status == null) {
-            result = validators.value.delegators.filter(el => el.validator_option == '')
+            result = validators.value.delegators.filter(el => Object.keys(el.validator_option).length === 0)
         }
 
         return result.length
@@ -291,23 +296,27 @@
         currentFilter.value = status
 
         if(status == 'Yes') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_YES')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_YES)
         }
 
         if(status == 'No') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_NO')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_NO)
         }
 
         if(status == 'NWV') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_NWV')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_NO_WITH_VETO)
         }
 
         if(status == 'Abstain') {
-            result = validators.value.delegators.filter(el => el.validator_option == 'VOTE_OPTION_ABSTAIN')
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_ABSTAIN)
+        }
+
+        if(status == 'Weighted') {
+            result = validators.value.delegators.filter(el => el.validator_option.VOTE_OPTION_WEIGHTED)
         }
 
         if(status == null) {
-            result = validators.value.delegators.filter(el => el.validator_option == '')
+            result = validators.value.delegators.filter(el => Object.keys(el.validator_option).length === 0)
         }
 
         // Sort before return
@@ -400,6 +409,13 @@
         color: #fff;
         border-radius: 10px;
         background: #282828;
+    }
+
+    .filter .btn.disabled
+    {
+        pointer-events: none;
+
+        opacity: .35;
     }
 
     .filter .btn:hover,
