@@ -55,7 +55,15 @@
                     </div>
 
                     <div class="percents">
-                        {{ $t('message.proposal_votes_th_percents') }}
+                        <span v-html="$t('message.proposal_votes_th_percents')"></span>
+
+                        <div class="tooltip">
+                            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_notice"></use></svg>
+
+                            <div class="text">
+                                {{ $t('message.proposal_votes_percents_tooltip') }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -836,8 +844,10 @@
     {
         justify-content: flex-start;
 
-        width: 100px;
-        min-width: 100px;
+        width: 124px;
+        min-width: 124px;
+
+        text-align: left;
     }
 
 
@@ -1050,4 +1060,5 @@
             max-height: 304px;
         }
     }
+
 </style>

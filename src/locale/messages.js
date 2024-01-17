@@ -117,9 +117,10 @@ export default {
             'proposal_votes_th_validator_vote': 'Validator Vote',
             'proposal_votes_th_most_voted': 'Most voted on',
             'proposal_votes_th_community_votes': 'Community Votes',
-            'proposal_votes_th_percents': '% Text ',
+            'proposal_votes_th_percents': 'Participation<br> Rate',
 
             'proposal_votes_community_votes_tooltip': 'The ratio of specific votes to the total votes cast',
+            'proposal_votes_percents_tooltip': 'Percentage of voters relative to the total number of delegators.',
 
             'proposal_votes_validator_no_active': 'no active',
             'proposal_votes_validator_sticker': 'Your Validator',
