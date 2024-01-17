@@ -846,8 +846,6 @@
 
         width: 124px;
         min-width: 124px;
-
-        text-align: left;
     }
 
 

@@ -63,7 +63,7 @@
 <script setup>
     import { onBeforeMount, inject, ref, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useRouter } from 'vue-router'
+    import { useRouter, useRoute } from 'vue-router'
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
     import { generateAddress } from '@/utils'
 
@@ -77,11 +77,12 @@
 
     var store = useGlobalStore(),
         router = useRouter(),
+        route = useRoute(),
         i18n = inject('i18n'),
         loading = ref(true),
         emitter = inject('emitter'),
         proposal = ref({}),
-        activeTab = ref('tab1'),
+        activeTab = ref(route.query.tab ? route.query.tab : 'tab1'),
         chartDatasets = reactive([]),
         currentVote = reactive({ votes: [] }),
         stakingPool =  ref({})
