@@ -104,9 +104,6 @@
                         groupByDenom = ref([])
 
 
-                        console.log(response)
-
-
                         // Clean data
                         if(response.liquid && response.liquid.native) {
                             for (let i = response.liquid.native.length - 1; i >= 0; i--) {

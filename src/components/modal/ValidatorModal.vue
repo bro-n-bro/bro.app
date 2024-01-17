@@ -99,10 +99,10 @@
 
                             <div class="val">
                                 <span>
-                                    {{ new Number($filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }}
+                                    {{ new Number($filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString('en-US') }}
                                 </span>
                                 /
-                                <span>{{ $filters.toFixed(store.validatorInfo.self_bonded.amount / store.validatorInfo.voting_power * 100, 2) }}%</span>
+                                <span>{{ $filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent) / store.validatorInfo.voting_power * 100, 2) }}%</span>
                             </div>
                         </div>
 
@@ -112,7 +112,7 @@
                             </div>
 
                             <div class="val">
-                                {{ new Number($filters.toFixed(store.validatorInfo.voting_power / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString() }}
+                                {{ new Number($filters.toFixed(store.validatorInfo.voting_power, 0)).toLocaleString('en-US') }}
                             </div>
                         </div>
 

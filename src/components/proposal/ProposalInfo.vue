@@ -215,7 +215,7 @@
 
                 <div class="total">
                     {{ $t('message.proposal_vote_info_total_vote_label') }}:
-                    {{ (props.proposal.VOTE_OPTION_YES + props.proposal.VOTE_OPTION_NO + props.proposal.VOTE_OPTION_NO_WITH_VETO + props.proposal.VOTE_OPTION_ABSTAIN).toLocaleString()  }}
+                    {{ (props.proposal.VOTE_OPTION_YES + props.proposal.VOTE_OPTION_NO + props.proposal.VOTE_OPTION_NO_WITH_VETO + props.proposal.VOTE_OPTION_ABSTAIN).toLocaleString('en-US')  }}
                 </div>
             </div>
 
@@ -423,7 +423,7 @@
     function isQuorum() {
         let result = ''
 
-        calcTurnout() > 40 && (props.proposal.tally_no_with_veto / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto) > 0.334 && (props.proposal.tally_yes / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto)) > 0.5) 
+        calcTurnout() > 40 && (props.proposal.tally_no_with_veto / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto) > 0.334 && (props.proposal.tally_yes / (props.proposal.tally_no + props.proposal.tally_yes + props.proposal.tally_no_with_veto)) > 0.5)
             ? result = true
             : result = false
 
