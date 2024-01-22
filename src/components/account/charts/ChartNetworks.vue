@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="price">
-                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                     <div>{{ $filters.toFixed(calcPercents(network.totalTokens), 2) }}%</div>
 
                     <div class="percents">
-                        {{ $filters.toFixed(currencyСonversion(network.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(network.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>

@@ -14,12 +14,12 @@
                 </div>
 
                 <div class="price" v-if="(typeof chartActiveLegend == 'undefined' || typeof chartActiveLegend == 'object')">
-                    {{ $filters.toFixed(currencyСonversion(store.account.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currencyСonversion(store.account.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
 
                 <template v-for="(wallet, index) in store.account.wallets" :key="index">
                     <div class="price" v-if="chartActiveLegend == index">
-                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
                     </div>
                 </template>
             </div>
@@ -35,7 +35,7 @@
 
                 <div class="price">
                     <div>
-                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
 

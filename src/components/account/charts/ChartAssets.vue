@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="price">
-                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
             </div>
         </div>
@@ -43,9 +43,9 @@
 
                 <div class="price">
                     <div>
-                        <template v-if="(currencyСonversion(item.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name)) < 0.01">&lt; 0.01</template>
+                        <template v-if="(currencyСonversion(item.symbol == 'BOOT' ? item.amount / Math.pow(10, store.networks.bostrom.exponent) : item.amount, item.symbol)) < 0.01">&lt; 0.01</template>
 
-                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}</template>
+                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.symbol == 'BOOT' ? item.amount / Math.pow(10, store.networks.bostrom.exponent) : item.amount, item.symbol), 2) }}</template>
 
                         {{ store.currentCurrency }}
                     </div>
@@ -141,6 +141,8 @@
 
             // Get current data
             currentData.value = currentWallet.value.networks.find(el => el.name == store.currentNetwork)
+
+            console.log(currentData.value)
         } else {
             let allGroupByDenom = []
 
@@ -237,7 +239,7 @@
             token = currentData.value.balance.groupByDenom.find(e => e.symbol == symbol)
 
         if(currentData.value.totalTokens) {
-            result = token.amount / currentData.value.totalTokens * 100
+            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currencyСonversion(currentData.value.totalTokens, store.networks[store.currentNetwork].token_name) * 100
         }
 
         return result
@@ -249,11 +251,10 @@
     .chart_info
     {
         display: flex;
-
-        justify-content: space-between;
-        align-items: flex-start;
         align-content: flex-start;
+        align-items: flex-start;
         flex-wrap: wrap;
+        justify-content: space-between;
     }
 
 
@@ -270,11 +271,12 @@
 
     .block_desc
     {
-        color: #555;
         line-height: 110%;
 
         width: 100%;
         margin-bottom: 24px;
+
+        color: #555;
     }
 
 
@@ -314,7 +316,6 @@
 
     .chart .total
     {
-        color: #555;
         font-size: 14px;
         line-height: 100%;
 
@@ -324,6 +325,10 @@
         left: 0;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 100%;
         height: 100%;
@@ -332,10 +337,7 @@
         white-space: nowrap;
         pointer-events: none;
 
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        color: #555;
     }
 
 
@@ -348,12 +350,13 @@
 
     .chart .total .price
     {
-        color: #fff;
         font-size: 18px;
         font-weight: 500;
         line-height: 100%;
 
         width: 100%;
+
+        color: #fff;
     }
 
     .chart .total .price.hide
@@ -384,6 +387,10 @@
     .legends .legend
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         padding: 6px 8px;
 
@@ -392,11 +399,6 @@
 
         border-radius: 10px;
         background: #141414;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .legends .legend + .legend
@@ -459,11 +461,12 @@
 
     .legends .legend .percents
     {
-        color: #464646;
         font-size: 12px;
         line-height: 100%;
 
         margin-top: 4px;
+
+        color: #464646;
     }
 
 

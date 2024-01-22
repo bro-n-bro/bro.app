@@ -172,6 +172,10 @@ export const sendTx = async ({ txRaw, client }) => {
 export const currencyСonversion = (amount, currency) => {
     let store = useGlobalStore()
 
+    if (currency == 'MBOOT') {
+        currency = 'BOOT'
+    }
+
     let tokenPrice = store.prices.find(el => el.symbol == currency).price,
         toPrice = 1
 

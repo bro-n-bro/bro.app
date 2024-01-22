@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(totalRewardTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(currencyСonversion(totalRewardTokens, store.networks[store.currentNetwork].token_name), 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.totalTokens / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -79,7 +79,7 @@
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
-        totalRewardTokens = !store.demo ? ref(0) : ref(10016000),
+        totalRewardTokens = !store.demo ? ref(0) : ref(10.016),
         APR = !store.demo ? ref(0) : ref(0.2125),
         RPDE = !store.demo ? ref(0) : ref(0.4)
 
@@ -125,9 +125,7 @@
                 }
 
                 // Calc wallet RPDE
-                network.info.rpde.exponent
-                    ? wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
-                    : wallet.RPDE += network.info.rpde.amount
+                wallet.RPDE += network.name == 'bostrom' ? network.info.rpde.amount / Math.pow(10, store.networks.bostrom.exponent) : network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
             }
 
             // Set current data

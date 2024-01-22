@@ -76,7 +76,6 @@
         loading.value = true
 
         for (const wallet of store.account.wallets) {
-            console.log(wallet)
             for (const network of wallet.networks) {
                 try {
                     // Set network info
@@ -97,45 +96,45 @@
 
 
                             // Clean data
-                            // if(response.liquid && response.liquid.native) {
-                            //     for (let i = response.liquid.native.length - 1; i >= 0; i--) {
-                            //         if (response.liquid.native[i].symbol === null || !response.liquid.native[i].exponent || !response.liquid.native[i].price) {
-                            //             response.liquid.native.splice(i, 1)
-                            //         }
-                            //     }
-                            // }
+                            if(response.liquid && response.liquid.native) {
+                                for (let i = response.liquid.native.length - 1; i >= 0; i--) {
+                                    if (response.liquid.native[i].symbol === null || !('exponent' in response.liquid.native[i]) || !response.liquid.native[i].price) {
+                                        response.liquid.native.splice(i, 1)
+                                    }
+                                }
+                            }
 
-                            // if(response.liquid && response.liquid.ibc) {
-                            //     for (let i = response.liquid.ibc.length - 1; i >= 0; i--) {
-                            //         if (response.liquid.ibc[i].symbol === null || !response.liquid.ibc[i].exponent || !response.liquid.ibc[i].price) {
-                            //             response.liquid.ibc.splice(i, 1)
-                            //         }
-                            //     }
-                            // }
+                            if(response.liquid && response.liquid.ibc) {
+                                for (let i = response.liquid.ibc.length - 1; i >= 0; i--) {
+                                    if (response.liquid.ibc[i].symbol === null || !('exponent' in response.liquid.ibc[i]) || !response.liquid.ibc[i].price) {
+                                        response.liquid.ibc.splice(i, 1)
+                                    }
+                                }
+                            }
 
-                            // if(response.staked) {
-                            //     for (let i = response.staked.length - 1; i >= 0; i--) {
-                            //         if (response.staked[i].symbol === null || !response.staked[i].exponent || !response.staked[i].price) {
-                            //             response.staked.splice(i, 1)
-                            //         }
-                            //     }
-                            // }
+                            if(response.staked) {
+                                for (let i = response.staked.length - 1; i >= 0; i--) {
+                                    if (response.staked[i].symbol === null || !('exponent' in response.staked[i]) || !response.staked[i].price) {
+                                        response.staked.splice(i, 1)
+                                    }
+                                }
+                            }
 
-                            // if(response.unbonding) {
-                            //     for (let i = response.unbonding.length - 1; i >= 0; i--) {
-                            //         if (response.unbonding[i].symbol === null || !response.unbonding[i].exponent || !response.unbonding[i].price) {
-                            //             response.unbonding.splice(i, 1)
-                            //         }
-                            //     }
-                            // }
+                            if(response.unbonding) {
+                                for (let i = response.unbonding.length - 1; i >= 0; i--) {
+                                    if (response.unbonding[i].symbol === null || !('exponent' in response.unbonding[i]) || !response.unbonding[i].price) {
+                                        response.unbonding.splice(i, 1)
+                                    }
+                                }
+                            }
 
-                            // if(response.rewards) {
-                            //     for (let i = response.rewards.length - 1; i >= 0; i--) {
-                            //         if (response.rewards[i].symbol === null || !response.rewards[i].exponent || !response.rewards[i].price) {
-                            //             response.rewards.splice(i, 1)
-                            //         }
-                            //     }
-                            // }
+                            if(response.rewards) {
+                                for (let i = response.rewards.length - 1; i >= 0; i--) {
+                                    if (response.rewards[i].symbol === null || !('exponent' in response.rewards[i]) || !response.rewards[i].price) {
+                                        response.rewards.splice(i, 1)
+                                    }
+                                }
+                            }
 
 
                             // Calc liquid tokens
@@ -144,18 +143,18 @@
 
                                 response.liquid.native.forEach(el => {
                                     // Sum total
-                                    network.total.liquid += el.amount
-                                    network.total.liquid_rewards += el.amount
+                                    network.total.liquid += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                    network.total.liquid_rewards += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
 
                                     // Group by denom
                                     // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount / Math.pow(10, el.exponent),
+                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -168,18 +167,22 @@
                                 // calcIBCTokens(network, response.liquid.ibc)
 
                                 response.liquid.ibc.forEach(el => {
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+
+                                    el.amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+
                                     // Sum total
-                                    network.total.ibc += el.amount / Math.pow(10, el.exponent)
+                                    network.total.ibc += el.amountCurrentDenom
 
                                     // Group by denom
                                     // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += amount
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount / Math.pow(10, el.exponent),
+                                            'amount': amount,
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -193,17 +196,17 @@
 
                                 response.staked.forEach(el => {
                                     // Sum total
-                                    network.total.staked += el.amount
+                                    network.total.staked += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
 
                                     // Group by denom
                                     // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount / Math.pow(10, el.exponent),
+                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -217,17 +220,17 @@
 
                                 response.unbonding.forEach(el => {
                                     // Sum total
-                                    network.total.unbonding += el.amount
+                                    network.total.unbonding += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
 
                                     // Group by denom
                                     // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount / Math.pow(10, el.exponent),
+                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -241,9 +244,11 @@
 
                                 response.rewards.forEach(el => {
                                     // Sum total
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
-                                        if(el.amount * Math.pow(10, el.exponent) >= 1) {
-                                            network.total.rewards += el.amount / Math.pow(10, el.exponent)
+                                        if(amount >= 1) {
+                                            network.total.rewards += amount
                                         }
                                     }
 
@@ -255,10 +260,10 @@
                                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                         if(duplicate) {
-                                            duplicate.amount += el.amount / Math.pow(10, el.exponent)
+                                            duplicate.amount += amount
                                         } else {
                                             network.groupByDenom.push({
-                                                'amount': el.amount / Math.pow(10, el.exponent),
+                                                'amount': amount,
                                                 'logo': el.logo,
                                                 'symbol': el.symbol
                                             })
@@ -273,7 +278,6 @@
                             network.address = response.address
 
                             network.totalTokens = 0
-
                             network.totalTokens += network.total.liquid + network.total.staked + network.total.unbonding + network.total.rewards + network.total.outside + network.total.ibc
 
                             network.balance = {
@@ -284,11 +288,7 @@
                                 staked: response.staked,
                                 unbonding: response.unbonding,
                                 rewards: response.rewards,
-                                groupByDenom: network.groupByDenom.sort((a, b) => {
-                                    if (a.amount > b.amount) { return -1 }
-                                    if (a.amount < b.amount) { return 1 }
-                                    return 0
-                                })
+                                groupByDenom: network.groupByDenom
                             }
                         })
                 } catch (error) {
@@ -298,17 +298,17 @@
         }
 
 
-        // Sum wallet total tokens
+        // Sum wallet total tokens (in current denom)
         for (let wallet of store.account.wallets) {
             wallet.totalTokens = 0
 
             for (let network of wallet.networks) {
-                wallet.totalTokens += network.totalTokens
+                wallet.totalTokens += network.totalTokens * network.price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price
             }
         }
 
 
-        // Sum account total tokens
+        // Sum account total tokens (in current denom)
         store.account.totalTokens = 0
 
         for (let wallet of store.account.wallets) {

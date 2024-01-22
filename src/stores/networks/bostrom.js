@@ -5,12 +5,12 @@ const network = {
     index_api: 'https://rpc.index.bostrom.bronbro.io',
 
     denom: 'boot',
-    token_name: 'BOOT',
+    token_name: 'MBOOT',
     chainId: 'bostrom',
     prefix: 'bostrom',
     mintscanAlias: null,
     address_prefix: 'bostrom',
-    exponent: 0,
+    exponent: 6,
     proposal_need: 420000000000
 }
 

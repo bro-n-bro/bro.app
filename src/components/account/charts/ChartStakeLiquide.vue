@@ -89,13 +89,13 @@
                 </div>
 
                 <div class="amount">
-                    <template v-if="(currentData.total.staked / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.staked / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+                    <template v-if="currentData.total.staked < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.staked, 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 
                     <div class="price">
-                        {{ $filters.toFixed(currencyСonversion(currentData.total.staked / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.staked, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
@@ -113,13 +113,13 @@
                 </div>
 
                 <div class="amount">
-                    <template v-if="(currentData.total.liquid_rewards / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.liquid_rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+                    <template v-if="currentData.total.liquid_rewards < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.liquid_rewards, 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 
                     <div class="price">
-                        {{ $filters.toFixed(currencyСonversion(currentData.total.liquid_rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.liquid_rewards, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
@@ -137,13 +137,13 @@
                 </div>
 
                 <div class="amount">
-                    <template v-if="(currentData.total.unbonding / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.unbonding / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+                    <template v-if="currentData.total.unbonding < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.unbonding, 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 
                     <div class="price">
-                        {{ $filters.toFixed(currencyСonversion(currentData.total.unbonding / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.unbonding, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
@@ -224,13 +224,13 @@
                 </div>
 
                 <div class="amount">
-                    <template v-if="(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+                    <template v-if="currentData.total.liquid < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.liquid, 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 
                     <div class="price">
-                        {{ $filters.toFixed(currencyСonversion(currentData.total.liquid / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.liquid, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
@@ -302,13 +302,13 @@
                 </div>
 
                 <div class="amount">
-                    <template v-if="(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent)) < 0.01">&lt; 0.01</template>
-                    <template v-else>{{ $filters.toFixed(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), 2) }}</template>
+                    <template v-if="currentData.total.rewards < 0.01">&lt; 0.01</template>
+                    <template v-else>{{ $filters.toFixed(currentData.total.rewards, 2) }}</template>
 
                     {{ store.networks[store.currentNetwork].token_name }}
 
                     <div class="price">
-                        {{ $filters.toFixed(currencyСonversion(currentData.total.rewards / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(currencyСonversion(currentData.total.rewards, store.networks[store.currentNetwork].token_name), 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
