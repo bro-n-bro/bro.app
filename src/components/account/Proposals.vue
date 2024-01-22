@@ -38,7 +38,7 @@
             </div>
 
 
-            <div class="loader_wrap" v-if="!loading">
+            <div class="loader_wrap" v-if="loading">
                 <div class="loader"><span></span></div>
             </div>
 
@@ -91,31 +91,49 @@
 
 
 <script setup>
-    import { onBeforeMount, ref } from 'vue'
+    import { onBeforeMount, ref, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
 
 
     const store = useGlobalStore(),
-        loading = ref(false),
+        loading = ref(true),
         proposals = ref([]),
         showAll = ref(false)
 
 
     onBeforeMount(() => {
         // Get proposals
+        getData()
+    })
+
+
+    watch(computed(() => store.currentNetwork), () => {
+        // Show loader
+        loading.value = true
+
+        // Clear data
+        proposals.value = []
+
+        // Get proposals
+        getData()
+    })
+
+
+    // Get proposals
+    function getData() {
         try {
-            fetch('https://rpc.bronbro.io/gov/proposals')
+            fetch(`${store.networks[store.currentNetwork].index_api}/gov/proposals`)
                 .then(res => res.json())
                 .then(response => {
                     proposals.value = response.proposals
 
                     // Hide loader
-                    loading.value = true
+                    loading.value = false
                 })
         } catch (error) {
             console.error(error)
         }
-    })
+    }
 </script>
 
 

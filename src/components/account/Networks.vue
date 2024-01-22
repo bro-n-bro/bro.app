@@ -7,7 +7,7 @@
         </div>
 
         <div class="list">
-            <button class="network active">
+            <router-link to="/account/cosmoshub" class="network" :class="{ active: store.currentNetwork == 'cosmoshub' }">
                 <div class="logo">
                     <img src="/cosmoshub_logo.png" alt="">
                 </div>
@@ -16,7 +16,18 @@
                     <div class="name">{{ store.networks.cosmoshub.name }}</div>
                     <div class="token">{{ store.networks.cosmoshub.token_name }}</div>
                 </div>
-            </button>
+            </router-link>
+
+            <router-link to="/account/bostrom" class="network" :class="{ active: store.currentNetwork == 'bostrom' }">
+                <div class="logo">
+                    <img src="/bostrom_logo.png" alt="">
+                </div>
+
+                <div>
+                    <div class="name">{{ store.networks.bostrom.name }}</div>
+                    <div class="token">{{ store.networks.bostrom.token_name }}</div>
+                </div>
+            </router-link>
         </div>
     </section>
 </template>
@@ -98,6 +109,8 @@
         display: flex;
 
         width: 100%;
+        text-decoration: none;
+        color: currentColor;
         padding: 10px;
 
         transition: background .2s linear;

@@ -84,7 +84,7 @@
     // Get current account balance
     async function getCurrentAccountBalance() {
         let wallet = store.account.wallets.find(wallet => wallet.address == store.account.currentWallet),
-            networkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
+            networkInWallet = wallet.networks.find(network => network.name == store.currentNetwork)
 
         if(networkInWallet.balance > 0) {
             // Get balance from state
@@ -92,7 +92,7 @@
         } else {
             // Get balance from API
             try {
-                await fetch(`https://rpc.bronbro.io/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, wallet.address)}`)
+                await fetch(`${store.networks[store.currentNetwork].index_api}/account/account_balance/${generateAddress(store.networks.cosmoshub.address_prefix, wallet.address)}`)
                     .then(res => res.json())
                     .then(response => {
                         // Set data

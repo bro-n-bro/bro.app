@@ -220,7 +220,7 @@
             currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
             // Get current data
-            currentData.value = currentWallet.value.networks.find(el => el.name == 'cosmoshub')
+            currentData.value = currentWallet.value.networks.find(el => el.name == store.currentNetwork)
         } else {
             // Sum totals
             for (let wallet of store.account.wallets) {

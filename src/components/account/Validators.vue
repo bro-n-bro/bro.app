@@ -123,7 +123,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress } from '@/utils'
 
@@ -157,6 +157,23 @@
     })
 
 
+    watch(computed(() => store.currentNetwork), async () => {
+        // Show loader
+        loading.value = true
+
+        // Clear data
+        wallets = store.demo ? DemoAccountValidators : reactive([])
+        totalPassportTokens = store.demo ? 1313694797.6590698 : 0
+
+        // Get data
+        if(!store.demo) {
+            store.account.currentWallet == 'all'
+                ? await getAllData()
+                : await getAddressData()
+        }
+    })
+
+
     // Replacement of the logo if it is not present
     function imageLoadError(event) {
         event.target.classList.add('hide')
@@ -172,7 +189,7 @@
         try {
             let currentAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, store.account.currentWallet)
 
-            await fetch(`https://rpc.bronbro.io/account/validators/${currentAddress}`)
+            await fetch(`${store.networks[store.currentNetwork].index_api}/account/validators/${currentAddress}`)
                 .then(res => res.json())
                 .then(response => {
                     if(response.validators.length) {

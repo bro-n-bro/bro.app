@@ -9,6 +9,7 @@
     <template v-else>
     <component :is="layout" />
 
+
     <notifications width="280px" group="default">
         <template #body="props">
             <div class="notification">
@@ -48,10 +49,11 @@
 
 
 <script setup>
-    import { computed, onBeforeMount, inject } from 'vue'
+    import { computed, onBeforeMount, inject, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useRouter, useRoute } from 'vue-router'
     import { useTitle } from '@vueuse/core'
+    import { createKeplrOfflineSinger } from '@/utils'
 
     import detect from 'detect.js'
 
@@ -81,6 +83,12 @@
 				window.location.reload()
 			}
 		})
+    })
+
+
+    watch(computed(() => store.currentNetwork), async () => {
+        // Keplr connect
+        await createKeplrOfflineSinger(store.networks[store.currentNetwork].chainId)
     })
 
 

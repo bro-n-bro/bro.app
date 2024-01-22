@@ -73,7 +73,7 @@
 
 
 <script setup>
-    import { ref, onBeforeMount } from 'vue'
+    import { ref, onBeforeMount, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress, currencyСonversion } from '@/utils'
 
@@ -92,56 +92,59 @@
     })
 
 
+    watch(computed(() => store.currentNetwork), async () => {
+        // Get data
+        if(!store.demo) {
+            await getData()
+        }
+    })
+
+
     // Get data
     async function getData() {
         // Set loader
         loading.value = true
 
-        for (const wallet of store.account.wallets) {
-            // Get cosmos hub data
-            let cosmosHubAddress = generateAddress(store.networks[store.currentNetwork].address_prefix, wallet.address)
-
-            try {
-                await fetch(`https://rpc.bronbro.io/account/account_info/${cosmosHubAddress}`)
-                    .then(res => res.json())
-                    .then(response => {
-                        // Set network info
-                        let currentNetworkInWallet = wallet.networks.find(network => network.name == 'cosmoshub')
-
-                        currentNetworkInWallet.info = response
-
-                        // Set current data
-                        APR.value = response.apr
-                    })
-
-                // Sum account rewards
-                for (let wallet of store.account.wallets) {
-                    for (let network of wallet.networks) {
-                        totalRewardTokens.value += network.total.rewards
-                    }
-                }
-
-                // Calc wallet info
-                wallet.RPDE = 0
-
-                for (let network of wallet.networks) {
-                    wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
-                }
-            } catch (error) {
-                console.error(error)
-            }
-        }
-
-
-        // Calc account info
         store.account.info.RPDE = 0
 
-        for (let wallet of store.account.wallets) {
+        for (const wallet of store.account.wallets) {
+            wallet.RPDE = 0
+
+            // Get network data
+            for (let network of wallet.networks) {
+                try {
+                    // Set network info
+                    await fetch(`${store.networks[store.currentNetwork].index_api}/account/account_info/${generateAddress(store.networks[store.currentNetwork].address_prefix, wallet.address)}`)
+                        .then(res => res.json())
+                        .then(response => {
+                            // Set network info
+                            network.info = response
+                        })
+                } catch (error) {
+                    console.error(error)
+                }
+
+                // Calc wallet RPDE
+                network.info.rpde.exponent
+                    ? wallet.RPDE += network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
+                    : wallet.RPDE += network.info.rpde.amount
+            }
+
+            // Set current data
+            if (store.currentNetwork != 'all') {
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet),
+                    currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+
+                // Set current APR
+                APR.value = currentNetwork.info.apr
+            }
+
+            // Calc account RPDE
             store.account.info.RPDE += wallet.RPDE
         }
 
 
-        // Set current data
+        // Set current RPDE
         if(store.account.currentWallet != 'all') {
             // Current wallet
             let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)

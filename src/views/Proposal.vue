@@ -23,8 +23,7 @@
                 <div class="data">
                     <HeadInfo :proposal="proposal" />
 
-
-                    <Depositors :depositors="proposal.depositors" :proposal="proposal" v-if="proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'" />
+                    <Depositors :depositors="proposal.depositors" :proposal="proposal" v-if="proposal.depositors.length && proposal.status != 'PROPOSAL_STATUS_VOTING_PERIOD'" />
 
 
                     <div class="tabs" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
@@ -105,7 +104,7 @@
     // Get proposal data
     async function getProposalData() {
         try {
-            await fetch(`https://rpc.bronbro.io/gov/proposal/${store.currentProposalId}`)
+            await fetch(`${store.networks[store.currentNetwork].index_api}/gov/proposal/${store.currentProposalId}`)
                 .then(res => res.json())
                 .then(async response => {
                     // Set data

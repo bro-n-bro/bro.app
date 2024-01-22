@@ -28,7 +28,7 @@
 
                     <!-- <pre>{{ data.proposals }}</pre> -->
 
-                    <div class="loader_wrap" v-if="!loading">
+                    <div class="loader_wrap" v-if="loading">
                         <div class="loader"><span></span></div>
                     </div>
 
@@ -37,7 +37,7 @@
                     </div>
 
 
-                    <div class="empty" v-if="loading && !data.proposals.length">
+                    <div class="empty" v-if="!loading && !data.proposals.length">
                         <img src="@/assets/images/empty_proposals.svg" alt="">
 
                         <div class="title">{{ $t('message.proposals_empty_title') }}</div>
@@ -101,7 +101,7 @@
 
 
 <script setup>
-    import { onBeforeMount, reactive, ref, inject } from 'vue'
+    import { onBeforeMount, reactive, ref, inject, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import hcSticky from 'hc-sticky'
     import { useUrlSearchParams } from '@vueuse/core'
@@ -114,7 +114,7 @@
 
     const store = useGlobalStore(),
         i18n = inject('i18n'),
-        loading = ref(false),
+        loading = ref(true),
         lockFilter = ref(false),
         urlParams = useUrlSearchParams('history'),
         data = reactive({
@@ -147,6 +147,26 @@
             let stickyElements = document.querySelectorAll('.sticky')
 
             stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
+        }
+    })
+
+
+    watch(computed(() => store.currentNetwork), async () => {
+        // Show loader
+        loading.value = true
+
+        // Clear data
+        data.proposals = []
+        data.offset = 0
+        data.limit = 10
+
+        // Get proposals
+        try {
+            store.proposalsFilter
+                ? await setFilter(store.proposalsFilter)
+                : await getProposals()
+        } catch (error) {
+            console.error(error)
         }
     })
 
@@ -243,7 +263,7 @@
 
         if(!loadMore) {
             // Show loader
-            loading.value = false
+            loading.value = true
 
             // Clear data
             data.proposals = []
@@ -252,8 +272,9 @@
         }
 
         !data.filter.length
-            ? url = `https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}`
-            : url = `https://rpc.bronbro.io/gov/proposals?limit=${data.limit}&offset=${data.offset}&status__in=${data.filter.substring(1)}`
+            ? url = `${store.networks[store.currentNetwork].index_api}/gov/proposals?limit=${data.limit}&offset=${data.offset}`
+
+            : url = `${store.networks[store.currentNetwork].index_api}/gov/proposals?limit=${data.limit}&offset=${data.offset}&status__in=${data.filter.substring(1)}`
 
         await fetch(url)
             .then(res => res.json())
@@ -268,7 +289,7 @@
 
                 if (!loadMore) {
                     // Hide loader
-                    loading.value = true
+                    loading.value = false
                 } else {
                     // Hide loader
                     data.loading = false

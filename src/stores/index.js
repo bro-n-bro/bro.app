@@ -165,7 +165,7 @@ export const useGlobalStore = defineStore('global', {
         async initApp(updateOwnerMoonPassport = true, updateAvatar = true) {
             if (window.keplr) {
                 // Keplr connect
-                await createKeplrOfflineSinger('cosmoshub-4')
+                await createKeplrOfflineSinger(this.networks[this.currentNetwork].chainId)
 
                 this.isKeplrConnected = true
 
@@ -295,6 +295,31 @@ export const useGlobalStore = defineStore('global', {
                                 rewards: null,
                                 groupByDenom: []
                             }
+                        },
+                        {
+                            name: 'bostrom',
+                            color: '#25FF25',
+                            price: this.prices.find(el => el.symbol == 'BOOT').price,
+                            total: {
+                                liquid: 0,
+                                staked: 0,
+                                unbonding: 0,
+                                rewards: 0,
+                                outside: 0,
+                                ibc: 0,
+                                liquid_rewards: 0
+                            },
+                            totalTokens: 0,
+                            balance: {
+                                liquid: {
+                                    native: null,
+                                    ibc: null
+                                },
+                                staked: null,
+                                unbonding: null,
+                                rewards: null,
+                                groupByDenom: []
+                            }
                         }
                     ]
                 })
@@ -338,6 +363,31 @@ export const useGlobalStore = defineStore('global', {
                                                 rewards: null,
                                                 groupByDenom: []
                                             }
+                                        },
+                                        {
+                                            name: 'bostrom',
+                                            color: '#25FF25',
+                                            price: this.prices.find(el => el.symbol == 'BOOT').price,
+                                            total: {
+                                                liquid: 0,
+                                                staked: 0,
+                                                unbonding: 0,
+                                                rewards: 0,
+                                                outside: 0,
+                                                ibc: 0,
+                                                liquid_rewards: 0
+                                            },
+                                            totalTokens: 0,
+                                            balance: {
+                                                liquid: {
+                                                    native: null,
+                                                    ibc: null
+                                                },
+                                                staked: null,
+                                                unbonding: null,
+                                                rewards: null,
+                                                groupByDenom: []
+                                            }
                                         }
                                     ]
                                 })
@@ -359,7 +409,7 @@ export const useGlobalStore = defineStore('global', {
             if (updateAvatar) {
                 // Start IPFS
                 if (!this.IPFSNode) {
-                    this.IPFSNode = await Ipfs.create()
+                    // this.IPFSNode = await Ipfs.create()
                 }
 
 

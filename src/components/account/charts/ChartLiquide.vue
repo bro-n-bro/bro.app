@@ -256,7 +256,7 @@
             currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
             // Get current network data
-            currentData.value = currentWallet.value.networks.find(el => el.name == 'cosmoshub')
+            currentData.value = currentWallet.value.networks.find(el => el.name == store.currentNetwork)
         } else {
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
