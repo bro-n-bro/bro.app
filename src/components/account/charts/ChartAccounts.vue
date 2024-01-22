@@ -50,7 +50,7 @@
 
 
 <script setup>
-    import { onBeforeMount, computed, reactive, ref } from 'vue'
+    import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { currencyСonversion } from '@/utils'
 
@@ -60,8 +60,9 @@
     ChartJS.register(ArcElement)
 
 
-    const store = useGlobalStore(),
-        chart = ref(null),
+    const store = useGlobalStore()
+
+    var chart = ref(null),
         chartDatasets = reactive([]),
         chartActiveLegend = ref(null),
         chartData = computed(() => ({
@@ -100,10 +101,21 @@
         })
 
 
-    onBeforeMount(() => {
+    onBeforeMount(() => init())
+
+    watch(computed(() => store.currentNetwork), () => {
+        // Reset chart
+        chartDatasets = reactive([])
+
+        init()
+    })
+
+
+    // Init
+    function init() {
         // Set data for chart
         store.account.wallets.forEach(el => chartDatasets.push(el.totalTokens))
-    })
+    }
 
 
     // Mouse enter on legend

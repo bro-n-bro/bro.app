@@ -61,17 +61,6 @@
         loading = store.demo ? ref(false) : ref(true),
         chartActive = ref(1)
 
-    // var totals = reactive({
-    //     liquid: 0,
-    //     staked: 0,
-    //     unbonding: 0,
-    //     rewards: 0,
-    //     outside: 0,
-    //     ibc: 0,
-    //     liquid_rewards: 0
-    // }),
-    // groupByDenom = ref([])
-
 
     onBeforeMount(async () => {
         // Get data
@@ -87,7 +76,8 @@
         loading.value = true
 
         for (const wallet of store.account.wallets) {
-            for (let network of wallet.networks) {
+            console.log(wallet)
+            for (const network of wallet.networks) {
                 try {
                     // Set network info
                     await fetch(`${store.networks[network.name].index_api}/account/account_balance/${generateAddress(store.networks[network.name].address_prefix, wallet.address)}`)
@@ -162,10 +152,10 @@
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount
+                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount,
+                                            'amount': el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -179,17 +169,17 @@
 
                                 response.liquid.ibc.forEach(el => {
                                     // Sum total
-                                    network.total.ibc += el.amount
+                                    network.total.ibc += el.amount / Math.pow(10, el.exponent)
 
                                     // Group by denom
                                     // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount
+                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount,
+                                            'amount': el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -210,10 +200,10 @@
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount
+                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount,
+                                            'amount': el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -234,10 +224,10 @@
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += el.amount
+                                        duplicate.amount += el.amount / Math.pow(10, el.exponent)
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': el.amount,
+                                            'amount': el.amount / Math.pow(10, el.exponent),
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -253,7 +243,7 @@
                                     // Sum total
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
                                         if(el.amount * Math.pow(10, el.exponent) >= 1) {
-                                            network.total.rewards += el.amount
+                                            network.total.rewards += el.amount / Math.pow(10, el.exponent)
                                         }
                                     }
 
@@ -265,10 +255,10 @@
                                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                         if(duplicate) {
-                                            duplicate.amount += el.amount
+                                            duplicate.amount += el.amount / Math.pow(10, el.exponent)
                                         } else {
                                             network.groupByDenom.push({
-                                                'amount': el.amount,
+                                                'amount': el.amount / Math.pow(10, el.exponent),
                                                 'logo': el.logo,
                                                 'symbol': el.symbol
                                             })
@@ -300,8 +290,6 @@
                                     return 0
                                 })
                             }
-
-                            console.log(network)
                         })
                 } catch (error) {
                     console.error(error)

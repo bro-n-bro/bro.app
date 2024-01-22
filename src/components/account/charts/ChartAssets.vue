@@ -43,7 +43,10 @@
 
                 <div class="price">
                     <div>
-                        {{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}
+                        <template v-if="(currencyСonversion(item.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name)) < 0.01">&lt; 0.01</template>
+
+                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), store.networks[store.currentNetwork].token_name), 2) }}</template>
+
                         {{ store.currentCurrency }}
                     </div>
 
@@ -59,7 +62,7 @@
 
 
 <script setup>
-    import { onBeforeMount, computed, reactive, ref } from 'vue'
+    import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { currencyСonversion } from '@/utils'
 
@@ -69,8 +72,9 @@
     ChartJS.register(ArcElement)
 
 
-    const store = useGlobalStore(),
-        chart = ref(null),
+    const store = useGlobalStore()
+
+    var chart = ref(null),
         chartDatasets = reactive([]),
         chartActiveLegend = ref(null),
         chartColors = reactive([]),
@@ -118,7 +122,19 @@
         })
 
 
-    onBeforeMount(() => {
+    onBeforeMount(() => init())
+
+    watch(computed(() => store.currentNetwork), () => {
+        // Reset chart
+        chartDatasets = reactive([])
+        chartColors = reactive([])
+
+        init()
+    })
+
+
+    // Init
+    function init() {
         if(store.account.currentWallet != 'all') {
             // Get current walllet data
             currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
@@ -186,7 +202,7 @@
 
         // Sum chart total
         currentData.value.balance.groupByDenom.forEach(el => chartTotal.value += el.amount)
-    })
+    }
 
 
     // Mouse enter on legend

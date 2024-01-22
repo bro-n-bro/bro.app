@@ -114,7 +114,7 @@
             for (let network of wallet.networks) {
                 try {
                     // Set network info
-                    await fetch(`${store.networks[store.currentNetwork].index_api}/account/account_info/${generateAddress(store.networks[store.currentNetwork].address_prefix, wallet.address)}`)
+                    await fetch(`${store.networks[network.name].index_api}/account/account_info/${generateAddress(store.networks[network.name].address_prefix, wallet.address)}`)
                         .then(res => res.json())
                         .then(response => {
                             // Set network info

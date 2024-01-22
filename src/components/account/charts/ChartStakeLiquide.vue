@@ -283,7 +283,8 @@
                                     <span class="token" v-else>{{ item.symbol }}</span>
 
                                     <div class="price">
-                                        {{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol), 2) }}
+                                        <template v-if="(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol)) < 0.01">&lt; 0.01</template>
+                                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol), 2) }}</template>
                                         {{ store.currentCurrency }}
                                     </div>
                                 </div>
@@ -319,7 +320,7 @@
 
 
 <script setup>
-    import { onBeforeMount, computed, reactive, ref, inject } from 'vue'
+    import { onBeforeMount, computed, reactive, ref, inject, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { currencyСonversion } from '@/utils'
 
@@ -334,9 +335,9 @@
 
     const store = useGlobalStore(),
         props = defineProps(['chartActive']),
-        emitter = inject('emitter'),
+        emitter = inject('emitter')
 
-        chartStake = ref(null),
+    var chartStake = ref(null),
         chartDatasetsStake = reactive([]),
         chartActiveLegendStake = ref(null),
         chartTotalStake = ref(0),
@@ -432,7 +433,21 @@
         })
 
 
-    onBeforeMount(() => {
+    onBeforeMount(() => init())
+
+    watch(computed(() => store.currentNetwork), () => {
+        // Reset chart
+        chartDatasetsStake = reactive([])
+        chartTotalStake = ref(0)
+
+        chartDatasetsLiquide = reactive([])
+        chartTotalLiquide = ref(0)
+
+        init()
+    })
+
+
+    function init() {
         if(store.account.currentWallet != 'all') {
             // Get current walllet data
             currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
@@ -478,7 +493,7 @@
         chartTotalStake.value = currentData.value.total.staked + currentData.value.total.liquid_rewards + currentData.value.total.unbonding
 
         chartTotalLiquide.value = currentData.value.total.liquid + currentData.value.total.ibc + currentData.value.total.rewards
-    })
+    }
 
 
     // Calc percents
@@ -562,11 +577,10 @@
     .chart_info
     {
         display: flex;
-
-        justify-content: space-between;
-        align-items: flex-start;
         align-content: flex-start;
+        align-items: flex-start;
         flex-wrap: wrap;
+        justify-content: space-between;
     }
 
 
@@ -583,11 +597,12 @@
 
     .block_desc
     {
-        color: #555;
         line-height: 110%;
 
         width: 100%;
         margin-bottom: 24px;
+
+        color: #555;
     }
 
 
@@ -602,6 +617,7 @@
 
         border-radius: 50%;
         background: #0d0d0d;
+        box-shadow: inset 0 0 0 18px rgba(255,255,255,.05);
     }
 
 
@@ -700,17 +716,16 @@
     .legends .legend
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         padding: 6px 8px;
 
         transition: background .2s linear;
 
         border-radius: 10px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -724,16 +739,16 @@
 
     .legends .legend .name
     {
-        color: #555;
         font-size: 14px;
         line-height: 100%;
 
         display: flex;
-
-        justify-content: flex-start;
-        align-items: center;
         align-content: center;
+        align-items: center;
         flex-wrap: wrap;
+        justify-content: flex-start;
+
+        color: #555;
     }
 
 
@@ -768,7 +783,6 @@
 
     .legends .legend .price
     {
-        color: #555;
         font-size: 12px;
         font-weight: 400;
         line-height: 100%;
@@ -776,20 +790,21 @@
         margin-top: 4px;
 
         white-space: nowrap;
+
+        color: #555;
     }
 
 
     .legends .legend .progress
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         width: 100%;
         margin-top: 8px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -822,15 +837,14 @@
     .legends .legend .tokens .item
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         padding-top: 8px;
 
         border-top: 1px solid rgba(255, 255, 255, .05);
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .legends .legend .tokens .item + .item
@@ -857,11 +871,12 @@
 
     .legends .legend .tokens .on_chain
     {
-        color: #555;
         font-size: 12px;
         line-height: 100%;
 
         margin-top: 4px;
+
+        color: #555;
     }
 
 
