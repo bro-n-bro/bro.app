@@ -25,7 +25,7 @@ const account = {
         outside: 0,
         ibc: 0,
     },
-    totalTokens: 0,
+    totalTokensPrice: 0,
 }
 
 export default account

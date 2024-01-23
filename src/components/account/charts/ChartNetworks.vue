@@ -14,14 +14,14 @@
                 </div>
 
                 <div class="price">
-                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currentData.totalTokensPrice, 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
             </div>
         </div>
 
 
-        <div class="legends" :class="{ empty: !currentData.totalTokens }">
-            <template v-if="!currentData.totalTokens">
+        <div class="legends" :class="{ empty: !currentData.totalTokensPrice }">
+            <template v-if="!currentData.totalTokensPrice">
             <div class="legend"></div>
 
             <div class="legend"></div>
@@ -42,10 +42,10 @@
                 </div>
 
                 <div class="price">
-                    <div>{{ $filters.toFixed(calcPercents(network.totalTokens), 2) }}%</div>
+                    <div>{{ $filters.toFixed(calcPercents(network.totalTokensPrice), 2) }}%</div>
 
                     <div class="percents">
-                        {{ $filters.toFixed(currencyСonversion(network.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(network.totalTokensPrice, 2) }}
                         {{ store.currentCurrency }}
                     </div>
                 </div>
@@ -59,7 +59,6 @@
 <script setup>
     import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { currencyСonversion } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -107,10 +106,7 @@
                     : chartActiveLegend.value = null
             }
         }),
-        currentData = ref({
-            totalTokens: 0,
-            networks: []
-        })
+        currentData = {}
 
 
     onBeforeMount(() => init())
@@ -128,17 +124,17 @@
     function init() {
         if(store.account.currentWallet != 'all') {
             // Get current walllet data
-            currentData.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+            currentData = store.account.wallets.find(el => el.address == store.account.currentWallet)
         } else {
             // Sum data for chart
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
-                    let duplicate = currentData.value.networks.find(e => e.name == network.name)
+                    let duplicate = currentData.networks.find(e => e.name == network.name)
 
                     if(duplicate) {
                         duplicate.totalTokens += network.totalTokens
                     } else {
-                        currentData.value.networks.push({
+                        currentData.networks.push({
                             name: network.name,
                             color: network.color,
                             totalTokens: network.totalTokens
@@ -148,12 +144,12 @@
             }
 
             // Total tokens
-            currentData.value.totalTokens = store.account.totalTokens
+            currentData.totalTokensPrice = store.account.totalTokensPrice
         }
 
         // Set data for chart
-        currentData.value.networks.forEach(network => {
-            chartDatasets.push(network.totalTokens)
+        currentData.networks.forEach(network => {
+            chartDatasets.push(network.totalTokensPrice)
             chartColors.push(network.color)
         })
     }
@@ -189,8 +185,8 @@
     function calcPercents(amount) {
         let result = 0
 
-        if(currentData.value.totalTokens) {
-            result = amount / currentData.value.totalTokens * 100
+        if(currentData.totalTokensPrice) {
+            result = amount / currentData.totalTokensPrice * 100
         }
 
         return result

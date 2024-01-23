@@ -21,6 +21,7 @@
             </div>
         </div>
 
+
         <template v-if="props.chartActive == 1">
         <div class="legends empty" v-if="!chartTotalStake">
             <div class="legend">
@@ -214,7 +215,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="legends" v-else>
             <div class="legend" v-if="currentData.total.liquid" :class="{'active': chartActiveLegendLiquide == 0}" @mouseenter="mouseenterLegendLiquide(0)" @mouseleave="mouseleaveLegendLiquide()">
@@ -415,7 +415,6 @@
             }
         }),
 
-        currentWallet = ref({}),
         currentData = ref({
             total: {
                 staked: 0,
@@ -449,11 +448,11 @@
 
     function init() {
         if(store.account.currentWallet != 'all') {
-            // Get current walllet data
-            currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+            // Get current walllet
+            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
-            // Get current data
-            currentData.value = currentWallet.value.networks.find(el => el.name == store.currentNetwork)
+            // Get current network
+            currentData.value = currentWallet.networks.find(el => el.name == store.currentNetwork)
         } else {
             // Sum totals
             for (let wallet of store.account.wallets) {
@@ -480,7 +479,7 @@
             }
         }
 
-        // Set chart data
+        // Set charts data
         chartDatasetsStake.push(currentData.value.total.staked)
         chartDatasetsStake.push(currentData.value.total.liquid_rewards)
         chartDatasetsStake.push(currentData.value.total.unbonding)
@@ -489,9 +488,8 @@
         chartDatasetsLiquide.push(currentData.value.total.ibc)
         chartDatasetsLiquide.push(currentData.value.total.rewards)
 
-        // Sum chart total
+        // Sum charts total
         chartTotalStake.value = currentData.value.total.staked + currentData.value.total.liquid_rewards + currentData.value.total.unbonding
-
         chartTotalLiquide.value = currentData.value.total.liquid + currentData.value.total.ibc + currentData.value.total.rewards
     }
 

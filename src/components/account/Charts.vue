@@ -137,24 +137,29 @@
                             }
 
 
-                            // Calc liquid tokens
+                            // Calc liquid native tokens
                             if(response.liquid && response.liquid.native) {
-                                // calcLiquidTokens(network, response.liquid.native)
-
                                 response.liquid.native.forEach(el => {
+                                    let amount = el.denom == 'boot' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+
                                     // Sum total
-                                    network.total.liquid += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
-                                    network.total.liquid_rewards += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                    network.total.liquid += amount
+                                    network.total.liquid_rewards += amount
+
+                                    // Calc tokens price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
-                                    // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += amount
+                                        duplicate.amountCurrentDenom += amountCurrentDenom
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                            'amount': amount,
+                                            'amountCurrentDenom': amountCurrentDenom,
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -164,25 +169,26 @@
 
                             // Calc ibc tokens
                             if(response.liquid && response.liquid.ibc) {
-                                // calcIBCTokens(network, response.liquid.ibc)
-
                                 response.liquid.ibc.forEach(el => {
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
-
-                                    el.amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
 
                                     // Sum total
-                                    network.total.ibc += el.amountCurrentDenom
+                                    network.total.ibc += amountCurrentDenom
+
+                                    // Calc tokens price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
-                                    // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
                                         duplicate.amount += amount
+                                        duplicate.amountCurrentDenom += amountCurrentDenom
                                     } else {
                                         network.groupByDenom.push({
                                             'amount': amount,
+                                            'amountCurrentDenom': amountCurrentDenom,
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -192,21 +198,26 @@
 
                             // Calc staked tokens
                             if(response.staked) {
-                                // calcStackedTokens(network, response.staked)
-
                                 response.staked.forEach(el => {
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+
                                     // Sum total
-                                    network.total.staked += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                    network.total.staked += amount
+
+                                    // Calc tokens price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
-                                    // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += amount
+                                        duplicate.amountCurrentDenom += amountCurrentDenom
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                            'amount': amount,
+                                            'amountCurrentDenom': amountCurrentDenom,
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -216,21 +227,26 @@
 
                             // Calc unbonding tokens
                             if(response.unbonding) {
-                                // calcUnbondingTokens(network, response.unbonding)
-
                                 response.unbonding.forEach(el => {
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+
                                     // Sum total
-                                    network.total.unbonding += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                    network.total.unbonding += amount
+
+                                    // Calc tokens price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
-                                    // AddGroupByDenom(network, el)
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                     if(duplicate) {
-                                        duplicate.amount += network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                        duplicate.amount += amount
+                                        duplicate.amountCurrentDenom += amountCurrentDenom
                                     } else {
                                         network.groupByDenom.push({
-                                            'amount': network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                            'amount': amount,
+                                            'amountCurrentDenom': amountCurrentDenom,
                                             'logo': el.logo,
                                             'symbol': el.symbol
                                         })
@@ -240,30 +256,31 @@
 
                             // Calc rewards tokens
                             if(response.rewards) {
-                                // calcRewardsTokens(network, response.rewards)
-
                                 response.rewards.forEach(el => {
-                                    // Sum total
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent)
+                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
+                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
 
+                                    // Sum total
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
                                         if(amount >= 1) {
                                             network.total.rewards += amount
                                         }
                                     }
 
-                                    network.total.liquid_rewards = network.total.liquid + network.total.rewards
+                                    // Calc tokens price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
-                                    // AddGroupByDenom(network, el)
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
                                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
 
                                         if(duplicate) {
                                             duplicate.amount += amount
+                                            duplicate.amountCurrentDenom += amountCurrentDenom
                                         } else {
                                             network.groupByDenom.push({
                                                 'amount': amount,
+                                                'amountCurrentDenom': amountCurrentDenom,
                                                 'logo': el.logo,
                                                 'symbol': el.symbol
                                             })
@@ -272,13 +289,10 @@
                                 })
                             }
 
-                            // Set data in network
-                            // setDataInNetwork(network, response)
-
+                            // Set network data
                             network.address = response.address
 
-                            network.totalTokens = 0
-                            network.totalTokens += network.total.liquid + network.total.staked + network.total.unbonding + network.total.rewards + network.total.outside + network.total.ibc
+                            network.total.liquid_rewards = network.total.liquid + network.total.rewards
 
                             network.balance = {
                                 liquid: {
@@ -287,9 +301,16 @@
                                 },
                                 staked: response.staked,
                                 unbonding: response.unbonding,
-                                rewards: response.rewards,
-                                groupByDenom: network.groupByDenom
+                                rewards: response.rewards
                             }
+
+                            // Sort data
+                            network.groupByDenom.sort((a, b) => {
+                                if (a.amountCurrentDenom > b.amountCurrentDenom) { return -1 }
+                                if (a.amountCurrentDenom < b.amountCurrentDenom) { return 1 }
+                                return 0
+                            })
+
                         })
                 } catch (error) {
                     console.error(error)
@@ -297,29 +318,24 @@
             }
         }
 
+        // Total tokens price
+        store.account.totalTokensPrice = 0
 
-        // Sum wallet total tokens (in current denom)
         for (let wallet of store.account.wallets) {
-            wallet.totalTokens = 0
+            wallet.totalTokensPrice = 0
 
             for (let network of wallet.networks) {
-                wallet.totalTokens += network.totalTokens * network.price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price
+                // Sum wallet total tokens price
+                wallet.totalTokensPrice += network.totalTokensPrice
+
+                // Sum account total tokens price
+                store.account.totalTokensPrice += network.totalTokensPrice
             }
         }
-
-
-        // Sum account total tokens (in current denom)
-        store.account.totalTokens = 0
-
-        for (let wallet of store.account.wallets) {
-            store.account.totalTokens += wallet.totalTokens
-        }
-
 
         // Hide loader
         loading.value = false
     }
-
 
 
     // Get demo data

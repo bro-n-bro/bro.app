@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(store.account.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(store.account.totalTokensPrice, 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>

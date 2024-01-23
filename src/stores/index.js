@@ -233,33 +233,6 @@ export const useGlobalStore = defineStore('global', {
                     }
                 )
 
-                // Networks info
-                // let cosmoshubInfo = {
-                //     name: 'cosmoshub',
-                //     color: '#2E314B',
-                //     price: this.prices.find(el => el.symbol == 'ATOM').price,
-                //     total: {
-                //         liquid: 0,
-                //         staked: 0,
-                //         unbonding: 0,
-                //         rewards: 0,
-                //         outside: 0,
-                //         ibc: 0,
-                //         liquid_rewards: 0
-                //     },
-                //     totalTokens: 0,
-                //     balance: {
-                //         liquid: {
-                //             native: null,
-                //             ibc: null
-                //         },
-                //         staked: null,
-                //         unbonding: null,
-                //         rewards: null,
-                //         groupByDenom: []
-                //     }
-                // }
-
                 // Set owner wallet
                 this.account.wallets = []
 
@@ -269,7 +242,7 @@ export const useGlobalStore = defineStore('global', {
                     info: {
                         RPDE: 0
                     },
-                    totalTokens: 0,
+                    totalTokensPrice: 0,
                     networks: [
                         {
                             name: 'cosmoshub',
@@ -284,17 +257,7 @@ export const useGlobalStore = defineStore('global', {
                                 ibc: 0,
                                 liquid_rewards: 0
                             },
-                            totalTokens: 0,
-                            balance: {
-                                liquid: {
-                                    native: null,
-                                    ibc: null
-                                },
-                                staked: null,
-                                unbonding: null,
-                                rewards: null,
-                                groupByDenom: []
-                            }
+                            totalTokensPrice: 0
                         },
                         {
                             name: 'bostrom',
@@ -309,17 +272,7 @@ export const useGlobalStore = defineStore('global', {
                                 ibc: 0,
                                 liquid_rewards: 0
                             },
-                            totalTokens: 0,
-                            balance: {
-                                liquid: {
-                                    native: null,
-                                    ibc: null
-                                },
-                                staked: null,
-                                unbonding: null,
-                                rewards: null,
-                                groupByDenom: []
-                            }
+                            totalTokensPrice: 0
                         }
                     ]
                 })
@@ -337,7 +290,7 @@ export const useGlobalStore = defineStore('global', {
                                     info: {
                                         RPDE: 0
                                     },
-                                    totalTokens: 0,
+                                    totalTokensPrice: 0,
                                     networks: [
                                         {
                                             name: 'cosmoshub',
@@ -352,17 +305,7 @@ export const useGlobalStore = defineStore('global', {
                                                 ibc: 0,
                                                 liquid_rewards: 0
                                             },
-                                            totalTokens: 0,
-                                            balance: {
-                                                liquid: {
-                                                    native: null,
-                                                    ibc: null
-                                                },
-                                                staked: null,
-                                                unbonding: null,
-                                                rewards: null,
-                                                groupByDenom: []
-                                            }
+                                            totalTokensPrice: 0
                                         },
                                         {
                                             name: 'bostrom',
@@ -377,17 +320,7 @@ export const useGlobalStore = defineStore('global', {
                                                 ibc: 0,
                                                 liquid_rewards: 0
                                             },
-                                            totalTokens: 0,
-                                            balance: {
-                                                liquid: {
-                                                    native: null,
-                                                    ibc: null
-                                                },
-                                                staked: null,
-                                                unbonding: null,
-                                                rewards: null,
-                                                groupByDenom: []
-                                            }
+                                            totalTokensPrice: 0
                                         }
                                     ]
                                 })

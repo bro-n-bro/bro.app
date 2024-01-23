@@ -14,14 +14,14 @@
                 </div>
 
                 <div class="price">
-                    {{ $filters.toFixed(currencyСonversion(currentData.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(currentData.totalTokensPrice, 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
             </div>
         </div>
 
 
-        <div class="legends" :class="{ empty: !currentData.totalTokens }">
-            <template v-if="!currentData.totalTokens">
+        <div class="legends" :class="{ empty: !currentData.totalTokensPrice }">
+            <template v-if="!currentData.totalTokensPrice">
             <div class="legend"></div>
 
             <div class="legend"></div>
@@ -32,7 +32,7 @@
             </template>
 
             <template v-else>
-            <div v-for="(item, index) in currentData.balance.groupByDenom" :key="index" class="legend" :class="{'active': chartActiveLegend == index}" @mouseenter="mouseenterLegend(index)" @mouseleave="mouseleaveLegend()">
+            <div v-for="(item, index) in currentData.groupByDenom" :key="index" class="legend" :class="{'active': chartActiveLegend == index}" @mouseenter="mouseenterLegend(index)" @mouseleave="mouseleaveLegend()">
                 <div class="logo">
                     <img :src="item.logo" alt="">
                 </div>
@@ -113,13 +113,7 @@
                     : chartActiveLegend.value = null
             }
         }),
-        currentWallet = ref({}),
-        currentData = ref({
-            totalTokens: 0,
-            balance: {
-                groupByDenom: []
-            }
-        })
+        currentData = {}
 
 
     onBeforeMount(() => init())
@@ -137,26 +131,26 @@
     function init() {
         if(store.account.currentWallet != 'all') {
             // Get current walllet data
-            currentWallet.value = store.account.wallets.find(el => el.address == store.account.currentWallet)
+            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
             // Get current data
-            currentData.value = currentWallet.value.networks.find(el => el.name == store.currentNetwork)
-
-            console.log(currentData.value)
+            currentData = currentWallet.networks.find(el => el.name == store.currentNetwork)
         } else {
             let allGroupByDenom = []
 
             // Group by denom
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
-                    network.balance.groupByDenom.forEach(el => {
+                    network.groupByDenom.forEach(el => {
                         let duplicate = allGroupByDenom.find(e => e.symbol == el.symbol)
 
                         if(duplicate) {
                             duplicate.amount += el.amount
+                            duplicate.amountCurrentDenom += el.amountCurrentDenom
                         } else {
                             allGroupByDenom.push({
                                 'amount': el.amount,
+                                'amountCurrentDenom': el.amountCurrentDenom,
                                 'logo': el.logo,
                                 'symbol': el.symbol
                             })
@@ -167,22 +161,22 @@
 
             // Sort data
             allGroupByDenom.sort((a, b) => {
-                if (a.amount > b.amount) { return -1 }
-                if (a.amount < b.amount) { return 1 }
+                if (a.amountCurrentDenom > b.amountCurrentDenom) { return -1 }
+                if (a.amountCurrentDenom < b.amountCurrentDenom) { return 1 }
                 return 0
             })
 
             // Set data
-            currentData.value.balance.groupByDenom = allGroupByDenom
+            currentData.groupByDenom = allGroupByDenom
 
             // Total tokens
-            currentData.value.totalTokens = store.account.totalTokens
+            currentData.totalTokensPrice = store.account.totalTokensPrice
         }
 
 
         // Set data for chart
-        currentData.value.balance.groupByDenom.forEach(el => {
-            chartDatasets.push(el.amount)
+        currentData.groupByDenom.forEach(el => {
+            chartDatasets.push(el.amountCurrentDenom)
 
             let color = store.networkColors[el.symbol]
 
@@ -203,7 +197,7 @@
 
 
         // Sum chart total
-        currentData.value.balance.groupByDenom.forEach(el => chartTotal.value += el.amount)
+        currentData.groupByDenom.forEach(el => chartTotal.value += el.amountCurrentDenom)
     }
 
 
@@ -236,10 +230,10 @@
     // Calc percents
     function calcPercents(symbol) {
         let result = 0,
-            token = currentData.value.balance.groupByDenom.find(e => e.symbol == symbol)
+            token = currentData.groupByDenom.find(e => e.symbol == symbol)
 
-        if(currentData.value.totalTokens) {
-            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currencyСonversion(currentData.value.totalTokens, store.networks[store.currentNetwork].token_name) * 100
+        if(currentData.totalTokensPrice) {
+            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currentData.totalTokensPrice * 100
         }
 
         return result

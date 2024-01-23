@@ -14,12 +14,12 @@
                 </div>
 
                 <div class="price" v-if="(typeof chartActiveLegend == 'undefined' || typeof chartActiveLegend == 'object')">
-                    {{ $filters.toFixed(currencyСonversion(store.account.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                    {{ $filters.toFixed(store.account.totalTokensPrice, 2) }}<span>{{ store.currentCurrency }}</span>
                 </div>
 
                 <template v-for="(wallet, index) in store.account.wallets" :key="index">
                     <div class="price" v-if="chartActiveLegend == index">
-                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}<span>{{ store.currentCurrency }}</span>
+                        {{ $filters.toFixed(store.account.totalTokensPrice, 2) }}<span>{{ store.currentCurrency }}</span>
                     </div>
                 </template>
             </div>
@@ -35,12 +35,12 @@
 
                 <div class="price">
                     <div>
-                        {{ $filters.toFixed(currencyСonversion(wallet.totalTokens, store.networks[store.currentNetwork].token_name), 2) }}
+                        {{ $filters.toFixed(wallet.totalTokensPrice, 2) }}
                         {{ store.currentCurrency }}
                     </div>
 
                     <div class="percents">
-                        {{ $filters.toFixed(calcPercents(wallet.totalTokens), 2) }}%
+                        {{ $filters.toFixed(calcPercents(wallet.totalTokensPrice), 2) }}%
                     </div>
                 </div>
             </div>
@@ -52,7 +52,6 @@
 <script setup>
     import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { currencyСonversion } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -114,7 +113,7 @@
     // Init
     function init() {
         // Set data for chart
-        store.account.wallets.forEach(el => chartDatasets.push(el.totalTokens))
+        store.account.wallets.forEach(el => chartDatasets.push(el.totalTokensPrice))
     }
 
 
@@ -145,11 +144,11 @@
 
 
     // Calc percents
-    function calcPercents(price) {
+    function calcPercents(walletPrice) {
         let result = 0
 
-        if(store.account.totalTokens) {
-            result = price / store.account.totalTokens * 100
+        if(store.account.totalTokensPrice) {
+            result = walletPrice / store.account.totalTokensPrice * 100
         }
 
         return result
