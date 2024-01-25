@@ -6,7 +6,7 @@
 
 
         <div class="chart">
-            <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
+            <Doughnut ref="chart" :data="chartData" :options="chartOptions" v-if="!chartLoading" />
 
             <div class="total">
                 <div class="label">
@@ -75,6 +75,7 @@
     const store = useGlobalStore()
 
     var chart = ref(null),
+        chartLoading = ref(true),
         chartDatasets = reactive([]),
         chartActiveLegend = ref(null),
         chartColors = reactive([]),
@@ -113,13 +114,15 @@
                     : chartActiveLegend.value = null
             }
         }),
-        currentData = {}
+        currentData = ref({})
 
 
     onBeforeMount(() => init())
 
     watch(computed(() => store.currentNetwork), () => {
         // Reset chart
+        chartLoading.value = true
+
         chartDatasets = reactive([])
         chartColors = reactive([])
 
@@ -134,7 +137,7 @@
             let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
             // Get current data
-            currentData = currentWallet.networks.find(el => el.name == store.currentNetwork)
+            currentData.value = currentWallet.networks.find(el => el.name == store.currentNetwork)
         } else {
             let allGroupByDenom = []
 
@@ -167,15 +170,14 @@
             })
 
             // Set data
-            currentData.groupByDenom = allGroupByDenom
+            currentData.value.groupByDenom = allGroupByDenom
 
             // Total tokens
-            currentData.totalTokensPrice = store.account.totalTokensPrice
+            currentData.value.totalTokensPrice = store.account.totalTokensPrice
         }
 
-
         // Set data for chart
-        currentData.groupByDenom.forEach(el => {
+        currentData.value.groupByDenom.forEach(el => {
             chartDatasets.push(el.amountCurrentDenom)
 
             let color = store.networkColors[el.symbol]
@@ -195,9 +197,11 @@
             chartColors.push(color)
         })
 
-
         // Sum chart total
-        currentData.groupByDenom.forEach(el => chartTotal.value += el.amountCurrentDenom)
+        currentData.value.groupByDenom.forEach(el => chartTotal.value += el.amountCurrentDenom)
+
+        // Show chart
+        chartLoading.value = false
     }
 
 
@@ -230,10 +234,10 @@
     // Calc percents
     function calcPercents(symbol) {
         let result = 0,
-            token = currentData.groupByDenom.find(e => e.symbol == symbol)
+            token = currentData.value.groupByDenom.find(e => e.symbol == symbol)
 
-        if(currentData.totalTokensPrice) {
-            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currentData.totalTokensPrice * 100
+        if(currentData.value.totalTokensPrice) {
+            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currentData.value.totalTokensPrice * 100
         }
 
         return result

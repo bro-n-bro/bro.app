@@ -338,12 +338,12 @@
         emitter = inject('emitter')
 
     var chartStake = ref(null),
-        chartDatasetsStake = reactive([]),
+        chartDatasetsStake = [],
         chartActiveLegendStake = ref(null),
         chartTotalStake = ref(0),
-        chartDataStake = computed(() => ({
+        chartDataStake = ref({
             datasets: [{
-                data: chartDatasetsStake,
+                data: computed(() => chartDatasetsStake),
                 backgroundColor: ['#950FFF', '#0343E8', '#EB5757'],
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
@@ -352,7 +352,7 @@
                 borderAlign: 'inner',
                 cutout: '84%',
             }]
-        })),
+        }),
         chartOptionsStake = reactive({
             responsive: true,
             plugins: {
@@ -377,12 +377,12 @@
         }),
 
         chartLiquide = ref(null),
-        chartDatasetsLiquide = reactive([]),
+        chartDatasetsLiquide = [],
         chartActiveLegendLiquide = ref(null),
         chartTotalLiquide = ref(0),
-        chartDataLiquide = computed(() => ({
+        chartDataLiquide = ref({
             datasets: [{
-                data: chartDatasetsLiquide,
+                data: computed(() => chartDatasetsLiquide),
                 backgroundColor: ['#7879F1', '#EF5DA8', '#1BC562'],
                 borderColor: '#0d0d0d',
                 borderWidth: 4,
@@ -391,7 +391,7 @@
                 borderAlign: 'inner',
                 cutout: '80%'
             }]
-        })),
+        }),
         chartOptionsLiquide = reactive({
             responsive: true,
             plugins: {
@@ -436,10 +436,10 @@
 
     watch(computed(() => store.currentNetwork), () => {
         // Reset chart
-        chartDatasetsStake = reactive([])
+        chartDatasetsStake = [],
         chartTotalStake = ref(0)
 
-        chartDatasetsLiquide = reactive([])
+        chartDatasetsLiquide = [],
         chartTotalLiquide = ref(0)
 
         init()

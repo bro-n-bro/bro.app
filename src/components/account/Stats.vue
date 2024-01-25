@@ -116,10 +116,7 @@
                     // Set network info
                     await fetch(`${store.networks[network.name].index_api}/account/account_info/${generateAddress(store.networks[network.name].address_prefix, wallet.address)}`)
                         .then(res => res.json())
-                        .then(response => {
-                            // Set network info
-                            network.info = response
-                        })
+                        .then(response => network.info = response)
                 } catch (error) {
                     console.error(error)
                 }
@@ -128,19 +125,18 @@
                 wallet.RPDE += network.name == 'bostrom' ? network.info.rpde.amount / Math.pow(10, store.networks.bostrom.exponent) : network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
             }
 
-            // Set current data
-            if (store.currentNetwork != 'all') {
-                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet),
-                    currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
-
-                // Set current APR
-                APR.value = currentNetwork.info.apr
-            }
-
             // Calc account RPDE
             store.account.info.RPDE += wallet.RPDE
         }
 
+        // Set current APR
+        if (store.currentNetwork != 'all') {
+            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet),
+                currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+
+            // Set current APR
+            APR.value = currentNetwork.info.apr
+        }
 
         // Set current RPDE
         if(store.account.currentWallet != 'all') {
