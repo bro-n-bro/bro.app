@@ -106,7 +106,9 @@
                     : chartActiveLegend.value = null
             }
         }),
-        currentData = {}
+        currentData = {
+            networks: []
+        }
 
 
     onBeforeMount(() => init())
@@ -132,12 +134,12 @@
                     let duplicate = currentData.networks.find(e => e.name == network.name)
 
                     if(duplicate) {
-                        duplicate.totalTokens += network.totalTokens
+                        duplicate.totalTokensPrice += network.totalTokensPrice
                     } else {
                         currentData.networks.push({
                             name: network.name,
                             color: network.color,
-                            totalTokens: network.totalTokens
+                            totalTokensPrice: network.totalTokensPrice
                         })
                     }
                 }

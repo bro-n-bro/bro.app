@@ -131,15 +131,20 @@
 
         // Set current APR
         if (store.currentNetwork != 'all') {
-            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet),
-                currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+            let currentWallet = {}
+
+            store.account.currentWallet != 'all'
+                ? currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+                : currentWallet = store.account.wallets[0]
+
+            let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
 
             // Set current APR
             APR.value = currentNetwork.info.apr
         }
 
         // Set current RPDE
-        if(store.account.currentWallet != 'all') {
+        if (store.account.currentWallet != 'all') {
             // Current wallet
             let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 

@@ -91,7 +91,8 @@
                                 outside: 0,
                                 ibc: 0,
                                 liquid_rewards: 0
-                            }),
+                            })
+                            network.totalTokensPrice = 0
                             network.groupByDenom = []
 
 

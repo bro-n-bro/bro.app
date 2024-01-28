@@ -144,21 +144,24 @@
             // Group by denom
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
-                    network.groupByDenom.forEach(el => {
-                        let duplicate = allGroupByDenom.find(e => e.symbol == el.symbol)
+                    // Calc if one network
+                    if (store.currentNetwork != 'all' && network.name == store.currentNetwork) {
+                        network.groupByDenom.forEach(el => {
+                            let duplicate = allGroupByDenom.find(e => e.symbol == el.symbol)
 
-                        if(duplicate) {
-                            duplicate.amount += el.amount
-                            duplicate.amountCurrentDenom += el.amountCurrentDenom
-                        } else {
-                            allGroupByDenom.push({
-                                'amount': el.amount,
-                                'amountCurrentDenom': el.amountCurrentDenom,
-                                'logo': el.logo,
-                                'symbol': el.symbol
-                            })
-                        }
-                    })
+                            if(duplicate) {
+                                duplicate.amount += el.amount
+                                duplicate.amountCurrentDenom += el.amountCurrentDenom
+                            } else {
+                                allGroupByDenom.push({
+                                    'amount': el.amount,
+                                    'amountCurrentDenom': el.amountCurrentDenom,
+                                    'logo': el.logo,
+                                    'symbol': el.symbol
+                                })
+                            }
+                        })
+                    }
                 }
             }
 

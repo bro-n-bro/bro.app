@@ -48,7 +48,7 @@ export const useGlobalStore = defineStore('global', {
         demo: false,
         tour: useLocalStorage('tour', true),
 
-        currentNetwork: null,
+        currentNetwork: 'cosmoshub',
         currentProposalId: null,
         currentDeleteAddress: null,
         currentCurrency: useLocalStorage('currency', 'USDT'),
@@ -342,7 +342,7 @@ export const useGlobalStore = defineStore('global', {
             if (updateAvatar) {
                 // Start IPFS
                 if (!this.IPFSNode) {
-                    // this.IPFSNode = await Ipfs.create()
+                    this.IPFSNode = await Ipfs.create()
                 }
 
 

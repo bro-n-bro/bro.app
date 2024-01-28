@@ -457,23 +457,26 @@
             // Sum totals
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
-                    currentData.value.total.staked += network.total.staked,
-                    currentData.value.total.unbonding += network.total.unbonding,
-                    currentData.value.total.liquid_rewards += network.total.liquid_rewards
+                    // Calc if one network
+                    if (store.currentNetwork != 'all' && network.name == store.currentNetwork) {
+                        currentData.value.total.staked += network.total.staked,
+                        currentData.value.total.unbonding += network.total.unbonding,
+                        currentData.value.total.liquid_rewards += network.total.liquid_rewards
 
-                    currentData.value.total.liquid += network.total.liquid,
-                    currentData.value.total.ibc += network.total.ibc,
-                    currentData.value.total.rewards += network.total.rewards
+                        currentData.value.total.liquid += network.total.liquid,
+                        currentData.value.total.ibc += network.total.ibc,
+                        currentData.value.total.rewards += network.total.rewards
 
-                    // Balance - Concat ibc tokens
-                    if(network.balance.liquid.ibc != null) {
-                        network.balance.liquid.ibc.forEach(el => {
-                            let duplicate = currentData.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
+                        // Balance - Concat ibc tokens
+                        if(network.balance.liquid.ibc != null) {
+                            network.balance.liquid.ibc.forEach(el => {
+                                let duplicate = currentData.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
 
-                            duplicate
-                                ? duplicate.amount += el.amount
-                                : currentData.value.balance.liquid.ibc.push(el)
-                        })
+                                duplicate
+                                    ? duplicate.amount += el.amount
+                                    : currentData.value.balance.liquid.ibc.push(el)
+                            })
+                        }
                     }
                 }
             }

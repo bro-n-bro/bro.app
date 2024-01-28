@@ -260,20 +260,22 @@
         } else {
             for (let wallet of store.account.wallets) {
                 for (let network of wallet.networks) {
-                    // Calc totals
-                    currentData.value.total.liquid += network.total.liquid,
-                    currentData.value.total.ibc += network.total.ibc,
-                    currentData.value.total.rewards += network.total.rewards
+                    // Calc if one network
+                    if (store.currentNetwork != 'all' && network.name == store.currentNetwork) {
+                        currentData.value.total.liquid += network.total.liquid,
+                        currentData.value.total.ibc += network.total.ibc,
+                        currentData.value.total.rewards += network.total.rewards
 
-                    // Balance - Concat ibc tokens
-                    if(network.balance.liquid.ibc != null) {
-                        network.balance.liquid.ibc.forEach(el => {
-                            let duplicate = currentData.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
+                        // Balance - Concat ibc tokens
+                        if(network.balance.liquid.ibc != null) {
+                            network.balance.liquid.ibc.forEach(el => {
+                                let duplicate = currentData.value.balance.liquid.ibc.find(e => e.symbol == el.symbol)
 
-                            duplicate
-                                ? duplicate.amount += el.amount
-                                : currentData.value.balance.liquid.ibc.push(el)
-                        })
+                                duplicate
+                                    ? duplicate.amount += el.amount
+                                    : currentData.value.balance.liquid.ibc.push(el)
+                            })
+                        }
                     }
                 }
             }

@@ -69,7 +69,7 @@
     })
 
 
-    watch(() => store.account.currentWallet, () => {
+    watch(() => [store.account.currentWallet, store.currentNetwork], () => {
         chartsKey.value += 1
         statsKey.value += 1
         validatorsKey.value += 1
