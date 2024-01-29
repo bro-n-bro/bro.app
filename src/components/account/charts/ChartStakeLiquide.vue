@@ -93,7 +93,7 @@
                     <template v-if="currentData.total.staked < 0.01">&lt; 0.01</template>
                     <template v-else>{{ $filters.toFixed(currentData.total.staked, 2) }}</template>
 
-                    {{ store.networks[store.currentNetwork].token_name }}
+                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
 
                     <div class="price">
                         {{ $filters.toFixed(currencyСonversion(currentData.total.staked, store.networks[store.currentNetwork].token_name), 2) }}
@@ -117,7 +117,7 @@
                     <template v-if="currentData.total.liquid_rewards < 0.01">&lt; 0.01</template>
                     <template v-else>{{ $filters.toFixed(currentData.total.liquid_rewards, 2) }}</template>
 
-                    {{ store.networks[store.currentNetwork].token_name }}
+                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
 
                     <div class="price">
                         {{ $filters.toFixed(currencyСonversion(currentData.total.liquid_rewards, store.networks[store.currentNetwork].token_name), 2) }}
@@ -141,7 +141,7 @@
                     <template v-if="currentData.total.unbonding < 0.01">&lt; 0.01</template>
                     <template v-else>{{ $filters.toFixed(currentData.total.unbonding, 2) }}</template>
 
-                    {{ store.networks[store.currentNetwork].token_name }}
+                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
 
                     <div class="price">
                         {{ $filters.toFixed(currencyСonversion(currentData.total.unbonding, store.networks[store.currentNetwork].token_name), 2) }}
@@ -227,7 +227,7 @@
                     <template v-if="currentData.total.liquid < 0.01">&lt; 0.01</template>
                     <template v-else>{{ $filters.toFixed(currentData.total.liquid, 2) }}</template>
 
-                    {{ store.networks[store.currentNetwork].token_name }}
+                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
 
                     <div class="price">
                         {{ $filters.toFixed(currencyСonversion(currentData.total.liquid, store.networks[store.currentNetwork].token_name), 2) }}
@@ -246,8 +246,6 @@
                 </div>
 
                 <div class="dropdown">
-                    <!-- <pre>{{ currentNetwork.balance.liquid.ibc }}</pre> -->
-
                     <div class="tokens">
                         <div v-for="(item, index) in currentData.balance.liquid.ibc" :key="index" class="item">
                             <div class="logo">
@@ -269,22 +267,14 @@
 
                             <div>
                                 <div class="amount">
-                                    <template v-if="item.symbol == 'BOOT'">
-                                        <span v-if="(item.amount / Math.pow(10, item.exponent) / 1000000) < 0.01">&lt; 0.01</span>
-                                        <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent) / 1000000, 2) }}</span>
-                                    </template>
+                                    <span v-if="formatTokenAmount(item.amount, item.symbol) < 0.01">&lt; 0.01</span>
+                                    <span v-else>{{ $filters.toFixed(formatTokenAmount(item.amount, item.symbol), 2) }}</span>
 
-                                    <template v-else>
-                                        <span v-if="(item.amount / Math.pow(10, item.exponent)) < 0.01">&lt; 0.01</span>
-                                        <span v-else>{{ $filters.toFixed(item.amount / Math.pow(10, item.exponent), 2) }}</span>
-                                    </template>
-
-                                    <span class="token" v-if="item.symbol == 'BOOT'">M{{ item.symbol }}</span>
-                                    <span class="token" v-else>{{ item.symbol }}</span>
+                                    <span class="token">{{ formatTokenName(item.symbol) }}</span>
 
                                     <div class="price">
-                                        <template v-if="(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol)) < 0.01">&lt; 0.01</template>
-                                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.amount / Math.pow(10, item.exponent), item.symbol), 2) }}</template>
+                                        <template v-if="currencyСonversion(formatTokenAmount(item.amount, item.symbol), item.symbol) < 0.01">&lt; 0.01</template>
+                                        <template v-else>{{ $filters.toFixed(currencyСonversion(formatTokenAmount(item.amount, item.symbol), item.symbol), 2) }}</template>
                                         {{ store.currentCurrency }}
                                     </div>
                                 </div>
@@ -305,7 +295,7 @@
                     <template v-if="currentData.total.rewards < 0.01">&lt; 0.01</template>
                     <template v-else>{{ $filters.toFixed(currentData.total.rewards, 2) }}</template>
 
-                    {{ store.networks[store.currentNetwork].token_name }}
+                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
 
                     <div class="price">
                         {{ $filters.toFixed(currencyСonversion(currentData.total.rewards, store.networks[store.currentNetwork].token_name), 2) }}
@@ -322,7 +312,7 @@
 <script setup>
     import { onBeforeMount, computed, reactive, ref, inject, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { currencyСonversion } from '@/utils'
+    import { currencyСonversion, formatTokenName, formatTokenAmount } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'

@@ -10,7 +10,7 @@ const network = {
     prefix: 'bostrom',
     mintscanAlias: null,
     address_prefix: 'bostrom',
-    exponent: 6,
+    exponent: 0,
     proposal_need: 420000000000
 }
 

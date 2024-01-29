@@ -45,7 +45,7 @@
 <script setup>
     import { onBeforeMount, ref, inject, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { generateAddress } from '@/utils'
+    import { generateAddress, formatTokenAmount, formatAmountToCurrentDenom } from '@/utils'
 
     // Components
     import ChartStakeLiquide from '@/components/account/charts/ChartStakeLiquide.vue'
@@ -141,8 +141,8 @@
                             // Calc liquid native tokens
                             if(response.liquid && response.liquid.native) {
                                 response.liquid.native.forEach(el => {
-                                    let amount = el.denom == 'boot' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
-                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = formatTokenAmount(el.amount, el.symbol),
+                                        amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
                                     network.total.liquid += amount
@@ -171,8 +171,8 @@
                             // Calc ibc tokens
                             if(response.liquid && response.liquid.ibc) {
                                 response.liquid.ibc.forEach(el => {
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
-                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = formatTokenAmount(el.amount, el.symbol),
+                                        amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
                                     network.total.ibc += amountCurrentDenom
@@ -200,8 +200,8 @@
                             // Calc staked tokens
                             if(response.staked) {
                                 response.staked.forEach(el => {
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
-                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = formatTokenAmount(el.amount, el.symbol),
+                                        amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
                                     network.total.staked += amount
@@ -229,8 +229,8 @@
                             // Calc unbonding tokens
                             if(response.unbonding) {
                                 response.unbonding.forEach(el => {
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
-                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = formatTokenAmount(el.amount, el.symbol),
+                                        amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
                                     network.total.unbonding += amount
@@ -258,8 +258,8 @@
                             // Calc rewards tokens
                             if(response.rewards) {
                                 response.rewards.forEach(el => {
-                                    let amount = network.name == 'bostrom' ? el.amount / Math.pow(10, store.networks.bostrom.exponent) : el.amount / Math.pow(10, el.exponent),
-                                        amountCurrentDenom = amount * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+                                    let amount = formatTokenAmount(el.amount, el.symbol),
+                                        amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
                                     if (store.prices.find(e => e.symbol == el.symbol)) {

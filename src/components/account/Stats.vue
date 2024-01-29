@@ -75,7 +75,7 @@
 <script setup>
     import { ref, onBeforeMount, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { generateAddress, currencyСonversion } from '@/utils'
+    import { generateAddress, currencyСonversion, formatTokenAmount } from '@/utils'
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
@@ -122,7 +122,7 @@
                 }
 
                 // Calc wallet RPDE
-                wallet.RPDE += network.name == 'bostrom' ? network.info.rpde.amount / Math.pow(10, store.networks.bostrom.exponent) : network.info.rpde.amount / Math.pow(10, network.info.rpde.exponent)
+                wallet.RPDE += formatTokenAmount(network.info.rpde.amount, network.info.rpde.symbol)
             }
 
             // Calc account RPDE

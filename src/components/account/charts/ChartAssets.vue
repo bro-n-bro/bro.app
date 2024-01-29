@@ -43,9 +43,8 @@
 
                 <div class="price">
                     <div>
-                        <template v-if="(currencyСonversion(item.symbol == 'BOOT' ? item.amount / Math.pow(10, store.networks.bostrom.exponent) : item.amount, item.symbol)) < 0.01">&lt; 0.01</template>
-
-                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.symbol == 'BOOT' ? item.amount / Math.pow(10, store.networks.bostrom.exponent) : item.amount, item.symbol), 2) }}</template>
+                        <template v-if="currencyСonversion(item.amount, item.symbol) < 0.01">&lt; 0.01</template>
+                        <template v-else>{{ $filters.toFixed(currencyСonversion(item.amount, item.symbol), 2) }}</template>
 
                         {{ store.currentCurrency }}
                     </div>

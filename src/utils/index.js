@@ -170,24 +170,53 @@ export const sendTx = async ({ txRaw, client }) => {
 
 // Currency conversion
 export const currencyСonversion = (amount, currency) => {
-    let store = useGlobalStore()
-
-    let tokenPrice = store.prices.find(el => el.symbol == currency).price,
+    let store = useGlobalStore(),
+        tokenPrice = store.prices.find(el => el.symbol == currency).price,
         toPrice = 1
 
     if (store.currency != 'USDT') {
         currency = store.currentCurrency
 
-        if (currency == 'ETH') {
-            currency = 'WETH'
-        }
-
         if (currency == 'BTC') {
-            currency = 'WBTC'
+            currency = formatTokenName('BTC')
         }
 
         toPrice = store.prices.find(el => el.symbol == currency).price
     }
 
     return amount * (tokenPrice / toPrice)
+}
+
+
+
+// Formating token name
+export const formatTokenName = (tokenName) => {
+    let store = useGlobalStore(),
+        newTokenName = ''
+
+    newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName)
+
+    return newTokenName ? newTokenName.formatTokenName : tokenName
+}
+
+
+// Formating token amount
+export const formatTokenAmount = (amount, tokenName) => {
+    let store = useGlobalStore(),
+        formatAmount = '',
+        formatableToken = store.formatableTokens.find(el => el.tokenName == tokenName)
+
+    formatableToken
+        ? formatAmount = amount / Math.pow(10, formatableToken.exponent)
+        : formatAmount = amount / Math.pow(10, store.prices.find(el => el.symbol == tokenName).exponent)
+
+    return formatAmount
+}
+
+
+// Formating token amount to current denom
+export const formatAmountToCurrentDenom = (amount, tokenName) => {
+    let store = useGlobalStore()
+
+    return amount * (store.prices.find(e => e.symbol == tokenName).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
 }

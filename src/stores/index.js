@@ -74,6 +74,23 @@ export const useGlobalStore = defineStore('global', {
         },
         needReload: false,
 
+        formatableTokens: [
+            {
+                tokenName: 'BTC',
+                formatTokenName: 'WBTC'
+            },
+            {
+                tokenName: 'BOOT',
+                formatTokenName: 'MBOOT',
+                exponent: 6
+            },
+            {
+                tokenName: 'HYDROGEN',
+                formatTokenName: 'MHYDROGEN',
+                exponent: 6
+            }
+        ],
+
         networkColors: {
             BOOT: '#25FF25',
             EVMOS: '#ED4E33',
