@@ -88,8 +88,8 @@
                                 </div>
 
                                 <div class="amount">
-                                    <span>{{ $filters.toFixed(validator.coin.amount / Math.pow(10, store.networks[store.currentNetwork].exponent), 3) }}</span>
-                                    {{ store.networks[store.currentNetwork].token_name }}
+                                    <span>{{ $filters.toFixed(formatTokenAmount(validator.coin.amount, store.networks[store.currentNetwork].token_name), 3) }}</span>
+                                    {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                                 </div>
                             </div>
 
@@ -125,7 +125,7 @@
 <script setup>
     import { onBeforeMount, reactive, ref, inject, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { generateAddress } from '@/utils'
+    import { generateAddress, formatTokenName, formatTokenAmount } from '@/utils'
 
     // Demo data
     import DemoAccountValidators from '@/demo/AccountValidators.json'

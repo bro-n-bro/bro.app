@@ -123,14 +123,14 @@
 
     header .info
     {
+        align-content: center;
+        align-items: center;
+        justify-content: space-between;
+
         min-height: 105px;
         padding: 11px 20px;
 
         border-radius: 42px;
-
-        align-content: center;
-        align-items: center;
-        justify-content: space-between;
     }
 
 
@@ -147,13 +147,12 @@
     header .logo .btn
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         cursor: pointer;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -198,8 +197,6 @@
 
     header .logo .mini_modal a
     {
-        color: currentColor;
-
         display: block;
 
         padding: 6px 10px 6px 4px;
@@ -207,6 +204,7 @@
         transition: background .2s linear;
         text-decoration: none;
 
+        color: currentColor;
         border-radius: 8px;
     }
 

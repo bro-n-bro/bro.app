@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(store.account.totalTokensPrice, 2) }}
+                    {{ '~' + totalTokensPrice }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -79,8 +79,9 @@
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
-        totalRewardTokens = !store.demo ? ref(0) : ref(10.016),
         APR = !store.demo ? ref(0) : ref(0.2125),
+        totalRewardTokens = !store.demo ? ref(0) : ref(10.016),
+        totalTokensPrice = !store.demo ? ref(0) : ref(150.18),
         RPDE = !store.demo ? ref(0) : ref(0.4)
 
 
@@ -105,9 +106,14 @@
         // Set loader
         loading.value = true
 
+        // Reset data
+        APR.value = 0
+        totalTokensPrice.value = 0
+        RPDE.value = 0
         store.account.info.RPDE = 0
 
         for (const wallet of store.account.wallets) {
+            // Reset data
             wallet.RPDE = 0
 
             // Get network data
@@ -129,28 +135,89 @@
             store.account.info.RPDE += wallet.RPDE
         }
 
+
         // Set current APR
         if (store.currentNetwork != 'all') {
+            // Get current walllet
             let currentWallet = {}
 
             store.account.currentWallet != 'all'
                 ? currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
                 : currentWallet = store.account.wallets[0]
 
+            // Get current network
             let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
 
             // Set current APR
             APR.value = currentNetwork.info.apr
         }
 
-        // Set current RPDE
-        if (store.account.currentWallet != 'all') {
-            // Current wallet
-            let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
-            RPDE.value = currentWallet.RPDE
+        // Set current passport value
+        if (store.account.currentWallet == 'all') {
+            if (store.currentNetwork == 'all') {
+                // Account RPDE
+                totalTokensPrice.value = store.account.totalTokensPrice
+            } else {
+                store.account.wallets.forEach(wallet => {
+                    // Network
+                    let network = wallet.networks.find(el => el.name == store.currentNetwork)
+
+                    // Sum network in all wallets Total tokens price
+                    totalTokensPrice.value += network.totalTokensPrice
+                })
+            }
         } else {
-            RPDE.value = store.account.info.RPDE
+            if (store.currentNetwork == 'all') {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Current wallet Total tokens price
+                RPDE.value = currentWallet.totalTokensPrice
+            } else {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Get current network
+                let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+
+                // Current network Total tokens price
+                totalTokensPrice.value = currentNetwork.totalTokensPrice
+            }
+        }
+
+
+        // Set current RPDE
+        if (store.account.currentWallet == 'all') {
+            if (store.currentNetwork == 'all') {
+                // Account RPDE
+                RPDE.value = store.account.info.RPDE
+            } else {
+                store.account.wallets.forEach(wallet => {
+                    // Network
+                    let network = wallet.networks.find(el => el.name == store.currentNetwork)
+
+                    // Sum network in all wallets RPDE
+                    RPDE.value += network.info.RPDE
+                })
+            }
+        } else {
+            if (store.currentNetwork == 'all') {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Current wallet RPDE
+                RPDE.value = currentWallet.RPDE
+            } else {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Get current network
+                let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+
+                // Current network RPDE
+                RPDE.value = currentNetwork.info.RPDE
+            }
         }
 
 

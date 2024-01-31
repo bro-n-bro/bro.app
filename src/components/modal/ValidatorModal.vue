@@ -99,10 +99,10 @@
 
                             <div class="val">
                                 <span>
-                                    {{ new Number($filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent), 0)).toLocaleString('en-US') }}
+                                    {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name), 0)).toLocaleString('en-US') }}
                                 </span>
                                 /
-                                <span>{{ $filters.toFixed(store.validatorInfo.self_bonded.amount / Math.pow(10, store.networks[store.validatorInfo.network].exponent) / store.validatorInfo.voting_power * 100, 2) }}%</span>
+                                <span>{{ $filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name) / store.validatorInfo.voting_power * 100, 2) }}%</span>
                             </div>
                         </div>
 
@@ -139,6 +139,7 @@
 <script setup>
     import { inject, onBeforeMount, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
+    import { formatTokenAmount } from '@/utils'
 
 
     const store = useGlobalStore(),
@@ -198,6 +199,10 @@
         position: relative;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 100px;
         min-width: 100px;
@@ -206,11 +211,6 @@
 
         border-radius: 50%;
         background: #fff;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -247,7 +247,6 @@
 
     .power
     {
-        color: #fff;
         font-size: 12px;
         font-weight: 500;
         line-height: 34px;
@@ -263,12 +262,12 @@
         height: 34px;
 
         text-align: center;
+
+        color: #fff;
     }
 
     .power svg
     {
-        color: #950fff;
-
         position: absolute;
         z-index: -1;
         top: 0;
@@ -278,6 +277,8 @@
 
         width: 100%;
         height: 100%;
+
+        color: #950fff;
     }
 
 
@@ -296,13 +297,12 @@
         line-height: 100%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         min-height: 44px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .info .name > div
@@ -344,6 +344,10 @@
         line-height: 100%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         padding: 10px 14px;
 
@@ -351,11 +355,6 @@
 
         border-radius: 24px;
         background: #353535;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: nowrap;
     }
 
     .active_set.green
@@ -380,15 +379,14 @@
     .btns
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-top: 30px;
         margin-bottom: -8px;
         margin-left: -8px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .btns > *
@@ -400,11 +398,14 @@
 
     .btns .link
     {
-        color: currentColor;
         font-size: 14px;
         line-height: 100%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         min-height: 32px;
         padding: 4px 6px;
@@ -412,13 +413,9 @@
         transition: background .2s linear;
         text-decoration: none;
 
+        color: currentColor;
         border-radius: 10px;
         background: #191919;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .btns .link .icon
@@ -480,11 +477,11 @@
 
     .features .row
     {
+        align-content: stretch;
+        align-items: stretch;
+
         margin-bottom: -24px;
         margin-left: -24px;
-
-        align-items: stretch;
-        align-content: stretch;
     }
 
     .features .row > *
@@ -691,5 +688,4 @@
             margin-right: 6px;
         }
     }
-
 </style>

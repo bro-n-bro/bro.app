@@ -50,6 +50,9 @@
 <style scoped>
     .networks
     {
+        position: sticky;
+        top: 118px;
+
         padding: 14px;
 
         border-radius: 20px;
@@ -64,15 +67,14 @@
         line-height: 36px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-bottom: 20px;
 
         pointer-events: none;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .networks .title > *
@@ -107,21 +109,20 @@
     .networks .network
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         width: 100%;
-        text-decoration: none;
-        color: currentColor;
         padding: 10px;
 
         transition: background .2s linear;
         text-align: left;
+        text-decoration: none;
 
+        color: currentColor;
         border-radius: 14px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -172,13 +173,14 @@
 
     .networks .token
     {
-        color: #555;
         font-size: 12px;
         line-height: 15px;
 
         margin-top: 6px;
 
         text-transform: uppercase;
+
+        color: #555;
     }
 
 
@@ -299,5 +301,4 @@
             line-height: 26px;
         }
     }
-
 </style>

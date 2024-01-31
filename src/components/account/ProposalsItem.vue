@@ -51,7 +51,7 @@
 
         <div class="progress" v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <div class="bar">
-                <div class="violet" :style="`width: ${$filters.toFixed(props.proposal.deposit / Math.pow(10, store.networks[store.currentNetwork].exponent) / store.networks[store.currentNetwork].proposal_need * 100, 2)}%;`"></div>
+                <div class="violet" :style="`width: ${$filters.toFixed(formatTokenAmount(props.proposal.deposit, store.networks[store.currentNetwork].token_name) / store.networks[store.currentNetwork].proposal_need * 100, 2)}%;`"></div>
             </div>
 
             <div class="funds">
@@ -59,8 +59,8 @@
                     <div class="label">{{ $t('message.proposal_deposite_label_collected') }}</div>
 
                     <div class="val">
-                        {{ $filters.toFixed(props.proposal.deposit / Math.pow(10, store.networks[store.currentNetwork].exponent), 0) }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ $filters.toFixed(formatTokenAmount(props.proposal.deposit, store.networks[store.currentNetwork].token_name), 0) }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@
 
                     <div class="val">
                         {{ store.networks[store.currentNetwork].proposal_need }}
-                        {{ store.networks[store.currentNetwork].token_name }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
                 </div>
             </div>
@@ -148,6 +148,8 @@
 <script setup>
     import { useGlobalStore } from '@/stores'
     import { formatTimeAgo } from '@vueuse/core'
+    import { formatTokenName, formatTokenAmount } from '@/utils'
+
 
     const store = useGlobalStore(),
         props = defineProps(['proposal']),

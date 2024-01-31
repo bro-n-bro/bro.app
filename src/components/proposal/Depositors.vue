@@ -26,8 +26,8 @@
                         </td>
 
                         <td class="amount">
-                            {{ parseInt($filters.toFixed(depositor.coins[0].amount / Math.pow(10, depositor.coins[0].exponent), 6)) }}.<small>{{ $filters.toFixed(depositor.coins[0].amount / Math.pow(10, depositor.coins[0].exponent), 6).split('.')[1] }}</small>
-                            {{ store.networks[props.proposal.network].token_name }}
+                            {{ parseInt($filters.toFixed(formatTokenAmount(depositor.coins[0].amount, store.networks[store.currentNetwork].token_name), 6)) }}.<small>{{ $filters.toFixed(formatTokenAmount(depositor.coins[0].amount, store.networks[store.currentNetwork].token_name), 6).split('.')[1] }}</small>
+                            {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                         </td>
 
                         <td class="date">
@@ -49,6 +49,7 @@
 
 <script setup>
     import { useGlobalStore } from '@/stores'
+    import { formatTokenName, formatTokenAmount } from '@/utils'
 
 
     const props = defineProps(['depositors', 'proposal']),

@@ -20,7 +20,6 @@
 		"core-js": "^3.8.3",
 		"detect.js": "^2.2.3",
 		"gh-pages": "^4.0.0",
-		"hc-sticky": "^2.2.7",
 		"html-to-image": "^1.11.11",
 		"marked": "^5.0.2",
 		"mitt": "^3.0.0",

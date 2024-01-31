@@ -92,9 +92,7 @@
 
             <div class="chart">
                 <div class="percents">
-                    <!-- <span v-if="store.networks[props.proposal.network].proposal_need <= (props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent))">100%</span>
-                    <span v-else>{{ $filters.toFixed((props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent)) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%</span> -->
-                    {{ $filters.toFixed((props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent)) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%
+                    {{ $filters.toFixed(formatTokenAmount(props.proposal.deposit, store.networks[store.currentNetwork].token_name) / store.networks[props.proposal.network].proposal_need * 100, 2) }}%
                 </div>
 
                 <Doughnut ref="chart" :data="chartData" :options="chartOptions" />
@@ -146,8 +144,8 @@
                     <div class="label">{{ $t('message.proposal_details_total_label') }}</div>
 
                     <div class="val">
-                        {{ props.proposal.deposit / Math.pow(10, store.networks[props.proposal.network].exponent) }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ formatTokenAmount(props.proposal.deposit, store.networks[store.currentNetwork].token_name) }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
                 </div>
 
@@ -155,8 +153,8 @@
                     <div class="label">{{ $t('message.proposal_details_initial_label') }}</div>
 
                     <div class="val">
-                        {{ props.proposal.init_deposit / Math.pow(10, store.networks[props.proposal.network].exponent) }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ formatTokenAmount(props.proposal.init_deposit, store.networks[store.currentNetwork].token_name) }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
                 </div>
             </div>
@@ -221,8 +219,8 @@
 
             <div class="exp" v-if="props.proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
                 {{ $t('message.proposal_vote_info_minimum', {
-                    amount: Number($filters.toFixed(props.stakingPool.amount / Math.pow(10, props.stakingPool.exponent) * 0.4, 2)).toLocaleString('en-US'),
-                    denom: store.networks[props.proposal.network].token_name
+                    amount: Number($filters.toFixed(formatTokenAmount(props.stakingPool.amount, store.networks[store.currentNetwork].token_name) * 0.4, 2)).toLocaleString('en-US'),
+                    denom: formatTokenName(store.networks[store.currentNetwork].token_name)
                 })}}
             </div>
         </div>
@@ -236,8 +234,8 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_yes / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ Number($filters.toFixed(formatTokenAmount(props.proposal.tally_yes, store.networks[store.currentNetwork].token_name), 2)).toLocaleString('en-US') }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
 
                     <div class="votes_count">
@@ -252,8 +250,8 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_no / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ Number($filters.toFixed(formatTokenAmount(props.proposal.tally_no, store.networks[store.currentNetwork].token_name), 2)).toLocaleString('en-US') }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
 
                     <div class="votes_count">
@@ -268,8 +266,8 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_no_with_veto / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ Number($filters.toFixed(formatTokenAmount(props.proposal.tally_no_with_veto, store.networks[store.currentNetwork].token_name), 2)).toLocaleString('en-US') }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
 
                     <div class="votes_count">
@@ -284,8 +282,8 @@
                     </div>
 
                     <div class="tokens_count">
-                        {{ Number($filters.toFixed(props.proposal.tally_abstain / Math.pow(10, store.networks[props.proposal.network].exponent), 2)).toLocaleString('en-US') }}
-                        {{ store.networks[props.proposal.network].token_name }}
+                        {{ Number($filters.toFixed(formatTokenAmount(props.proposal.tally_abstain, store.networks[store.currentNetwork].token_name), 2)).toLocaleString('en-US') }}
+                        {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
 
                     <div class="votes_count">
@@ -303,11 +301,10 @@
 
 
 <script setup>
-    import { ref, reactive, inject, onMounted, computed } from 'vue'
+    import { ref, reactive, inject, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { useNotification } from '@kyvg/vue3-notification'
-    import { generateAddress, prepareTx, sendTx } from '@/utils'
-    import hcSticky from 'hc-sticky'
+    import { generateAddress, prepareTx, sendTx, formatTokenName, formatTokenAmount } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -361,14 +358,6 @@
                 cutout: '84%'
             }]
         }))
-
-
-    onMounted(async () => {
-        // Sticky element
-        let stickyElements = document.querySelectorAll('.sticky')
-
-        stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
-    })
 
 
     // Get current account
@@ -565,21 +554,26 @@
 
 
 <style scoped>
+    .sticky
+    {
+        position: sticky;
+        top: 118px;
+    }
+
     .current_account
     {
         position: relative;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         margin-bottom: 16px;
         padding-bottom: 16px;
 
         border-bottom: 1px solid rgba(255, 255, 255, .05);
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -685,11 +679,10 @@
         position: relative;
 
         display: flex;
-
-        justify-content: space-between;
-        align-items: center;
         align-content: center;
+        align-items: center;
         flex-wrap: wrap;
+        justify-content: space-between;
     }
 
     .current_vote .val::first-letter
@@ -713,15 +706,14 @@
         position: relative;
 
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-top: 16px;
         margin-bottom: -8px;
         margin-left: -8px;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: wrap;
     }
 
 
@@ -812,30 +804,29 @@
         line-height: 100%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         margin-bottom: 16px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
     .refresh_btn
     {
-        color: #950fff;
         font-size: 14px;
         line-height: 20px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-left: auto;
 
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        color: #950fff;
     }
 
     .refresh_btn .icon
@@ -870,17 +861,15 @@
 
     .deposit_btn.disabled
     {
-        color: rgba(255,255,255,.5);
-
         cursor: default;
         pointer-events: none;
 
+        color: rgba(255,255,255,.5);
         background: rgba(149, 15, 255, .5);
     }
 
     .deposit_btn .tooltip
     {
-        color: #fff;
         font-size: 12px;
         line-height: 100%;
 
@@ -895,6 +884,7 @@
         transform: translateX(-50%);
         white-space: nowrap;
 
+        color: #fff;
         border-radius: 8px;
         background: #282828;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
@@ -945,11 +935,11 @@
 
     .details .row
     {
+        align-content: stretch;
+        align-items: stretch;
+
         margin-bottom: -8px;
         margin-left: -8px;
-
-        align-items: stretch;
-        align-content: stretch;
     }
 
     .details .row > *
@@ -972,11 +962,12 @@
 
     .details .label
     {
-        color: #555;
         font-size: 12px;
         line-height: 100%;
 
         margin-bottom: 8px;
+
+        color: #555;
     }
 
 
@@ -1000,13 +991,12 @@
     .vote_info .head
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         margin-bottom: 16px;
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -1036,16 +1026,15 @@
         position: absolute;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 100%;
         height: 100%;
 
         text-align: center;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -1054,25 +1043,25 @@
         position: absolute;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 100%;
         height: 100%;
 
         text-align: center;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .chart .final_status .label
     {
-        color: #555;
         font-size: 14px;
         line-height: 17px;
 
         width: 100%;
+
+        color: #555;
     }
 
     .chart .final_status .val
@@ -1108,7 +1097,6 @@
 
     .vote_info .turnout
     {
-        color: #eb5757;
         font-size: 12px;
         line-height: 15px;
 
@@ -1116,6 +1104,7 @@
         margin-right: auto;
         padding: 7px;
 
+        color: #eb5757;
         border: 1px solid;
         border-radius: 8px;
     }
@@ -1128,13 +1117,13 @@
 
     .vote_info .total
     {
-        color: #950fff;
         font-size: 12px;
         line-height: 15px;
 
         margin-top: 16px;
         padding: 7px;
 
+        color: #950fff;
         border: 1px solid;
         border-radius: 8px;
     }
@@ -1142,28 +1131,29 @@
 
     .vote_info .exp
     {
-        color: #555;
         font-size: 12px;
         line-height: 15px;
 
         margin-top: 8px;
+
+        color: #555;
     }
 
 
     .vote_info .refresh_btn
     {
-        color: #950fff;
         font-size: 14px;
         line-height: 20px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-left: auto;
 
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
+        color: #950fff;
     }
 
     .vote_info .refresh_btn .icon
@@ -1187,11 +1177,11 @@
 
     .vote_result .row
     {
+        align-content: stretch;
+        align-items: stretch;
+
         margin-bottom: -8px;
         margin-left: -8px;
-
-        align-items: stretch;
-        align-content: stretch;
     }
 
     .vote_result .row > *
@@ -1204,12 +1194,12 @@
 
     .vote_result .item
     {
-        color: #555;
         font-size: 14px;
         line-height: 100%;
 
         padding: 8px;
 
+        color: #555;
         border-radius: 10px;
         background: #191919;
     }
@@ -1295,5 +1285,4 @@
             font-size: 28px;
         }
     }
-
 </style>

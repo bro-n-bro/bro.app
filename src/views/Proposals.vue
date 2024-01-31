@@ -2,11 +2,11 @@
     <section class="proposals_page">
         <div class="cont middle">
             <div class="back_btn">
-                <router-link to="/account/cosmoshub?demo=true" class="btn" v-if="store.demo">
+                <router-link :to="`/account/${store.currentNetwork}?demo=true`" class="btn" v-if="store.demo">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
 
-                <router-link to="/account/cosmoshub" class="btn" v-else>
+                <router-link :to="`/account/${store.currentNetwork}`" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
@@ -15,12 +15,12 @@
             <div class="grid row">
                 <section class="col">
                     <!-- Networks -->
-                    <Networks class="sticky" />
+                    <Networks />
                 </section>
 
 
                 <section class="col_main">
-                    <div class="head sticky">
+                    <div class="head">
                         <div class="title">
                             {{ $t('message.account_proposals_title') }}
                         </div>
@@ -56,7 +56,7 @@
 
                 <section class="col">
                     <!-- Filter -->
-                    <div class="filter sticky">
+                    <div class="filter">
                         <div class="title" @click.prevent="toggleActiveClass">
                             <span>{{ $t('message.filter_title') }}</span>
 
@@ -103,7 +103,6 @@
 <script setup>
     import { onBeforeMount, reactive, ref, inject, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import hcSticky from 'hc-sticky'
     import { useUrlSearchParams } from '@vueuse/core'
 
     // Components
@@ -140,13 +139,6 @@
                 : await getProposals()
         } catch (error) {
             console.error(error)
-        }
-
-        // Sticky element
-        if(window.innerWidth > 1279) {
-            let stickyElements = document.querySelectorAll('.sticky')
-
-            stickyElements.forEach(el => new hcSticky(el, { top: 118 }))
         }
     })
 
@@ -334,9 +326,11 @@
 
     .back_btn .btn
     {
-        color: currentColor;
-
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 36px;
         height: 36px;
@@ -344,13 +338,9 @@
         transition: background .2s linear;
         text-decoration: none;
 
+        color: currentColor;
         border-radius: 50%;
         background: #141414;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -371,9 +361,9 @@
 
     .grid
     {
-        justify-content: space-between;
-        align-items: stretch;
         align-content: stretch;
+        align-items: stretch;
+        justify-content: space-between;
     }
 
 
@@ -393,20 +383,20 @@
 
     .head
     {
-        position: relative;
+        position: sticky;
         z-index: 9;
+        top: 118px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
 
         margin-top: -28px;
         padding: 28px 0 20px;
 
         background: var(--bg);
-
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -420,7 +410,6 @@
 
     .head .create_link
     {
-        color: currentColor;
         font-size: 16px;
         font-weight: 500;
         line-height: 110%;
@@ -433,6 +422,7 @@
         transition: background .2s linear;
         text-decoration: none;
 
+        color: currentColor;
         border-radius: 16px;
         background: #950fff;
     }
@@ -458,14 +448,13 @@
     .proposals
     {
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-bottom: -20px;
         margin-left: -20px;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: wrap;
     }
 
     .proposals > *
@@ -516,6 +505,9 @@
 
     .filter
     {
+        position: sticky;
+        top: 118px;
+
         padding: 16px 14px 24px;
 
         border-radius: 20px;
@@ -530,13 +522,12 @@
         line-height: 36px;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         pointer-events: none;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .filter .title > *
@@ -635,13 +626,15 @@
 
     .btn_up
     {
-        color: currentColor;
-
         position: fixed;
         right: auto;
         bottom: 200px;
 
         display: none;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
 
         width: 48px;
         height: 48px;
@@ -650,13 +643,9 @@
         text-decoration: none;
 
         opacity: 1;
+        color: currentColor;
         border-radius: 16px;
         background: #950fff;
-
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
 
@@ -874,5 +863,4 @@
             padding: 40px 0;
         }
     }
-
 </style>

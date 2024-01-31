@@ -80,6 +80,8 @@
 <style scoped>
     .grid
     {
+        align-content: stretch;
+        align-items: stretch;
         justify-content: space-between;
     }
 

@@ -203,7 +203,7 @@ button
     z-index: 9;
 
     display: flex;
-    overflow: hidden;
+    overflow: clip;
     flex-direction: column;
 
     min-width: 360px;
