@@ -15,7 +15,7 @@
 		"@cosmjs/tendermint-rpc": "^0.29.0",
 		"@cybercongress/cyber-js": "^0.3.3",
 		"@kyvg/vue3-notification": "^2.7.0",
-		"@vueuse/core": "^10.2.1",
+		"@vueuse/core": "^10.7.2",
 		"chart.js": "^4.2.1",
 		"core-js": "^3.8.3",
 		"detect.js": "^2.2.3",

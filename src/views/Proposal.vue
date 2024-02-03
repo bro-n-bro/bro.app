@@ -6,18 +6,15 @@
     <section class="proposal_info" v-else>
         <div class="cont middle">
             <div class="back_btn">
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/cosmoshub?demo=true'" class="btn" v-if="store.demo">
+                <router-link :to="`/proposals/${store.currentNetwork}?demo=true`" class="btn" v-if="store.demo">
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
 
-                <router-link :to="router.options.history.state.back ? router.options.history.state.back : '/proposals/cosmoshub'" class="btn" v-else>
+                <router-link :to="`'/proposals/${store.currentNetwork}`" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>
 
-            <!-- <pre>{{ proposal }}</pre> -->
-            <!-- <pre>{{ currentVote }}</pre> -->
-            <!-- <pre>{{ stakingPool }}</pre> -->
 
             <div class="row">
                 <div class="data">
@@ -28,11 +25,11 @@
 
                     <div class="tabs" v-if="proposal.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                         <div class="row">
-                            <button class="btn" :class="{ active: activeTab == 'tab1' }" @click="activeTab = 'tab1'">
+                            <button class="btn" :class="{ active: activeTab == 'tab1' }" @click="setActiveTab('tab1')">
                                 {{ $t('message.proposal_tab1') }}
                             </button>
 
-                            <button v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="btn" :class="{ active: activeTab == 'tab2' }" @click="activeTab = 'tab2'">
+                            <button v-if="proposal.status == 'PROPOSAL_STATUS_VOTING_PERIOD'" class="btn" :class="{ active: activeTab == 'tab2' }" @click="setActiveTab('tab2')">
                                 {{ $t('message.proposal_tab2') }}
                             </button>
                         </div>
@@ -62,9 +59,9 @@
 <script setup>
     import { onBeforeMount, inject, ref, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { useRouter, useRoute } from 'vue-router'
     import { fromBech32, toBech32 } from '@cosmjs/encoding'
     import { generateAddress } from '@/utils'
+    import { useUrlSearchParams } from '@vueuse/core'
 
     // Components
     import HeadInfo from '../components/proposal/HeadInfo.vue'
@@ -75,13 +72,12 @@
 
 
     var store = useGlobalStore(),
-        router = useRouter(),
-        route = useRoute(),
         i18n = inject('i18n'),
         loading = ref(true),
         emitter = inject('emitter'),
+        urlParams = useUrlSearchParams('history'),
         proposal = ref({}),
-        activeTab = ref(route.query.tab ? route.query.tab : 'tab1'),
+        activeTab = ref(urlParams.tab ? urlParams.tab : 'tab1'),
         chartDatasets = reactive([]),
         currentVote = reactive({ votes: [] }),
         stakingPool =  ref({})
@@ -176,6 +172,16 @@
         } catch (error) {
             console.error(error)
         }
+    }
+
+
+    // Set active tab
+    function setActiveTab(tab) {
+        // Change tab
+        activeTab.value = tab
+
+        // Set params to URL
+        urlParams.tab = value
     }
 
 

@@ -449,25 +449,6 @@
         scrollbar-width: thin;
     }
 
-    .scroll::-webkit-scrollbar
-    {
-        width: 6px;
-        height: 6px;
-    }
-    .scroll::-webkit-scrollbar
-    {
-        width: 4px;
-        height: 4px;
-
-        background-color: var(--bg);
-    }
-
-    .scroll::-webkit-scrollbar-thumb
-    {
-        border-radius: 5px;
-        background-color: #950fff;
-    }
-
 
     .titles
     {
@@ -961,9 +942,7 @@
         margin-bottom: 0;
     }
 
-    .scroll:not(.with_your_validator) .item:first-child .validator .moniker .tooltip:before,
-    .scroll:not(.with_your_validator) .item:first-child .bar .tooltip:before,
-    .item.first .validator .moniker .tooltip:before,
+    .item.first .validator .moniker .tooltip:before
     .item.first .bar .tooltip:before
     {
         top: auto;
@@ -1025,9 +1004,17 @@
     }
 
 
-    .table_wrap .community_votes:hover .tooltip
+    .item .community_votes:hover .tooltip
     {
         display: flex;
+    }
+
+
+    .item .percents
+    {
+        justify-content: flex-end;
+
+        text-align: right;
     }
 
 
@@ -1057,6 +1044,5 @@
         {
             max-height: 304px;
         }
-    }
-
+}
 </style>
