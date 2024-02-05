@@ -10,7 +10,7 @@
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
 
-                <router-link :to="`'/proposals/${store.currentNetwork}`" class="btn" v-else>
+                <router-link :to="`/proposals/${store.currentNetwork}`" class="btn" v-else>
                     <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_arrow_hor"></use></svg>
                 </router-link>
             </div>

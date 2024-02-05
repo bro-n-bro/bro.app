@@ -106,8 +106,8 @@
     import { useUrlSearchParams } from '@vueuse/core'
 
     // Components
-    import Networks from '../components/account/Networks.vue'
-    import ProposalsItem from '../components/account/ProposalsItem.vue'
+    import Networks from '../components/proposals/Networks.vue'
+    import ProposalsItem from '../components/proposals/ProposalsItem.vue'
     import ButtonUp from '../components/ButtonUp.vue'
 
 
