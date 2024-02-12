@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(totalRewardTokens, store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(totalRewardsPrice, 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + totalTokensPrice }}
+                    {{ '~' + $filters.toFixed(totalTokensPrice, 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="val" v-else>
-                    {{ '~' + $filters.toFixed(currencyСonversion(RPDE, store.networks[store.currentNetwork].token_name), 2) }}
+                    {{ '~' + $filters.toFixed(currencyСonversion(formatTokenAmount(RPDE, store.networks[store.currentNetwork].token_name), store.networks[store.currentNetwork].token_name), 2) }}
 
                     <div class="currency">{{ store.currentCurrency }}</div>
                 </div>
@@ -80,7 +80,7 @@
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
         APR = !store.demo ? ref(0) : ref(0.2125),
-        totalRewardTokens = !store.demo ? ref(0) : ref(10.016),
+        totalRewardsPrice = !store.demo ? ref(0) : ref(10.016),
         totalTokensPrice = !store.demo ? ref(0) : ref(150.18),
         RPDE = !store.demo ? ref(0) : ref(0.4)
 
@@ -108,6 +108,7 @@
 
         // Reset data
         APR.value = 0
+        totalRewardsPrice.value = 0
         totalTokensPrice.value = 0
         RPDE.value = 0
         store.account.info.RPDE = 0
@@ -153,10 +154,44 @@
         }
 
 
+        // Set current rewards
+        if (store.account.currentWallet == 'all') {
+            if (store.currentNetwork == 'all') {
+                // Account Total rewards price
+                totalRewardsPrice.value = store.account.totalRewardsPrice
+            } else {
+                store.account.wallets.forEach(wallet => {
+                    // Network
+                    let network = wallet.networks.find(el => el.name == store.currentNetwork)
+
+                    // Sum network in all wallets Total rewards price
+                    totalRewardsPrice.value += network.totalRewardsPrice
+                })
+            }
+        } else {
+            if (store.currentNetwork == 'all') {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Current wallet Total rewards price
+                totalRewardsPrice.value = currentWallet.totalRewardsPrice
+            } else {
+                // Get current walllet
+                let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
+
+                // Get current network
+                let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
+
+                // Current network Total rewards price
+                totalRewardsPrice.value = currentNetwork.totalRewardsPrice
+            }
+        }
+
+
         // Set current passport value
         if (store.account.currentWallet == 'all') {
             if (store.currentNetwork == 'all') {
-                // Account RPDE
+                // Account value
                 totalTokensPrice.value = store.account.totalTokensPrice
             } else {
                 store.account.wallets.forEach(wallet => {
@@ -173,7 +208,7 @@
                 let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
 
                 // Current wallet Total tokens price
-                RPDE.value = currentWallet.totalTokensPrice
+                totalTokensPrice.value = currentWallet.totalTokensPrice
             } else {
                 // Get current walllet
                 let currentWallet = store.account.wallets.find(el => el.address == store.account.currentWallet)
@@ -198,7 +233,7 @@
                     let network = wallet.networks.find(el => el.name == store.currentNetwork)
 
                     // Sum network in all wallets RPDE
-                    RPDE.value += network.info.RPDE
+                    RPDE.value += network.info.rpde.amount
                 })
             }
         } else {
@@ -216,7 +251,7 @@
                 let currentNetwork = currentWallet.networks.find(el => el.name == store.currentNetwork)
 
                 // Current network RPDE
-                RPDE.value = currentNetwork.info.RPDE
+                RPDE.value = currentNetwork.info.rpde.amount
             }
         }
 

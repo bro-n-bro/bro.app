@@ -274,6 +274,7 @@ export const useGlobalStore = defineStore('global', {
                                 ibc: 0,
                                 liquid_rewards: 0
                             },
+                            totalRewardsPrice: 0,
                             totalTokensPrice: 0
                         },
                         {
@@ -289,6 +290,7 @@ export const useGlobalStore = defineStore('global', {
                                 ibc: 0,
                                 liquid_rewards: 0
                             },
+                            totalRewardsPrice: 0,
                             totalTokensPrice: 0
                         }
                     ]
@@ -322,6 +324,7 @@ export const useGlobalStore = defineStore('global', {
                                                 ibc: 0,
                                                 liquid_rewards: 0
                                             },
+                                            totalRewardsPrice: 0,
                                             totalTokensPrice: 0
                                         },
                                         {
@@ -337,6 +340,7 @@ export const useGlobalStore = defineStore('global', {
                                                 ibc: 0,
                                                 liquid_rewards: 0
                                             },
+                                            totalRewardsPrice: 0,
                                             totalTokensPrice: 0
                                         }
                                     ]

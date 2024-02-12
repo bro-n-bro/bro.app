@@ -174,7 +174,7 @@ export const currencyСonversion = (amount, currency) => {
         tokenPrice = store.prices.find(el => el.symbol == currency).price,
         toPrice = 1
 
-    if (store.currency != 'USDT') {
+    if (store.currentCurrency != 'USDT') {
         currency = store.currentCurrency
 
         if (currency == 'BTC') {

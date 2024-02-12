@@ -262,14 +262,13 @@
                                         amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                                     // Sum total
-                                    if (store.prices.find(e => e.symbol == el.symbol)) {
-                                        if(amount >= 1) {
-                                            network.total.rewards += amount
-                                        }
-                                    }
+                                    network.total.rewards += amount
+
+                                    // Calc tokens rewards price
+                                    network.totalRewardsPrice += amountCurrentDenom * el.price
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amountCurrentDenom * el.price
 
                                     // Group by denom
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
@@ -330,6 +329,21 @@
 
                 // Sum account total tokens price
                 store.account.totalTokensPrice += network.totalTokensPrice
+            }
+        }
+
+        // Total rewards price
+        store.account.totalRewardsPrice = 0
+
+        for (let wallet of store.account.wallets) {
+            wallet.totalRewardsPrice = 0
+
+            for (let network of wallet.networks) {
+                // Sum wallet total rewards price
+                wallet.totalRewardsPrice += network.totalRewardsPrice
+
+                // Sum account total rewards price
+                store.account.totalRewardsPrice += network.totalRewardsPrice
             }
         }
 
