@@ -63,7 +63,7 @@
 <script setup>
     import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { currencyСonversion } from '@/utils'
+    import { currencyСonversion, formatTokenAmount } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'
@@ -239,7 +239,7 @@
             token = currentData.value.groupByDenom.find(e => e.symbol == symbol)
 
         if(currentData.value.totalTokensPrice) {
-            result = currencyСonversion(token.symbol == 'BOOT' ? token.amount / Math.pow(10, store.networks.bostrom.exponent) : token.amount, token.symbol) / currentData.value.totalTokensPrice * 100
+            result = currencyСonversion(formatTokenAmount(token.amount, token.symbol), token.symbol) / currentData.value.totalTokensPrice * 100
         }
 
         return result

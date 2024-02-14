@@ -265,10 +265,10 @@
                                     network.total.rewards += amount
 
                                     // Calc tokens rewards price
-                                    network.totalRewardsPrice += amountCurrentDenom * el.price
+                                    network.totalRewardsPrice += amount * el.price
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amountCurrentDenom * el.price
+                                    network.totalTokensPrice += amount * el.price
 
                                     // Group by denom
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
@@ -346,6 +346,8 @@
                 store.account.totalRewardsPrice += network.totalRewardsPrice
             }
         }
+
+        console.log(store.account)
 
         // Hide loader
         loading.value = false
