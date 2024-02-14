@@ -218,7 +218,7 @@ export const formatTokenAmount = (amount, tokenName) => {
 export const formatAmountToCurrentDenom = (amount, tokenName) => {
     let store = useGlobalStore()
 
-    return amount * (store.prices.find(e => e.symbol == tokenName).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
+    return amount * (formatTokenPrice(store.prices.find(e => e.symbol == tokenName).price) / formatTokenPrice(store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price))
 }
 
 
