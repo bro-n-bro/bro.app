@@ -45,7 +45,7 @@
 <script setup>
     import { onBeforeMount, ref, inject, reactive } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { generateAddress, formatTokenAmount, formatAmountToCurrentDenom } from '@/utils'
+    import { generateAddress, formatTokenAmount, formatAmountToCurrentDenom, formatTokenPrice } from '@/utils'
 
     // Components
     import ChartStakeLiquide from '@/components/account/charts/ChartStakeLiquide.vue'
@@ -149,7 +149,7 @@
                                     network.total.liquid_rewards += amount
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Group by denom
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -178,7 +178,7 @@
                                     network.total.ibc += amountCurrentDenom
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Group by denom
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -207,7 +207,7 @@
                                     network.total.staked += amount
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Group by denom
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -236,7 +236,7 @@
                                     network.total.unbonding += amount
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Group by denom
                                     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -265,10 +265,10 @@
                                     network.total.rewards += amount
 
                                     // Calc tokens rewards price
-                                    network.totalRewardsPrice += amount * el.price
+                                    network.totalRewardsPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Calc tokens price
-                                    network.totalTokensPrice += amount * el.price
+                                    network.totalTokensPrice += amount * formatTokenPrice(el.price, el.symbol)
 
                                     // Group by denom
                                     if (store.prices.find(e => e.symbol == el.symbol)) {
@@ -346,8 +346,6 @@
                 store.account.totalRewardsPrice += network.totalRewardsPrice
             }
         }
-
-        console.log(store.account)
 
         // Hide loader
         loading.value = false
