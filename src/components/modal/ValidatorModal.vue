@@ -149,7 +149,7 @@
 
     onBeforeMount(async () => {
         // Get validator data
-        await fetch(`https://rpc.bronbro.io/validators/${store.validatorInfo.operator_address}`)
+        await fetch(`${store.networks[store.currentNetwork].index_api}/validators/${store.validatorInfo.operator_address}`)
             .then(res => res.json())
             .then(response => {
                 // Set data
@@ -165,7 +165,7 @@
     function imageLoadError(event) {
         event.target.classList.add('hide')
 
-        event.target.closest('.logo').style.backgroundColor = store.colors[Math.floor((Math.random()*store.colors.length))]
+        event.target.closest('.logo').style.backgroundColor = store.networkColors[Math.floor((Math.random() * store.networkColors.length))]
     }
 </script>
 

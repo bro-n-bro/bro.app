@@ -103,6 +103,7 @@ export const useGlobalStore = defineStore('global', {
             NGM: '#00646F',
             ATOM: '#2E314B',
             DSM: '#F98256',
+            DYM: '#F0E0D3',
             FLIX: '#F19E22',
             AKT: '#ED3324',
             MNTL: '#F5B31D',
