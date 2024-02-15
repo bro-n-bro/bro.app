@@ -28,6 +28,14 @@
             </div>
         </div>
 
+        <div class="suspicious" v-if="checkSuspicious(props.proposal.title)">
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_suspicious"></use></svg>
+
+            <div class="tooltip">
+                {{ $t('message.account_proposals_suspicious_tooltip') }}
+            </div>
+        </div>
+
         <div class="date" v-if="props.proposal.status == 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <vue-countdown :time="dateCalc(proposal.deposit_end_time) - new Date()" v-slot="{ days, hours, minutes, seconds }">
                 {{ days }}D : {{ hours }}H : {{ minutes }}M : {{ seconds }}S
@@ -68,7 +76,7 @@
                     <div class="label">{{ $t('message.proposal_deposite_label_necessary') }}</div>
 
                     <div class="val">
-                        {{ store.networks[store.currentNetwork].proposal_need }}
+                        {{ $filters.toFixed(formatTokenAmount(store.networks[store.currentNetwork].proposal_need, store.networks[store.currentNetwork].token_name), 0) }}
                         {{ formatTokenName(store.networks[store.currentNetwork].token_name) }}
                     </div>
                 </div>
@@ -165,6 +173,25 @@
     }
 
 
+    // Check Suspicious
+    function checkSuspicious(title) {
+        let result = false,
+            forbiddenWords = ['Airdrop', '\ud83d\udc8e', '\ud83d\udca5', '\u2705']
+
+        // Convert a string to an array of words and characters
+        let titleArr = title.toLowerCase().split('')
+
+        for (let char of titleArr) {
+            // Checking if there is an element in the array of prohibited words and characters
+            if (forbiddenWords.includes(char)) {
+                result = true
+            }
+        }
+
+        return result
+    }
+
+
     // Get progress percents
     function getProgressPercents(value) {
         let sum = props.proposal.tally_no + props.proposal.tally_no_with_veto + props.proposal.tally_yes
@@ -185,23 +212,21 @@
 <style scoped>
     .proposal
     {
-        color: currentColor;
-
         display: flex;
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         padding: 10px;
 
         transition: border-color .2s linear;
         text-decoration: none;
 
+        color: currentColor;
         border: 1px solid transparent;
         border-radius: 13px;
         background: #0d0d0d;
-
-        justify-content: flex-start;
-        align-items: flex-start;
-        align-content: flex-start;
-        flex-wrap: wrap;
     }
 
 
@@ -239,43 +264,38 @@
     .proposal .status div
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         padding: 7px 5px;
 
         border: 1px solid currentColor;
         border-radius: 10px;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .proposal .status div.blue
     {
         color: #0343e8;
-
         background: rgba(3, 67, 232, .05);
     }
 
     .proposal .status div.green
     {
         color: #1bc562;
-
         background: rgba(27, 197, 98, .05);
     }
 
     .proposal .status div.red
     {
         color: #eb5757;
-
         background: rgba(235, 87, 87, .05);
     }
 
     .proposal .status div.violet
     {
         color: #950fff;
-
         background: rgba(149, 15, 255, .05);
     }
 
@@ -290,21 +310,99 @@
     }
 
 
+    .proposal .suspicious
+    {
+        position: relative;
+
+        display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+        margin-left: 8px;
+
+        color: #c5811b;
+        border: 1px solid;
+        border-radius: 10px;
+        background: rgba(197, 129, 27, .05);
+    }
+
+
+    .proposal .suspicious .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+    }
+
+
+    .proposal .suspicious .tooltip
+    {
+        font-size: 12px;
+        line-height: 100%;
+
+        position: absolute;
+        z-index: 9;
+        bottom: 100%;
+        left: 50%;
+
+        display: none;
+
+        margin-bottom: 11px;
+        padding: 8px;
+
+        transform: translateX(-50%);
+        pointer-events: none;
+
+        color: #fff;
+        border-radius: 8px;
+        background: #282828;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .2);
+    }
+
+    .proposal .suspicious .tooltip:before
+    {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+
+        display: block;
+
+        width: 29px;
+        height: 7px;
+        margin: 0 auto;
+
+        content: '';
+
+        background: url(@/assets/images/tooltip_tail.svg) 50% 0/100% 100% no-repeat;
+    }
+
+
+    .proposal .suspicious:hover .tooltip
+    {
+        display: block;
+    }
+
+
     .proposal .date
     {
         font-size: 12px;
         line-height: 130%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        align-self: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         margin-bottom: 16px;
         margin-left: auto;
-
-        align-self: center;
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .proposal .date > * + *
@@ -330,20 +428,20 @@
 
     .proposal .desc
     {
-        color: #fff;
         font-size: 12px;
         line-height: 140%;
 
         display: -webkit-box;
         overflow: hidden;
+        -webkit-box-orient: vertical;
 
         width: 100%;
         margin-top: 8px;
 
         opacity: .7;
+        color: #fff;
 
         -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
     }
 
 
@@ -358,16 +456,15 @@
     {
         display: flex;
         overflow: hidden;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         height: 8px;
 
         border-radius: 4px;
         background: #353535;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: wrap;
     }
 
     .proposal .progress .bar > *
@@ -399,13 +496,12 @@
     .proposal .progress .exp
     {
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         margin-top: 8px;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: nowrap;
     }
 
     .proposal .progress .exp > *
@@ -425,11 +521,12 @@
 
     .proposal .progress .exp .label
     {
-        color: #555;
         font-size: 12px;
         line-height: 100%;
 
         margin-bottom: 4px;
+
+        color: #555;
     }
 
     .proposal .progress .exp .green .label
@@ -468,11 +565,10 @@
     .proposal .progress .funds > *
     {
         display: flex;
-
-        justify-content: space-between;
-        align-items: center;
         align-content: center;
+        align-items: center;
         flex-wrap: wrap;
+        justify-content: space-between;
     }
 
     .proposal .progress .funds > * + *
@@ -495,15 +591,14 @@
     .proposal .likes
     {
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         width: 100%;
         margin-top: 8px;
         padding: 3px 0;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .proposal .likes .btn
@@ -512,6 +607,10 @@
         line-height: 130%;
 
         display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         padding: 8px;
 
@@ -519,11 +618,6 @@
 
         border-radius: 14px;
         background: #191919;
-
-        justify-content: flex-start;
-        align-items: center;
-        align-content: center;
-        flex-wrap: wrap;
     }
 
     .proposal .likes .btn.like
@@ -563,7 +657,6 @@
     .proposal .likes .btn.like:hover
     {
         color: #fff;
-
         background: #950fff;
     }
 
@@ -571,7 +664,6 @@
     .proposal .likes .btn.dislike:hover
     {
         color: #fff;
-
         background: #eb5757;
     }
 
@@ -601,5 +693,4 @@
             margin-left: 0;
         }
     }
-
 </style>

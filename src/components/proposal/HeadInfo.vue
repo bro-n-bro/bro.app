@@ -20,6 +20,11 @@
             <span>{{ $t('message.account_proposals_status_rejected') }}</span>
         </div>
 
+        <div class="suspicious" v-if="checkSuspicious(props.proposal.title)">
+            <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_suspicious"></use></svg>
+            <span>{{ $t('message.account_proposals_suspicious_tooltip') }}</span>
+        </div>
+
 
         <div class="type">
             <svg class="icon" v-if="props.proposal.proposal_type == 'Text'"><use xlink:href="@/assets/sprite.svg#ic_proposal_Text"></use></svg>
@@ -63,6 +68,25 @@
 
     const props = defineProps(['proposal']),
         store = useGlobalStore()
+
+
+    // Check Suspicious
+    function checkSuspicious(title) {
+        let result = false,
+            forbiddenWords = ['Airdrop', '\ud83d\udc8e', '\ud83d\udca5', '\u2705']
+
+        // Convert a string to an array of words and characters
+        let titleArr = title.toLowerCase().split('')
+
+        for (let char of titleArr) {
+            // Checking if there is an element in the array of prohibited words and characters
+            if (forbiddenWords.includes(char)) {
+                result = true
+            }
+        }
+
+        return result
+    }
 </script>
 
 
@@ -121,6 +145,38 @@
     }
 
     .head .status .icon
+    {
+        display: block;
+
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+    }
+
+
+    .head .suspicious
+    {
+        font-size: 12px;
+        line-height: 130%;
+
+        display: flex;
+        align-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        height: 32px;
+        margin-left: 8px;
+        padding: 0 5px;
+
+        color: #c5811b;
+        border: 1px solid;
+        border-radius: 10px;
+        background: rgba(197, 129, 27, .05);
+    }
+
+
+    .head .suspicious .icon
     {
         display: block;
 

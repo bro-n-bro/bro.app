@@ -190,6 +190,8 @@ export default {
             'account_proposals_status_passed': 'Passed',
             'account_proposals_status_rejected': 'Rejected',
 
+            'account_proposals_suspicious_tooltip': 'Suspicious',
+
             'account_RPDE': 'Daily profit',
             'account_APR': 'Personal APR',
             'account_rewards': 'Rewards',
