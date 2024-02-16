@@ -239,7 +239,7 @@
             token = currentData.value.groupByDenom.find(e => e.symbol == symbol)
 
         if(currentData.value.totalTokensPrice) {
-            result = currencyСonversion(formatTokenAmount(token.amount, token.symbol), token.symbol) / currentData.value.totalTokensPrice * 100
+            result = currencyСonversion(token.amount, token.symbol) / currentData.value.totalTokensPrice * 100
         }
 
         return result
