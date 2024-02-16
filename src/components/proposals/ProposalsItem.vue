@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="suspicious" v-if="checkSuspicious(props.proposal.title)">
+        <div class="suspicious" v-if="checkProposalSuspicious(props.proposal)">
             <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_suspicious"></use></svg>
 
             <div class="tooltip">
@@ -156,7 +156,7 @@
 <script setup>
     import { useGlobalStore } from '@/stores'
     import { formatTimeAgo } from '@vueuse/core'
-    import { formatTokenName, formatTokenAmount } from '@/utils'
+    import { formatTokenName, formatTokenAmount, checkProposalSuspicious } from '@/utils'
 
 
     const store = useGlobalStore(),
@@ -170,25 +170,6 @@
         let currentDate = new Date(date)
 
         return new Date(currentDate.setHours(currentDate.getHours() + userTimeZone))
-    }
-
-
-    // Check Suspicious
-    function checkSuspicious(title) {
-        let result = false,
-            forbiddenWords = ['Airdrop', '\ud83d\udc8e', '\ud83d\udca5', '\u2705']
-
-        // Convert a string to an array of words and characters
-        let titleArr = title.toLowerCase().split('')
-
-        for (let char of titleArr) {
-            // Checking if there is an element in the array of prohibited words and characters
-            if (forbiddenWords.includes(char)) {
-                result = true
-            }
-        }
-
-        return result
     }
 
 

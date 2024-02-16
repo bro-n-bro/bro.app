@@ -234,3 +234,34 @@ export const formatTokenPrice = (price, tokenName) => {
 
     return formatPrice
 }
+
+
+    // Check Suspicious
+    export const checkProposalSuspicious = (proposal) => {
+        let result = false,
+            forbiddenWords = ['Airdrop', '\ud83d\udc8e', '\ud83d\udca5', '\u2705', '\ud83e\ude82']
+
+        // Check title
+        // Convert a string to an array of words and characters
+        let titleArr = proposal.title.toLowerCase().split('')
+
+        for (let char of titleArr) {
+            // Checking if there is an element in the array of prohibited words and characters
+            if (forbiddenWords.includes(char)) {
+                result = true
+            }
+        }
+
+        // Check description
+        // Convert a string to an array of words and characters
+        let descArr = proposal.description.toLowerCase().split('')
+
+        for (let char of descArr) {
+            // Checking if there is an element in the array of prohibited words and characters
+            if (forbiddenWords.includes(char)) {
+                result = true
+            }
+        }
+
+        return result
+    }

@@ -20,7 +20,7 @@
             <span>{{ $t('message.account_proposals_status_rejected') }}</span>
         </div>
 
-        <div class="suspicious" v-if="checkSuspicious(props.proposal.title)">
+        <div class="suspicious" v-if="checkProposalSuspicious(props.proposal)">
             <svg class="icon"><use xlink:href="@/assets/sprite.svg#ic_suspicious"></use></svg>
             <span>{{ $t('message.account_proposals_suspicious_tooltip') }}</span>
         </div>
@@ -64,29 +64,11 @@
 
 <script setup>
     import { useGlobalStore } from '@/stores'
+    import { checkProposalSuspicious } from '@/utils'
 
 
     const props = defineProps(['proposal']),
         store = useGlobalStore()
-
-
-    // Check Suspicious
-    function checkSuspicious(title) {
-        let result = false,
-            forbiddenWords = ['Airdrop', '\ud83d\udc8e', '\ud83d\udca5', '\u2705']
-
-        // Convert a string to an array of words and characters
-        let titleArr = title.toLowerCase().split('')
-
-        for (let char of titleArr) {
-            // Checking if there is an element in the array of prohibited words and characters
-            if (forbiddenWords.includes(char)) {
-                result = true
-            }
-        }
-
-        return result
-    }
 </script>
 
 
