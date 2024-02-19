@@ -181,7 +181,7 @@
         activeTab.value = tab
 
         // Set params to URL
-        urlParams.tab = value
+        urlParams.tab = tab
     }
 
 

@@ -63,7 +63,7 @@
 <script setup>
     import { onBeforeMount, computed, reactive, ref, watch } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { currencyСonversion, formatTokenAmount } from '@/utils'
+    import { currencyСonversion } from '@/utils'
 
     import { Chart as ChartJS, ArcElement } from 'chart.js'
     import { Doughnut } from 'vue-chartjs'

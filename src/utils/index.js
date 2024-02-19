@@ -168,6 +168,22 @@ export const sendTx = async ({ txRaw, client }) => {
 
 
 
+// Formating token name
+export const formatTokenName = (tokenName, giga = false) => {
+    let store = useGlobalStore(),
+        newTokenName = ''
+
+    if (store.formatableTokens.find(el => el.tokenName == tokenName)) {
+        giga
+            ? newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName).formatTokenNameG
+            : newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName).formatTokenName
+    }
+
+    return newTokenName.length ? newTokenName : tokenName
+}
+
+
+
 // Currency conversion
 export const currencyСonversion = (amount, currency) => {
     let store = useGlobalStore(),
@@ -188,27 +204,21 @@ export const currencyСonversion = (amount, currency) => {
 }
 
 
-
-// Formating token name
-export const formatTokenName = (tokenName) => {
-    let store = useGlobalStore(),
-        newTokenName = ''
-
-    newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName)
-
-    return newTokenName ? newTokenName.formatTokenName : tokenName
-}
-
-
 // Formating token amount
-export const formatTokenAmount = (amount, tokenName) => {
+export const formatTokenAmount = (amount, tokenName, giga = false) => {
     let store = useGlobalStore(),
         formatAmount = 0,
         formatableToken = store.formatableTokens.find(el => el.tokenName == tokenName)
 
-    formatableToken
-        ? formatAmount = amount / Math.pow(10, formatableToken.exponent)
-        : formatAmount = amount / Math.pow(10, store.prices.find(el => el.symbol == tokenName).exponent)
+    if (giga) {
+        formatableToken
+            ? formatAmount = amount / Math.pow(10, formatableToken.exponentG)
+            : formatAmount = amount / Math.pow(10, store.prices.find(el => el.symbol == tokenName).exponent)
+    } else {
+        formatableToken
+            ? formatAmount = amount / Math.pow(10, formatableToken.exponent)
+            : formatAmount = amount / Math.pow(10, store.prices.find(el => el.symbol == tokenName).exponent)
+    }
 
     return formatAmount
 }

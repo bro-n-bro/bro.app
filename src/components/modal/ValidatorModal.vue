@@ -99,7 +99,11 @@
 
                             <div class="val">
                                 <span>
-                                    {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name), 0)).toLocaleString('en-US') }}
+                                    {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name, true), 0)).toLocaleString('en-US') }}
+
+                                    <template v-if="store.validatorInfo.network == 'bostrom'">
+                                        {{ formatTokenName(store.networks[store.validatorInfo.network].token_name, true) }}
+                                    </template>
                                 </span>
                                 /
                                 <span>{{ $filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name) / store.validatorInfo.voting_power * 100, 2) }}%</span>
@@ -112,7 +116,7 @@
                             </div>
 
                             <div class="val">
-                                {{ new Number($filters.toFixed(store.validatorInfo.voting_power, 0)).toLocaleString('en-US') }}
+                                {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.voting_power, store.networks[store.validatorInfo.network].token_name), 2)).toLocaleString('en-US') }} {{ formatTokenName(store.networks[store.validatorInfo.network].token_name) }}
                             </div>
                         </div>
 
@@ -139,7 +143,7 @@
 <script setup>
     import { inject, onBeforeMount, ref } from 'vue'
     import { useGlobalStore } from '@/stores'
-    import { formatTokenAmount } from '@/utils'
+    import { formatTokenAmount, formatTokenName } from '@/utils'
 
 
     const store = useGlobalStore(),
