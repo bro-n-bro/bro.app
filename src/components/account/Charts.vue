@@ -668,31 +668,30 @@
     .tabs
     {
         display: flex;
+        align-content: stretch;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
 
         width: 100%;
         margin-bottom: 24px;
-
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        flex-wrap: nowrap;
     }
 
 
     .tabs .btn
     {
-        color: #555;
+        font-weight: 500;
         line-height: 100%;
 
         display: block;
 
         width: 100%;
-        min-height: 62px;
         padding: 10px 0 9px;
 
-        text-align: center;
-
-        border-bottom: 1px solid rgba(255, 255, 255, .1);
+        text-align: left;
+        transition: .2s linear;
+        color: #b3b3b3;
+        border-bottom: 1px solid #555;
     }
 
     .tabs .btn + .btn
@@ -700,11 +699,11 @@
         margin-left: 4px;
     }
 
+
     .tabs .btn:hover,
     .tabs .btn.active
     {
         color: #950fff;
-
         border-color: #950fff;
     }
 
