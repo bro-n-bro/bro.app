@@ -169,14 +169,12 @@ export const sendTx = async ({ txRaw, client }) => {
 
 
 // Formating token name
-export const formatTokenName = (tokenName, giga = false) => {
+export const formatTokenName = (tokenName) => {
     let store = useGlobalStore(),
         newTokenName = ''
 
     if (store.formatableTokens.find(el => el.tokenName == tokenName)) {
-        giga
-            ? newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName).formatTokenNameG
-            : newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName).formatTokenName
+        newTokenName = store.formatableTokens.find(el => el.tokenName == tokenName).formatTokenName
     }
 
     return newTokenName.length ? newTokenName : tokenName

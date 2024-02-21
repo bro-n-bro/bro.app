@@ -99,10 +99,10 @@
 
                             <div class="val">
                                 <span>
-                                    {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name, true), 0)).toLocaleString('en-US') }}
+                                    {{ new Number($filters.toFixed(formatTokenAmount(store.validatorInfo.self_bonded.amount, store.networks[store.validatorInfo.network].token_name), 0)).toLocaleString('en-US') }}
 
                                     <template v-if="store.validatorInfo.network == 'bostrom'">
-                                        {{ formatTokenName(store.networks[store.validatorInfo.network].token_name, true) }}
+                                        {{ formatTokenName(store.networks[store.validatorInfo.network].token_name) }}
                                     </template>
                                 </span>
                                 /
@@ -490,7 +490,7 @@
 
     .features .row > *
     {
-        width: calc(20% - 24px);
+        width: calc(25% - 24px);
         margin-bottom: 24px;
         margin-left: 24px;
     }

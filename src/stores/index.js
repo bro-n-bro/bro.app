@@ -82,16 +82,12 @@ export const useGlobalStore = defineStore('global', {
             {
                 tokenName: 'BOOT',
                 formatTokenName: 'MBOOT',
-                formatTokenNameG: 'GBOOT',
-                exponent: 6,
-                exponentG: 9
+                exponent: 6
             },
             {
                 tokenName: 'HYDROGEN',
                 formatTokenName: 'MHYDROGEN',
-                formatTokenName: 'GHYDROGEN',
-                exponent: 6,
-                exponentG: 9
+                exponent: 6
             }
         ],
 
