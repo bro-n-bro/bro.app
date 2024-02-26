@@ -80,9 +80,9 @@
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
         APR = !store.demo ? ref(0) : ref(0.2125),
-        totalRewardsPrice = !store.demo ? ref(0) : ref(10.016),
-        totalTokensPrice = !store.demo ? ref(0) : ref(150.18),
-        RPDE = !store.demo ? ref(0) : ref(0.4)
+        totalRewardsPrice = !store.demo ? ref(0) : ref(110.016),
+        totalTokensPrice = !store.demo ? ref(0) : ref(15070.18),
+        RPDE = !store.demo ? ref(0) : ref(4000000)
 
 
     onBeforeMount(async () => {

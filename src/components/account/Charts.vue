@@ -92,6 +92,7 @@
                                 ibc: 0,
                                 liquid_rewards: 0
                             })
+                            network.totalRewardsPrice = 0
                             network.totalTokensPrice = 0
                             network.groupByDenom = []
 
@@ -359,6 +360,21 @@
 
         for (const wallet of store.account.wallets) {
             for (const network of wallet.networks) {
+                // Clear previous data
+                network.total = reactive({
+                    liquid: 0,
+                    staked: 0,
+                    unbonding: 0,
+                    rewards: 0,
+                    outside: 0,
+                    ibc: 0,
+                    liquid_rewards: 0
+                })
+                network.totalRewardsPrice = 0
+                network.totalTokensPrice = 0
+                network.groupByDenom = []
+
+
                 // Calc liquid tokens
                 if(network.balance.liquid && network.balance.liquid.native) {
                     network.balance.liquid.native.forEach(el => {
@@ -370,7 +386,7 @@
                         network.total.liquid_rewards += amount
 
                         // Calc tokens price
-                        network.totalTokensPrice += amount * el.price
+                        network.totalTokensPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Group by denom
                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -388,6 +404,7 @@
                         }
                     })
                 }
+
 
                 // Calc ibc tokens
                 if(network.balance.liquid && network.balance.liquid.ibc) {
@@ -399,7 +416,7 @@
                         network.total.ibc += amountCurrentDenom
 
                         // Calc tokens price
-                        network.totalTokensPrice += amount * el.price
+                        network.totalTokensPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Group by denom
                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -417,6 +434,7 @@
                         }
                     })
                 }
+
 
                 // Calc staked tokens
                 if(network.balance.staked) {
@@ -428,7 +446,7 @@
                         network.total.staked += amount
 
                         // Calc tokens price
-                        network.totalTokensPrice += amount * el.price
+                        network.totalTokensPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Group by denom
                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -446,6 +464,7 @@
                         }
                     })
                 }
+
 
                 // Calc unbonding tokens
                 if(network.balance.unbonding) {
@@ -457,7 +476,7 @@
                         network.total.unbonding += amount
 
                         // Calc tokens price
-                        network.totalTokensPrice += amount * el.price
+                        network.totalTokensPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Group by denom
                         let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
@@ -476,6 +495,7 @@
                     })
                 }
 
+
                 // Calc rewards tokens
                 if(network.balance.rewards) {
                     network.balance.rewards.forEach(el => {
@@ -483,14 +503,13 @@
                             amountCurrentDenom = formatAmountToCurrentDenom(amount, el.symbol)
 
                         // Sum total
-                        if (store.prices.find(e => e.symbol == el.symbol)) {
-                            if(amount >= 1) {
-                                network.total.rewards += amount
-                            }
-                        }
+                        network.total.rewards += amount
+
+                        // Calc tokens rewards price
+                        network.totalRewardsPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Calc tokens price
-                        network.totalTokensPrice += amount * el.price
+                        network.totalTokensPrice += amount * formatTokenPrice(store.prices.find(e => e.symbol == el.symbol).price, el.symbol)
 
                         // Group by denom
                         if (store.prices.find(e => e.symbol == el.symbol)) {
@@ -511,6 +530,7 @@
                     })
                 }
 
+
                 // Set network data
                 network.total.liquid_rewards = network.total.liquid + network.total.rewards
 
@@ -524,139 +544,41 @@
         }
 
 
-        // Sum wallet total tokens
+        // Total tokens price
+        store.account.totalTokensPrice = 0
+
         for (let wallet of store.account.wallets) {
-            wallet.totalTokens = 0
+            wallet.totalTokensPrice = 0
 
             for (let network of wallet.networks) {
-                wallet.totalTokens += network.totalTokens
+                // Sum wallet total tokens price
+                wallet.totalTokensPrice += network.totalTokensPrice
+
+                // Sum account total tokens price
+                store.account.totalTokensPrice += network.totalTokensPrice
             }
         }
 
-
-        // Sum account total tokens
-        store.account.totalTokens = 0
+        // Total rewards price
+        store.account.totalRewardsPrice = 0
 
         for (let wallet of store.account.wallets) {
-            store.account.totalTokens += wallet.totalTokens
+            wallet.totalRewardsPrice = 0
+
+            for (let network of wallet.networks) {
+                // Sum wallet total rewards price
+                wallet.totalRewardsPrice += network.totalRewardsPrice
+
+                // Sum account total rewards price
+                store.account.totalRewardsPrice += network.totalRewardsPrice
+            }
         }
 
+        console.log(store.account)
 
         // Hide loader
         loading.value = false
     }
-
-
-    // // Calc liquid tokens
-    // function calcLiquidTokens(network, tokens) {
-    //     tokens.forEach(el => {
-    //         // Sum total
-    //         network.totals.liquid += el.amount
-    //         network.totals.liquid_rewards += el.amount
-
-    //         // Group by denom
-    //         AddGroupByDenom(network, el)
-    //     })
-    // }
-
-
-    // // Calc IBC tokens
-    // function calcIBCTokens(tokens) {
-    //     tokens.forEach(el => {
-    //         // Convert to current denom
-    //         el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
-
-    //         // Sum total
-    //         network.totals.ibc += parseFloat(el.amountCurrentDenom * Math.pow(10, store.networks[store.currentNetwork].exponent))
-
-    //         // Group by denom
-    //         AddGroupByDenom(network, el)
-    //     })
-    // }
-
-
-    // // Calc staked tokens
-    // function calcStackedTokens(tokens) {
-    //     tokens.forEach(el => {
-    //         // Sum total
-    //         network.totals.staked += el.amount
-
-    //         // Group by denom
-    //         AddGroupByDenom(network, el)
-    //     })
-    // }
-
-
-    // // Calc unbonding tokens
-    // function calcUnbondingTokens(tokens) {
-    //     tokens.forEach(el => {
-    //         // Sum total
-    //         network.totals.unbonding += el.amount
-
-    //         // Group by denom
-    //         AddGroupByDenom(network, el)
-    //     })
-    // }
-
-
-    // // Calc rewards tokens
-    // function calcRewardsTokens(tokens) {
-    //     tokens.forEach(el => {
-    //         // Convert to current denom
-    //         el.amountCurrentDenom = el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)
-
-    //         // Sum total
-    //         if(el.amount * Math.pow(10, el.exponent) >= 1) {
-    //             network.totals.rewards += parseFloat(el.amountCurrentDenom * Math.pow(10, store.networks[store.currentNetwork].exponent))
-    //         }
-
-    //         network.totals.liquid_rewards = network.totals.liquid + network.totals.rewards
-
-    //         // Group by denom
-    //         AddGroupByDenom(network, el)
-    //     })
-    // }
-
-
-    // // Group by denom
-    // function AddGroupByDenom(network, el) {
-    //     let duplicate = network.groupByDenom.find(e => e.symbol == el.symbol)
-
-    //     if(duplicate) {
-    //         duplicate.amount += (el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)) * Math.pow(10, store.networks[store.currentNetwork].exponent)
-    //     } else {
-    //         network.groupByDenom.push({
-    //             'amount': (el.amount / Math.pow(10, el.exponent) * (store.prices.find(e => e.symbol == el.symbol).price / store.prices.find(e => e.symbol == store.networks[store.currentNetwork].token_name).price)) * Math.pow(10, store.networks[store.currentNetwork].exponent),
-    //             'logo': el.logo,
-    //             'symbol': el.symbol
-    //         })
-    //     }
-    // }
-
-
-    // // Set data in network
-    // function setDataInNetwork(currentNetwork, response) {
-    //     currentNetwork.address = response.address
-    //     currentNetwork.total = currentNetwork.totals
-
-    //     currentNetwork.totalTokens = 0
-    //     currentNetwork.totalTokens += currentNetwork.totals.liquid + currentNetwork.totals.staked + currentNetwork.totals.unbonding + currentNetwork.totals.rewards + currentNetwork.totals.outside + currentNetwork.totals.ibc
-
-    //     currentNetwork.balance = {
-    //         liquid: {
-    //             native: response.liquid && response.liquid.native ? response.liquid.native : null,
-    //             ibc: response.liquid && response.liquid.ibc ? response.liquid.ibc : null
-    //         },
-    //         staked: response.staked,
-    //         unbonding: response.unbonding,
-    //         rewards: response.rewards,
-    //         groupByDenom: currentNetwork.groupByDenom.sort((a, b) => {
-    //             if (a.amount > b.amount) { return -1 }
-    //             if (a.amount < b.amount) { return 1 }
-    //             return 0
-    //         })
-    //     }
-    // }
 
 
     // Event "change active chart"

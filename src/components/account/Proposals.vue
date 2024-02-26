@@ -6,11 +6,7 @@
             </div>
 
             <div class="all_link">
-                <router-link :to="`/proposals/${store.currentNetwork}?demo=true`" class="link" v-if="store.demo">
-                    {{ $t('message.btn_see_more') }} &rarr;
-                </router-link>
-
-                <router-link :to="`/proposals/${store.currentNetwork}`" class="link" v-else>
+                <router-link :to="{ path: `/proposals/${store.currentNetwork}`, query: { demo: store.demo ? true : '' } }" class="link" v-if="store.demo">
                     {{ $t('message.btn_see_more') }} &rarr;
                 </router-link>
             </div>

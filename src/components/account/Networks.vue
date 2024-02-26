@@ -7,7 +7,7 @@
         </div>
 
         <div class="list">
-            <router-link to="/account/cosmoshub" class="network" :class="{ active: store.currentNetwork == 'cosmoshub' }">
+            <router-link :to="{ path: '/account/cosmoshub', query: { demo: store.demo ? true : '' } }" class="network" :class="{ active: store.currentNetwork == 'cosmoshub' }">
                 <div class="logo">
                     <img src="/cosmoshub_logo.png" alt="">
                 </div>
@@ -18,7 +18,7 @@
                 </div>
             </router-link>
 
-            <router-link to="/account/bostrom" class="network" :class="{ active: store.currentNetwork == 'bostrom' }">
+            <router-link :to="{ path: '/account/bostrom', query: { demo: store.demo ? true : '' } }" class="network" :class="{ active: store.currentNetwork == 'bostrom' }">
                 <div class="logo">
                     <img src="/bostrom_logo.png" alt="">
                 </div>
