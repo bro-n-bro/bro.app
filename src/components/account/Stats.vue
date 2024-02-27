@@ -76,13 +76,14 @@
     import { ref, onBeforeMount, watch, computed } from 'vue'
     import { useGlobalStore } from '@/stores'
     import { generateAddress, currencyСonversion, formatTokenAmount } from '@/utils'
+    import DemoStats from '@/demo/Stats.json'
 
     const store = useGlobalStore(),
         loading = store.demo ? ref(false) : ref(true),
-        APR = !store.demo ? ref(0) : ref(0.2125),
-        totalRewardsPrice = !store.demo ? ref(0) : ref(110.016),
-        totalTokensPrice = !store.demo ? ref(0) : ref(15070.18),
-        RPDE = !store.demo ? ref(0) : ref(4000000)
+        APR = !store.demo ? ref(0) : ref(DemoStats[store.currentNetwork].APR),
+        totalRewardsPrice = !store.demo ? ref(0) : ref(DemoStats[store.currentNetwork].totalRewardsPrice),
+        totalTokensPrice = !store.demo ? ref(0) : ref(DemoStats[store.currentNetwork].totalTokensPrice),
+        RPDE = !store.demo ? ref(0) : ref(DemoStats[store.currentNetwork].RPDE)
 
 
     onBeforeMount(async () => {

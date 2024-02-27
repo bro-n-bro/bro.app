@@ -384,7 +384,7 @@
                         "liquid": {
                             "native": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 20235470000,
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -393,7 +393,7 @@
                             ],
                             "ibc": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 8888000000,
                                     "denom": "HYDROGEN",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/hydrogen.svg",
@@ -403,7 +403,7 @@
                         },
                         "staked": [
                             {
-                                "amount": 100324500000,
+                                "amount": 36824500000,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -412,7 +412,7 @@
                         ],
                         "unbonding": [
                             {
-                                "amount": 1000590000,
+                                "amount": 175899590000,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -421,7 +421,7 @@
                         ],
                         "rewards": [
                             {
-                                "amount": 10000000,
+                                "amount": 234000,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -558,7 +558,7 @@
                         "liquid": {
                             "native": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 4376452726,
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -567,7 +567,7 @@
                             ],
                             "ibc": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 2625626346,
                                     "denom": "HYDROGEN",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/hydrogen.svg",
@@ -577,25 +577,17 @@
                         },
                         "staked": [
                             {
-                                "amount": 100324500000,
+                                "amount": 5879542475,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
                                 "symbol": "BOOT"
                             }
                         ],
-                        "unbonding": [
-                            {
-                                "amount": 1000590000,
-                                "denom": "boot",
-                                "exponent": 0,
-                                "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
-                                "symbol": "BOOT"
-                            }
-                        ],
+                        "unbonding": [],
                         "rewards": [
                             {
-                                "amount": 10000000,
+                                "amount": 234676547,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -732,7 +724,7 @@
                         "liquid": {
                             "native": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 82376367426,
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -741,7 +733,7 @@
                             ],
                             "ibc": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 2135563462,
                                     "denom": "HYDROGEN",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/hydrogen.svg",
@@ -751,7 +743,7 @@
                         },
                         "staked": [
                             {
-                                "amount": 100324500000,
+                                "amount": 32465473562,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -760,7 +752,7 @@
                         ],
                         "unbonding": [
                             {
-                                "amount": 1000590000,
+                                "amount": 457436345,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -769,7 +761,7 @@
                         ],
                         "rewards": [
                             {
-                                "amount": 10000000,
+                                "amount": 3426323426,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -906,7 +898,7 @@
                         "liquid": {
                             "native": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 2346346546,
                                     "denom": "boot",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -915,7 +907,7 @@
                             ],
                             "ibc": [
                                 {
-                                    "amount": 10000000000,
+                                    "amount": 32463426,
                                     "denom": "HYDROGEN",
                                     "exponent": 0,
                                     "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/hydrogen.svg",
@@ -925,7 +917,7 @@
                         },
                         "staked": [
                             {
-                                "amount": 100324500000,
+                                "amount": 1463464364,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -934,7 +926,7 @@
                         ],
                         "unbonding": [
                             {
-                                "amount": 1000590000,
+                                "amount": 24356664,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",
@@ -943,7 +935,7 @@
                         ],
                         "rewards": [
                             {
-                                "amount": 10000000,
+                                "amount": 34634634,
                                 "denom": "boot",
                                 "exponent": 0,
                                 "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg",

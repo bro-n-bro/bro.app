@@ -1,0 +1,15 @@
+{
+    "cosmoshub": {
+        "APR": 0.14,
+        "totalRewardsPrice": 80.016,
+        "totalTokensPrice": 10070.18,
+        "RPDE": 4000000
+    },
+
+    "bostrom": {
+        "APR": 0.2125,
+        "totalRewardsPrice": 110.016,
+        "totalTokensPrice": 15070.18,
+        "RPDE": 4000000
+    }
+}
